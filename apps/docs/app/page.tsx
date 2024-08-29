@@ -1,12 +1,9 @@
-import Image from "next/image";
-import { Button } from "@repo/ui/button";
-import { SheetDemo } from "@repo/ui/SheetDemo"
-import styles from "./page.module.css";
+import { Button } from "@repo/ui/components/ui/button";
 
-export default function Home() {
+export default function Page() {
   return (
-    <div className={"bg-red-400"}>
-      <SheetDemo />
-    </div>
+    <main>
+      <Button>Click me</Button>
+    </main>
   );
 }
