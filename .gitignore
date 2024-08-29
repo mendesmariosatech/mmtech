@@ -60,3 +60,5 @@ logs
 
 # Optional: System Files
 Thumbs.db
+
+*storybook.log
