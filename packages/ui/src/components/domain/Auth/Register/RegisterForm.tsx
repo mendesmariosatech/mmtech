@@ -2,14 +2,16 @@
 
 import { cn } from "@repo/ui/lib/utils"
 import * as React from "react"
-import { Input } from "../../ui/input"
-import { Label } from "../../ui/label"
-import { Button } from "../../ui/button"
+import { Input } from "../../../ui/input"
+import { Label } from "../../../ui/label"
+import { Button } from "../../../ui/button"
 import { Loader } from 'lucide-react';
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
+interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  onClick: () => void
+}
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function RegisterForm({ className, ...props }: RegisterFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   async function onSubmit(event: React.SyntheticEvent) {
@@ -19,6 +21,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setTimeout(() => {
       setIsLoading(false)
     }, 3000)
+
+    console.log('onSubmit')
+    props.onClick()
   }
 
   return (
@@ -39,7 +44,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
             />
           </div>
-          <Button disabled={isLoading}>
+          <Button
+            onClick={onSubmit}
+            disabled={isLoading}>
             {isLoading && (
               <Loader />
             )}

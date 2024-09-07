@@ -1,10 +1,5 @@
-import { Button } from "@repo/ui/components/ui/button";
-import { AuthenticationPage } from "@repo/ui/components/molecules/SignIn/AuthenticationPage";
+import { Title } from "~/components/Title"
 
-export default function Page() {
-  return (
-    <main>
-      <AuthenticationPage />
-    </main>
-  );
-}
+const Index = () => <Title />
+
+export default Index

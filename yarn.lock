@@ -1396,6 +1396,11 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.7.tgz#d0ece53ce99ab5a8e37ebdfe5e32452a2bfc073e"
   integrity sha512-X8R8Oj771YRl/w+c1HqAC1szL8zWQRwFvgDwT129k9ACdBoud/+/rX9V0qiMl6LWUdP9voC2nDVZYPMQQsb6eA==
 
+"@hono/zod-validator@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.npmjs.org/@hono/zod-validator/-/zod-validator-0.2.2.tgz#929a1c40aee5eac1ed9c84094d6d977e0b70187a"
+  integrity sha512-dSDxaPV70Py8wuIU2QNpoVEIOSzSXZ/6/B/h4xA7eOMz7+AarKTSGV8E6QwrdcCbBLkpqfJ4Q2TmBO0eP1tCBQ==
+
 "@hookform/resolvers@^3.9.0":
   version "3.9.0"
   resolved "https://registry.npmjs.org/@hookform/resolvers/-/resolvers-3.9.0.tgz#cf540ac21c6c0cd24a40cf53d8e6d64391fb753d"
