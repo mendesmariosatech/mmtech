@@ -1,9 +1,10 @@
-import { AuthenticationPage } from "@repo/ui/components/domain/index";
+import { RegisterPage } from "@repo/ui/components/domain/index";
 
 export default function Page() {
   return (
     <main>
-      <AuthenticationPage handleLogin={() => { }} />
+      <RegisterPage handleLogin={() => { }} />
+
     </main>
   );
 }
