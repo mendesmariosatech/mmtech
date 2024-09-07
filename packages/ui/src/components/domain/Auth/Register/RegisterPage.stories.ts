@@ -31,3 +31,11 @@ export const Success: Story = {
   },
 };
 
+export const Error: Story = {
+  args: {
+    handleLogin(email, password) {
+      console.log('handleLogin', email, password)
+    },
+  },
+};
+
