@@ -8,6 +8,7 @@ import { Label } from '../../ui/label'
 import { Card, CardContent } from "../../ui/card"
 import { formatarNumeroCelular } from "@repo/ui/lib/formatNumberCell"
 import { CheckIcon, LucideEye, LucideEyeOff } from "lucide-react"
+import { Checkbox } from "../../ui/checkbox"
 
 export function SignUp({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
 	const [isLoading, setIsLoading] = React.useState<boolean>(false)
@@ -49,41 +50,65 @@ export function SignUp({ className, ...props }: React.HTMLAttributes<HTMLDivElem
 				<CardContent className="mt-8">
 					<h2 className="text-2xl font-bold text-gray-900">Sobre você</h2>
 					<p className="mt-2 text-sm text-gray-600">Preencha os campos abaixo para criar sua conta.</p>
-					<form className="mt-8 max-w-lg" onSubmit={onSubmit}>
-						<Input
-							disabled={isLoading}
-							placeholder="Seu nome"></Input>
-						<Input
-							disabled={isLoading}
-							type="email"
-							placeholder="seu@email.com"></Input>
-						<Input
-							disabled={isLoading}
-							placeholder="(99) 9xxxx-xxxx"
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								const formattedValue = formatarNumeroCelular(e.target.value);
-								e.target.value = formattedValue;
-							}}
-						></Input>
-						<div className="relative">
+					<form className="mt-2 max-w-lg gap-4 flex flex-col" onSubmit={onSubmit}>
+						<div>
+							<Label htmlFor="name">Nome</Label>
 							<Input
-								type={showPassword ? "text" : "password"}
-								placeholder="Crie uma senha forte"
-								onChange={(e) => {
-									handlePasswordChange(e);
+								disabled={isLoading}
+								placeholder="Seu nome"></Input>
+						</div>
+						<div>
+							<Label htmlFor="email">E-mail</Label>
+							<Input
+								disabled={isLoading}
+								type="email"
+								placeholder="seu@email.com"></Input>
+						</div>
+						<div>
+							<Label htmlFor="phone">Celular</Label>
+							<Input
+								disabled={isLoading}
+								placeholder="(99) 9xxxx-xxxx"
+								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+									const formattedValue = formatarNumeroCelular(e.target.value);
+									e.target.value = formattedValue;
 								}}
-							/>
-							{showPassword ? (
-								<LucideEye
-									className="absolute right-2 top-2 cursor-pointer"
-									onClick={() => setShowPassword(false)}
+							></Input>
+						</div>
+						<div>
+							<Label htmlFor="senha">Senha</Label>
+							<div className="relative">
+								<Input
+									type={showPassword ? "text" : "password"}
+									placeholder="Crie uma senha forte"
+									onChange={(e) => {
+										handlePasswordChange(e);
+									}}
 								/>
-							) : (
-								<LucideEyeOff
-									className="absolute right-2 top-2 cursor-pointer"
-									onClick={() => setShowPassword(true)}
-								/>
-							)}
+								{showPassword ? (
+									<LucideEye
+										className="absolute right-2 top-2 cursor-pointer"
+										onClick={() => setShowPassword(false)}
+									/>
+								) : (
+									<LucideEyeOff
+										className="absolute right-2 top-2 cursor-pointer"
+										onClick={() => setShowPassword(true)}
+									/>
+								)}
+							</div>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Checkbox id="terms" />
+							<label
+								htmlFor="terms"
+								className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+							>
+								Eu concordo com os{" "}
+								<a className=" text-blue-800 font-bold hover:underline">
+									termos de uso
+								</a>
+							</label>
 						</div>
 						<div className="ml-2 mt-2">
 							<p
@@ -125,7 +150,7 @@ export function SignUp({ className, ...props }: React.HTMLAttributes<HTMLDivElem
 						</div>
 						<Button
 							onClick={() => setShowPassword(!showPassword)}
-							className="mt-4">Criar conta</Button>
+							className="mt-4">Cadastrar-se</Button>
 					</form>
 				</CardContent>
 			</Card>
