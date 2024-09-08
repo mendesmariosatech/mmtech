@@ -17,7 +17,7 @@ Server client
 import { hc } from "@repo/server";
 import type { AppType } from "@repo/server";
 
-const DEV_URL = `https://localhost:${PORT}/`;
+const DEV_URL = `http://localhost:${PORT}/`;
 const PROD_URL = `http://127:0.0.1:${PORT}/`;
 
 const PROD = false;
