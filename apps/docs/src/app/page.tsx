@@ -3,10 +3,10 @@ import { hono_client } from "../hono-client"
 
 const Dashboard = async () => {
 
-  console.log(
-    { URL: hono_client.api.$url() }
-  )
   try {
+    console.log(
+      { URL: hono_client.api.$url() }
+    )
     const resp = await hono_client.api.personal.me.$get({
       query: {
         email: '10',
@@ -22,7 +22,7 @@ const Dashboard = async () => {
 
     return <Header name={`Text: ${data.email}`} email="test@example.com" />
   } catch (error) {
-
+    console.log({ error })
     return <div>Error</div>
   }
 
