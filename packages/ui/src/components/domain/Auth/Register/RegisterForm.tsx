@@ -6,28 +6,17 @@ import { Input } from "../../../ui/input"
 import { Label } from "../../../ui/label"
 import { Button } from "../../../ui/button"
 import { Loader } from 'lucide-react';
-import { useRouter } from "next/navigation"
 interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  onClick: () => void
+  onClick: () => Promise<void>;
+  isLoading: boolean;
 }
 
 export function RegisterForm({ className, ...props }: RegisterFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
-
-  const router = useRouter()
-
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
-    setIsLoading(true)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
 
     console.log('onSubmit')
     props.onClick()
-
-    router.push('/')
   }
 
   return (
@@ -45,13 +34,13 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading}
+              disabled={props.isLoading}
             />
           </div>
           <Button
             onClick={onSubmit}
-            disabled={isLoading}>
-            {isLoading && (
+            disabled={props.isLoading}>
+            {props.isLoading && (
               <Loader />
             )}
             Sign In with Email
@@ -68,8 +57,8 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
+      <Button variant="outline" type="button" disabled={props.isLoading}>
+        {props.isLoading ? (
           <Loader />
         ) : (
           null
