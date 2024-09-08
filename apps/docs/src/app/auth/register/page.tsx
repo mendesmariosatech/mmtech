@@ -1,6 +1,6 @@
 "use client";
 import { RegisterPage } from "@repo/ui/components/domain/index";
-import { hono_client } from "~/honno-client";
+import { hono_client } from "~/src/hono-client";
 
 export default function Page() {
 

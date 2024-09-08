@@ -2,9 +2,10 @@ import { hc } from "@repo/server";
 import type { AppType } from "@repo/server";
 
 const DEV_URL = 'http://localhost:3001'
-const PROD_URL = 'https://mmtech-docs.vercel.app'
+// const PROD_URL = 'https://mmtech-docs.vercel.app'
 
 //TODO: pattern to get env variables
-const isProductionURL = () => false ? PROD_URL : DEV_URL
+//
+const isProductionURL = () => DEV_URL
 
 export const hono_client = hc<AppType>(isProductionURL())
