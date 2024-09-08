@@ -1,9 +1,31 @@
 import { Header } from "@repo/ui/components/domain/Personal/Header"
-import { Title } from "../components/Title"
+import { hono_client } from "../hono-client"
 
-const Dashboard = () => {
+const Dashboard = async () => {
 
-  return <Header name="test" email="test@example.com" />
+  console.log(
+    { URL: hono_client.api.$url() }
+  )
+  try {
+    const resp = await hono_client.api.personal.me.$get({
+      query: {
+        email: '10',
+        password: '2023-01-01',
+      }
+    })
+
+    if (resp.status !== 201) {
+      return <div>Error</div>
+    }
+    const { data } = await resp.json()
+    console.log({ data })
+
+    return <Header name={`Text: ${data.email}`} email="test@example.com" />
+  } catch (error) {
+
+    return <div>Error</div>
+  }
+
 }
 
 export default Dashboard

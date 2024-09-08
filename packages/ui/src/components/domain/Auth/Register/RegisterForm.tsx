@@ -6,13 +6,15 @@ import { Input } from "../../../ui/input"
 import { Label } from "../../../ui/label"
 import { Button } from "../../../ui/button"
 import { Loader } from 'lucide-react';
-
+import { useRouter } from "next/navigation"
 interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onClick: () => void
 }
 
 export function RegisterForm({ className, ...props }: RegisterFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
+  const router = useRouter()
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
@@ -24,6 +26,8 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
 
     console.log('onSubmit')
     props.onClick()
+
+    router.push('/')
   }
 
   return (

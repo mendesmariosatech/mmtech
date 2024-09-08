@@ -1,3 +1,7 @@
+"use client"
+import { Button } from "../../ui/button";
+import Link from 'next/link'
+
 export const Header = ({
   name,
   email,
@@ -14,6 +18,10 @@ export const Header = ({
       <p className="text-lg text-muted-foreground">
         {name}
       </p>
+
+      <Button>
+        <Link href="/auth/register">Register</Link>
+      </Button>
     </div>
   );
 };
