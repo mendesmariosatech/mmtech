@@ -1,5 +1,5 @@
-import { Title } from "~/src/honno-client/components/Title"
+import { Title } from "../components/Title"
 
-const Index = () => <Title />
+const Dashboard = () => <Title />
 
-export default Index
+export default Dashboard

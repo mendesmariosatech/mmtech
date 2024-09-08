@@ -1,5 +1,4 @@
-import { hono_client } from "~/honno-client";
-
+import { hono_client } from "../honno-client";
 
 // todo: make this component send a client ID in the query string as well as a client secret and token
 export const Title = async () => {
