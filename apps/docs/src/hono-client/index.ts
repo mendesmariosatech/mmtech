@@ -6,7 +6,7 @@ console.log({ port: process.env.PORT })
 const PROD = false
 const PORT = process.env.PORT || 3001
 
-const DEV_URL = `http://localhost:${PORT}/`
+const DEV_URL = `https://localhost:${PORT}/`
 const PROD_URL = `http://127:0.0.1:${PORT}/`
 
 const URL = PROD ? PROD_URL : DEV_URL

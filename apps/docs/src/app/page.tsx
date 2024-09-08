@@ -3,24 +3,29 @@ import { hono_client } from "../hono-client"
 
 const Dashboard = async () => {
 
+
   try {
+    const URL = hono_client.api.$url()
     console.log(
-      { URL: hono_client.api.$url() }
+      { URL }
     )
-    const resp = await hono_client.api.personal.me.$get({
-      query: {
-        email: '10',
-        password: '2023-01-01',
-      }
-    })
+    // const resp = await fetch(hono_client.api.personal.me.$url())
+    // const data = await resp.json()
 
-    if (resp.status !== 201) {
-      return <div>Error</div>
-    }
-    const { data } = await resp.json()
-    console.log({ data })
+    // const resp = await hono_client.api.personal.me.$get({
+    //   query: {
+    //     email: '10',
+    //     password: '2023-01-01',
+    //   }
+    // })
 
-    return <Header name={`Text: ${data.email}`} email="test@example.com" />
+    // if (resp.status !== 201) {
+    //   return <div>Error</div>
+    // }
+    // const { data } = await resp.json()
+    // console.log({ data })
+
+    return <Header name={`Text:`} email={JSON.stringify(URL)} />
   } catch (error) {
     console.log({ error })
     return <div>Error</div>
