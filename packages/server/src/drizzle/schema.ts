@@ -5,6 +5,9 @@ export const authTable = sqliteTable('auth', {
   id: integer('id').primaryKey(),
   passwordDigest: text('password_digest').notNull(),
   email: text('email').unique().notNull(),
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
 });
 
 export const usersTable = sqliteTable('user', {

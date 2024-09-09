@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts"
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "npx drizzle-kit migrate"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.2",
