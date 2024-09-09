@@ -1,7 +1,8 @@
 CREATE TABLE `auth` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`password_digest` text NOT NULL,
-	`email` text NOT NULL
+	`email` text NOT NULL,
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `user` (

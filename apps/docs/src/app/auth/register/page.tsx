@@ -10,15 +10,22 @@ export default function Page() {
   const handleLogin = async (email: string, password: string) => {
     // mandar o email e a senha para o backend
     try {
+      console.log("posting action")
 
-      await hono_client.api.auth.register.$post({
+      const resp = await hono_client.api.auth.register.$post({
         form: {
           email,
           password,
         }
       })
 
-      router.push("/?me=123")
+      if (resp.status !== 201) {
+        console.log("error")
+        return
+      }
+      const { data } = await resp.json()
+
+      router.push(`/?id=${data.id}&email=${data.email}`)
 
     } catch (error) {
       console.log(error)
@@ -27,7 +34,7 @@ export default function Page() {
 
   return (
     <main>
-      <RegisterPage handleLogin={handleLogin} isLoading={false} />
+      <RegisterPage handleLogIn={handleLogin} isLoading={false} />
     </main>
   );
 }

@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1725835813187,
-      "tag": "0000_open_otto_octavius",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1725850602624,
-      "tag": "0001_red_sleepwalker",
+      "when": 1725851064122,
+      "tag": "0000_polite_quasar",
       "breakpoints": true
     }
   ]
