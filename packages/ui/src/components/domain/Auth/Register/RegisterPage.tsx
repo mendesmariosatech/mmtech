@@ -84,7 +84,7 @@ export function RegisterPage({ handleLogin, isLoading }: RegisterPageProps) {
                 Enter your email below to create your account
               </p>
             </div>
-            <RegisterForm isLoading={isLoading} onClick={() => handleLogin("mmichael@gmail.com", "password")} />
+            <RegisterForm onClick={() => handleLogin("mmichael@gmail.com", "password")} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               {/* <Link

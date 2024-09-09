@@ -8,7 +8,7 @@ import { Button } from "../../../ui/button"
 import { Loader } from 'lucide-react';
 interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onClick: () => Promise<void>;
-  isLoading: boolean;
+  // isloading: boolean;
 }
 
 export function RegisterForm({ className, ...props }: RegisterFormProps) {
@@ -34,13 +34,14 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={props.isLoading}
+            // disabled={props.isloading}
             />
           </div>
           <Button
             onClick={onSubmit}
-            disabled={props.isLoading}>
-            {props.isLoading && (
+          // disabled={props.isloading}
+          >
+            {true && (
               <Loader />
             )}
             Sign In with Email
@@ -57,8 +58,10 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={props.isLoading}>
-        {props.isLoading ? (
+      <Button variant="outline" type="button"
+      // disabled={props.isloading}
+      >
+        {true ? (
           <Loader />
         ) : (
           null
