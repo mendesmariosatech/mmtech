@@ -6,7 +6,7 @@ export default function Page() {
     <main>
       <RegisterPage
         isLoading={false}
-        handleLogin={() => { return Promise.resolve() }} />
+        handleLogIn={() => { return Promise.resolve() }} />
     </main>
   );
 }
