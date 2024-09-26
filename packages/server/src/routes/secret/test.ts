@@ -6,6 +6,6 @@ export const secret = new Hono()
   .get('/', (c) => {
     const message = c.get('jwtPayload')
 
-    return c.json({ data: `Hello Hono! ${message}` })
+    return c.json({ data: `Hello Hono! ${JSON.stringify(message)}` })
   }
   )
