@@ -5,6 +5,12 @@ import { AuthTable } from "./handlers";
 import { hashPassword } from "../../utils/bcrypt";
 import { env } from "hono/adapter";
 import { ENV_TYPES } from "../../env/zod";
+import { generateToken } from "../../jwt_token";
+import {
+  setCookie,
+  setSignedCookie,
+} from 'hono/cookie'
+import { COOKIES } from "../../cookies";
 
 const formValidation = zValidator(
   'form',
@@ -17,7 +23,7 @@ const formValidation = zValidator(
 export const authRoute = new Hono()
   .post('/register', formValidation,
     async (c) => {
-      const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env<ENV_TYPES>(c)
+      const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL, JWT_SECRET_KEY, COOkIE_SECRET_KEY } = env<ENV_TYPES>(c)
       const form = c.req.valid('form')
 
       if (!form) return c.json({ error: 'Invalid form data' }, 400)
@@ -34,12 +40,17 @@ export const authRoute = new Hono()
       const newUser = await auth.registerUser(email, passwordDigest)
       if (!newUser) return c.json({ error: 'User creation failed' }, 400)
 
-      return c.json({ data: newUser }, 201)
+      const token = await generateToken(newUser, JWT_SECRET_KEY)
+
+      setCookie(c, COOKIES.USER_ID, newUser.email)
+      await setSignedCookie(c, COOKIES.USER_TOKEN, token, COOkIE_SECRET_KEY)
+
+      return c.json({ data: { newUser, token: token } }, 201)
     }
   )
   .post('/login', formValidation,
     async (c) => {
-      const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env<ENV_TYPES>(c)
+      const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL, COOkIE_SECRET_KEY, JWT_SECRET_KEY } = env<ENV_TYPES>(c)
       const form = c.req.valid('form')
 
       if (!form) return c.json({ error: 'Invalid form data' }, 400)
@@ -49,7 +60,12 @@ export const authRoute = new Hono()
       const auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN)
       const user = await auth.findUser(email)
 
-      return c.json({ data: user }, 201
+      if (!user) return c.json({ error: 'User not found' }, 404)
 
+      const token = await generateToken(user, JWT_SECRET_KEY)
+
+      setCookie(c, COOKIES.USER_ID, user.email)
+      await setSignedCookie(c, COOKIES.USER_TOKEN, token, COOkIE_SECRET_KEY)
+      return c.json({ data: user }, 201
       )
     })

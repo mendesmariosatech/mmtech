@@ -25,7 +25,7 @@ export default function Page() {
       }
       const { data } = await resp.json()
 
-      router.push(`/?id=${data.id}&email=${data.email}`)
+      router.push(`/?id=${data.newUser.id}&email=${data.newUser.email}`)
 
     } catch (error) {
       console.log(error)

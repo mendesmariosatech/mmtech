@@ -9,6 +9,7 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@hono/swagger-ui": "^0.4.1",
     "@repo/server": "*",
     "@repo/ui": "*",
     "next": "14.2.4",

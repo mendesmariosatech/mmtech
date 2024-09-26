@@ -1642,6 +1642,11 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.7.tgz#d0ece53ce99ab5a8e37ebdfe5e32452a2bfc073e"
   integrity sha512-X8R8Oj771YRl/w+c1HqAC1szL8zWQRwFvgDwT129k9ACdBoud/+/rX9V0qiMl6LWUdP9voC2nDVZYPMQQsb6eA==
 
+"@hono/swagger-ui@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.npmjs.org/@hono/swagger-ui/-/swagger-ui-0.4.1.tgz#d67a31420c0f9c77946c820d1ab3a350998d0a9a"
+  integrity sha512-kPaJatHffeYQ3yVkHo878hCqwfapqx54FczJVJ+eRWt8J4biyVVMIdCAJb6MyA8bcnHUoTmUpPc7OJAV1VTg2g==
+
 "@hono/zod-validator@^0.2.2":
   version "0.2.2"
   resolved "https://registry.npmjs.org/@hono/zod-validator/-/zod-validator-0.2.2.tgz#929a1c40aee5eac1ed9c84094d6d977e0b70187a"

@@ -3,10 +3,11 @@ import { z } from "zod";
 export const envVariables = z.object({
   TURSO_CONNECTION_URL: z.string(),
   TURSO_AUTH_TOKEN: z.string(),
-  // TURSO_DB_NAME: z.string(),
+  JWT_SECRET_KEY: z.string(),
+  COOkIE_SECRET_KEY: z.string(),
 })
 
-envVariables.parse(process.env);
+export const ENV_VARIABLES = envVariables.parse(process.env);
 
 export type ENV_TYPES = z.infer<typeof envVariables>
 
