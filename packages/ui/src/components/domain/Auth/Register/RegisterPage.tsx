@@ -1,17 +1,23 @@
+"use client"
 import { Metadata } from "next"
 // import Image from "next/image"
 // import Link from "next/link"
 
-import { cn } from "../../../lib/utils"
-import { buttonVariants } from "../../ui/button"
-import { UserAuthForm } from "./Authentication"
+// import { cn } from "../../../lib/utils"
+// import { buttonVariants } from "../../ui/button"
+import { RegisterForm } from "./RegisterForm"
 
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
 }
 
-export function AuthenticationPage() {
+type RegisterPageProps = {
+  handleLogin: (email: string, password: string) => Promise<void>;
+  isLoading: boolean;
+}
+
+export function RegisterPage({ handleLogin, isLoading }: RegisterPageProps) {
   return (
     <>
       <div className="md:hidden">
@@ -78,7 +84,7 @@ export function AuthenticationPage() {
                 Enter your email below to create your account
               </p>
             </div>
-            <UserAuthForm />
+            <RegisterForm isLoading={isLoading} onClick={() => handleLogin("mmichael@gmail.com", "password")} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               {/* <Link

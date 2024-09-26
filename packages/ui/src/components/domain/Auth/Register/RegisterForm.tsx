@@ -2,23 +2,21 @@
 
 import { cn } from "@repo/ui/lib/utils"
 import * as React from "react"
-import { Input } from "../../ui/input"
-import { Label } from "../../ui/label"
-import { Button } from "../../ui/button"
+import { Input } from "../../../ui/input"
+import { Label } from "../../../ui/label"
+import { Button } from "../../../ui/button"
 import { Loader } from 'lucide-react';
+interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  onClick: () => Promise<void>;
+  isLoading: boolean;
+}
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
-
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
-
+export function RegisterForm({ className, ...props }: RegisterFormProps) {
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
-    setIsLoading(true)
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    console.log('onSubmit')
+    props.onClick()
   }
 
   return (
@@ -36,11 +34,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading}
+              disabled={props.isLoading}
             />
           </div>
-          <Button disabled={isLoading}>
-            {isLoading && (
+          <Button
+            onClick={onSubmit}
+            disabled={props.isLoading}>
+            {props.isLoading && (
               <Loader />
             )}
             Sign In with Email
@@ -57,8 +57,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
+      <Button variant="outline" type="button" disabled={props.isLoading}>
+        {props.isLoading ? (
           <Loader />
         ) : (
           null
