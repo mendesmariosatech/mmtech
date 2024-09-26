@@ -5,21 +5,20 @@ import { env } from "hono/adapter";
 import { ENV_TYPES } from "../../env/zod";
 import { authMiddleware } from "../../middleware/authentication";
 
+const queryValidation = zValidator(
+  'query',
+  z.object({
+    email: z.string(),
+    password: z.string(),
+  }).optional(),
+)
+
 
 export const personalRoute = new Hono()
   .use('*', authMiddleware)
   .get('/me',
-    zValidator(
-      'query',
-      z.object({
-        email: z.string().optional(),
-        password: z.string().optional(),
-      }).optional(),
-    ), async (c) => {
-      const { COOkIE_SECRET_KEY } = env<ENV_TYPES>(c)
-
+    queryValidation, async (c) => {
       const token = c.get('jwtPayload')
-
       const query = c.req.valid('query')
 
       if (query && query.email && query.password) {
@@ -27,6 +26,7 @@ export const personalRoute = new Hono()
           data: {
             email: query.email,
             password: query.password,
+            token: token,
           }
         }, 201)
       }

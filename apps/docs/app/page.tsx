@@ -1,14 +1,14 @@
 import { Header } from "@repo/ui/components/domain/Personal/Header"
-import { hono_client } from "../hono-client"
+import { hono_client } from "../src/hono-client"
 
 const Dashboard = async () => {
 
 
   try {
-    const URL = hono_client.api.$url()
-    console.log(
-      { URL }
-    )
+    // const URL = hono_client.api.$url()
+    // console.log(
+    //   { URL }
+    // )
     // const resp = await fetch(hono_client.api.personal.me.$url())
     // const data = await resp.json()
 
@@ -24,6 +24,10 @@ const Dashboard = async () => {
     // }
     // const { data } = await resp.json()
     // console.log({ data })
+
+    console.log({
+      URL: hono_client.api.$url()
+    })
 
     return <Header name={`Text:`} email={JSON.stringify(URL)} />
   } catch (error) {
