@@ -1,9 +1,10 @@
-import { AuthenticationPage } from "@repo/ui/components/molecules/SignIn/AuthenticationPage";
+import { Header } from "@repo/ui/components/domain/Personal/Header";
 
-export default function Page() {
+const Dashboard = () => {
+
   return (
-    <main>
-      <AuthenticationPage />
-    </main>
+    <Header email="test@example.com" name="test" />
   );
-}
+};
+
+export default Dashboard;

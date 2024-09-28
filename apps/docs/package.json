@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3001",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@repo/server": "*",
     "@repo/ui": "*",
     "next": "14.2.4",
     "react": "^18",
