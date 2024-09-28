@@ -3496,7 +3496,7 @@ chokidar@^3.5.3:
   optionalDependencies:
     fsevents "~2.3.2"
 
-chromatic@^11.4.0:
+chromatic@^11.10.4, chromatic@^11.4.0:
   version "11.10.4"
   resolved "https://registry.npmjs.org/chromatic/-/chromatic-11.10.4.tgz#22f01dc0c7d8c4a71f2aae1c15869738ea412359"
   integrity sha512-nfgDpW5gQ4FtgV1lZXXfqLjONKDCh2K4vwI3dbZrtU1ObOL9THyAzpIdnK9LRcNSeisDLX+XFCryfMg1Ql2U2g==
