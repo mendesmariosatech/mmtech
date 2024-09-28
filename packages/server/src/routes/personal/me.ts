@@ -13,13 +13,22 @@ const queryValidation = zValidator(
   }).optional(),
 )
 
+const headerValidation = zValidator(
+  'header',
+  z.object({
+    Authorization: z.string(),
+  }).optional(),
+)
+
 
 export const personalRoute = new Hono()
   .use('*', authMiddleware)
   .get('/me',
-    queryValidation, async (c) => {
+    queryValidation, headerValidation, async (c) => {
       const token = c.get('jwtPayload')
       const query = c.req.valid('query')
+
+      if (!token) return c.json({ error: 'Unauthorized' }, 401)
 
       if (query && query.email && query.password) {
         return c.json({

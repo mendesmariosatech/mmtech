@@ -6,7 +6,8 @@ import { personalRoute } from './routes/personal/me'
 import { secret } from './routes/secret/test'
 import { swaggerUI } from '@hono/swagger-ui'
 
-const route = app.get('/', (c) => c.text('Hello Hono!'))
+const route = app
+  .get('/', (c) => c.text('Hello Hono!'))
   .route('/auth', authRoute)
   .route('/personal', personalRoute)
   .route('/private/secret', secret)

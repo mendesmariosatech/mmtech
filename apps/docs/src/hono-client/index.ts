@@ -9,4 +9,4 @@ const PROD_URL = `https://mmtech-web.vercel.app/`
 
 const URL = PROD ? PROD_URL : DEV_URL
 
-export const hono_client = hc<AppType>(global.window?.location.href ?? URL)
+export const hono_client = hc<AppType>(URL)
