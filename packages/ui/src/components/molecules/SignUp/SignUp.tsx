@@ -10,7 +10,7 @@ import { formatarNumeroCelular } from "@repo/ui/lib/formatNumberCell"
 import { CheckIcon, LucideEye, LucideEyeOff } from "lucide-react"
 import { Checkbox } from "../../ui/checkbox"
 
-export function SignUp({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+export function SignUp() {
 	const [isLoading, setIsLoading] = React.useState<boolean>(false)
 	const [showPassword, setShowPassword] = React.useState(false);
 	const [passwordValidations, setPasswordValidations] = React.useState({

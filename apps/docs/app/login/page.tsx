@@ -1,10 +1,14 @@
+'use client'
+
 import { Button } from "@repo/ui/components/ui/button";
-import { AuthenticationPage } from "@repo/ui/components/molecules/SignIn/AuthenticationPage";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const {push} = useRouter();
   return (
     <main>
-      <AuthenticationPage />
+      <p>autenticationPage</p>
+      <Button onClick={() => {push('/login/signup')}}>SignUp</Button>
     </main>
   );
 }
