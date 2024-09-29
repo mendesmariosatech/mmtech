@@ -59,7 +59,7 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
           {true && (
             <Loader />
           )}
-          Sign In with Email
+          Sign In with Email Text
         </Button>
       </div>
       {/* </form> */}

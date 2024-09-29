@@ -6,7 +6,8 @@
     "ui:add": "npx shadcn-ui@latest add",
     "lint": "eslint .",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "chromatic": "npx chromatic --project-token=<CHROMATIC_TOKEN>"
   },
   "peerDependencies": {
     "react": "^18"
@@ -26,6 +27,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "autoprefixer": "^10.4.19",
+    "chromatic": "^11.10.4",
     "eslint-plugin-storybook": "^0.8.0",
     "postcss": "^8.4.38",
     "postcss-load-config": "^6.0.1",
