@@ -12,7 +12,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {},
   args: {
-    handleLogin(email, password) {
+    async handleLogIn(email, password) {
       console.log('handleLogin', email, password)
     },
   },
@@ -21,21 +21,30 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {};
+export const Primary: Story = {
+  args: {
+    async handleLogIn(email, password) {
+      console.log('handleLogin', email, password)
+    },
+    isLoading: false,
+  }
+};
 
 export const Success: Story = {
   args: {
-    handleLogin(email, password) {
+    async handleLogIn(email, password) {
       console.log('handleLogin', email, password)
     },
+    isLoading: false,
   },
 };
 
 export const Error: Story = {
   args: {
-    handleLogin(email, password) {
+    async handleLogIn(email, password) {
       console.log('handleLogin', email, password)
     },
+    isLoading: false,
   },
 };
 
