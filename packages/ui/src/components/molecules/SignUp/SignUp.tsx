@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from "react"
-import { cn } from '@repo/ui/lib/utils'
 import { Button } from '../../ui/button'
 import { Input } from '../../ui/input'
 import { Label } from '../../ui/label'
@@ -9,28 +8,13 @@ import { Card, CardContent } from "../../ui/card"
 import { formatarNumeroCelular } from "@repo/ui/lib/formatNumberCell"
 import { CheckIcon, LucideEye, LucideEyeOff } from "lucide-react"
 import { Checkbox } from "../../ui/checkbox"
+import { PasswordSecurity } from "@repo/ui/lib/passwordSecurity"
+import { useState } from "react"
 
 export function SignUp() {
-	const [isLoading, setIsLoading] = React.useState<boolean>(false)
-	const [showPassword, setShowPassword] = React.useState(false);
-	const [passwordValidations, setPasswordValidations] = React.useState({
-		hasLetter: false,
-		hasDigit: false,
-		isLongEnough: false,
-	});
-
-	const handlePasswordChange = (e: any) => {
-		const value = e.target.value;
-		const hasLetter = /[A-Z]/.test(value);
-		const hasDigit = /\d/.test(value);
-		const isLongEnough = value.length >= 8;
-
-		setPasswordValidations({
-			hasLetter,
-			hasDigit,
-			isLongEnough,
-		});
-	};
+	const { handlePasswordChange, passwordValidations } = PasswordSecurity()
+	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [showPassword, setShowPassword] = useState(false);
 
 	async function onSubmit(event: React.SyntheticEvent) {
 		event.preventDefault()
