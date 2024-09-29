@@ -21,6 +21,17 @@ jobs:
         with:
           node-version: 20
       - name: Install dependencies
+        run:
+          npm install
+          # |
+          # if [ -e yarn.lock ]; then
+          # yarn install --frozen-lockfile
+          # elif [ -e package-lock.json ]; then
+          # npm ci
+          # else
+          # npm i
+          # fi
+      - name: Install ci
         # ⚠️ See your package manager's documentation for the correct command to install dependencies in a CI environment.
         run: npm ci
       - name: Run Chromatic
