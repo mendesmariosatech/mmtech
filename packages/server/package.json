@@ -3,15 +3,22 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts"
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "npx drizzle-kit migrate"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.2",
+    "@libsql/client": "^0.10.0",
+    "bcryptjs": "^2.4.3",
+    "drizzle-orm": "^0.33.0",
     "hono": "^4.5.11",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
+    "@types/bcryptjs": "^2.4.6",
+    "drizzle-kit": "^0.24.2",
     "wrangler": "^3.57.2"
   },
   "private": true,

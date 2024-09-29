@@ -7,46 +7,62 @@ import { Label } from "../../../ui/label"
 import { Button } from "../../../ui/button"
 import { Loader } from 'lucide-react';
 interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  onClick: () => Promise<void>;
-  isLoading: boolean;
+  handleLogIn: (email: string, password: string) => Promise<void>;
+  // isloading: boolean;
 }
 
 export function RegisterForm({ className, ...props }: RegisterFormProps) {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
 
     console.log('onSubmit')
-    props.onClick()
+    props.handleLogIn(email, password)
   }
+
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-            <Input
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              disabled={props.isLoading}
-            />
-          </div>
-          <Button
-            onClick={onSubmit}
-            disabled={props.isLoading}>
-            {props.isLoading && (
-              <Loader />
-            )}
-            Sign In with Email
-          </Button>
+      {/* <form > */}
+      <div className="grid gap-2">
+        <div className="grid gap-1">
+          <Label className="sr-only" htmlFor="email">
+            Email
+          </Label>
+          <Input
+            id="email"
+            placeholder="name@example.com"
+            type="email"
+            autoCapitalize="none"
+            autoComplete="email"
+            autoCorrect="off"
+            onChange={(e) => setEmail(e.target.value)}
+            // disabled={props.isloading}
+            value={email}
+          />
+          <Input
+            id="password"
+            placeholder="######"
+            type="password"
+            autoCapitalize="none"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          // disabled={props.isloading}
+          />
         </div>
-      </form>
+        <Button
+          onClick={onSubmit}
+        // disabled={props.isloading}
+        >
+          {true && (
+            <Loader />
+          )}
+          Sign In with Email
+        </Button>
+      </div>
+      {/* </form> */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -57,8 +73,11 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={props.isLoading}>
-        {props.isLoading ? (
+      <Button variant="outline" type="button"
+      // disabled={props.isloading}
+      // onClick={onSubmit}
+      >
+        {true ? (
           <Loader />
         ) : (
           null

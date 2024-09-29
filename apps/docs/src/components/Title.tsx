@@ -10,7 +10,17 @@ export const Title = async () => {
     }
   })
 
-  if (resp.status !== 201) {
+  if (resp.status === 401) {
+    const error = await resp.json()
+    return (
+      <>
+        <p>Error</p>
+        <p>{error.error}</p>
+      </>
+    )
+  }
+
+  if (resp.status === 404) {
     const error = await resp.json()
     return (
       <>

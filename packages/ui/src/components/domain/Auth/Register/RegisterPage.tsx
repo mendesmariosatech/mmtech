@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 }
 
 type RegisterPageProps = {
-  handleLogin: (email: string, password: string) => Promise<void>;
+  handleLogIn: (email: string, password: string) => Promise<void>;
   isLoading: boolean;
 }
 
-export function RegisterPage({ handleLogin, isLoading }: RegisterPageProps) {
+export function RegisterPage({ handleLogIn, isLoading }: RegisterPageProps) {
   return (
     <>
       <div className="md:hidden">
@@ -84,7 +84,7 @@ export function RegisterPage({ handleLogin, isLoading }: RegisterPageProps) {
                 Enter your email below to create your account
               </p>
             </div>
-            <RegisterForm isLoading={isLoading} onClick={() => handleLogin("mmichael@gmail.com", "password")} />
+            <RegisterForm handleLogIn={handleLogIn} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               {/* <Link
