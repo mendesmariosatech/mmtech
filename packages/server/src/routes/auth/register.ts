@@ -11,14 +11,9 @@ import {
   setSignedCookie,
 } from 'hono/cookie'
 import { COOKIES } from "../../cookies";
+import { registerFields } from "@repo/zod-types"
 
-const formValidation = zValidator(
-  'form',
-  z.object({
-    email: z.string(),
-    password: z.string(),
-  }).optional(),
-)
+const formValidation = zValidator('form', registerFields)
 
 export const authRoute = new Hono()
   .post('/register', formValidation,
