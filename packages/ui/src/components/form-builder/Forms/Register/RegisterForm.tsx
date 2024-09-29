@@ -4,7 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ControlledForm } from "../../ControlledForm";
 import { Button } from "../../../ui/button";
-import { RegisterFields, registerFields, registerFormConfig } from "./Register.config";
+import { registerFormConfig } from "./Register.config";
+import { RegisterFields, registerFields } from "@repo/zod-types";
 
 export const RegisterForm = () => {
   const form = useForm<RegisterFields>({

@@ -11,3 +11,5 @@ export const registerFields = z.object({
     message: "You must agree to the terms and conditions",
   })
 });
+
+export type RegisterFields = z.infer<typeof registerFields>;
