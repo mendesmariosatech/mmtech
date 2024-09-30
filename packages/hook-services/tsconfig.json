@@ -1,13 +1,10 @@
 {
-  "extends": "@repo/typescript-config/base.json",
+  "extends": "@repo/typescript-config/react-library.json",
   "compilerOptions": {
     "strict": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {}
+    "paths": {},
+    "module": "Preserve",
+    "moduleResolution": "Bundler"
   },
   "include": [
     "next-env.d.ts",

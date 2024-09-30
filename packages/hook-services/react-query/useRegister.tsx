@@ -1,4 +1,4 @@
-import { RegisterFields } from "@repo/zod-types";
+import type { RegisterFields } from "@repo/zod-types";
 import { useMutation } from "@tanstack/react-query";
 import { hono_client } from "../hono_client";
 
