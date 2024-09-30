@@ -4,7 +4,7 @@ import { z } from "zod";
 import { AuthTable } from "./handlers";
 import { hashPassword } from "../../utils/bcrypt";
 import { env } from "hono/adapter";
-import { ENV_TYPES } from "../../env/zod";
+import type { ENV_TYPES } from "../../env/zod";
 import { generateToken } from "../../jwt_token";
 import { setCookie, setSignedCookie } from "hono/cookie";
 import { COOKIES } from "../../cookies";

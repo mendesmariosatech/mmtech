@@ -1,11 +1,11 @@
 import React from "react";
 import {
 	Controller,
-	FieldPath,
-	FieldValues,
-	UseFormReturn,
+	type FieldPath,
+	type FieldValues,
+	type UseFormReturn,
 } from "react-hook-form";
-import { Input, InputProps } from "../ui/input";
+import { Input, type InputProps } from "../ui/input";
 import {
 	FormControl,
 	FormDescription,

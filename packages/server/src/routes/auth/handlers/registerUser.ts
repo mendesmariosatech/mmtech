@@ -1,5 +1,5 @@
 import { DBConnection } from "../../../drizzle/drizzle-client";
-import { authTable, SelectAuth } from "../../../drizzle/schema";
+import { authTable, type SelectAuth } from "../../../drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export class AuthTable extends DBConnection {

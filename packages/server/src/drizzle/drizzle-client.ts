@@ -1,4 +1,4 @@
-import { drizzle, LibSQLDatabase } from "drizzle-orm/libsql";
+import { drizzle, type LibSQLDatabase } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 
 export const createDrizzleClient = (

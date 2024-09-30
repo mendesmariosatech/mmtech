@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import type React from "react";
 // In Next.js, this file would be called: app/providers.tsx
 
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
@@ -10,7 +10,7 @@ import {
 	useMutation,
 } from "@tanstack/react-query";
 import { hono_client } from "./hono_client";
-import { RegisterFields } from "@repo/zod-types";
+import type { RegisterFields } from "@repo/zod-types";
 // import { getTodos, postTodo } from '../my-api'
 
 // Create a client

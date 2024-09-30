@@ -1,6 +1,6 @@
 import { COOKIES } from "../cookies";
 import { createMiddleware } from "hono/factory";
-import { ENV_TYPES } from "../env/zod";
+import type { ENV_TYPES } from "../env/zod";
 import { getSignedCookie, getCookie } from "hono/cookie";
 import { env } from "hono/adapter";
 import { decodeToken } from "../jwt_token";

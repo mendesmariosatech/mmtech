@@ -1,5 +1,5 @@
-import { ConfigObject } from "../../ControlledInput";
-import { RegisterFields } from "@repo/zod-types";
+import type { ConfigObject } from "../../ControlledInput";
+import type { RegisterFields } from "@repo/zod-types";
 
 export const registerFormConfig: ConfigObject<RegisterFields> = {
 	name: {

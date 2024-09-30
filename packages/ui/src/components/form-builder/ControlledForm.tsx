@@ -1,7 +1,7 @@
 import React from "react";
-import { FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form";
+import type { FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form";
 
-import { ConfigObject, ControlledInput } from "./ControlledInput";
+import { type ConfigObject, ControlledInput } from "./ControlledInput";
 import { Form } from "../ui/form";
 
 type ControlledForm<T extends FieldValues> = {

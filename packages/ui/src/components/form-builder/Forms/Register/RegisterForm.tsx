@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { ControlledForm } from "../../ControlledForm";
 import { Button } from "../../../ui/button";
 import { registerFormConfig } from "./Register.config";
-import { RegisterFields, registerFields } from "@repo/zod-types";
+import { type RegisterFields, registerFields } from "@repo/zod-types";
 import { useRegister } from "@repo/hooks";
 import { useRouter } from "next/navigation";
 
