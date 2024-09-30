@@ -5,7 +5,7 @@ import { hono_client } from "../hono_client";
 export function useRegister() {
 	return useMutation({
 		onError: (error) => {
-			console.log(error.message);
+			console.log(error);
 		},
 		onSuccess: (data) => {
 			console.log(data);
@@ -16,12 +16,12 @@ export function useRegister() {
 				data,
 			});
 			return hono_client.api.auth.register.$post({
-				form: {
+				json: {
 					email: data.email,
 					password: data.password,
 					name: data.name,
 					phone: data.phone,
-					agreeTerms: false.toString(),
+					agreeTerms: data.agreeTerms,
 				},
 			});
 		},
