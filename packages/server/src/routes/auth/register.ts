@@ -24,7 +24,7 @@ export const authRoute = new Hono()
 
 		if (!form) return c.json({ error: "Invalid form data" }, 400);
 
-		const { email, password, name, phone, } = form;
+		const { email, password, name, phone } = form;
 		const auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
 		const user = await auth.findUser(email);
