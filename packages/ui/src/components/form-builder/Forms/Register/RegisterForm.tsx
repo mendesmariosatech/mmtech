@@ -9,6 +9,7 @@ import { registerFormConfig } from "./Register.config";
 import { type RegisterFields, registerFields } from "@repo/zod-types";
 import { useRegister } from "@repo/hooks-server";
 import { useRouter } from "next/navigation";
+import { ronaldo } from "@repo/hook-services";
 
 type RegisterFormProps = {
 	mutate: ReturnType<typeof useRegister>["mutate"];
@@ -16,6 +17,8 @@ type RegisterFormProps = {
 	isPending: ReturnType<typeof useRegister>["isPending"];
 	error: ReturnType<typeof useRegister>["error"];
 };
+
+ronaldo
 
 const registerForm = () =>
 	useForm<RegisterFields>({
