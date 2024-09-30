@@ -5,7 +5,7 @@ export const registerFields = z.object({
 		.string()
 		.min(1, { message: "Name is required to have +3 characters" }),
 	email: z.string().email({ message: "Invalid email address" }),
-	phone: z.string().min(10, { message: "Phone number is required" }),
+	phone: z.string().min(9, { message: "Phone number is required" }),
 	password: z
 		.string()
 		.min(6)
