@@ -9,7 +9,7 @@ console.log({
   next: process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL,
 })
 
-const URL = process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL  // my-site.vercel.app || localhost:3001
+const URL = process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL  // my-site.vercel.app || localhost:3001
 
 
 const DEV_URL = `http://localhost:${PORT}/`;
