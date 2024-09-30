@@ -43,7 +43,10 @@ export const RegisterForm = (mutation: RegisterFormProps) => {
   return (
     <>
       <DevTool control={form.control} />
-      <ControlledForm useForm={form} config={registerFormConfig} onSubmit={handleSubmit} />
+      <ControlledForm
+        useForm={form}
+        config={registerFormConfig}
+        onSubmit={handleSubmit} />
       <div style={{ justifyContent: "end", display: "flex", padding: "1rem" }}>
         <Button
           onClick={form.handleSubmit(handleSubmit)}
@@ -57,9 +60,16 @@ export const RegisterForm = (mutation: RegisterFormProps) => {
   );
 };
 
-export default function Page() {
+export function RegisterPage() {
   const router = useRouter()
   const register = useRegister()
 
-  return (<RegisterForm {...register} />);
+  return (
+    <RegisterForm
+      data={register.data}
+      isPending={register.isPending}
+      error={register.error}
+      mutate={register.mutate}
+    />
+  );
 }

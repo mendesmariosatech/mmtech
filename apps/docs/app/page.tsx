@@ -12,15 +12,15 @@ const Dashboard = async () => {
 
     // get from cookie
 
-    const resp = await hono_client.api.personal.me.$get({
-      query: {
-        email: '10',
-        password: '2023-01-01',
-      },
-      header: {
-        Authorization: `Bearer ${USER_TOKEN?.value}` || '',
-      }
-    })
+    // const resp = await hono_client.api.personal.me.$get({
+    //   query: {
+    //     email: '10',
+    //     password: '2023-01-01',
+    //   },
+    //   header: {
+    //     Authorization: `Bearer ${USER_TOKEN?.value}` || '',
+    //   }
+    // })
 
     // if (resp.status !== 201 && resp.status == 401) {
     //   const response = await resp.json()

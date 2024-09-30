@@ -1,12 +1,5 @@
 "use client";
-import { useRegister } from "@repo/hooks";
-import { RegisterForm } from "@repo/ui/components/form-builder/Forms/Register/RegisterForm";
-import { useRouter } from "next/navigation";
+import { RegisterPage } from "@repo/ui/components/form-builder/Forms/Register/RegisterForm";
 
-export default function Page() {
-  const router = useRouter()
-  const register = useRegister()
+export default RegisterPage;
 
-
-  return (<RegisterForm {...register} />);
-}
