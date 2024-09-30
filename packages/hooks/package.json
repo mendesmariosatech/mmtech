@@ -1,0 +1,19 @@
+{
+  "name": "@repo/hooks",
+  "version": "1.0.0",
+  "description": "react hooks and all hooks",
+  "main": "index.ts",
+  "author": "mmtech",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@tanstack/react-query": "^5.56.2",
+    "@repo/server": "*"
+  },
+  "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.58.1"
+  },
+  "exports": {
+    ".": "./index.tsx"
+  }
+}
