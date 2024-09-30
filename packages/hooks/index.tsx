@@ -25,7 +25,7 @@ export function ReactQueryClientProvider({ children }: { children: React.ReactNo
 export function useRegister() {
   return useMutation({
     onError: (error) => {
-      console.log(error)
+      console.log(error.message)
     },
     onSuccess: (data) => {
       console.log(data)
