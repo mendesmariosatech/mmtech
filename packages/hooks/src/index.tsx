@@ -80,13 +80,16 @@ export function useRegister() {
 		},
 
 		mutationFn: (data: RegisterFields) => {
+			console.log({
+				data,
+			})
 			return hono_client.api.auth.register.$post({
 				form: {
 					email: data.email,
 					password: data.password,
 					name: data.name,
 					phone: data.phone,
-					agreeTerms: data.agreeTerms.toString(),
+					agreeTerms: false.toString(),
 				},
 			});
 		},
