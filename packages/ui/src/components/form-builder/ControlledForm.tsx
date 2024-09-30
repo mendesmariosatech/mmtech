@@ -1,5 +1,9 @@
 import React from "react";
-import type { FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form";
+import type {
+	FieldValues,
+	SubmitHandler,
+	UseFormReturn,
+} from "react-hook-form";
 
 import { type ConfigObject, ControlledInput } from "./ControlledInput";
 import { Form } from "../ui/form";
