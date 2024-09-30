@@ -11,6 +11,6 @@
     "@tanstack/eslint-plugin-query": "^5.58.1"
   },
   "exports": {
-    ".": "./index.tsx"
+    ".": "./index.ts"
   }
 }

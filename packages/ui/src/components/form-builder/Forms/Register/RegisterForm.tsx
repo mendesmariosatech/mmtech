@@ -7,7 +7,7 @@ import { ControlledForm } from "../../ControlledForm";
 import { Button } from "../../../ui/button";
 import { registerFormConfig } from "./Register.config";
 import { type RegisterFields, registerFields } from "@repo/zod-types";
-import { useRegister } from "@repo/hooks";
+import { useRegister } from "@repo/hooks-server";
 import { useRouter } from "next/navigation";
 
 type RegisterFormProps = {
