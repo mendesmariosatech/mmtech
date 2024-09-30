@@ -39,7 +39,6 @@
   },
   "dependencies": {
     "@repo/zod-types": "*",
-    "@repo/hooks": "*",
     "@repo/hook-services": "*",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",

@@ -1,7 +1,7 @@
 import "@repo/ui/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { QueryProvider } from "@repo/hooks";
+import { QueryProvider } from "@repo/hook-services";
 
 const inter = Inter({ subsets: ["latin"] });
 
