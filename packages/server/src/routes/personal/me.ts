@@ -19,7 +19,7 @@ const headerValidation = zValidator(
 	"header",
 	z
 		.object({
-			Authorization: z.string(),
+			authorization: z.string(),
 		})
 		.optional(),
 );

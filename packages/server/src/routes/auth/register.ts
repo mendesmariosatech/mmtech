@@ -40,7 +40,7 @@ export const authRoute = new Hono()
 		const token = await generateToken(newUser, JWT_SECRET_KEY);
 
 		setCookie(c, COOKIES.USER_ID, newUser.email);
-		await setSignedCookie(c, COOKIES.USER_TOKEN, token, COOkIE_SECRET_KEY);
+		setCookie(c, COOKIES.USER_TOKEN, token);
 
 		return c.json({ data: { newUser, token: token } }, 201);
 	})
@@ -65,6 +65,6 @@ export const authRoute = new Hono()
 		const token = await generateToken(user, JWT_SECRET_KEY);
 
 		setCookie(c, COOKIES.USER_ID, user.email);
-		await setSignedCookie(c, COOKIES.USER_TOKEN, token, COOkIE_SECRET_KEY);
+		setCookie(c, COOKIES.USER_TOKEN, token);
 		return c.json({ data: user }, 201);
 	});
