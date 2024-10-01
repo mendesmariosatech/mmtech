@@ -24,7 +24,7 @@ export const ControlledForm = <T extends FieldValues>({
 		<Form {...useForm}>
 			<form
 				onSubmit={useForm.handleSubmit(onSubmit)}
-				className="w-2/3 space-y-6"
+				className="w-full space-y-2"
 			>
 				{Object.entries(config).map(([key, value]) => {
 					return (
