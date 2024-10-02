@@ -21,12 +21,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
+export const Loading: Story = {
 	args: {
 		async handleLogIn(email, password) {
 			console.log("handleLogin", email, password);
 		},
-		isLoading: false,
+		isLoading: true,
 	},
 };
 

@@ -5,15 +5,17 @@ import * as React from "react";
 import { Input } from "../../../ui/input";
 import { Label } from "../../../ui/label";
 import { Button } from "../../../ui/button";
-import { Loader } from "lucide-react";
+import { Eye, EyeOff, Loader } from "lucide-react";
 interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {
 	handleLogIn: (email: string, password: string) => Promise<void>;
-	// isloading: boolean;
+	isloading: boolean;
 }
 
 export function RegisterForm({ className, ...props }: RegisterFormProps) {
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
+	const [showPassword, setShowPassword] = React.useState(false);
+
 
 	async function onSubmit(event: React.SyntheticEvent) {
 		event.preventDefault();
@@ -25,10 +27,10 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
 	return (
 		<div className={cn("grid gap-6", className)} {...props}>
 			{/* <form > */}
-			<div className="grid gap-2">
-				<div className="grid gap-1">
-					<Label className="sr-only" htmlFor="email">
-						Email
+			<div className="flex flex-col my-2">
+				<div className="flex flex-col gap-1 my-3">
+					<Label htmlFor="email">
+						E-mail*
 					</Label>
 					<Input
 						id="email"
@@ -41,43 +43,47 @@ export function RegisterForm({ className, ...props }: RegisterFormProps) {
 						// disabled={props.isloading}
 						value={email}
 					/>
-					<Input
-						id="password"
-						placeholder="######"
-						type="password"
-						autoCapitalize="none"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						// disabled={props.isloading}
-					/>
+					<div className="flex justify-between">
+						<Label htmlFor="senha">Senha</Label>
+						<a
+							className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+							href="/login/recuperar-acesso"
+							tabIndex={-1}
+						>
+							esqueceu a senha?
+						</a>
+					</div>
+					<div className="relative">
+						<Input
+							type={showPassword ? "text" : "password"}
+							placeholder=""
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+						{showPassword ? (
+							<Eye
+								className="absolute right-2 top-2 cursor-pointer"
+								onClick={() => setShowPassword(false)}
+							/>
+						) : (
+							<EyeOff
+								className="absolute right-2 top-2 cursor-pointer"
+								onClick={() => setShowPassword(true)}
+							/>
+						)}
+					</div>
 				</div>
 				<Button
 					onClick={onSubmit}
-					// disabled={props.isloading}
+					disabled={props.isloading}
 				>
-					{true && <Loader />}
-					Sign In with Email Text
+					{props.isloading ? (
+						<Loader className="animate-spin h-4 w-4 mr-2" />
+					) : null}
+					Acessar
 				</Button>
 			</div>
 			{/* </form> */}
-			<div className="relative">
-				<div className="absolute inset-0 flex items-center">
-					<span className="w-full border-t" />
-				</div>
-				<div className="relative flex justify-center text-xs uppercase">
-					<span className="bg-background px-2 text-muted-foreground">
-						Or continue with
-					</span>
-				</div>
-			</div>
-			<Button
-				variant="outline"
-				type="button"
-				// disabled={props.isloading}
-				// onClick={onSubmit}
-			>
-				{true ? <Loader /> : null} GitHub
-			</Button>
 		</div>
 	);
 }

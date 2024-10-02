@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 // import { cn } from "../../../lib/utils"
 // import { buttonVariants } from "../../ui/button"
 import { RegisterForm } from "./RegisterForm";
+import { Card, CardContent } from "@repo/ui/components/ui/card";
 
 export const metadata: Metadata = {
 	title: "Authentication",
@@ -19,92 +20,58 @@ type RegisterPageProps = {
 
 export function RegisterPage({ handleLogIn, isLoading }: RegisterPageProps) {
 	return (
-		<>
-			<div className="md:hidden">
-				{/* <Image
-          src="/examples/authentication-light.png"
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/authentication-dark.png"
-          width={1280}
-          height={843}
-          alt="Authentication"
-          className="hidden dark:block"
-        /> */}
-			</div>
-			<div className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-				{/* <Link
-          href="/examples/authentication"
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
-          )}
-        >
-          Login
-        </Link> */}
-				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-					<div className="absolute inset-0 bg-zinc-900" />
-					<div className="relative z-20 flex items-center text-lg font-medium">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							className="mr-2 h-6 w-6"
-						>
-							<path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-						</svg>
-						Acme Inc
-					</div>
-					<div className="relative z-20 mt-auto">
-						<blockquote className="space-y-2">
-							<p className="text-lg">
-								&ldquo;This library has saved me countless hours of work and
-								helped me deliver stunning designs to my clients faster than
-								ever before.&rdquo;
-							</p>
-							<footer className="text-sm">Sofia Davis</footer>
-						</blockquote>
-					</div>
+		<div className="min-h-screen bg-[#25508C] sm:bg-gray-100 flex flex-col md:flex-row">
+			<div className="hidden flex-1 sm:flex flex-col justify-center sm:justify-between p-8 sm:bg-[#25508C]">
+				<div>
+					<h1 className="mt-4 text-3xl font-bold text-gray-900 sm:text-white">
+						Sua empresa
+					</h1>
 				</div>
-				<div className="lg:p-8">
-					<div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-						<div className="flex flex-col space-y-2 text-center">
-							<h1 className="text-2xl font-semibold tracking-tight">
-								Create an account
-							</h1>
-							<p className="text-sm text-muted-foreground">
-								Enter your email below to create your account
-							</p>
-						</div>
-						<RegisterForm handleLogIn={handleLogIn} />
-						<p className="px-8 text-center text-sm text-muted-foreground">
-							By clicking continue, you agree to our{" "}
-							{/* <Link
-                href="/terms"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link
-                href="/privacy"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Privacy Policy
-              </Link> */}
-							.
+				<div className="mt-8">
+					<blockquote>
+						<p className="text-xl font-semibold text-gray-900 sm:text-gray-200">
+							"Uma solulação pensada em potencializar o dia a dia da
+							administração pública através de soluções tecnológicas."
 						</p>
-					</div>
+						<footer className="mt-4">
+							<p className="text-base font-normal text-gray-500 sm:text-gray-400">
+								M&M Tech
+							</p>
+						</footer>
+					</blockquote>
 				</div>
 			</div>
-		</>
+			<div className="flex-1 flex flex-col justify-center p-4">
+				<Card className="w-full max-w-md mx-auto sm:bg-gray-100 sm:border-none shadow-none">
+					<CardContent className="mt-8">
+						<h2 className="text-2xl font-bold text-gray-900">Acessar painel</h2>
+						<p className="mt-2 text-sm text-gray-600">
+							Entre com seu e-email e senha abaixo:
+						</p>
+						<RegisterForm handleLogIn={handleLogIn} isloading={false}></RegisterForm>
+						<div className="relative mt-6">
+							<div
+								aria-hidden="true"
+								className="absolute inset-0 flex items-center"
+							>
+								<div className="w-full border-t border-gray-300" />
+							</div>
+							<div className="relative flex justify-center text-sm">
+								<span className="px-2 bg-gray-100 text-gray-500"></span>
+							</div>
+						</div>
+						<p className="mt-4 text-xs text-gray-500">
+							{`Ainda não possui cadastro? `}
+							<a
+								className="text-blue-800 font-bold hover:underline"
+								href="/login/singup"
+							>
+								Criar nova conta.
+							</a>{" "}
+						</p>					
+					</CardContent>
+				</Card>
+			</div>
+		</div>
 	);
 }
