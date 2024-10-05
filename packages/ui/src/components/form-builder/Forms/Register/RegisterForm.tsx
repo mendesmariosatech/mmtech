@@ -8,14 +8,15 @@ import { registerFormConfig } from "./Register.config";
 import { type RegisterFields } from "@repo/zod-types";
 import { useRegister } from "@repo/hook-services";
 import { useRegisterForm } from "./useRegister.hooks";
-import { error } from "console";
 
 const texts = {
 	EN: {
-		button: "Submit"
+		button: "Submit",
+		loading: "Loading...",
 	},
 	PT: {
-		button: "Entrar"
+		button: "Entrar",
+		loading: "Carregando...",
 	}
 } as const
 
@@ -25,21 +26,20 @@ type RegisterFormProps = {
 	error: ReturnType<typeof useRegister>["error"];
 };
 
-export const RegisterForm = (mutation: RegisterFormProps) => {
+export const RegisterForm = (props: RegisterFormProps) => {
 	const form = useRegisterForm();
 
 	const handleSubmit = (data: RegisterFields) => {
 		console.log(data);
-		mutation.mutate(data);
+		props.mutate(data);
 	};
 
 	console.log("Errors", form.formState.errors);
 
-	mutation.error?.message
-
+	props.error?.message
 
 	return (
-		<div className="border-2 border-gray-500 p-4">
+		<div className="border-2 border-primary-foreground p-6 rounded-md">
 			<DevTool control={form.control} />
 			<ControlledForm
 				useForm={form}
@@ -51,17 +51,18 @@ export const RegisterForm = (mutation: RegisterFormProps) => {
 				}}>
 					<Button
 						type="submit"
-						disabled={mutation.isPending}
+						disabled={props.isPending}
 						className="w-full"
 					>
-						<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-						{texts.EN.button}
+						{props.isPending ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : null}
+						{props.isPending ? texts.EN.loading : texts.EN.button}
 					</Button>
 				</div>
 			</ControlledForm>
-			<p style={{ border: "1px solid red" }}>
-				{mutation.error?.message}
-			</p>
+			{props.error?.message ?
+				<p style={{ color: "red", textAlign: "center" }}>
+					{props.error?.message}
+				</p> : null}
 		</div>
 	);
 };

@@ -21,10 +21,21 @@ export const Loading: Story = {
 	},
 };
 
-export const Primary: Story = {
+export const Default: Story = {
 	args: {
 		mutate: () => { },
 		isPending: false,
 		error: null,
+	},
+};
+
+export const Error: Story = {
+	args: {
+		mutate: () => { },
+		isPending: false,
+		error: {
+			message: "Error",
+			name: "Error",
+		},
 	},
 };

@@ -26,7 +26,7 @@ export const ControlledForm = <T extends FieldValues>({
 		<Form {...useForm}>
 			<form
 				onSubmit={useForm.handleSubmit(onSubmit)}
-				className="border-2 border-red-500 p-4"
+			// className="border-2 border-red-500 p-4"
 			>
 				{Object.entries(config).map(([key, value]) => {
 					return (
