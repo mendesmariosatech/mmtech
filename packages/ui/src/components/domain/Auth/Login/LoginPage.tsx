@@ -1,7 +1,6 @@
 "use client";
 import type { Metadata } from "next";
-import { RegisterFormWithHook } from "./RegisterFormWithHook";
-import { RegisterForm } from "../../../../components/form-builder/Forms/Register";
+import { LoginForm } from "@repo/ui/components/form-builder/Forms/Login/LoginForm";
 
 export const metadata: Metadata = {
 	title: "Authentication",
@@ -19,7 +18,7 @@ const texts = {
 		terms: "By clicking continue, you agree to our terms and conditions"
 	}
 }
-export function RegisterPage() {
+export function LoginPage() {
 	return (
 		<>
 			<div className="md:hidden">
@@ -84,7 +83,7 @@ export function RegisterPage() {
 								{texts.EN.enterEmail}
 							</p>
 						</div>
-						<RegisterForm
+						<LoginForm
 							error={null}
 							isPending={false}
 							mutate={() => { }}

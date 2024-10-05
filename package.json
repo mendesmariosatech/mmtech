@@ -6,7 +6,8 @@
   "scripts": {
     "format": "yarn biome format --write",
     "lint": "yarn biome lint --write",
-    "ui:add": "yarn --filter @repo/ui ui:add"
+    "ui:add": "yarn --filter @repo/ui ui:add",
+    "ui:storybook": "cd packages/ui && yarn storybook"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.2",
