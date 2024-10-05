@@ -1,9 +1,20 @@
 import { ShoppingCart, Search, MessageCircle } from 'lucide-react'
 import { Button } from '../../../ui/button'
 
+const texts = {
+  EN: {
+    welcome: "Welcome to Our Platform",
+    title: "Discover amazing features and boost your productivity",
+    subtitle: `Join thousands of users who are already enjoying our services.
+            Start your journey today!`,
+    login: "Login",
+    register: "Register"
+  }
+}
+
 export function Header() {
   return (
-    <div className="min-h-screen bg-white">
+    <>
       {/* Navigation */}
       <nav className="flex items-center justify-between p-4 bg-white">
         <div className="flex items-center">
@@ -59,9 +70,18 @@ export function Header() {
             <p className="text-xl text-gray-600 mb-6">
               We make it a priority to offer flexible results and data to include your must needs do it.
             </p>
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-              Get Started
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button size="lg">
+                {/* <Link href="/login"> */}
+                {texts.EN.login}
+                {/* </Link> */}
+              </Button>
+              <Button variant="outline" size="lg">
+                {/* <Link href="/register"> */}
+                {texts.EN.register}
+                {/* </Link> */}
+              </Button>
+            </div>
           </div>
 
           <div className="md:w-1/2">
@@ -77,7 +97,6 @@ export function Header() {
           </div>
         </div>
       </div>
-
-    </div>
+    </>
   )
 }
