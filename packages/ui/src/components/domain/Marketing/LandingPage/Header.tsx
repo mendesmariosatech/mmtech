@@ -1,6 +1,3 @@
-// import Link from 'next/link'
-// import Image from 'next/image'
-// import { Button } from "@/components/ui/button"
 import { ShoppingCart, Search, MessageCircle } from 'lucide-react'
 import { Button } from '../../../ui/button'
 
@@ -15,10 +12,10 @@ export function Header() {
             <path d="M2 17L12 22L22 17" stroke="#4338CA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M2 12L12 17L22 12" stroke="#4338CA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="text-2xl font-bold text-gray-800">AMAVA</span>
+          <span className="text-2xl font-bold text-gray-800">MM</span>
         </div>
-        <div className="md:flex space-x-4 border-2">
-          <Button className="text-gray-600 hover:text-gray-800">HOME</Button>
+        <div className="sm:hidden md:flex space-x-4">
+          <Button variant={"link"} className="text-gray-600 hover:text-gray-800">HOME</Button>
           <Button
             // href="/pages"
             variant={"link"}
@@ -52,10 +49,11 @@ export function Header() {
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-600 rounded-bl-full z-0"></div>
-        <div className="container mx-auto px-4 py-12 flex flex-col md:flex-row items-center relative z-10">
+        <div className="container mx-auto px-4 py-12 flex flex-col sm:flex-row items-center relative z-10">
+
           <div className="md:w-1/2 mb-8 md:mb-0">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Amava <span className="text-blue-600">Startup</span><br />
+              MM Tech <span className="text-blue-600">Startup</span><br />
               Agency template
             </h1>
             <p className="text-xl text-gray-600 mb-6">
@@ -65,9 +63,10 @@ export function Header() {
               Get Started
             </Button>
           </div>
+
           <div className="md:w-1/2">
             <img
-              src="https://www.entireflight.com/cdn/shop/articles/airplane_landing.png?v=1697724937&width=1456"
+              src="https://amava.websitelayout.net/img/content/content-13.svg"
               alt="Startup Agency Illustration"
               style={{
                 width: 600,

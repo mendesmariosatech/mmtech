@@ -1,7 +1,3 @@
-import { Header } from "@repo/ui/components/domain/Personal/Header";
+import { LandingPage } from "@repo/ui/components/domain/Marketing/LandingPage/LandingPage";
 
-const Dashboard = () => {
-	return <Header email="test@example.com" name="test" />;
-};
-
-export default Dashboard;
+export default LandingPage;
