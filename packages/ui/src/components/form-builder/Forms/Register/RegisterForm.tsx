@@ -1,6 +1,6 @@
 "use client";
 import { DevTool } from "@hookform/devtools";
-
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 import { ControlledForm } from "../../ControlledForm";
 import { Button } from "../../../ui/button";
@@ -8,6 +8,7 @@ import { registerFormConfig } from "./Register.config";
 import { type RegisterFields } from "@repo/zod-types";
 import { useRegister } from "@repo/hook-services";
 import { useRegisterForm } from "./useRegister.hooks";
+import { error } from "console";
 
 const texts = {
 	EN: {
@@ -34,6 +35,9 @@ export const RegisterForm = (mutation: RegisterFormProps) => {
 
 	console.log("Errors", form.formState.errors);
 
+	mutation.error?.message
+
+
 	return (
 		<div className="border-2 border-gray-500 p-4">
 			<DevTool control={form.control} />
@@ -50,10 +54,14 @@ export const RegisterForm = (mutation: RegisterFormProps) => {
 						disabled={mutation.isPending}
 						className="w-full"
 					>
+						<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
 						{texts.EN.button}
 					</Button>
 				</div>
 			</ControlledForm>
+			<p style={{ border: "1px solid red" }}>
+				{mutation.error?.message}
+			</p>
 		</div>
 	);
 };
