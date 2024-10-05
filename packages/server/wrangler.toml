@@ -1,0 +1,32 @@
+name = "backend-v1"
+compatibility_date = "2024-09-07"
+# compatibility_flags = [ "nodejs_compat" ]
+
+# TODO: Add your env vars here
+# [vars]
+# MY_VAR = "my-variable"
+
+[env.staging.vars]
+API_HOST = "staging.example.com"
+API_ACCOUNT_ID = "staging_example_user"
+SERVICE_X_DATA = { URL = "service-x-api.dev.example", MY_ID = 123, COOkIE_SECRET_KEY =  "secret" }
+
+kv_namespaces = [
+  { binding = "<MY_NAMESPACE>", id = "<KV_ID>" }
+]
+
+# [[kv_namespaces]]
+# binding = "MY_KV_NAMESPACE"
+# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "my-database"
+# database_id = ""
+
+# [ai]
+# binding = "AI"
