@@ -3,7 +3,7 @@ import { LandingPage } from "./LandingPage";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: "Landing Page",
+  title: "Marketing/Landing Page",
   component: LandingPage,
   parameters: {
     // layout: "centered",
