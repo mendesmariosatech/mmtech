@@ -1,0 +1,15 @@
+{
+	"name": "@repo/zod-types",
+	"version": "1.0.0",
+	"description": "shared types",
+	"main": "index.ts",
+	"author": "mmtech",
+	"license": "MIT",
+	"private": true,
+	"dependencies": {
+		"zod": "^3.23.8"
+	},
+	"exports": {
+		".": "./index.ts"
+	}
+}

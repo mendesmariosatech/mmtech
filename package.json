@@ -4,13 +4,12 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "yarn biome format --write",
+    "lint": "yarn biome lint --write",
     "ui:add": "yarn --filter @repo/ui ui:add"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.2",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "prettier": "^3.3.2",
