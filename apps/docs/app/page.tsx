@@ -3,7 +3,6 @@ import { hono_client } from "@repo/hook-services";
 import { cookies } from "next/headers";
 
 const Dashboard = async () => {
-
 	let honoURL;
 	try {
 		// const honoURL = hono_client.api.$url();
@@ -40,7 +39,9 @@ const Dashboard = async () => {
 		// const { data } = await resp.json()
 		// console.log({ data })
 
-		return <Header name={`Text:`} email={JSON.stringify({ response: "none" })} />;
+		return (
+			<Header name={`Text:`} email={JSON.stringify({ response: "none" })} />
+		);
 	} catch (error) {
 		console.log({ error });
 		return <div>{`Error: Backend URL ${honoURL}`}</div>;

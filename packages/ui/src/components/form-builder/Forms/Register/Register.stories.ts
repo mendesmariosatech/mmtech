@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Loading: Story = {
 	args: {
-		mutate: () => { },
+		mutate: () => {},
 		isPending: true,
 		error: null,
 	},
@@ -23,7 +23,7 @@ export const Loading: Story = {
 
 export const Default: Story = {
 	args: {
-		mutate: () => { },
+		mutate: () => {},
 		isPending: false,
 		error: null,
 	},
@@ -31,7 +31,7 @@ export const Default: Story = {
 
 export const Error: Story = {
 	args: {
-		mutate: () => { },
+		mutate: () => {},
 		isPending: false,
 		error: {
 			message: "Error",

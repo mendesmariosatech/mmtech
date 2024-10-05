@@ -16,14 +16,13 @@ const texts = {
 						ever"`,
 		createAccount: "Create an account",
 		enterEmail: "Enter your email below to create your account",
-		terms: "By clicking continue, you agree to our terms and conditions"
-	}
-}
+		terms: "By clicking continue, you agree to our terms and conditions",
+	},
+};
 export function RegisterPage() {
 	return (
 		<>
-			<div className="md:hidden">
-			</div>
+			<div className="md:hidden"></div>
 			<div className="container relative h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
 				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 					<div className="absolute inset-0 bg-zinc-900" />
@@ -44,9 +43,7 @@ export function RegisterPage() {
 					</div>
 					<div className="relative z-20 mt-auto">
 						<blockquote className="space-y-2">
-							<p className="text-lg">
-								{texts.EN.title}
-							</p>
+							<p className="text-lg">{texts.EN.title}</p>
 							<footer className="text-sm">John Doe</footer>
 						</blockquote>
 					</div>
@@ -61,11 +58,7 @@ export function RegisterPage() {
 								{texts.EN.enterEmail}
 							</p>
 						</div>
-						<RegisterForm
-							error={null}
-							isPending={false}
-							mutate={() => { }}
-						/>
+						<RegisterForm error={null} isPending={false} mutate={() => {}} />
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{texts.EN.terms}
 						</p>

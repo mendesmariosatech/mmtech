@@ -11,9 +11,7 @@ const meta = {
 	},
 	tags: ["autodocs"],
 	argTypes: {},
-	args: {
-
-	},
+	args: {},
 } satisfies Meta<typeof RegisterPage>;
 
 export default meta;

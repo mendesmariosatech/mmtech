@@ -16,13 +16,12 @@ const texts = {
 		createAccount: "Login to your account",
 		enterEmail: "Enter your email below",
 		dontHaveAccount: "Don't have an account? ",
-	}
-}
+	},
+};
 export function LoginPage() {
 	return (
 		<div>
-			<div className="md:hidden">
-			</div>
+			<div className="md:hidden"></div>
 			<div className="container relative h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
 				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 					<div className="absolute inset-0 bg-zinc-900" />
@@ -43,9 +42,7 @@ export function LoginPage() {
 					</div>
 					<div className="relative z-20 mt-auto">
 						<blockquote className="space-y-2">
-							<p className="text-lg">
-								{texts.EN.title}
-							</p>
+							<p className="text-lg">{texts.EN.title}</p>
 							<footer className="text-sm">John Doe</footer>
 						</blockquote>
 					</div>
@@ -60,11 +57,7 @@ export function LoginPage() {
 								{texts.EN.enterEmail}
 							</p>
 						</div>
-						<LoginForm
-							error={null}
-							isPending={false}
-							mutate={() => { }}
-						/>
+						<LoginForm error={null} isPending={false} mutate={() => {}} />
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{texts.EN.dontHaveAccount}
 						</p>

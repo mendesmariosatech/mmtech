@@ -1,11 +1,11 @@
 export const runningProcess = () => {
-  console.log("process");
+	console.log("process");
 
-  const precess = process.env.NODE_ENV
+	const precess = process.env.NODE_ENV;
 
-  console.log({
-    precess
-  })
+	console.log({
+		precess,
+	});
 
-  return precess
+	return precess;
 };
