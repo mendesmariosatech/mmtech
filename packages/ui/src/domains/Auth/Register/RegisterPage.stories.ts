@@ -7,9 +7,9 @@ const meta = {
 	title: "Auth/RegisterPage",
 	component: RegisterPage,
 	parameters: {
-		layout: "centered",
+		// layout: "centered",
 	},
-	tags: ["autodocs"],
+	// tags: ["autodocs"],
 	argTypes: {},
 	args: {},
 } satisfies Meta<typeof RegisterPage>;

@@ -1,2 +1,2 @@
 export * from "./domains/auth";
-export * from "./process"
+export * from "./process";

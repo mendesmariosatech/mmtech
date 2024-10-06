@@ -13,8 +13,8 @@ const config = {
 	stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
 	env: (config) => ({
 		...config,
-		EXAMPLE_VAR: 'An environment variable configured in Storybook',
-		LANG: process?.env?.LANG === 'EN' ? 'EN' : 'BR',
+		EXAMPLE_VAR: "An environment variable configured in Storybook",
+		LANG: process?.env?.LANG === "EN" ? "EN" : "BR",
 	}),
 	addons: [
 		getAbsolutePath("@storybook/addon-onboarding"),

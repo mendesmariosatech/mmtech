@@ -9,7 +9,7 @@ const meta = {
 	parameters: {
 		// layout: "centered",
 	},
-	tags: ["autodocs"],
+	// tags: ["autodocs"],
 	argTypes: {},
 	args: {},
 } satisfies Meta<typeof LoginPage>;

@@ -1,5 +1,5 @@
 import { ShoppingCart, Search, MessageCircle } from "lucide-react";
-import { Button } from "../../../ui/button";
+import { Button } from "../../../components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { ENV_VARIABLES } from "@repo/zod-types";
@@ -20,12 +20,12 @@ const texts = {
             Comece sua jornada hoje!`,
 		login: "Login",
 		register: "Registrar",
-	}
+	},
 };
 
 console.log(process.env.LANG);
-console.log(process.env.EXAMPLE_VAR)
-console.log(ENV_VARIABLES)
+console.log(process.env.EXAMPLE_VAR);
+console.log(ENV_VARIABLES);
 export function Header() {
 	return (
 		<>
