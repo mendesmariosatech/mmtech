@@ -5,6 +5,7 @@
   "license": "MIT",
   "prepare": "husky",
   "scripts": {
+    "postinstall": "husky install",
     "build": "turbo run build",
     "format": "yarn biome format --write",
     "lint": "yarn biome lint --write",
