@@ -46,7 +46,7 @@ export function LoginPage() {
 								{texts.EN.enterEmail}
 							</p>
 						</div>
-						<LoginForm error={null} isPending={false} mutate={() => { }} />
+						<LoginForm error={null} isPending={false} mutate={() => {}} />
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{texts.EN.dontHaveAccount}
 						</p>
