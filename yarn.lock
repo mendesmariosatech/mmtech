@@ -14510,6 +14510,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"root-workspace-0b6124@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "root-workspace-0b6124@workspace:."
+  dependencies:
+    "@biomejs/biome": "npm:1.9.2"
+    "@repo/eslint-config": "npm:*"
+    "@repo/typescript-config": "npm:*"
+    husky: "npm:^8.0.0"
+    prettier: "npm:^3.3.2"
+    turbo: "npm:2.0.6"
+  languageName: unknown
+  linkType: soft
+
 "run-parallel@npm:^1.1.9":
   version: 1.2.0
   resolution: "run-parallel@npm:1.2.0"
@@ -15760,19 +15773,6 @@ __metadata:
   checksum: 10c0/3edf8f5fa3fc2456c47f0c0b150c92c670594564fa96b1a90db06c888364a8cc2612081823b685ec31813831a622d71955c3c880d0aa3a0cf10f97d1666f2e35
   languageName: node
   linkType: hard
-
-"turborepo-shadcn-ui@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "turborepo-shadcn-ui@workspace:."
-  dependencies:
-    "@biomejs/biome": "npm:1.9.2"
-    "@repo/eslint-config": "npm:*"
-    "@repo/typescript-config": "npm:*"
-    husky: "npm:^8.0.0"
-    prettier: "npm:^3.3.2"
-    turbo: "npm:2.0.6"
-  languageName: unknown
-  linkType: soft
 
 "tween-functions@npm:^1.2.0":
   version: 1.2.0
