@@ -113,10 +113,6 @@ export function Header() {
 							include your must needs do it.
 						</p>
 						<div className="flex flex-col sm:flex-row gap-4">
-							<Button asChild size="lg">
-								{/* <Link href="/login">Loginss</Link> */}
-								lll
-							</Button>
 							<Button asChild size="lg" variant={"default"}>
 								<Link href="/auth/login">{texts.EN.login}</Link>
 							</Button>
