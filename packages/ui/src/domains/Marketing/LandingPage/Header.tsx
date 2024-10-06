@@ -2,7 +2,7 @@ import { ShoppingCart, Search, MessageCircle } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ENV_VARIABLES } from "@repo/zod-types";
+import { ENV_VARIABLES, envVariables } from "@repo/zod-types";
 
 const texts = {
 	EN: {
@@ -26,6 +26,12 @@ const texts = {
 console.log(process.env.LANG);
 console.log(process.env.EXAMPLE_VAR);
 console.log(ENV_VARIABLES);
+
+const parsedEnv = envVariables.parse(process.env);
+
+console.log({
+	parsedEnv
+})
 export function Header() {
 	return (
 		<>
