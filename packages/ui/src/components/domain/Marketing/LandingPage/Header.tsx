@@ -1,5 +1,7 @@
 import { ShoppingCart, Search, MessageCircle } from "lucide-react";
 import { Button } from "../../../ui/button";
+import Link from "next/link";
+import Image from "next/image";
 
 const texts = {
 	EN: {
@@ -111,27 +113,25 @@ export function Header() {
 							include your must needs do it.
 						</p>
 						<div className="flex flex-col sm:flex-row gap-4">
-							<Button size="lg">
-								{/* <Link href="/login"> */}
-								{texts.EN.login}
-								{/* </Link> */}
+							<Button asChild size="lg">
+								{/* <Link href="/login">Loginss</Link> */}
+								lll
 							</Button>
-							<Button variant="outline" size="lg">
-								{/* <Link href="/register"> */}
-								{texts.EN.register}
-								{/* </Link> */}
+							<Button asChild size="lg" variant={"default"}>
+								<Link href="/auth/login">{texts.EN.login}</Link>
+							</Button>
+							<Button asChild variant="outline" size="lg">
+								<Link href="/auth/register">{texts.EN.register}</Link>
 							</Button>
 						</div>
 					</div>
 
 					<div className="md:w-1/2">
-						<img
+						<Image
 							src="https://amava.websitelayout.net/img/content/content-13.svg"
 							alt="Startup Agency Illustration"
-							style={{
-								width: 600,
-								height: 400,
-							}}
+							width={600}
+							height={400}
 							className="w-full h-auto"
 						/>
 					</div>

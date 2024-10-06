@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowRight, Save, Lock, Settings } from "lucide-react";
+import Link from "next/link";
 
 export function CoreServices() {
 	const services = [
@@ -46,14 +47,14 @@ export function CoreServices() {
 							</div>
 							<h3 className="text-xl font-semibold mb-2">{service.title}</h3>
 							<p className="mb-4">{service.description}</p>
-							<a
+							<Link
 								href="#"
 								className={`inline-flex items-center ${
 									index === 1 ? "text-white" : "text-gray-600"
 								} hover:underline`}
 							>
 								read more <ArrowRight className="w-4 h-4 ml-1" />
-							</a>
+							</Link>
 						</div>
 					))}
 				</div>

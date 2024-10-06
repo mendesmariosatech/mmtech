@@ -1,13 +1,6 @@
-import img from "next/image";
+import Image from "next/image";
 import Link from "next/link";
-import {
-	ShoppingCart,
-	Search,
-	MessageCircle,
-	ChevronDown,
-	Check,
-} from "lucide-react";
-import { Subtitle } from "@storybook/blocks";
+import { ShoppingCart, MessageCircle, Check } from "lucide-react";
 
 const texts = {
 	EN: {
@@ -28,11 +21,11 @@ export function Section() {
 			{/* Hero Section */}
 			<div className="container mx-auto px-4 py-12 flex flex-col md:flex-row items-center">
 				<div className="md:w-1/2 mb-8 md:mb-0">
-					<img
+					<Image
 						src="https://amava.websitelayout.net/img/content/content-19.svg"
 						alt="Isometric Illustration"
-						// width={600}
-						// height={400}
+						width={600}
+						height={400}
 						className="w-full h-auto"
 					/>
 				</div>
@@ -52,11 +45,11 @@ export function Section() {
 					</div>
 					<div className="bg-white shadow-md rounded-lg p-4">
 						<div className="flex items-center">
-							<img
+							<Image
 								src="https://amava.websitelayout.net/img/avatar/avatar-03.jpg"
 								alt="John Doe"
-								// width={50}
-								// height={50}
+								width={50}
+								height={50}
 								className="rounded-full mr-4"
 							/>
 							<div>
