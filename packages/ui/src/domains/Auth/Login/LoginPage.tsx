@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { LoginForm } from "@repo/ui/components/form-builder/Forms/Login/LoginForm";
 import Link from "next/link";
 
-
 export const metadata: Metadata = {
 	title: "Authentication",
 	description: "Authentication forms built using the components.",
@@ -61,7 +60,7 @@ export function LoginPage() {
 								{texts.EN.enterEmail}
 							</p>
 						</div>
-						<LoginForm error={null} isPending={false} mutate={() => { }} />
+						<LoginForm error={null} isPending={false} mutate={() => {}} />
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{texts.EN.dontHaveAccount}
 						</p>
