@@ -96,6 +96,10 @@
     "./components/*": [
       "./src/components/*.tsx",
       "./src/components/*.ts"
+    ],
+    "./domain/*": [
+      "./src/domains/**/*.tsx",
+      "./src/domains/**/*.ts"
     ]
   }
 }

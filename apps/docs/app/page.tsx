@@ -1,3 +1,3 @@
-import { LandingPage } from "@repo/ui/components/domain/Marketing/LandingPage/LandingPage";
+import { LandingPage } from "@repo/ui/domains/";
 
 export default LandingPage;

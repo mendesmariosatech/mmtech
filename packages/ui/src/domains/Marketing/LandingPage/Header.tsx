@@ -2,6 +2,7 @@ import { ShoppingCart, Search, MessageCircle } from "lucide-react";
 import { Button } from "../../../ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import { ENV_VARIABLES } from "@repo/zod-types";
 
 const texts = {
 	EN: {
@@ -12,8 +13,19 @@ const texts = {
 		login: "Login",
 		register: "Register",
 	},
+	BR: {
+		welcome: "Bem-vindo ao nosso multiplataforma",
+		title: "Descubra recursos incríveis e aumente sua produtividade",
+		subtitle: `Junte-se a milhares de usuários que já estão aproveitando nossos serviços.
+            Comece sua jornada hoje!`,
+		login: "Login",
+		register: "Registrar",
+	}
 };
 
+console.log(process.env.LANG);
+console.log(process.env.EXAMPLE_VAR)
+console.log(ENV_VARIABLES)
 export function Header() {
 	return (
 		<>
