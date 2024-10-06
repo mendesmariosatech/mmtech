@@ -136,7 +136,7 @@ export function Header() {
 
 					<div className="md:w-1/2">
 						<Image
-							src="https://amava.websitelayout.net/img/content/content-13.svg"
+							src="/marketing/landingPage/hero.svg"
 							alt="Startup Agency Illustration"
 							width={600}
 							height={400}

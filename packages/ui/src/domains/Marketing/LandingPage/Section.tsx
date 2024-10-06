@@ -22,7 +22,7 @@ export function Section() {
 			<div className="container mx-auto px-4 py-12 flex flex-col md:flex-row items-center">
 				<div className="md:w-1/2 mb-8 md:mb-0">
 					<Image
-						src="https://amava.websitelayout.net/img/content/content-19.svg"
+						src="/marketing/landingPage/section.svg"
 						alt="Isometric Illustration"
 						width={600}
 						height={400}
@@ -44,14 +44,10 @@ export function Section() {
 						</div>
 					</div>
 					<div className="bg-white shadow-md rounded-lg p-4">
-						<div className="flex items-center">
-							<Image
-								src="https://amava.websitelayout.net/img/avatar/avatar-03.jpg"
-								alt="John Doe"
-								width={50}
-								height={50}
-								className="rounded-full mr-4"
-							/>
+						<div className="flex items-center gap-2">
+							<div className="bg-blue-600 text-white p-2 rounded-full shadow-lg">
+								<MessageCircle />
+							</div>
 							<div>
 								<p className="text-gray-800 font-medium">{`"${texts.EN.depoiment}"`}</p>
 								<p className="text-gray-600">- {`${texts.EN.personName}`}</p>

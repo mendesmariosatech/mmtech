@@ -11,6 +11,7 @@ function getAbsolutePath(value) {
 /** @type { import('@storybook/nextjs').StorybookConfig } */
 const config = {
 	stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+	staticDirs: ['../public'],
 	env: (config) => ({
 		...config,
 		EXAMPLE_VAR: "An environment variable configured in Storybook",
