@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { RegisterForm } from "../../../form-builder/Forms/Register";
 // import { useRouter } from "next/navigation";
