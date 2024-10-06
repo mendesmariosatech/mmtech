@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const texts = {
 	EN: {
-		companyName: 'MM Tech',
+		companyName: "MM Tech",
 		title: `"This library has saved me countless hours of work and
 						helped me deliver stunning designs to my clients faster than
 						ever"`,
@@ -57,7 +57,7 @@ export function LoginPage() {
 								{texts.EN.enterEmail}
 							</p>
 						</div>
-						<LoginForm error={null} isPending={false} mutate={() => { }} />
+						<LoginForm error={null} isPending={false} mutate={() => {}} />
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{texts.EN.dontHaveAccount}
 						</p>
