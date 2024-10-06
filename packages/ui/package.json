@@ -5,9 +5,9 @@
   "scripts": {
     "ui:add": "npx shadcn-ui@latest add",
     "lint": "eslint .",
+    "chromatic": "npx chromatic --project-token=<CHROMATIC_TOKEN>",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=<CHROMATIC_TOKEN>"
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "react": "^18"
@@ -22,8 +22,8 @@
     "@storybook/addon-links": "^8.2.9",
     "@storybook/addon-onboarding": "^8.2.9",
     "@storybook/blocks": "^8.2.9",
+    "@storybook/nextjs": "^8.3.5",
     "@storybook/react": "^8.2.9",
-    "@storybook/react-vite": "^8.2.9",
     "@storybook/test": "^8.2.9",
     "@types/node": "^20",
     "@types/react": "^18",
