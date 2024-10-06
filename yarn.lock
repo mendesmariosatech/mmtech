@@ -12442,6 +12442,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mm_tech@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "mm_tech@workspace:."
+  dependencies:
+    "@biomejs/biome": "npm:1.9.2"
+    "@repo/eslint-config": "npm:*"
+    "@repo/typescript-config": "npm:*"
+    husky: "npm:^8.0.0"
+    prettier: "npm:^3.3.2"
+    turbo: "npm:2.0.6"
+  languageName: unknown
+  linkType: soft
+
 "ms@npm:2.0.0":
   version: 2.0.0
   resolution: "ms@npm:2.0.0"
@@ -14509,19 +14522,6 @@ __metadata:
   checksum: 10c0/77fb549c1de8afd1142d2da765adbb0cdab9f13c47df5217f00b5cf40b74219caa48c6ba2157f6249313ee81b6fa4c4fa8b3d2a0347ad6220739e00e580a808d
   languageName: node
   linkType: hard
-
-"root-workspace-0b6124@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "root-workspace-0b6124@workspace:."
-  dependencies:
-    "@biomejs/biome": "npm:1.9.2"
-    "@repo/eslint-config": "npm:*"
-    "@repo/typescript-config": "npm:*"
-    husky: "npm:^8.0.0"
-    prettier: "npm:^3.3.2"
-    turbo: "npm:2.0.6"
-  languageName: unknown
-  linkType: soft
 
 "run-parallel@npm:^1.1.9":
   version: 1.2.0
