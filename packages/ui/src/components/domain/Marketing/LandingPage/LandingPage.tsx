@@ -3,6 +3,7 @@ import { Button } from '../../../ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../ui/card'
 import { Header } from './Header'
 import { CoreServices } from './CoreServices'
+import { Section } from './Section'
 
 const texts = {
   EN: {
@@ -20,6 +21,7 @@ export function LandingPage() {
     <div className="min-h-screen bg-white">
       <Header />
       <CoreServices />
+      <Section />
     </div>
   )
 }
