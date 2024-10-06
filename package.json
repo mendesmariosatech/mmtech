@@ -3,7 +3,11 @@
   "version": "1.3.0",
   "private": true,
   "license": "MIT",
-  "prepare": "husky",
+  "husky": {
+    "hooks": {
+      "pre-commit": "format"
+    }
+  },
   "scripts": {
     "postinstall": "husky install",
     "build": "turbo run build",
