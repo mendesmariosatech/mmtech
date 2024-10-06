@@ -30,8 +30,8 @@ console.log(ENV_VARIABLES);
 const parsedEnv = envVariables.parse(process.env);
 
 console.log({
-	parsedEnv
-})
+	parsedEnv,
+});
 export function Header() {
 	return (
 		<>
