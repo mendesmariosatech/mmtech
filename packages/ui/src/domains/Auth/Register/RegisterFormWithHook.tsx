@@ -1,8 +1,7 @@
 "use client";
 
-import { RegisterForm } from "../../../form-builder/Forms/Register";
-// import { useRouter } from "next/navigation";
-import { useRegister } from "../../../../../../hook-services/react-query";
+import { useRegister } from "@repo/hook-services";
+import { RegisterForm } from "../../../components/form-builder/Forms/Register";
 
 export function RegisterFormWithHook() {
 	// const router = useRouter();
