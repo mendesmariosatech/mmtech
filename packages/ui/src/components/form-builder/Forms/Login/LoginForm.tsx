@@ -13,7 +13,7 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 
 const texts = {
 	EN: {
-		button: "Submit",
+		button: 'Submit',
 		loading: "Loading...",
 	},
 	PT: {
