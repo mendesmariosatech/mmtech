@@ -3,6 +3,11 @@
   "version": "1.3.0",
   "private": true,
   "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "sh husky/pre-commit"
+    }
+  },
   "scripts": {
     "build": "turbo run build",
     "format": "yarn biome format --write",
