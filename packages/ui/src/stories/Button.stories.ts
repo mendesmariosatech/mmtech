@@ -52,9 +52,3 @@ export const Small: Story = {
 	},
 };
 
-export const Test123: Story = {
-	args: {
-		primary: false,
-		label: "Button",
-	},
-};
