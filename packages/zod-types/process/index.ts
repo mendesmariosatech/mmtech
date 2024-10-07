@@ -14,6 +14,6 @@ export type ENV_TYPES = z.infer<typeof envVariables>;
 
 declare global {
 	namespace NodeJS {
-		interface ProcessEnv extends ENV_TYPES {}
+		interface ProcessEnv extends ENV_TYPES { }
 	}
 }
