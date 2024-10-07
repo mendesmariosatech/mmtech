@@ -1,13 +1,12 @@
+import { LoginForm } from "./LoginForm";
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { RegisterForm } from "./RegisterForm";
-
 const meta = {
-	title: "Forms/Register",
-	component: RegisterForm,
+	title: "Forms/Login",
+	component: LoginForm,
 	argTypes: {},
 	args: {},
-} satisfies Meta<typeof RegisterForm>;
+} satisfies Meta<typeof LoginForm>;
 
 export default meta;
 
@@ -21,14 +20,6 @@ export const Loading: Story = {
 	},
 };
 
-export const Default: Story = {
-	args: {
-		mutate: () => {},
-		isPending: false,
-		error: null,
-	},
-};
-
 export const Error: Story = {
 	args: {
 		mutate: () => {},
@@ -37,5 +28,13 @@ export const Error: Story = {
 			message: "Error",
 			name: "Error",
 		},
+	},
+};
+
+export const Primary: Story = {
+	args: {
+		mutate: () => {},
+		isPending: false,
+		error: null,
 	},
 };

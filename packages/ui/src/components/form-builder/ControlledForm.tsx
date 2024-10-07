@@ -13,18 +13,20 @@ type ControlledForm<T extends FieldValues> = {
 	config: ConfigObject<FieldValues>;
 	useForm: UseFormReturn<T, any>;
 	onSubmit: SubmitHandler<T>;
+	children?: React.ReactNode;
 };
 
 export const ControlledForm = <T extends FieldValues>({
 	useForm,
 	config,
 	onSubmit,
+	children,
 }: ControlledForm<T>) => {
 	return (
 		<Form {...useForm}>
 			<form
 				onSubmit={useForm.handleSubmit(onSubmit)}
-				className="w-2/3 space-y-6"
+				// className="border-2 border-red-500 p-4"
 			>
 				{Object.entries(config).map(([key, value]) => {
 					return (
@@ -51,6 +53,7 @@ export const ControlledForm = <T extends FieldValues>({
 						</div>
 					);
 				})}
+				{children}
 			</form>
 		</Form>
 	);

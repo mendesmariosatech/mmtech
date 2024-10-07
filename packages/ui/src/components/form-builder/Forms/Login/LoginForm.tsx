@@ -1,13 +1,15 @@
 "use client";
 import { DevTool } from "@hookform/devtools";
-import { ReloadIcon } from "@radix-ui/react-icons";
 
 import { ControlledForm } from "../../ControlledForm";
 import { Button } from "../../../ui/button";
-import { registerFormConfig } from "./Register.config";
-import { type RegisterFields } from "@repo/zod-types";
-import { useRegister } from "@repo/hook-services";
-import { useRegisterForm } from "./useRegister.hooks";
+// import { LoginFormConfig } from "./Login.config";
+import { type LoginFields } from "@repo/zod-types";
+import { useLogin } from "@repo/hook-services";
+import { loginFormConfig } from "./LoginConfig";
+import { useLoginForm } from "./useLogin.hook";
+import { ReloadIcon } from "@radix-ui/react-icons";
+// import { useLoginForm } from "./useLogin.hooks";
 
 const texts = {
 	EN: {
@@ -20,30 +22,28 @@ const texts = {
 	},
 } as const;
 
-type RegisterFormProps = {
-	mutate: ReturnType<typeof useRegister>["mutate"];
-	isPending: ReturnType<typeof useRegister>["isPending"];
-	error: ReturnType<typeof useRegister>["error"];
+type LoginFormProps = {
+	mutate: ReturnType<typeof useLogin>["mutate"];
+	isPending: ReturnType<typeof useLogin>["isPending"];
+	error: ReturnType<typeof useLogin>["error"];
 };
 
-export const RegisterForm = (props: RegisterFormProps) => {
-	const form = useRegisterForm();
+export const LoginForm = (props: LoginFormProps) => {
+	const form = useLoginForm();
 
-	const handleSubmit = (data: RegisterFields) => {
+	const handleSubmit = (data: LoginFields) => {
 		console.log(data);
 		props.mutate(data);
 	};
 
 	console.log("Errors", form.formState.errors);
 
-	props.error?.message;
-
 	return (
 		<div className="border-2 border-primary-foreground p-6 rounded-md">
 			<DevTool control={form.control} />
 			<ControlledForm
 				useForm={form}
-				config={registerFormConfig}
+				config={loginFormConfig}
 				onSubmit={handleSubmit}
 			>
 				<div

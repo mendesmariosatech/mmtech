@@ -1,7 +1,6 @@
 "use client";
 import type { Metadata } from "next";
-import { RegisterFormWithHook } from "./RegisterFormWithHook";
-import { RegisterForm } from "../../../../components/form-builder/Forms/Register";
+import { LoginForm } from "@repo/ui/components/form-builder/Forms/Login/LoginForm";
 
 export const metadata: Metadata = {
 	title: "Authentication",
@@ -14,14 +13,14 @@ const texts = {
 		title: `"This library has saved me countless hours of work and
 						helped me deliver stunning designs to my clients faster than
 						ever"`,
-		createAccount: "Create an account",
-		enterEmail: "Enter your email below to create your account",
-		terms: "By clicking continue, you agree to our terms and conditions",
+		createAccount: "Login to your account",
+		enterEmail: "Enter your email below",
+		dontHaveAccount: "Don't have an account? ",
 	},
 };
-export function RegisterPage() {
+export function LoginPage() {
 	return (
-		<>
+		<div>
 			<div className="md:hidden"></div>
 			<div className="container relative h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
 				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
@@ -49,7 +48,7 @@ export function RegisterPage() {
 					</div>
 				</div>
 				<div className="lg:p-8">
-					<div className="mx-auto flex w-full flex-col justify-center space-y-6">
+					<div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
 						<div className="flex flex-col space-y-2 text-center">
 							<h1 className="text-2xl font-semibold tracking-tight">
 								{texts.EN.createAccount}
@@ -58,13 +57,13 @@ export function RegisterPage() {
 								{texts.EN.enterEmail}
 							</p>
 						</div>
-						<RegisterForm error={null} isPending={false} mutate={() => {}} />
+						<LoginForm error={null} isPending={false} mutate={() => {}} />
 						<p className="px-8 text-center text-sm text-muted-foreground">
-							{texts.EN.terms}
+							{texts.EN.dontHaveAccount}
 						</p>
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
