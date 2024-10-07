@@ -1,28 +1,39 @@
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-pnpm dev
+- yarn v1.22.19
+- node v18.16.0
+- npm 9.5.1
+
+### Installation
+
+1. Clone the repository
+
+```
+git clone https://github.com/your-username/your-repo.git
 ```
 
-Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.
+2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+yarn install
+```
 
-To create [API routes](https://nextjs.org/docs/app/building-your-application/routing/router-handlers) add an `api/` directory to the `app/` directory with a `route.ts` file. For individual endpoints, create a subfolder in the `api` directory, like `api/hello/route.ts` would map to [http://localhost:3001/api/hello](http://localhost:3001/api/hello).
+3. Start the development server
 
-## Learn More
+```
+yarn dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+```
+// rename env to .env file and add yours env variables
+TURSO_CONNECTION_URL="libsql://"
+TURSO_AUTH_TOKEN="ey
+JWT_SECRET_KEY=secret
+COOkIE_SECRET_KEY=secret
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn/foundations/about-nextjs) - an interactive Next.js tutorial.
+## Turso To create a Database
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_source=github.com&utm_medium=referral&utm_campaign=turborepo-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[Turso](https://turso.tech/) is a serverless database that allows you to create, manage, and query

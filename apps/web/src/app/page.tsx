@@ -1,9 +1,3 @@
-import { AuthenticationPage } from "@repo/ui/components/molecules/SignIn/AuthenticationPage";
+import { LandingPage } from "@repo/ui/components/domain/Marketing/LandingPage/LandingPage";
 
-export default function Page() {
-  return (
-    <main>
-      <AuthenticationPage />
-    </main>
-  );
-}
+export default LandingPage;
