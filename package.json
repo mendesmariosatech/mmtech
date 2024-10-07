@@ -1,9 +1,15 @@
 {
-  "name": "turborepo-shadcn-ui",
+  "name": "mm_tech",
   "version": "1.3.0",
   "private": true,
   "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "format"
+    }
+  },
   "scripts": {
+    "prepare": "husky install",
     "build": "turbo run build",
     "format": "yarn biome format --write",
     "lint": "yarn biome lint --write",
@@ -14,15 +20,16 @@
     "@biomejs/biome": "1.9.2",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "husky": "^8.0.0",
     "prettier": "^3.3.2",
     "turbo": "2.0.6"
   },
-  "packageManager": "yarn@1.22.22",
   "engines": {
     "node": ">=18"
   },
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "packageManager": "yarn@1.22.22"
 }

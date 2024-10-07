@@ -8,9 +8,9 @@
 		"db:migrate": "npx drizzle-kit migrate"
 	},
 	"dependencies": {
-		"@repo/zod-types": "*",
 		"@hono/zod-validator": "^0.2.2",
 		"@libsql/client": "^0.10.0",
+		"@repo/zod-types": "*",
 		"bcryptjs": "^2.4.3",
 		"drizzle-orm": "^0.33.0",
 		"hono": "^4.5.11",
