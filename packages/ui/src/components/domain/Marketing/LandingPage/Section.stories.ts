@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { LandingPage } from "./LandingPage";
+import { Section } from "./Section";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-	title: "Marketing/Landing Page",
-	component: LandingPage,
+	title: "Marketing/Section",
+	component: Section,
 	parameters: {
 		// layout: "centered",
 	},
 	// tags: ["autodocs"],
 	argTypes: {},
 	args: {},
-} satisfies Meta<typeof LandingPage>;
+} satisfies Meta<typeof Section>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
