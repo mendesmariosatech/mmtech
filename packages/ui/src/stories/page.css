@@ -18,7 +18,7 @@
 }
 
 .storybook-page p {
-  margin: 1em 0;
+	margin: 1em 0;
 }
 
 .storybook-page a {
@@ -32,7 +32,7 @@
 }
 
 .storybook-page li {
-  margin-bottom: 8px;
+	margin-bottom: 8px;
 }
 
 .storybook-page .tip {
@@ -65,5 +65,5 @@
 }
 
 .storybook-page .tip-wrapper svg path {
-  fill: #1ea7fd;
+	fill: #1ea7fd;
 }
