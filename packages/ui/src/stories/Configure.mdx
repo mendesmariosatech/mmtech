@@ -14,6 +14,7 @@ import Testing from "./assets/testing.png";
 import Accessibility from "./assets/accessibility.png";
 import Theming from "./assets/theming.png";
 import AddonLibrary from "./assets/addon-library.png";
+import Image from "next/image"
 
 export const RightArrow = () => <svg 
     viewBox="0 0 14 14" 
@@ -41,7 +42,7 @@ export const RightArrow = () => <svg
   </div>
   <div className="sb-section">
     <div className="sb-section-item">
-      <img
+      <Image
         src={Styling}
         alt="A wall of logos representing different styling technologies"
       />

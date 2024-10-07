@@ -1,5 +1,6 @@
 import { ShoppingCart, Search, MessageCircle } from "lucide-react";
 import { Button } from "../../../ui/button";
+import Image from "next/image"
 
 const texts = {
 	EN: {
@@ -125,13 +126,11 @@ export function Header() {
 					</div>
 
 					<div className="md:w-1/2">
-						<img
+						<Image
 							src="https://amava.websitelayout.net/img/content/content-13.svg"
 							alt="Startup Agency Illustration"
-							style={{
-								width: 600,
-								height: 400,
-							}}
+							width={600}
+							height={400}
 							className="w-full h-auto"
 						/>
 					</div>
