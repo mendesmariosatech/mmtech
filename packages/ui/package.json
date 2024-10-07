@@ -5,9 +5,9 @@
   "scripts": {
     "ui:add": "npx shadcn-ui@latest add",
     "lint": "eslint .",
+    "chromatic": "npx chromatic --project-token=<CHROMATIC_TOKEN>",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=<CHROMATIC_TOKEN>"
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "react": "^18"
@@ -17,25 +17,24 @@
     "@hookform/devtools": "^4.3.1",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@storybook/addon-essentials": "^8.2.9",
-    "@storybook/addon-interactions": "^8.2.9",
-    "@storybook/addon-links": "^8.2.9",
-    "@storybook/addon-onboarding": "^8.2.9",
-    "@storybook/blocks": "^8.2.9",
-    "@storybook/react": "^8.2.9",
-    "@storybook/react-vite": "^8.2.9",
-    "@storybook/test": "^8.2.9",
+    "@storybook/addon-essentials": "^8.3.5",
+    "@storybook/addon-interactions": "^8.3.5",
+    "@storybook/addon-links": "^8.3.5",
+    "@storybook/addon-onboarding": "^8.3.5",
+    "@storybook/blocks": "^8.3.5",
+    "@storybook/nextjs": "^8.3.5",
+    "@storybook/react": "^8.3.5",
+    "@storybook/test": "^8.3.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "autoprefixer": "^10.4.19",
     "chromatic": "^11.10.4",
-    "eslint-plugin-storybook": "^0.8.0",
+    "eslint-plugin-storybook": "^0.9.0",
     "postcss": "^8.4.38",
     "postcss-load-config": "^6.0.1",
-    "storybook": "^8.2.9",
+    "storybook": "^8.3.5",
     "tailwindcss": "^3.4.4",
-    "typescript": "^5.4.5",
-    "vite": "^5.4.2"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -96,6 +95,10 @@
     "./components/*": [
       "./src/components/*.tsx",
       "./src/components/*.ts"
+    ],
+    "./domains/*": [
+      "./src/domains/*.tsx",
+      "./src/domains/*.ts"
     ]
   }
 }

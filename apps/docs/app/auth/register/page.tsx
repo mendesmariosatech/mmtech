@@ -1,7 +1,3 @@
-"use client";
-
-import { RegisterPage } from "@repo/ui/components/domain/Auth/Register/RegisterPage";
-
-// import { RegisterPage } from "@repo/ui/components/form-builder/Forms/Register/RegisterForm";
+import { RegisterPage } from "@repo/ui/domains/Auth/Register/RegisterPage";
 
 export default RegisterPage;

@@ -1,4 +1,4 @@
-import type { StorybookConfig } from "@storybook/react-vite";
+import type { StorybookConfig } from "@storybook/nextjs";
 
 import { join, dirname } from "path";
 
@@ -18,13 +18,15 @@ const config: StorybookConfig = {
 		getAbsolutePath("@chromatic-com/storybook"),
 		getAbsolutePath("@storybook/addon-interactions"),
 	],
+	env: (config) => ({
+		...config,
+		EXAMPLE_VAR: "An environment variable configured in Storybook",
+		LANG: process?.env?.LANG === "EN" ? "EN" : "BR",
+	}),
 	framework: {
-		name: getAbsolutePath("@storybook/react-vite"),
-		options: {
-			builder: {
-				// viteConfigPath: "../vite.config.ts",
-			},
-		},
+		name: getAbsolutePath("@storybook/nextjs"),
+		options: {},
 	},
+	staticDirs: ["../public"],
 };
 export default config;
