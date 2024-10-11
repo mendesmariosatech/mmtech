@@ -6,29 +6,32 @@
     "deploy": "wrangler deploy --minify src/index.ts",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
-    "ddtest": "jest"
+    "test": "jest --env-file=.env",
+    "test:watch": "jest --watch --env-file=.env"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.2",
     "@libsql/client": "^0.10.0",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@repo/zod-types": "*",
     "bcryptjs": "^2.4.3",
     "drizzle-orm": "^0.33.0",
     "hono": "^4.5.11",
-    "ts-node": "^10.9.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
     "@jest/globals": "^29.7.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.7.5",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "^0.24.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
     "wrangler": "^3.57.2"
   },
   "private": true,
-  "type": "module",
   "exports": {
     ".": "./src/index.ts"
   }
