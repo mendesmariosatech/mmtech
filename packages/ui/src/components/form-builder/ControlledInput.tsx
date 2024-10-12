@@ -87,10 +87,7 @@ export const ControlledInput = <D extends FieldValues>(
 									</FormControl>
 									<SelectContent>
 										{props.options.map((option) => (
-											<SelectItem
-												key={option.key}
-												value={option.key}
-											>
+											<SelectItem key={option.key} value={option.key}>
 												{option.value}
 											</SelectItem>
 										))}
