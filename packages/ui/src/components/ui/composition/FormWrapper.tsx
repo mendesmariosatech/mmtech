@@ -18,7 +18,6 @@ import { Button } from "../button";
 import { ConfigObject } from "../../form-builder/ControlledInput";
 
 const itemSchema = z.object({
-	// id: z.string().uuid(),
 	name: z.string().min(1, "Name is required"),
 	description: z.string().optional(),
 	price: z.number().positive("Price must be a positive number"),
@@ -44,7 +43,7 @@ export const itemFormConfig: ConfigObject<ItemSchema> = {
 		input: "text",
 		label: "Item Name",
 		placeholder: "Enter item name",
-		// required: "Item name is required",
+		required: true,
 	},
 	description: {
 		name: "description",
@@ -73,7 +72,9 @@ export const itemFormConfig: ConfigObject<ItemSchema> = {
 export const FormWrapper = () => {
 	const form = useItemForm();
 
-	const handleSubmit = () => {};
+	const handleSubmit = (data: ItemSchema) => {
+		console.log(data);
+	};
 
 	return (
 		<Card x-chunk="dashboard-07-chunk-0">

@@ -26,13 +26,14 @@ export const ControlledForm = <T extends FieldValues>({
 		<Form {...useForm}>
 			<form
 				onSubmit={useForm.handleSubmit(onSubmit)}
-				// className="border-2 border-red-500 p-4"
+			// className="border-2 border-red-500 p-4"
 			>
 				{Object.entries(config).map(([key, value]) => {
 					return (
 						<div key={key}>
 							{value.input === "text" ? (
 								<ControlledInput
+									key={key}
 									{...useForm}
 									{...value}
 									// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -42,6 +43,7 @@ export const ControlledForm = <T extends FieldValues>({
 								/>
 							) : (
 								<ControlledInput
+									key={key}
 									{...useForm}
 									{...value}
 									// eslint-disable-next-line @typescript-eslint/ban-ts-comment
