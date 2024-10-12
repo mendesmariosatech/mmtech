@@ -48,7 +48,7 @@ export const authRoute = new Hono()
 		setCookie(c, COOKIES.USER_ID, newUser.email);
 		setCookie(c, COOKIES.USER_TOKEN, token);
 
-		const newAccount = await User.createNewUser(newUser.email)
+		const newAccount = await User.createNewUser(newUser.email);
 
 		return c.json(
 			{

@@ -1,5 +1,9 @@
 import { DBConnection } from "../../../drizzle/drizzle-client";
-import { authTable, usersTable, type SelectAuth } from "../../../drizzle/schema";
+import {
+	authTable,
+	usersTable,
+	type SelectAuth,
+} from "../../../drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export class AuthTable extends DBConnection {
@@ -45,9 +49,9 @@ export class UserTable extends DBConnection {
 			.insert(usersTable)
 			.values({
 				name: email,
-			}).returning()
+			})
+			.returning();
 
-		return creatade
-
+		return creatade;
 	}
 }
