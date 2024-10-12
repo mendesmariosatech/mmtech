@@ -8,13 +8,12 @@ import { deleteDB } from "../tests/setup";
 
 const newUniqueDate = createId();
 const testEmail = newUniqueDate + "validemailtest@email.com";
-const testPassword = "12312349090ASAKkdk"
+const testPassword = "12312349090ASAKkdk";
 
 describe("New User - POST /auth/register", () => {
-
 	afterAll(async () => {
-		await deleteDB.deleteTableAuth()
-	})
+		await deleteDB.deleteTableAuth();
+	});
 	test("User can register using a new email and valid password", async () => {
 		const data = await createTestUser({});
 
@@ -37,21 +36,19 @@ describe("New User - POST /auth/register", () => {
 		const data = await createTestUser({ password: "123" });
 		expect("error" in data).toBe(true);
 	});
-
 });
 
 describe("Login - POST /auth/login", () => {
-
 	afterAll(async () => {
-		await deleteDB.deleteTableAuth()
-	})
+		await deleteDB.deleteTableAuth();
+	});
 	test("User can login with valid credentials", async () => {
-		const newEmail = newUniqueDate + "alex@gmail.com"
-		const password = "123ASDADD"
+		const newEmail = newUniqueDate + "alex@gmail.com";
+		const password = "123ASDADD";
 
 		const data = await createTestUser({
 			email: newEmail,
-			password
+			password,
 		});
 
 		if ("error" in data) {
@@ -61,22 +58,26 @@ describe("Login - POST /auth/login", () => {
 
 		const loginResp = await loginTestUser({
 			email: newEmail,
-			password
+			password,
 		});
 		expect("data" in loginResp).toStrictEqual(true);
 	});
 
 	test("User cannot login with non-existent email", async () => {
-		const loginResp = await createTestUser({ email: "nonexistent@example.com", password: "password123" });
+		const loginResp = await createTestUser({
+			email: "nonexistent@example.com",
+			password: "password123",
+		});
 		expect("error" in loginResp).toBe(true);
 	});
 });
 
 async function createTestUser({
-	email = testEmail, password = testPassword
+	email = testEmail,
+	password = testPassword,
 }: {
-	email?: string,
-	password?: string
+	email?: string;
+	password?: string;
 }) {
 	const user: RegisterFields = {
 		email,
@@ -90,18 +91,19 @@ async function createTestUser({
 	});
 
 	return resp.json();
-};
+}
 
 async function loginTestUser({
-	email = testEmail, password = testPassword
+	email = testEmail,
+	password = testPassword,
 }: {
-	email?: string,
-	password?: string
+	email?: string;
+	password?: string;
 }) {
 	const resp = await testClient(authRoute).login.$post({
 		json: {
 			email,
-			password
+			password,
 		},
 	});
 

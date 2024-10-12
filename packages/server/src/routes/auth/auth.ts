@@ -13,7 +13,6 @@ import { loginFields, registerFields } from "@repo/zod-types";
 const registerFormValidation = zValidator("json", registerFields);
 const loginFormValidation = zValidator("json", loginFields);
 
-
 export const authRoute = new Hono()
 	.post("/register", registerFormValidation, async (c) => {
 		const {
@@ -44,7 +43,17 @@ export const authRoute = new Hono()
 		setCookie(c, COOKIES.USER_ID, newUser.email);
 		setCookie(c, COOKIES.USER_TOKEN, token);
 
-		return c.json({ data: { newUser, token: token } }, 201);
+		const { passwordDigest: _NotUsed, ...rest } = newUser;
+
+		return c.json(
+			{
+				data: {
+					newUser: rest,
+					token: token,
+				},
+			},
+			201,
+		);
 	})
 	.post("/login", loginFormValidation, async (c) => {
 		const {
@@ -63,12 +72,20 @@ export const authRoute = new Hono()
 		const user = await Auth.findUser(email);
 		if (!user) return c.json({ error: "User not found" }, 404);
 
-		const doesPasswordMatch = await checkPassword(password, user.passwordDigest)
-		if (!doesPasswordMatch) return c.json({ error: "Password does not match" }, 403);
+		const doesPasswordMatch = await checkPassword(
+			password,
+			user.passwordDigest,
+		);
+
+		if (!doesPasswordMatch)
+			return c.json({ error: "Password does not match" }, 403);
 
 		const token = await generateToken(user, JWT_SECRET_KEY);
 
 		setCookie(c, COOKIES.USER_ID, user.email);
 		setCookie(c, COOKIES.USER_TOKEN, token);
-		return c.json({ data: user }, 201);
+
+		const { passwordDigest: _NotUsed, ...rest } = user;
+
+		return c.json({ data: rest }, 201);
 	});

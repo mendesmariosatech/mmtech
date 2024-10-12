@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { password } from "./common"
+import { password } from "./common";
 
 const loginTexts = {
 	EN: {

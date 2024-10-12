@@ -7,7 +7,10 @@ export class AuthTable extends DBConnection {
 		super(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	}
 
-	public async registerUser(email: SelectAuth["email"], passwordDigest: string) {
+	public async registerUser(
+		email: SelectAuth["email"],
+		passwordDigest: string,
+	) {
 		const [user] = await this.db
 			.insert(authTable)
 			.values({
@@ -28,6 +31,6 @@ export class AuthTable extends DBConnection {
 	}
 
 	public async deleteTable() {
-		await this.db.delete(authTable)
+		await this.db.delete(authTable);
 	}
 }
