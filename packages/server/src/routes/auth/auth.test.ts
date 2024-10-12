@@ -27,7 +27,7 @@ const createTestUser = async () => {
 };
 
 describe("New User - POST /auth/register", () => {
-	test("User can SignUp using a new email and valid password, nut cannot create another account with same email", async () => {
+	test("User can register using a new email and valid password", async () => {
 		const data = await createTestUser();
 
 		if ("error" in data) {
@@ -43,7 +43,7 @@ describe("New User - POST /auth/register", () => {
 });
 
 describe.skip("Login - POST /auth/login", () => {
-	test("User can SignUp using a new email and valid password, nut cannot create another account with same email", async () => {
+	test("User cannot create another account with same email", async () => {
 		const data = await createTestUser();
 
 		if ("error" in data) {
