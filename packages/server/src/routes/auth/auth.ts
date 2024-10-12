@@ -25,16 +25,16 @@ export const authRoute = new Hono()
 		if (!form) return c.json({ error: "Invalid form data" }, 400);
 
 		const { email, password, name, phone } = form;
-		const auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+		const Auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
-		const user = await auth.findUser(email);
+		const user = await Auth.findUser(email);
 		if (user) return c.json({ error: "User already exists" }, 400);
 
 		const passwordDigest = await hashPassword(password);
 		if (!passwordDigest)
 			return c.json({ error: "Password digest failed" }, 400);
 
-		const newUser = await auth.registerUser(email, passwordDigest);
+		const newUser = await Auth.registerUser(email, passwordDigest);
 		if (!newUser) return c.json({ error: "User creation failed" }, 400);
 
 		const token = await generateToken(newUser, JWT_SECRET_KEY);
