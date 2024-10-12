@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { testClient } from "hono/testing";
-import { authRoute } from "./register";
+import { authRoute } from "./auth";
 import { RegisterFields } from "@repo/zod-types";
 import { createId } from "@paralleldrive/cuid2";
 
