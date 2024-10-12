@@ -66,7 +66,7 @@ describe("Login - POST /auth/login", () => {
 		}
 
 		expect("data" in loginResp).toStrictEqual(true);
-		expect(loginResp.data.email).toBe(newEmail)
+		expect(loginResp.data.email).toBe(newEmail);
 	});
 
 	test("User cannot login with non-existent email", async () => {
