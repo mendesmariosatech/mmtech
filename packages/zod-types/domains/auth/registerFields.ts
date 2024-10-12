@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { password } from "./common"
 
 const texts = {
 	EN: {
@@ -6,7 +7,6 @@ const texts = {
 			name: "Name is required to have +3 characters",
 			email: "Invalid email address",
 			phone: "Phone number is required",
-			password: "Password must contain at least one uppercase letter",
 			agreeTerms: "You must agree to the terms and conditions",
 		},
 	},
@@ -25,12 +25,7 @@ export const registerFields = z.object({
 	name: z.string().min(1, { message: texts.EN.error.name }),
 	email: z.string().email({ message: texts.EN.error.email }),
 	phone: z.string().min(9, { message: texts.EN.error.phone }),
-	password: z
-		.string()
-		.min(6)
-		.refine((val) => /[A-Z]/.test(val), {
-			message: texts.EN.error.password,
-		}),
+	password,
 	agreeTerms: z.literal(true, {
 		message: texts.EN.error.agreeTerms,
 	}),

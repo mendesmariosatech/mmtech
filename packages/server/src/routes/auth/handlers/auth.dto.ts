@@ -7,7 +7,7 @@ export class AuthTable extends DBConnection {
 		super(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	}
 
-	async registerUser(email: SelectAuth["email"], passwordDigest: string) {
+	public async registerUser(email: SelectAuth["email"], passwordDigest: string) {
 		const [user] = await this.db
 			.insert(authTable)
 			.values({
@@ -19,12 +19,15 @@ export class AuthTable extends DBConnection {
 		return user;
 	}
 
-	async findUser(email: SelectAuth["email"]) {
+	public async findUser(email: SelectAuth["email"]) {
 		const [user] = await this.db
 			.select()
 			.from(authTable)
 			.where(eq(authTable.email, email));
-
 		return user;
+	}
+
+	public async deleteTable() {
+		await this.db.delete(authTable)
 	}
 }

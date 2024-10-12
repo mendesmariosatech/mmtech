@@ -2,18 +2,20 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { AuthTable } from "./handlers";
-import { hashPassword } from "../../utils/bcrypt";
+import { hashPassword, checkPassword } from "../../utils/bcrypt";
 import { env } from "hono/adapter";
 import type { ENV_TYPES } from "../../env/zod";
 import { generateToken } from "../../jwt_token";
 import { setCookie, setSignedCookie } from "hono/cookie";
 import { COOKIES } from "../../cookies";
-import { registerFields } from "@repo/zod-types";
+import { loginFields, registerFields } from "@repo/zod-types";
 
-const formValidation = zValidator("json", registerFields);
+const registerFormValidation = zValidator("json", registerFields);
+const loginFormValidation = zValidator("json", loginFields);
+
 
 export const authRoute = new Hono()
-	.post("/register", formValidation, async (c) => {
+	.post("/register", registerFormValidation, async (c) => {
 		const {
 			TURSO_AUTH_TOKEN,
 			TURSO_CONNECTION_URL,
@@ -44,7 +46,7 @@ export const authRoute = new Hono()
 
 		return c.json({ data: { newUser, token: token } }, 201);
 	})
-	.post("/login", formValidation, async (c) => {
+	.post("/login", loginFormValidation, async (c) => {
 		const {
 			TURSO_AUTH_TOKEN,
 			TURSO_CONNECTION_URL,
@@ -57,10 +59,12 @@ export const authRoute = new Hono()
 
 		const { email, password } = form;
 
-		const auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
-		const user = await auth.findUser(email);
-
+		const Auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+		const user = await Auth.findUser(email);
 		if (!user) return c.json({ error: "User not found" }, 404);
+
+		const doesPasswordMatch = await checkPassword(password, user.passwordDigest)
+		if (!doesPasswordMatch) return c.json({ error: "Password does not match" }, 403);
 
 		const token = await generateToken(user, JWT_SECRET_KEY);
 
