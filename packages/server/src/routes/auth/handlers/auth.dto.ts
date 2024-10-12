@@ -1,5 +1,5 @@
 import { DBConnection } from "../../../drizzle/drizzle-client";
-import { authTable, type SelectAuth } from "../../../drizzle/schema";
+import { authTable, usersTable, type SelectAuth } from "../../../drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export class AuthTable extends DBConnection {
@@ -32,5 +32,22 @@ export class AuthTable extends DBConnection {
 
 	public async deleteTable() {
 		await this.db.delete(authTable);
+	}
+}
+
+export class UserTable extends DBConnection {
+	constructor(TURSO_CONNECTION_URL: string, TURSO_AUTH_TOKEN: string) {
+		super(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+	}
+
+	public async createNewUser(email: string) {
+		const [creatade] = await this.db
+			.insert(usersTable)
+			.values({
+				name: email,
+			}).returning()
+
+		return creatade
+
 	}
 }

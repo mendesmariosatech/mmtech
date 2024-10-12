@@ -5,8 +5,8 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 export const authTable = sqliteTable("auth", {
 	id: text("id", { length: 128 }).$defaultFn(() => `AU_` + createId()),
 	passwordDigest: text("password_digest").notNull(),
-	email: text("email").unique().notNull(),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+	email: text("email").unique().notNull(),
 });
 
 export const usersTable = sqliteTable("user", {

@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { AuthTable } from "./handlers";
+import { AuthTable, UserTable } from "./handlers";
 import { hashPassword, checkPassword } from "../../utils/bcrypt";
 import { env } from "hono/adapter";
 import type { ENV_TYPES } from "../../env/zod";
@@ -21,12 +21,17 @@ export const authRoute = new Hono()
 			JWT_SECRET_KEY,
 			COOkIE_SECRET_KEY,
 		} = env<ENV_TYPES>(c);
+		if (!TURSO_CONNECTION_URL || !TURSO_AUTH_TOKEN) {
+			return c.json({ error: "No ENV file" }, 500);
+		}
 		const form = c.req.valid("json");
 
 		if (!form) return c.json({ error: "Invalid form data" }, 400);
 
 		const { email, password, name, phone } = form;
+
 		const Auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+		const User = new UserTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
 		const user = await Auth.findUser(email);
 		if (user) return c.json({ error: "User already exists" }, 400);
@@ -43,12 +48,13 @@ export const authRoute = new Hono()
 		setCookie(c, COOKIES.USER_ID, newUser.email);
 		setCookie(c, COOKIES.USER_TOKEN, token);
 
-		const { passwordDigest: _NotUsed, ...rest } = newUser;
+		const newAccount = await User.createNewUser(newUser.email)
 
 		return c.json(
 			{
 				data: {
-					newUser: rest,
+					newUser,
+					newAccount,
 					token: token,
 				},
 			},
@@ -79,6 +85,8 @@ export const authRoute = new Hono()
 
 		if (!doesPasswordMatch)
 			return c.json({ error: "Password does not match" }, 403);
+
+		// find table and move forward
 
 		const token = await generateToken(user, JWT_SECRET_KEY);
 
