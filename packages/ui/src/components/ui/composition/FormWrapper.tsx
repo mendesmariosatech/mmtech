@@ -91,7 +91,7 @@ export const FormWrapper = () => {
 					onSubmit={handleSubmit}
 				>
 					<div className="mt-4">
-						<Button type="submit" variant="outline" size="sm">
+						<Button type="submit" variant="default" size="sm">
 							Discard
 						</Button>
 					</div>
