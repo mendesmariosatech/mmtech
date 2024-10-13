@@ -1,5 +1,3 @@
-import React from "react";
-import { Label } from "../../../ui/label";
 import {
 	Card,
 	CardHeader,
@@ -7,8 +5,6 @@ import {
 	CardDescription,
 	CardContent,
 } from "../../../ui/card";
-import { Input } from "../../../ui/input";
-import { Textarea } from "../../../ui/textarea";
 import { ControlledForm } from "../../ControlledForm";
 
 import { z } from "zod";
@@ -58,7 +54,7 @@ export const itemFormConfig: ConfigObject<ItemSchema> = {
 	},
 };
 
-export const FormWrapper = () => {
+export const ProductForm = () => {
 	const form = useForm<ItemSchema>({
 		resolver: zodResolver(itemSchema),
 		defaultValues: {
