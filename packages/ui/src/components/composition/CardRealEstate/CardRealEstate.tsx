@@ -5,8 +5,8 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "../../card";
-import { Button } from "../../button";
+} from "../../ui/card";
+import { Button } from "../../ui/button";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
 
 const properties = [

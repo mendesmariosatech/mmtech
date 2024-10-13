@@ -21,7 +21,7 @@ import {
 	Users2,
 } from "lucide-react";
 
-import { Badge } from "../../badge";
+import { Badge } from "../../ui/badge";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -29,8 +29,8 @@ import {
 	BreadcrumbList,
 	BreadcrumbPage,
 	BreadcrumbSeparator,
-} from "../../breadcrumb";
-import { Button } from "../../button";
+} from "../../ui/breadcrumb";
+import { Button } from "../../ui/button";
 import {
 	Card,
 	CardContent,
@@ -38,7 +38,7 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "../../card";
+} from "../../ui/card";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -47,16 +47,16 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "../../dropdown-menu";
-import { Input } from "../../input";
+} from "../../ui/dropdown-menu";
+import { Input } from "../../ui/input";
 import {
 	Pagination,
 	PaginationContent,
 	PaginationItem,
-} from "../../pagination";
-import { Progress } from "../../progress";
-import { Separator } from "../../separator";
-import { Sheet, SheetContent, SheetTrigger } from "../../sheet";
+} from "../../ui/pagination";
+import { Progress } from "../../ui/progress";
+import { Separator } from "../../ui/separator";
+import { Sheet, SheetContent, SheetTrigger } from "../../ui/sheet";
 import {
 	Table,
 	TableBody,
@@ -64,9 +64,9 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from "../../table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../tabs";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../tooltip";
+} from "../../ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 
 export function Dashboard() {
 	return (

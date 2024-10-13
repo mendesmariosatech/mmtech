@@ -1,7 +1,7 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../../card";
-import { Badge } from "../../badge";
-import { Avatar, AvatarFallback, AvatarImage } from "../../avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Badge } from "../../ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 
 type Person = {
 	id: string;

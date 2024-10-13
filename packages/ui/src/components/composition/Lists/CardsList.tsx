@@ -1,8 +1,8 @@
 import React from "react";
 import { Card } from "../Cards/Card";
 
-import { Separator } from "../../separator";
-import { ScrollArea, ScrollBar } from "../../scroll-area";
+import { Separator } from "../../ui/separator";
+import { ScrollArea, ScrollBar } from "../../ui/scroll-area";
 import { madeForYouAlbums } from "../Cards/data";
 
 export const CardsList = () => {
