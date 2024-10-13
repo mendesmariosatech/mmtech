@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ProductForm } from "./ProductForm";
 
 const meta = {
-	title: "ProductForm",
+	title: "Forms/ProductForm",
 	component: ProductForm,
 } satisfies Meta<typeof ProductForm>;
 
