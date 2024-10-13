@@ -235,7 +235,7 @@ export function ProductsList() {
 								className="overflow-hidden rounded-full"
 							>
 								<Image
-									src="/placeholder-user.jpg"
+									src="/marketing/logo.svg"
 									width={36}
 									height={36}
 									alt="Avatar"
@@ -336,7 +336,7 @@ export function ProductsList() {
 														alt="Product image"
 														className="aspect-square rounded-md object-cover"
 														height="64"
-														src="/placeholder.svg"
+														src="/marketing/logo.svg"
 														width="64"
 													/>
 												</TableCell>
@@ -379,7 +379,7 @@ export function ProductsList() {
 														alt="Product image"
 														className="aspect-square rounded-md object-cover"
 														height="64"
-														src="/placeholder.svg"
+														src="/marketing/logo.svg"
 														width="64"
 													/>
 												</TableCell>
@@ -422,7 +422,7 @@ export function ProductsList() {
 														alt="Product image"
 														className="aspect-square rounded-md object-cover"
 														height="64"
-														src="/placeholder.svg"
+														src="/marketing/logo.svg"
 														width="64"
 													/>
 												</TableCell>
@@ -465,7 +465,7 @@ export function ProductsList() {
 														alt="Product image"
 														className="aspect-square rounded-md object-cover"
 														height="64"
-														src="/placeholder.svg"
+														src="/marketing/logo.svg"
 														width="64"
 													/>
 												</TableCell>
@@ -508,7 +508,7 @@ export function ProductsList() {
 														alt="Product image"
 														className="aspect-square rounded-md object-cover"
 														height="64"
-														src="/placeholder.svg"
+														src="/marketing/logo.svg"
 														width="64"
 													/>
 												</TableCell>
@@ -551,7 +551,7 @@ export function ProductsList() {
 														alt="Product image"
 														className="aspect-square rounded-md object-cover"
 														height="64"
-														src="/placeholder.svg"
+														src="/marketing/logo.svg"
 														width="64"
 													/>
 												</TableCell>
