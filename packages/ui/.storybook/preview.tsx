@@ -16,7 +16,6 @@ const preview: Preview = {
 	decorators: [
 		(Story, { parameters }) => {
 			// 👇 Make it configurable by reading from parameters
-
 			return (
 				<TooltipProvider>
 					<Story />

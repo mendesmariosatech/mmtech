@@ -1,21 +1,21 @@
 import React from "react";
-import { Label } from "../label";
+import { Label } from "../../../ui/label";
 import {
 	Card,
 	CardHeader,
 	CardTitle,
 	CardDescription,
 	CardContent,
-} from "../card";
-import { Input } from "../input";
-import { Textarea } from "../textarea";
-import { ControlledForm } from "../../form-builder/ControlledForm";
+} from "../../../ui/card";
+import { Input } from "../../../ui/input";
+import { Textarea } from "../../../ui/textarea";
+import { ControlledForm } from "../../ControlledForm";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../button";
-import { ConfigObject } from "../../form-builder/ControlledInput";
+import { Button } from "../../../ui/button";
+import { ConfigObject } from "../../ControlledInput";
 
 const itemSchema = z.object({
 	name: z.string().min(1, "Name is required"),
@@ -25,17 +25,6 @@ const itemSchema = z.object({
 });
 
 type ItemSchema = z.infer<typeof itemSchema>;
-
-const useItemForm = () =>
-	useForm<ItemSchema>({
-		resolver: zodResolver(itemSchema),
-		defaultValues: {
-			name: "",
-			price: 1000,
-			category: "product",
-			description: "",
-		},
-	});
 
 export const itemFormConfig: ConfigObject<ItemSchema> = {
 	name: {
@@ -70,7 +59,15 @@ export const itemFormConfig: ConfigObject<ItemSchema> = {
 };
 
 export const FormWrapper = () => {
-	const form = useItemForm();
+	const form = useForm<ItemSchema>({
+		resolver: zodResolver(itemSchema),
+		defaultValues: {
+			name: "",
+			price: 1000,
+			category: "product",
+			description: "",
+		},
+	});
 
 	const handleSubmit = (data: ItemSchema) => {
 		console.log(data);
