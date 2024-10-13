@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Dashboard } from "./Dashboard";
 
 const meta = {
-	title: "Category",
+	title: "Dashboard",
 	component: Dashboard,
 } satisfies Meta<typeof Dashboard>;
 
