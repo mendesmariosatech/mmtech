@@ -1,6 +1,5 @@
 import React from "react";
 import {
-	Controller,
 	type FieldPath,
 	type FieldValues,
 	type UseFormReturn,
@@ -34,9 +33,15 @@ type CheckBox<D extends FieldValues> = {
 	checkboxLabel: string;
 } & FormConfig;
 
+type DropdownOptions = {
+	key: string;
+	value: string;
+};
+
 type DropdownProps<D extends FieldValues> = {
 	name: FieldPath<D>;
 	input: "select";
+	options: DropdownOptions[];
 } & FormConfig;
 // & Omit<Props<{ label: string }>, "onChange">;
 
@@ -81,9 +86,11 @@ export const ControlledInput = <D extends FieldValues>(
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										<SelectItem value="m@example.com">m@example.com</SelectItem>
-										<SelectItem value="m@google.com">m@google.com</SelectItem>
-										<SelectItem value="m@support.com">m@support.com</SelectItem>
+										{props.options.map((option) => (
+											<SelectItem key={option.key} value={option.key}>
+												{option.value}
+											</SelectItem>
+										))}
 									</SelectContent>
 								</Select>
 								<FormMessage />
