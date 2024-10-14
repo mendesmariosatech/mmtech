@@ -30,7 +30,7 @@ import { PanelLeft } from "lucide-react";
 export const SideBarFormer = ({
 	buttonsData,
 	NomeEmpresa,
-	buttonConfig = []
+	buttonConfig = [],
 }: PropsSideBarBuilder) => {
 	const [open, setOpen] = useState(true);
 	const pathName = usePathname() || "";
@@ -194,9 +194,7 @@ export const SideBarFormer = ({
 			</aside> */}
 			<div className="sm:hidden bg-[#2563EB] top-0 w-full fixed h-[36px] z-10">
 				<div className="flex flex-row justify-between items-center">
-					<h3 className={`pl-2 font-bold text-lg text-white`}>
-						{NomeEmpresa}
-					</h3>
+					<h3 className={`pl-2 font-bold text-lg text-white`}>{NomeEmpresa}</h3>
 					<Sheet>
 						<SheetTrigger asChild className="p-0 m-0 border-none">
 							<Button variant={"ghost"}>
@@ -207,7 +205,7 @@ export const SideBarFormer = ({
 							<div className="h-screen overflow-y-auto">
 								<SheetHeader>
 									<div className="flex relative items-center mx-3.5 py-4 px-3.5">
-										<Image src='' alt="Logo" width={45} height={45}></Image>
+										<Image src="" alt="Logo" width={45} height={45}></Image>
 										<h3 className={`pl-2 font-bold text-lg`}>{NomeEmpresa}</h3>
 									</div>
 								</SheetHeader>
@@ -236,7 +234,10 @@ export const SideBarFormer = ({
 								<div className="flex flex-col gap-2 items-start mt-2 mb-20 mx-4">
 									<SheetClose asChild>
 										{buttonConfig.map((button, index) => {
-											if (button.dropdownItems && button.dropdownItems.length > 0) {
+											if (
+												button.dropdownItems &&
+												button.dropdownItems.length > 0
+											) {
 												// Dropdown Menu Logic
 												const isOpen =
 													button.dropdownItems?.some((item) =>

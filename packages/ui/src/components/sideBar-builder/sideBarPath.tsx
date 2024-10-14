@@ -12,7 +12,6 @@ import {
 	CardStackIcon,
 	GlobeIcon,
 	ExitIcon,
-
 } from "@radix-ui/react-icons"; // Importe seus ícones aqui
 
 import {
@@ -33,9 +32,8 @@ import {
 	ShoppingCart,
 	Truck,
 	Users2,
-} from "lucide-react"
+} from "lucide-react";
 import { PropsSideBarBuilder } from "./SideBarTypes";
-
 
 // Dados do menu de botões e dropdowns
 export const buttonsData: PropsSideBarBuilder = {
@@ -94,7 +92,7 @@ export const buttonsData: PropsSideBarBuilder = {
 			label: "Suporte",
 			disable: false,
 			link: "/business/suporte",
-		}		
+		},
 	],
 	buttonConfig: [
 		{
@@ -125,9 +123,8 @@ export const buttonsData: PropsSideBarBuilder = {
 				},
 			],
 		},
-	]
+	],
 };
-
 
 export const buttonsDataStatic: PropsSideBarBuilder = {
 	NomeEmpresa: "Smart Gabinete",
@@ -194,5 +191,5 @@ export const buttonsDataStatic: PropsSideBarBuilder = {
 			disable: false,
 			link: "/settings",
 		},
-	]
+	],
 };

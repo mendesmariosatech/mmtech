@@ -3,10 +3,10 @@ import React from "react";
 export interface ButtonData {
 	label: string;
 	icon: React.ReactNode;
-	link?: string; 
+	link?: string;
 	disable: boolean;
 	onClick?: () => void;
-	dropdownItems?: DropMenuItem[]; 
+	dropdownItems?: DropMenuItem[];
 }
 
 export interface DropMenuItem {
@@ -23,9 +23,9 @@ export interface ButtonConfig {
 	path?: string;
 	icon?: React.ReactNode;
 	disable?: boolean;
-	link?: string;	
+	link?: string;
 	onClick?: () => void;
-	dropdownItems?: DropMenuItem[]; 
+	dropdownItems?: DropMenuItem[];
 }
 
 export interface PropsSideBarBuilder {
