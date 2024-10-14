@@ -1,27 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { SideBarFormer } from "./SideBarFormer";
-import { buttonsData } from "./sideBarPath"; // Importando buttonsData corretamente
-
-interface ButtonData {
-	icon: React.ReactNode;
-	label: string;
-	disable: boolean;
-	link?: string; // Link opcional, já que dropdowns não necessariamente têm link
-	dropdownItems?: DropMenuItem[]; // Adicionando itens de dropdown
-}
-
-interface DropMenuItem {
-	label: string;
-	path?: string;
-	icon?: React.ReactNode;
-	disabled?: boolean;
-	onClick?: () => void;
-}
-
-export interface PropsSideBarBuilder {
-	NomeEmpresa: string;
-	buttonsData: ButtonData[]; // Lista de botões, que pode incluir dropdowns
-}
+import { buttonsData } from "./SideBarPath"; // Importando buttonsData corretamente
 
 const meta = {
 	title: "SideBar",
@@ -31,18 +10,21 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+// Stories for SideBarFormer
+type Story = StoryObj<typeof SideBarFormer>;
 
 export const NormalMode: Story = {
 	args: {
-		NomeEmpresa: "Minha Empresa",
-		buttonsData: buttonsData,
+		NomeEmpresa: buttonsData.NomeEmpresa,
+		buttonsData: buttonsData.buttonsData,
+		buttonConfig: buttonsData.buttonConfig,
 	},
 };
 
 export const ContractMode: Story = {
 	args: {
-		NomeEmpresa: "Sua Empresa",
+		NomeEmpresa: buttonsData.NomeEmpresa,
 		buttonsData: [],
+		buttonConfig: [],
 	},
 };

@@ -14,39 +14,30 @@ import {
 } from "../ui/dropdown-menu";
 import React from "react";
 import Link from "next/link";
-
-interface ButtonData {
-	icon: React.ReactNode;
-	label: string;
-	disable: boolean;
-	link?: string; // Optional link, since dropdowns don't necessarily have a link
-	dropdownItems?: DropMenuItem[]; // Optional dropdown items for dropdown buttons
-}
-
-interface DropMenuItem {
-	label: string;
-	path?: string;
-	icon?: React.ReactNode;
-	disabled?: boolean;
-	onClick?: () => void;
-	separator?: boolean; // Optional separator between dropdown items
-}
-
-export interface PropsSideBarBuilder {
-	NomeEmpresa: string;
-	buttonsData: ButtonData[]; // Array of buttons, which may include dropdowns
-}
+import { PropsSideBarBuilder } from "./SideBarTypes";
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "../ui/sheet";
+import { PanelLeft } from "lucide-react";
 
 export const SideBarFormer = ({
 	buttonsData,
 	NomeEmpresa,
+	buttonConfig = []
 }: PropsSideBarBuilder) => {
 	const [open, setOpen] = useState(true);
 	const pathName = usePathname() || "";
 
 	return (
 		<section className="flex w-full relative bg-gray-200">
-			<aside
+			{/* <aside
 				className={`hidden sm:flex flex-col bg-[#25508C] rounded-tr-xl rounded-br-xl text-white h-[800px] shadow-lg shadow-gray-900/20 duration-200 ease-out ${open ? "w-[18.5rem]" : "w-[5rem]"}`}
 			>
 				<div className="flex relative items-center mx-3.5 py-4 px-3.5">
@@ -55,7 +46,7 @@ export const SideBarFormer = ({
 						alt="Logo"
 						width={45}
 						height={45}
-					></Image>
+					/>
 					<h3 className={`${open ? `pl-2 font-bold text-lg` : `scale-0`}`}>
 						{NomeEmpresa}
 					</h3>
@@ -71,13 +62,55 @@ export const SideBarFormer = ({
 				<hr className="bg-gray-50 mx-3.5" />
 				<div className="flex flex-col gap-2 items-start my-4 mx-4">
 					{buttonsData.map((button, index) => {
-						// Regular Button Logic
-						if (button.link) {
+						if (button.dropdownItems && button.dropdownItems.length > 0) {
+							// Dropdown Menu Logic
+							const isOpen =
+								button.dropdownItems?.some((item) =>
+									pathName.includes(item.link || ""),
+								) || false;
+							return (
+								<DropdownMenu key={index}>
+									<DropdownMenuTrigger asChild>
+										<Button
+											variant="ghost"
+											className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-white w-full cursor-pointer ${isOpen ? "border border-white bg-white text-black" : ""}`}
+										>
+											{button.icon}
+											{open && button.label}
+										</Button>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent
+										className={`${open ? "w-[16rem] min-w-8" : "w-[3rem] min-w-8"}`}
+									>
+										{button.dropdownItems.map((item, subIndex) => (
+											<DropdownMenuItem
+												key={subIndex}
+												disabled={item.disabled}
+												onClick={() => {
+													if (item.onClick) {
+														item.onClick();
+													}
+												}}
+											>
+												<Link
+													href={item.link || ""}
+													className={`flex ${open ? "gap-5" : "gap-0"}`}
+												>
+													{item.icon}
+													{open && item.label}
+												</Link>
+											</DropdownMenuItem>
+										))}
+									</DropdownMenuContent>
+								</DropdownMenu>
+							);
+						} else {
+							// Regular Button Logic
 							return (
 								<Button
 									key={index}
 									variant="ghost"
-									className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-white w-full cursor-pointer ${button.link !== pathName ? `` : `border border-white bg-white text-black`}`}
+									className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-white w-full cursor-pointer ${button.link === pathName ? "border border-white bg-white text-black" : ""}`}
 									disabled={button.disable}
 								>
 									<Link
@@ -90,77 +123,186 @@ export const SideBarFormer = ({
 								</Button>
 							);
 						}
-
-						// Dropdown Menu Logic
+					})}
+				</div>
+				<hr className="bg-gray-50 mx-3.5 opacity-50" />
+				<div className="flex flex-col gap-2 items-start my-4 mx-4">
+					{buttonConfig.map((button, index) => {
 						if (button.dropdownItems && button.dropdownItems.length > 0) {
+							// Dropdown Menu Logic
 							const isOpen =
 								button.dropdownItems?.some((item) =>
-									pathName.includes(item.path || ""),
+									pathName.includes(item.link || ""),
 								) || false;
 							return (
 								<DropdownMenu key={index}>
-									<DropdownMenuTrigger
-										asChild
-										className={
-											isOpen ? "" : "border border-white bg-white text-black"
-										}
-									>
+									<DropdownMenuTrigger asChild>
 										<Button
 											variant="ghost"
-											className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-white w-full cursor-pointer ${isOpen ? "" : "border border-white bg-white text-black"}`}
+											className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-white w-full cursor-pointer ${isOpen ? "border border-white bg-white text-black" : ""}`}
 										>
-											<Link
-												href={button.link || ""}
-												className={`flex ${open ? "gap-5" : "gap-0"}`}
-											>
-												{button.icon}
-												{open && button.label}
-											</Link>
+											{button.icon}
+											{open && button.label}
 										</Button>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent
 										className={`${open ? "w-[16rem] min-w-8" : "w-[3rem] min-w-8"}`}
 									>
 										{button.dropdownItems.map((item, subIndex) => (
-											<React.Fragment key={subIndex}>
-												<DropdownMenuItem
-													disabled={item.disabled}
-													onClick={() => {
-														if (item.onClick) {
-															item.onClick();
-														}
-													}}
+											<DropdownMenuItem
+												key={subIndex}
+												disabled={item.disabled}
+												onClick={() => {
+													if (item.onClick) {
+														item.onClick();
+													}
+												}}
+											>
+												<Link
+													href={item.link || ""}
+													className={`flex ${open ? "gap-5" : "gap-0"}`}
 												>
-													<Button
-														variant="ghost"
-														className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-black w-full cursor-pointer ${pathName === item.path ? "bg-[#25508C] text-white" : ""}`}
-														asChild
-													>
-														<Link
-															href={item.path || ""}
-															className={`flex ${open ? "gap-5" : "gap-0"}`}
-														>
-															{item.icon}
-															{open && item.label}
-														</Link>
-													</Button>
-												</DropdownMenuItem>
-												{item.separator && <DropdownMenuSeparator />}
-											</React.Fragment>
+													{item.icon}
+													{open && item.label}
+												</Link>
+											</DropdownMenuItem>
 										))}
 									</DropdownMenuContent>
 								</DropdownMenu>
 							);
+						} else {
+							// Regular Button Logic
+							return (
+								<Button
+									key={index}
+									variant="ghost"
+									className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-white w-full cursor-pointer ${button.link === pathName ? "border border-white bg-white text-black" : ""}`}
+									disabled={button.disable}
+								>
+									<Link
+										href={button.link || ""}
+										className={`flex ${open ? "gap-5" : "gap-0"}`}
+									>
+										{button.icon}
+										{open && button.label}
+									</Link>
+								</Button>
+							);
 						}
-
-						return null; // Fallback in case neither link nor dropdownItems is defined
 					})}
 				</div>
-				<hr className="bg-gray-50 mx-3.5 opacity-50" />
-			</aside>
+			</aside> */}
 			<div className="sm:hidden bg-[#2563EB] top-0 w-full fixed h-[36px] z-10">
-				<div className="flex flex-row justify-between mx-1 items-center">
-					<h3 className={`pl-2 font-bold text-lg text-white`}>{NomeEmpresa}</h3>
+				<div className="flex flex-row justify-between items-center">
+					<h3 className={`pl-2 font-bold text-lg text-white`}>
+						{NomeEmpresa}
+					</h3>
+					<Sheet>
+						<SheetTrigger asChild className="p-0 m-0 border-none">
+							<Button variant={"ghost"}>
+								<PanelLeft className="text-white w-6 h-6 " />
+							</Button>
+						</SheetTrigger>
+						<SheetContent>
+							<div className="h-screen overflow-y-auto">
+								<SheetHeader>
+									<div className="flex relative items-center mx-3.5 py-4 px-3.5">
+										<Image src='' alt="Logo" width={45} height={45}></Image>
+										<h3 className={`pl-2 font-bold text-lg`}>{NomeEmpresa}</h3>
+									</div>
+								</SheetHeader>
+								<hr className="bg-[#25508C] mx-3.5 border-[#25508C]" />
+								<div className="flex flex-col gap-2 items-start my-4 mx-4">
+									{buttonsData.map((button, index) => (
+										<SheetClose asChild>
+											<Button
+												key={index}
+												variant="ghost"
+												className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-[#25508C] w-full cursor-pointer ${button.link === pathName ? "border border-white bg-white text-black" : ""}`}
+												disabled={button.disable}
+											>
+												<Link
+													href={button.link || ""}
+													className={`flex ${open ? "gap-5" : "gap-0"}`}
+												>
+													{button.icon}
+													{button.label}
+												</Link>
+											</Button>
+										</SheetClose>
+									))}
+								</div>
+								<hr className="bg-[#25508C] mx-3.5 border-[#25508C] opacity-50" />
+								<div className="flex flex-col gap-2 items-start mt-2 mb-20 mx-4">
+									<SheetClose asChild>
+										{buttonConfig.map((button, index) => {
+											if (button.dropdownItems && button.dropdownItems.length > 0) {
+												// Dropdown Menu Logic
+												const isOpen =
+													button.dropdownItems?.some((item) =>
+														pathName.includes(item.link || ""),
+													) || false;
+												return (
+													<DropdownMenu key={index}>
+														<DropdownMenuTrigger asChild>
+															<Button
+																variant="ghost"
+																className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-[#25508C] w-full cursor-pointer ${isOpen ? "border border-white bg-white text-black" : ""}`}
+															>
+																{button.icon}
+																{open && button.label}
+															</Button>
+														</DropdownMenuTrigger>
+														<DropdownMenuContent
+															className={`${open ? "w-[16rem] min-w-8" : "w-[3rem] min-w-8"}`}
+														>
+															{button.dropdownItems.map((item, subIndex) => (
+																<DropdownMenuItem
+																	key={subIndex}
+																	disabled={item.disabled}
+																	onClick={() => {
+																		if (item.onClick) {
+																			item.onClick();
+																		}
+																	}}
+																>
+																	<Link
+																		href={item.link || ""}
+																		className={`flex ${open ? "gap-5" : "gap-0"}`}
+																	>
+																		{item.icon}
+																		{open && item.label}
+																	</Link>
+																</DropdownMenuItem>
+															))}
+														</DropdownMenuContent>
+													</DropdownMenu>
+												);
+											} else {
+												// Regular Button Logic
+												return (
+													<Button
+														key={index}
+														variant="ghost"
+														className={`flex ${open ? `gap-2 items-start justify-start` : `items-center justify-center p-0 gap-0`} text-md font-light text-white w-full cursor-pointer ${button.link === pathName ? "border border-white bg-white text-black" : ""}`}
+														disabled={button.disable}
+													>
+														<Link
+															href={button.link || ""}
+															className={`flex ${open ? "gap-5" : "gap-0"}`}
+														>
+															{button.icon}
+															{open && button.label}
+														</Link>
+													</Button>
+												);
+											}
+										})}
+									</SheetClose>
+								</div>
+							</div>
+						</SheetContent>
+					</Sheet>
 				</div>
 			</div>
 		</section>
