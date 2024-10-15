@@ -108,10 +108,6 @@ async function createTestUser({
 		json: user,
 	});
 
-	console.log({
-		resp,
-	});
-
 	return resp.json();
 }
 

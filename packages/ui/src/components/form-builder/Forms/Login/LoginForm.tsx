@@ -32,11 +32,8 @@ export const LoginForm = (props: LoginFormProps) => {
 	const form = useLoginForm();
 
 	const handleSubmit = (data: LoginFields) => {
-		console.log(data);
 		props.mutate(data);
 	};
-
-	console.log("Errors", form.formState.errors);
 
 	return (
 		<div className="border-2 border-primary-foreground p-6 rounded-md">
