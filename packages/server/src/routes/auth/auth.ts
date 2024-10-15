@@ -7,7 +7,7 @@ import { env } from "hono/adapter";
 import type { ENV_TYPES } from "../../env/zod";
 import { generateToken } from "../../jwt_token";
 import { setCookie, setSignedCookie } from "hono/cookie";
-import { COOKIES } from "../../cookies";
+import { COOKIES } from "../../env/cookies";
 import { loginFields, registerFields } from "@repo/zod-types";
 
 const registerFormValidation = zValidator("json", registerFields);

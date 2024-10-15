@@ -3,7 +3,7 @@ import { app } from "./base/base-app";
 import { authRoute } from "./routes/auth/auth";
 import { hc } from "hono/client";
 import { personalRoute } from "./routes/personal/me";
-import { secret } from "./routes/secret/test";
+import { secret } from "./routes/secret/routeTest";
 import { swaggerUI } from "@hono/swagger-ui";
 
 const route = app

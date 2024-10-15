@@ -1,4 +1,4 @@
-import { COOKIES } from "../cookies";
+import { COOKIES } from "../env/cookies";
 import { createMiddleware } from "hono/factory";
 import type { ENV_TYPES } from "../env/zod";
 import { getSignedCookie, getCookie } from "hono/cookie";
