@@ -7,7 +7,9 @@
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
     "test": "jest --env-file=.env",
-    "test:watch": "jest --watch --env-file=.env"
+    "test:watch": "jest --watch --env-file=.env",
+    "test:ci": "jest",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.2",
@@ -26,6 +28,7 @@
     "@types/node": "^22.7.5",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.24.2",
+    "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3",

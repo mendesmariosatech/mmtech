@@ -1,0 +1,19 @@
+# Workflow name
+name: "Jest Deployment"
+
+# Event for the workflow
+on: push
+
+# List of jobs
+jobs:
+  chromatic:
+    name: "Run Jest"
+    runs-on: ubuntu-latest
+    # Job steps
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          workingDir: packages/server
+      - run: yarn
+      - run: yarn test
