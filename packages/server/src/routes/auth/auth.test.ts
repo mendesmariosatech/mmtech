@@ -1,13 +1,26 @@
-import { afterAll, describe, expect, test } from "@jest/globals";
+import { afterAll, describe, expect, test, jest } from "@jest/globals";
 import { testClient } from "hono/testing";
 import { authRoute } from "./auth";
 import { RegisterFields } from "@repo/zod-types";
 import { createId } from "@paralleldrive/cuid2";
 import { deleteDB } from "../tests/setup";
+import { JWTPayload } from "hono/utils/jwt/types";
 
 const newUniqueDate = createId();
 const testEmail = newUniqueDate + "validemailtest@email.com";
 const testPassword = "12312349090ASAKkdk";
+
+jest.mock("../../jwt_token", () => {
+	return {
+		generateToken: jest.fn().mockReturnValue(Promise.resolve("string")),
+		decodeToken: jest.fn().mockReturnValue(
+			Promise.resolve({
+				jwtPayload: "123",
+				email: "email@gmail.com",
+			}),
+		),
+	};
+});
 
 describe("New User - POST /auth/register", () => {
 	afterAll(async () => {
