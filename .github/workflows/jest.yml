@@ -12,8 +12,5 @@ jobs:
     # Job steps
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          workingDir: packages/server
       - run: yarn
-      - run: yarn test
+      - run: cd packages/server && yarn test:ci
