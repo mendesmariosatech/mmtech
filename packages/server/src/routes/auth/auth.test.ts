@@ -3,7 +3,6 @@ import { testClient } from "hono/testing";
 import { authRoute } from "./auth";
 import { RegisterFields } from "@repo/zod-types";
 import { createId } from "@paralleldrive/cuid2";
-import { AuthTable } from "./handlers";
 import { deleteDB } from "../tests/setup";
 
 const newUniqueDate = createId();
@@ -94,6 +93,10 @@ async function createTestUser({
 	};
 	const resp = await testClient(authRoute).register.$post({
 		json: user,
+	});
+
+	console.log({
+		resp,
 	});
 
 	return resp.json();
