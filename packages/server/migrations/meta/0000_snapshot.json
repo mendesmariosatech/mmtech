@@ -40,9 +40,7 @@
       "indexes": {
         "auth_email_unique": {
           "name": "auth_email_unique",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         }
       },
