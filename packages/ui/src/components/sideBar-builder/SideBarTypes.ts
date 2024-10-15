@@ -16,7 +16,7 @@ export interface ButtonConfig {
 }
 
 export interface PropsSideBarBuilder {
-	NomeEmpresa: string;
+	companyName: string;
 	buttonsData: ButtonData[];
 	buttonConfig?: ButtonConfig[];
 }

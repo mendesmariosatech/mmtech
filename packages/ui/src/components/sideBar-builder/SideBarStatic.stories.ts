@@ -15,7 +15,7 @@ type Story = StoryObj<typeof SideBarStaticFormer>;
 // Story para SideBarStaticFormer com TooltipProvider
 export const SideBarStaticModel: Story = {
 	args: {
-		NomeEmpresa: buttonsDataStatic.NomeEmpresa,
+		companyName: buttonsDataStatic.companyName,
 		buttonsData: buttonsDataStatic.buttonsData,
 		buttonConfig: buttonsDataStatic.buttonConfig,
 	},
@@ -23,7 +23,7 @@ export const SideBarStaticModel: Story = {
 
 export const SideBarStaticModelEmpty: Story = {
 	args: {
-		NomeEmpresa: buttonsDataStatic.NomeEmpresa,
+		companyName: buttonsDataStatic.companyName,
 		buttonsData: [],
 		buttonConfig: [],
 	},

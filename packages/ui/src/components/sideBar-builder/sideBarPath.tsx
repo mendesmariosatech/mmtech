@@ -36,67 +36,43 @@ import {
 import { PropsSideBarBuilder } from "./SideBarTypes";
 
 export const buttonsDataStatic: PropsSideBarBuilder = {
-	NomeEmpresa: "Smart Gabinete",
+	companyName: "Smart Gabinete",
 	buttonsData: [
 		{
-			icon: <DashboardIcon className="h-6 w-6" />,
-			label: "Visão Geral",
+			icon: <Home className="h-5 w-5" />,
+			label: "Dashboard",
 			disable: false,
-			link: "/business/dashboard",
+			link: "/dashboard",
 		},
 		{
-			icon: <PersonIcon className="h-6 w-6" />,
-			label: "Produtos",
+			icon: <ShoppingCart className="h-5 w-5" />,
+			label: "Orders",
+			disable: false,
+			link: "/orders",
+		},
+		{
+			icon: <Package className="h-5 w-5" />,
+			label: "Products",
 			disable: false,
 			link: "/products",
 		},
 		{
-			icon: <HomeIcon className="h-6 w-6" />,
-			label: "Instituições",
+			icon: <Users2 className="h-5 w-5" />,
+			label: "Customers",
 			disable: false,
-			link: "/business/instituicoes",
+			link: "/customers",
 		},
 		{
-			icon: <ReaderIcon className="h-6 w-6" />,
-			label: "Demandas",
+			icon: <LineChart className="h-5 w-5" />,
+			label: "Analytics",
 			disable: false,
-			link: "/business/demandas",
-		},
-		{
-			icon: <CubeIcon className="h-6 w-6" />,
-			label: "Aniversários",
-			disable: false,
-			link: "/business/birthday",
-		},
-		{
-			icon: <CalendarIcon className="h-6 w-6" />,
-			label: "Agenda",
-			disable: false,
-			link: "/business/calendar",
-		},
-		{
-			icon: <MobileIcon className="h-6 w-6" />,
-			label: "Contatos de Aut",
-			disable: true,
-			link: "/business/contato",
-		},
-		{
-			icon: <BellIcon className="h-6 w-6" />,
-			label: "Notificações",
-			disable: true,
-			link: "/business/notificacao",
-		},
-		{
-			icon: <HandIcon className="h-6 w-6" />,
-			label: "Suporte",
-			disable: false,
-			link: "/business/suporte",
+			link: "/analytics",
 		},
 	],
 	buttonConfig: [
 		{
-			icon: <Settings className="h-6 w-6" />,
-			label: "Configurações", // Botão de dropdown
+			icon: <Settings className="h-5 w-5" />,
+			label: "Settings", // Botão de dropdown
 			disable: false,
 			link: "/settings",
 		},
