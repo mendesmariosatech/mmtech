@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-type LinkFormerProps = {
+export type LinkFormerProps = {
 	link: string;
 	icon?: React.ReactNode;
 	label?: string;
 };
 
-export function LinkButton({ link, icon, label }: LinkFormerProps) {
+export function LinkFormer({ link, icon, label }: LinkFormerProps) {
 	return (
 		<Link
 			href={link}

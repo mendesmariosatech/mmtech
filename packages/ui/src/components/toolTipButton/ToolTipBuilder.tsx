@@ -7,23 +7,21 @@ import {
 	TooltipProvider,
 } from "../ui/tooltip";
 
-type ToolTipBuilderProps = {
-	index: number;
+export type ToolTipBuilderProps = {
 	link: string;
-	icon: React.ReactNode;
-	label: string;
-	path: string;
+	icon?: React.ReactNode;
+	label?: string;
+	path?: string;
 };
 
 export function ToolTipBuilder({
-	index,
 	link,
 	icon,
 	label,
 	path,
 }: ToolTipBuilderProps) {
 	return (
-		<Tooltip key={index}>
+		<Tooltip>
 			<TooltipTrigger asChild>
 				<Link
 					href={link || "#"}

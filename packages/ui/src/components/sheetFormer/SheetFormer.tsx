@@ -4,12 +4,12 @@ import Link from "next/link";
 import { ButtonConfig, ButtonData } from "../sideBar-builder/SideBarTypes";
 import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
 import { PanelLeft } from "lucide-react";
-import { LinkButton } from "../linkFormer/LinkFormer";
+import { LinkFormer } from "../linkFormer/LinkFormer";
 
 type SheetFormerProps = {
 	triggerIcon?: React.ReactNode;
 	triggerLabel?: string;
-	position?: "left" | "right" | "top" | "bottom";
+	position?: "left" | "right";
 	buttonsData?: ButtonData[];
 	buttonConfig?: ButtonConfig[];
 	companyName?: string;
@@ -41,7 +41,7 @@ const SheetFormer = ({
 						<span className="sr-only">{companyName}</span>
 					</Link>
 					{buttonsData.map((button, index) => (
-						<LinkButton
+						<LinkFormer
 							key={index}
 							link={button.link || "#"}
 							icon={button.icon}
@@ -49,7 +49,7 @@ const SheetFormer = ({
 						/>
 					))}
 					{buttonConfig.map((button, index) => (
-						<LinkButton
+						<LinkFormer
 							key={index}
 							link={button.link || "#"}
 							icon={button.icon}

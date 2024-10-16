@@ -34,7 +34,6 @@ export const SideBarStaticFormer = ({
 				{buttonsData.map((button, index) => (
 					<ToolTipBuilder
 						key={index}
-						index={index}
 						link={button.link || "#"}
 						icon={button.icon}
 						label={button.label}
@@ -46,7 +45,6 @@ export const SideBarStaticFormer = ({
 				{buttonConfig.map((button, index) => (
 					<ToolTipBuilder
 						key={index}
-						index={index}
 						link={button.link || "#"}
 						icon={button.icon}
 						label={button.label}
