@@ -4,17 +4,10 @@ import { hono_client } from "../hono_client";
 
 export function useRegister() {
 	return useMutation({
-		onError: (error) => {
-			console.log(error);
-		},
-		onSuccess: (data) => {
-			console.log(data);
-		},
+		onError: (error) => {},
+		onSuccess: (data) => {},
 
 		mutationFn: (data: RegisterFields) => {
-			console.log({
-				data,
-			});
 			return hono_client.api.auth.register.$post({
 				json: {
 					email: data.email,

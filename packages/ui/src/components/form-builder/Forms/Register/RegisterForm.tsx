@@ -30,13 +30,8 @@ export const RegisterForm = (props: RegisterFormProps) => {
 	const form = useRegisterForm();
 
 	const handleSubmit = (data: RegisterFields) => {
-		console.log(data);
 		props.mutate(data);
 	};
-
-	console.log("Errors", form.formState.errors);
-
-	props.error?.message;
 
 	return (
 		<div className="border-2 border-primary-foreground p-6 rounded-md">

@@ -37,7 +37,6 @@ export function DatePicker() {
 	});
 
 	function onSubmit(data: { date: Date | undefined; time: string }) {
-		console.log("Form submitted:", data);
 		// Here you would typically send the data to your backend
 	}
 

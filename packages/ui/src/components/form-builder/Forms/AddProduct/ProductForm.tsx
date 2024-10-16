@@ -67,9 +67,7 @@ export const ProductForm = () => {
 		},
 	});
 
-	const handleSubmit = (data: ItemSchema) => {
-		console.log(data);
-	};
+	const handleSubmit = (data: ItemSchema) => {};
 
 	return (
 		<Card x-chunk="dashboard-07-chunk-0">
