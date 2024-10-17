@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { getIcon } from "../iconData/IconData";
 
 export type LinkFormerProps = {
 	link: string;
-	icon?: React.ReactNode;
+	icon: string;
 	label?: string;
 };
 
@@ -12,7 +13,7 @@ export function LinkFormer({ link, icon, label }: LinkFormerProps) {
 			href={link}
 			className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
 		>
-			{icon}
+			{getIcon(icon)}
 			{label}
 		</Link>
 	);
