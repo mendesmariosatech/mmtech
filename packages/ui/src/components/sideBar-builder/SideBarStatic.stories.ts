@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { buttonsDataStatic } from "./SideBarPath";
 import { SideBarStaticFormer } from "./SideBarStaticFormer";
+import SideBarJson from "./SideBarData.json";
 
 const meta = {
 	title: "SideBarStatic",
@@ -15,16 +15,16 @@ type Story = StoryObj<typeof SideBarStaticFormer>;
 // Story para SideBarStaticFormer com TooltipProvider
 export const SideBarStaticModel: Story = {
 	args: {
-		companyName: buttonsDataStatic.companyName,
-		buttonsData: buttonsDataStatic.buttonsData,
-		buttonConfig: buttonsDataStatic.buttonConfig,
+		companyName: SideBarJson.companyName,
+		buttonTop: SideBarJson.buttonTop,
+		buttonBotton: SideBarJson.buttonBotton,
 	},
 };
 
 export const SideBarStaticModelEmpty: Story = {
 	args: {
-		companyName: buttonsDataStatic.companyName,
-		buttonsData: [],
-		buttonConfig: [],
+		companyName: SideBarJson.companyName,
+		buttonTop: [],
+		buttonBotton: [],
 	},
 };

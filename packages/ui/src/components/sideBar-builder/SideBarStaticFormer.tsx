@@ -2,22 +2,14 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-	TooltipProvider,
-} from "../ui/tooltip";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import { Button } from "../ui/button";
 import { PropsSideBarBuilder } from "./SideBarTypes";
-import { Package2, PanelLeft, Settings } from "lucide-react";
+import { Package2 } from "lucide-react";
 import { ToolTipBuilder } from "../toolTipButton/ToolTipBuilder";
 
 export const SideBarStaticFormer = ({
 	companyName,
-	buttonsData,
-	buttonConfig = [],
+	buttonTop,
+	buttonBotton = [],
 }: PropsSideBarBuilder) => {
 	const pathname = usePathname();
 
@@ -31,7 +23,7 @@ export const SideBarStaticFormer = ({
 					<Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
 					<span className="sr-only">{companyName}</span>
 				</Link>
-				{buttonsData.map((button, index) => (
+				{buttonTop.map((button, index) => (
 					<ToolTipBuilder
 						key={index}
 						link={button.link || "#"}
@@ -42,7 +34,7 @@ export const SideBarStaticFormer = ({
 				))}
 			</nav>
 			<nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
-				{buttonConfig.map((button, index) => (
+				{buttonBotton.map((button, index) => (
 					<ToolTipBuilder
 						key={index}
 						link={button.link || "#"}

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Dashboard } from "./Dashboard";
-import { buttonsDataStatic } from "../../sideBar-builder/SideBarPath";
+import DashBoardData from "./DashBoardData.json";
 
 const meta = {
 	title: "Dashboard",
@@ -12,8 +12,8 @@ type Story = StoryObj<typeof meta>;
 
 export const BaseDashboard: Story = {
 	args: {
-		companyName: buttonsDataStatic.companyName,
-		buttonsData: buttonsDataStatic.buttonsData,
-		buttonConfig: buttonsDataStatic.buttonConfig,
+		companyName: DashBoardData.companyName,
+		buttonTop: DashBoardData.buttonTop,
+		buttonBotton: DashBoardData.buttonBotton,
 	},
 };

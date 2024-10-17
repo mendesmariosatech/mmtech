@@ -13,7 +13,7 @@ export interface ButtonBotton {
 	onClick?: () => void;
 }
 
-export interface PropsSideBarBuilder {
+export interface DashBoardProps {
 	companyName: string;
 	buttonTop: ButtonTop[];
 	buttonBotton?: ButtonBotton[];

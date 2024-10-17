@@ -6,10 +6,11 @@ import {
 	TooltipTrigger,
 	TooltipProvider,
 } from "../ui/tooltip";
+import { getIcon } from "../iconData/IconData";
 
 export type ToolTipBuilderProps = {
 	link: string;
-	icon?: React.ReactNode;
+	icon: string;
 	label?: string;
 	path?: string;
 };
@@ -27,7 +28,7 @@ export function ToolTipBuilder({
 					href={link || "#"}
 					className={`flex h-9 w-9 items-center justify-center rounded-lg ${link === path ? `bg-accent` : `bg-none`}  text-muted-foreground hover:text-foreground transition-colors`}
 				>
-					{icon}
+					{getIcon(icon)}
 					<span className="sr-only">{label}</span>
 				</Link>
 			</TooltipTrigger>

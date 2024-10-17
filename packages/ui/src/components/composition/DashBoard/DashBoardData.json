@@ -1,0 +1,43 @@
+{
+	"companyName": "Smart Gabinete",
+	"buttonTop": [
+		{
+			"icon": "Home",
+			"label": "Dashboard",
+			"disable": false,
+			"link": "/dashboard"
+		},
+		{
+			"icon": "ShoppingCart",
+			"label": "Orders",
+			"disable": false,
+			"link": "/orders"
+		},
+		{
+			"icon": "Package",
+			"label": "Products",
+			"disable": false,
+			"link": "/products"
+		},
+		{
+			"icon": "Users2",
+			"label": "Customers",
+			"disable": false,
+			"link": "/customers"
+		},
+		{
+			"icon": "LineChart",
+			"label": "Analytics",
+			"disable": false,
+			"link": "/analytics"
+		}
+	],
+	"buttonBotton": [
+		{
+			"icon": "Settings",
+			"label": "Settings",
+			"disable": false,
+			"link": "/settings"
+		}
+	]
+}

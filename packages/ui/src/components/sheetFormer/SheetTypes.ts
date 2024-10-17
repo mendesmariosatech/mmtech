@@ -13,8 +13,11 @@ export interface ButtonBotton {
 	onClick?: () => void;
 }
 
-export interface PropsSideBarBuilder {
-	companyName: string;
-	buttonTop: ButtonTop[];
+export type SheetFormerProps = {
+	triggerIcon?: React.ReactNode;
+	triggerLabel?: string;
+	position?: "left" | "right";
+	buttonTop?: ButtonTop[];
 	buttonBotton?: ButtonBotton[];
-}
+	companyName?: string;
+};

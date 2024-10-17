@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import SheetFormer from "./SheetFormer";
-import { buttonsDataStatic } from "../sideBar-builder/SideBarPath";
-import { ShoppingCart } from "lucide-react";
+import SideBarJson from "./SheetData.json";
 
 const meta = {
 	title: "SheetFormer",
@@ -19,9 +18,9 @@ export const SheetFormerFull: Story = {
 		triggerIcon: "",
 		triggerLabel: "",
 		position: "left",
-		companyName: buttonsDataStatic.companyName,
-		buttonsData: buttonsDataStatic.buttonsData,
-		buttonConfig: buttonsDataStatic.buttonConfig,
+		companyName: SideBarJson.companyName,
+		buttonTop: SideBarJson.buttonTop,
+		buttonBotton: SideBarJson.buttonBotton,
 	},
 };
 
@@ -31,7 +30,7 @@ export const SheetFormerEmpity: Story = {
 		triggerLabel: "",
 		position: "left",
 		companyName: "",
-		buttonsData: [],
-		buttonConfig: [],
+		buttonTop: [],
+		buttonBotton: [],
 	},
 };

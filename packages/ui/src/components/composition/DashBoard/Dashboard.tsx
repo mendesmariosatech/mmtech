@@ -66,21 +66,20 @@ import {
 	TableRow,
 } from "../../ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import SheetFormer from "../../sheetFormer/SheetFormer";
-import { PropsSideBarBuilder } from "../../sideBar-builder/SideBarTypes";
 import { SideBarStaticFormer } from "../../sideBar-builder/SideBarStaticFormer";
+import { DashBoardProps } from "./DashBoardTypes";
 
 export function Dashboard({
-	buttonsData,
-	buttonConfig = [],
+	buttonTop,
+	buttonBotton = [],
 	companyName,
-}: PropsSideBarBuilder) {
+}: DashBoardProps) {
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
 			<SideBarStaticFormer
-				buttonsData={buttonsData}
-				buttonConfig={buttonConfig}
+				buttonTop={buttonTop}
+				buttonBotton={buttonBotton}
 				companyName={companyName}
 			/>
 			<div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -89,8 +88,8 @@ export function Dashboard({
 						triggerIcon={<Package2 className="h-5 w-5" />}
 						triggerLabel="Open Sidebar"
 						position="left"
-						buttonsData={buttonsData}
-						buttonConfig={buttonConfig}
+						buttonTop={buttonTop}
+						buttonBotton={buttonBotton}
 						companyName={companyName}
 					/>
 					<Breadcrumb className="hidden md:flex">
