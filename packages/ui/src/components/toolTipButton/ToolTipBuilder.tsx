@@ -1,11 +1,6 @@
 "use client";
 import Link from "next/link";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-	TooltipProvider,
-} from "../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { getIcon } from "../iconData/IconData";
 
 export type ToolTipBuilderProps = {
