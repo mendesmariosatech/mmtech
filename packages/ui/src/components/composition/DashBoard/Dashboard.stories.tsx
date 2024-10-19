@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Dashboard } from "./Dashboard";
+import { DashBoardData } from "@repo/data-testing/DashBoardData";
 
 const meta = {
 	title: "Dashboard",
