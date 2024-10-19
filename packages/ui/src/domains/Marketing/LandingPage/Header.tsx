@@ -23,8 +23,6 @@ const texts = {
 	},
 };
 
-// const parsedEnv = envVariables.parse(process.env);
-
 export function Header() {
 	return (
 		<>

@@ -1,1 +1,2 @@
-export * from "./registerUser";
+export * from "./auth.dto";
+export * from "./client.dto";

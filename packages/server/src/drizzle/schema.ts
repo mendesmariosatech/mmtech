@@ -1,19 +1,17 @@
-import { sql } from "drizzle-orm";
+import { createId } from "@paralleldrive/cuid2";
+import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const authTable = sqliteTable("auth", {
-	id: integer("id").primaryKey(),
+	id: text("id", { length: 128 })
+		.$defaultFn(() => `AU_` + createId())
+		.primaryKey(),
+	name: text("name").notNull(),
 	passwordDigest: text("password_digest").notNull(),
 	email: text("email").unique().notNull(),
-	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-});
-
-export const usersTable = sqliteTable("user", {
-	id: integer("id").primaryKey(),
-	name: text("name").notNull(),
-	authId: integer("auth_id")
-		.notNull()
-		.references(() => authTable.id, { onDelete: "cascade" }),
+	phone: text("phone"),
+	emailConfirmedAt: integer("email_confirmed_at", { mode: "timestamp" }),
+	deletedAt: integer("deleted_at", { mode: "timestamp" }),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
 	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
@@ -23,5 +21,25 @@ export const usersTable = sqliteTable("user", {
 export type InsertAuth = typeof authTable.$inferInsert;
 export type SelectAuth = typeof authTable.$inferSelect;
 
-export type InsertUser = typeof usersTable.$inferInsert;
-export type SelectUser = typeof usersTable.$inferSelect;
+export const clientTable = sqliteTable("client", {
+	id: text("id", { length: 128 })
+		.$defaultFn(() => `CL_` + createId())
+		.primaryKey(),
+	authId: text("auth_id")
+		.references(() => authTable.id, { onDelete: "cascade" })
+		.notNull(),
+	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+export const clientRelations = relations(clientTable, ({ one }) => ({
+	auth: one(authTable, {
+		fields: [clientTable.authId],
+		references: [authTable.id],
+	}),
+}));
+
+export type InsertClient = typeof clientTable.$inferInsert;
+export type SelectClient = typeof clientTable.$inferSelect;
