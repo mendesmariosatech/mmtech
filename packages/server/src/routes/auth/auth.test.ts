@@ -12,7 +12,7 @@ const testPassword = "12312349090ASAKkdk";
 
 jest.mock("../../jwt_token", () => {
 	return {
-		generateToken: jest.fn().mockReturnValue(Promise.resolve("string")),
+		generateToken: jest.fn().mockReturnValue(Promise.resolve("123")),
 		decodeToken: jest.fn().mockReturnValue(
 			Promise.resolve({
 				jwtPayload: "123",
@@ -22,16 +22,12 @@ jest.mock("../../jwt_token", () => {
 	};
 });
 
-describe.skip("New User - POST /auth/register", () => {
+describe("New User - POST /auth/register", () => {
 	afterAll(async () => {
 		await deleteDB.deleteTableAuth();
 	});
 	test("User can register using a new email and valid password and will return the auth token and the user info", async () => {
 		const data = await createTestUser({});
-
-		console.log({
-			data,
-		});
 
 		if ("error" in data) {
 			throw new Error(data.error);
@@ -59,7 +55,7 @@ describe("Login - POST /auth/login", () => {
 	afterAll(async () => {
 		await deleteDB.deleteTableAuth();
 	});
-	test.skip("User can login with valid credentials", async () => {
+	test("User can login with valid credentials", async () => {
 		const newEmail = newUniqueDate + "alex@gmail.com";
 		const password = "123ASDADD";
 

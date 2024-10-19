@@ -18,10 +18,6 @@ export const authTable = sqliteTable("auth", {
 	),
 });
 
-export const authRelations = relations(authTable, ({ one }) => ({
-	client: one(clientTable),
-}));
-
 export type InsertAuth = typeof authTable.$inferInsert;
 export type SelectAuth = typeof authTable.$inferSelect;
 
