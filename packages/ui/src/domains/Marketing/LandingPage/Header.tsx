@@ -23,15 +23,8 @@ const texts = {
 	},
 };
 
-console.log(process.env.LANG);
-console.log(process.env.EXAMPLE_VAR);
-console.log(ENV_VARIABLES);
+// const parsedEnv = envVariables.parse(process.env);
 
-const parsedEnv = envVariables.parse(process.env);
-
-console.log({
-	parsedEnv,
-});
 export function Header() {
 	return (
 		<>
