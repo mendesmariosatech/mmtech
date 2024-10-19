@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { ToolTipBuilder } from "./ToolTipBuilder";
 
 import { IconName, iconsNames, routeNames } from "../iconData/IconData";
-import DashBoardData from "@repo/data-testing/DashBoardData.json";
+import { DashBoardData } from "@repo/data-testing/DashBoardData";
 
 const meta = {
 	title: "ToolTip",
