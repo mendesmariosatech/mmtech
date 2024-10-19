@@ -19,6 +19,11 @@ export const SideBarStaticModel: Story = {
 		buttonTop: DashBoardData.buttonTop,
 		buttonBottom: DashBoardData.buttonBottom,
 	},
+	parameters: {
+		viewport: {
+			defaultViewport: "desktop",
+		},
+	},
 };
 
 export const SideBarStaticModelEmpty: Story = {
@@ -26,5 +31,10 @@ export const SideBarStaticModelEmpty: Story = {
 		companyName: DashBoardData.companyName,
 		buttonTop: [],
 		buttonBottom: [],
+	},
+	parameters: {
+		viewport: {
+			defaultViewport: "desktop",
+		},
 	},
 };

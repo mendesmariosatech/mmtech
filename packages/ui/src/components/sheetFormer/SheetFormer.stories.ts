@@ -22,6 +22,11 @@ export const SheetFormerFull: Story = {
 		buttonTop: DashBoardData.buttonTop,
 		buttonBotton: DashBoardData.buttonBottom,
 	},
+	parameters: {
+		viewport: {
+			defaultViewport: "mobile1",
+		},
+	},
 };
 
 export const SheetFormerEmpity: Story = {
@@ -32,5 +37,10 @@ export const SheetFormerEmpity: Story = {
 		companyName: "",
 		buttonTop: [],
 		buttonBotton: [],
+	},
+	parameters: {
+		viewport: {
+			defaultViewport: "mobile1",
+		},
 	},
 };

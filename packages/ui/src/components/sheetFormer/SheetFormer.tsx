@@ -5,18 +5,18 @@ import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
 import { PanelLeft } from "lucide-react";
 import { LinkFormer } from "../linkFormer/LinkFormer";
 import Image from "next/image";
-import { IconName } from "../iconData/IconData";
+import { getIcon, IconName } from "../iconData/IconData";
 
 export interface ButtonConfig {
 	label: string;
-	icon: string;
+	icon: IconName;
 	link?: string;
 	disable?: boolean;
 	onClick?: () => void;
 }
 
 export type SheetFormerProps = {
-	triggerIcon?: IconName;
+	triggerIcon: IconName;
 	triggerLabel?: string;
 	position?: "left" | "right";
 	buttonTop?: ButtonConfig[];
@@ -36,7 +36,7 @@ const SheetFormer = ({
 		<Sheet>
 			<SheetTrigger asChild>
 				<Button size="icon" variant="outline" className="sm:hidden">
-					<PanelLeft className="h-5 w-5" />
+					{getIcon(triggerIcon)}
 					<span className="sr-only">{triggerLabel}</span>
 				</Button>
 			</SheetTrigger>
@@ -53,8 +53,8 @@ const SheetFormer = ({
 							alt="Avatar"
 							className="overflow-hidden rounded-full bg-white"
 						/>
-						<span className="sr-only">{companyName}</span>
 					</Link>
+					<span className="sr-only">{companyName}</span>
 					{buttonTop.map((button, index) => (
 						<LinkFormer
 							key={index}
