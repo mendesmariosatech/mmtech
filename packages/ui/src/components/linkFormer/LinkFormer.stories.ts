@@ -1,22 +1,34 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { LinkFormer } from "./LinkFormer";
-import LinkData from "./LinkFormerData.json";
+import { DashBoardData } from "@repo/data-testing/DashBoardData";
 
 const meta = {
 	title: "Link Former",
 	component: LinkFormer,
-	argTypes: {},
+	argTypes: {
+		icon: {
+			control: {
+				type: "select",
+				options: DashBoardData.buttonBottom.map((item) => item.icon),
+			},
+		},
+		link: {
+			control: {
+				type: "select",
+				options: DashBoardData.buttonBottom.map((item) => item.link),
+			},
+		},
+	},
 } satisfies Meta<typeof LinkFormer>;
 
 export default meta;
 
 type Story = StoryObj<typeof LinkFormer>;
 
-// Story para SideBarStaticFormer com TooltipProvider
 export const LinkFormerButton: Story = {
 	args: {
-		link: LinkData.link,
-		icon: LinkData.icon,
-		label: LinkData.label,
+		link: DashBoardData.buttonBottom[0]?.link,
+		icon: DashBoardData.buttonBottom[0]?.icon,
+		label: DashBoardData.buttonBottom[0]?.label,
 	},
 };

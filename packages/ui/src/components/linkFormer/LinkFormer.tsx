@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { getIcon } from "../iconData/IconData";
+import { getIcon, IconName } from "../iconData/IconData";
 
 export type LinkFormerProps = {
 	link: string;
-	icon: string;
+	icon: IconName;
 	label?: string;
 };
 
