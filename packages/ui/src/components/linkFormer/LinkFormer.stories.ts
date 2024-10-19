@@ -3,11 +3,6 @@ import { LinkFormer } from "./LinkFormer";
 import { DashBoardData } from "@repo/data-testing/DashBoardData";
 import { iconsNames, routeNames } from "../iconData/IconData";
 
-console.log({
-	iconsNames,
-	routeNames,
-});
-
 const meta = {
 	title: "Link Former",
 	component: LinkFormer,
