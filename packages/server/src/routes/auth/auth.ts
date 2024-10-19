@@ -48,7 +48,12 @@ export const authRoute = new Hono()
 		setCookie(c, COOKIES.USER_ID, newAuthUser.email);
 		setCookie(c, COOKIES.USER_TOKEN, token);
 
-		const newClient = await Client.createNewClient({ authId: newAuthUser.id });
+		const [newClient, error] = await Client.createNewClient({
+			authId: newAuthUser.id,
+		});
+
+		if (error) return c.json({ error: error.message }, 400);
+		if (!newClient) return c.json({ error: "Client creation failed" }, 400);
 
 		return c.json(
 			{
