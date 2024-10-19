@@ -101,7 +101,7 @@ export const authRoute = new Hono()
 		setCookie(c, COOKIES.USER_ID, user.email);
 		setCookie(c, COOKIES.USER_TOKEN, token);
 
-		const { passwordDigest: _NotUsed, ...rest } = user;
+		const { passwordDigest: NOT_USE, ...rest } = user;
 
 		return c.json({ data: rest }, 201);
 	});
