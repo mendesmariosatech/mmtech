@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import SheetFormer from "./SheetFormer";
-import SideBarJson from "./SheetData.json";
+import { DashBoardData } from "@repo/data-testing/DashBoardData";
 
 const meta = {
 	title: "SheetFormer",
@@ -15,19 +15,19 @@ type Story = StoryObj<typeof SheetFormer>;
 // Story para SideBarStaticFormer com TooltipProvider
 export const SheetFormerFull: Story = {
 	args: {
-		triggerIcon: "",
+		triggerIcon: "ShoppingCart",
 		triggerLabel: "",
 		position: "left",
-		companyName: SideBarJson.companyName,
-		buttonTop: SideBarJson.buttonTop,
-		buttonBotton: SideBarJson.buttonBotton,
+		companyName: DashBoardData.companyName,
+		buttonTop: DashBoardData.buttonTop,
+		buttonBotton: DashBoardData.buttonBottom,
 	},
 };
 
 export const SheetFormerEmpity: Story = {
 	args: {
-		triggerIcon: "",
-		triggerLabel: "",
+		triggerIcon: "CreditCard",
+		triggerLabel: "Ronaldo",
 		position: "left",
 		companyName: "",
 		buttonTop: [],

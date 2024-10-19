@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Dashboard } from "./Dashboard";
-import DashBoardData from "./DashBoardData.json";
+import { DashBoardData } from "@repo/data-testing/DashBoardData";
 
 const meta = {
 	title: "Dashboard",
@@ -11,9 +11,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const BaseDashboard: Story = {
-	args: {
-		companyName: DashBoardData.companyName,
-		buttonTop: DashBoardData.buttonTop,
-		buttonBotton: DashBoardData.buttonBotton,
-	},
+	args: {},
 };

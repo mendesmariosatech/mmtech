@@ -1,4 +1,3 @@
-import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -7,18 +6,11 @@ import {
 	Copy,
 	CreditCard,
 	File,
-	Home,
-	LineChart,
 	ListFilter,
 	MoreVertical,
-	Package,
 	Package2,
-	PanelLeft,
 	Search,
-	Settings,
-	ShoppingCart,
 	Truck,
-	Users2,
 } from "lucide-react";
 
 import { Badge } from "../../ui/badge";
@@ -56,7 +48,6 @@ import {
 } from "../../ui/pagination";
 import { Progress } from "../../ui/progress";
 import { Separator } from "../../ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "../../ui/sheet";
 import {
 	Table,
 	TableBody,
@@ -68,29 +59,25 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import SheetFormer from "../../sheetFormer/SheetFormer";
 import { SideBarStaticFormer } from "../../sideBar-builder/SideBarStaticFormer";
-import { DashBoardProps } from "./DashBoardTypes";
+import { DashBoardData } from "@repo/data-testing/DashBoardData";
 
-export function Dashboard({
-	buttonTop,
-	buttonBotton = [],
-	companyName,
-}: DashBoardProps) {
+export function Dashboard() {
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
 			<SideBarStaticFormer
-				buttonTop={buttonTop}
-				buttonBotton={buttonBotton}
-				companyName={companyName}
+				companyName={DashBoardData.companyName}
+				buttonTop={DashBoardData.buttonTop}
+				buttonBottom={DashBoardData.buttonBottom}
 			/>
 			<div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
 				<header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
 					<SheetFormer
-						triggerIcon={<Package2 className="h-5 w-5" />}
+						triggerIcon={"PanelLeft"}
 						triggerLabel="Open Sidebar"
 						position="left"
-						buttonTop={buttonTop}
-						buttonBotton={buttonBotton}
-						companyName={companyName}
+						buttonTop={DashBoardData.buttonTop}
+						buttonBotton={DashBoardData.buttonBottom}
+						companyName={DashBoardData.companyName}
 					/>
 					<Breadcrumb className="hidden md:flex">
 						<BreadcrumbList>

@@ -1,3 +1,4 @@
+import { DashBoardData } from "@repo/data-testing/DashBoardData";
 import {
 	ChevronLeft,
 	ChevronRight,
@@ -18,7 +19,7 @@ import {
 	Users2,
 } from "lucide-react";
 
-const iconMap: Record<string, JSX.Element> = {
+const iconMap = {
 	Home: <Home className="h-5 w-5" />,
 	ShoppingCart: <ShoppingCart className="h-5 w-5" />,
 	Package: <Package className="h-5 w-5" />,
@@ -36,8 +37,15 @@ const iconMap: Record<string, JSX.Element> = {
 	PanelLeft: <PanelLeft className="h-5 w-5" />,
 	Search: <Search className="h-5 w-5" />,
 	Truck: <Truck className="h-5 w-5" />,
-};
+} as const;
 
-export function getIcon(iconName: string) {
+export type IconName = keyof typeof iconMap;
+
+export const iconsNames = Object.keys(iconMap) as IconName[];
+
+export function getIcon(iconName: IconName) {
 	return iconMap[iconName] || null; // Retorna o ícone correspondente ou null se não encontrado
 }
+
+export const routeNames =
+	DashBoardData.buttonTop?.map((item) => item.link) ?? [];
