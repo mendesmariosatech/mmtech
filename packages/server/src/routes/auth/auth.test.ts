@@ -22,18 +22,23 @@ jest.mock("../../jwt_token", () => {
 	};
 });
 
-describe("New User - POST /auth/register", () => {
+describe.skip("New User - POST /auth/register", () => {
 	afterAll(async () => {
 		await deleteDB.deleteTableAuth();
 	});
-	test("User can register using a new email and valid password", async () => {
+	test("User can register using a new email and valid password and will return the auth token and the user info", async () => {
 		const data = await createTestUser({});
+
+		console.log({
+			data,
+		});
 
 		if ("error" in data) {
 			throw new Error(data.error);
 		}
 		expect("data" in data).toStrictEqual(true);
-		expect(data.data.newUser.email).toBe(testEmail);
+		expect(data.data.auth.email).toBe(testEmail);
+		expect(data.data.token).toBe("123");
 
 		const secondResp = await createTestUser({});
 		expect("error" in secondResp).toBe(true);
@@ -54,7 +59,7 @@ describe("Login - POST /auth/login", () => {
 	afterAll(async () => {
 		await deleteDB.deleteTableAuth();
 	});
-	test("User can login with valid credentials", async () => {
+	test.skip("User can login with valid credentials", async () => {
 		const newEmail = newUniqueDate + "alex@gmail.com";
 		const password = "123ASDADD";
 

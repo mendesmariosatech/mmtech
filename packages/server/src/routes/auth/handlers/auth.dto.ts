@@ -1,8 +1,8 @@
 import { DBConnection } from "../../../drizzle/drizzle-client";
 import {
 	authTable,
-	usersTable,
-	type SelectAuth,
+	SelectAuth,
+	type InsertAuth,
 } from "../../../drizzle/schema";
 import { eq } from "drizzle-orm";
 
@@ -11,22 +11,20 @@ export class AuthTable extends DBConnection {
 		super(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	}
 
-	public async registerUser(
-		email: SelectAuth["email"],
-		passwordDigest: string,
-	) {
+	public async registerAuthUser(args: InsertAuth) {
 		const [user] = await this.db
 			.insert(authTable)
 			.values({
-				email,
-				passwordDigest,
+				email: args.email,
+				passwordDigest: args.passwordDigest,
+				name: args.name,
 			})
 			.returning();
 
 		return user;
 	}
 
-	public async findUser(email: SelectAuth["email"]) {
+	public async findAuthUser(email: SelectAuth["email"]) {
 		const [user] = await this.db
 			.select()
 			.from(authTable)
@@ -34,24 +32,7 @@ export class AuthTable extends DBConnection {
 		return user;
 	}
 
-	public async deleteTable() {
+	private async deleteTable() {
 		await this.db.delete(authTable);
-	}
-}
-
-export class UserTable extends DBConnection {
-	constructor(TURSO_CONNECTION_URL: string, TURSO_AUTH_TOKEN: string) {
-		super(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
-	}
-
-	public async createNewUser(email: string) {
-		const [creatade] = await this.db
-			.insert(usersTable)
-			.values({
-				name: email,
-			})
-			.returning();
-
-		return creatade;
 	}
 }
