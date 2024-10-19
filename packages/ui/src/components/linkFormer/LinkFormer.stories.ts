@@ -1,6 +1,12 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { LinkFormer } from "./LinkFormer";
 import { DashBoardData } from "@repo/data-testing/DashBoardData";
+import { iconsNames, routeNames } from "../iconData/IconData";
+
+console.log({
+	iconsNames,
+	routeNames,
+});
 
 const meta = {
 	title: "Link Former",
@@ -9,13 +15,13 @@ const meta = {
 		icon: {
 			control: {
 				type: "select",
-				options: DashBoardData.buttonBottom.map((item) => item.icon),
+				options: iconsNames,
 			},
 		},
 		link: {
 			control: {
 				type: "select",
-				options: DashBoardData.buttonBottom.map((item) => item.link),
+				options: routeNames,
 			},
 		},
 	},
