@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Logo } from "@repo/ui/components/ui/Logo";
 import { useLogin } from "@repo/hook-services";
+import { LinkFormer } from "@repo/ui/components/linkFormer/LinkFormer";
 
 export const metadata: Metadata = {
 	title: "Authentication",
@@ -19,7 +20,7 @@ const texts = {
 						ever"`,
 		createAccount: "Login to your account",
 		enterEmail: "Enter your email below",
-		dontHaveAccount: "Don't have an account? ",
+		dontHaveAccount: "Don't have an account? Register.",
 	},
 };
 export function LoginPage() {
@@ -49,9 +50,11 @@ export function LoginPage() {
 							</p>
 						</div>
 						<LoginForm error={error} isPending={isPending} mutate={login} />
-						<p className="px-8 text-center text-sm text-muted-foreground">
-							{texts.EN.dontHaveAccount}
-						</p>
+						<Link href="/auth/register">
+							<p className="px-8 text-center text-sm text-muted-foreground">
+								{texts.EN.dontHaveAccount}
+							</p>
+						</Link>
 					</div>
 				</div>
 			</div>
