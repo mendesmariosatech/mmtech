@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -65,8 +66,12 @@ import {
 import SheetFormer from "../../../components/sheetFormer/SheetFormer";
 import { SideBarStaticFormer } from "../../../components/sideBar-builder/SideBarStaticFormer";
 import { DashBoardData } from "@repo/data-testing/DashBoardData";
+import { Routes } from "@repo/data-testing/Routes";
+import { useRouter } from "next/navigation";
 
 export function Dashboard() {
+	const router = useRouter();
+
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
 			<SideBarStaticFormer
@@ -133,7 +138,11 @@ export function Dashboard() {
 							<DropdownMenuItem>Settings</DropdownMenuItem>
 							<DropdownMenuItem>Support</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem>Logout</DropdownMenuItem>
+							<DropdownMenuItem
+								onSelect={() => router.push(Routes.client["/"])}
+							>
+								Logout
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</header>
