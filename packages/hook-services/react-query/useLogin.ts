@@ -1,23 +1,27 @@
 import type { LoginFields } from "@repo/zod-types";
 import { useMutation } from "@tanstack/react-query";
-// import { hono_client } from "../hono_client";
+import { hono_client } from "../hono_client";
+import { toast } from "sonner";
 
 export function useLogin() {
 	return useMutation({
-		onError: (error) => {},
-		onSuccess: (data) => {},
+		onError: (error) => {
+			console.error(error.message);
+			toast.error(error.message);
+		},
+		onSuccess: async (data) => {
+			const resp = await data.json();
+			console.log(resp);
+			toast.success("Login successful");
+		},
 
 		mutationFn: (data: LoginFields) => {
-			return Promise.resolve(data);
-			// return hono_client.api.auth.register.$post({
-			// 	json: {
-			// 		email: data.email,
-			// 		password: data.password,
-			// 		name: data.name,
-			// 		phone: data.phone,
-			// 		agreeTerms: data.agreeTerms,
-			// 	},
-			// });
+			return hono_client.api.auth.login.$post({
+				json: {
+					email: data.email,
+					password: data.password,
+				},
+			});
 		},
 	});
 }

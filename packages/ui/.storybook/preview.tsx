@@ -1,6 +1,7 @@
 import React from "react";
 import type { Preview } from "@storybook/react";
 import "../src/globals.css";
+import { Toaster } from "../src/components/ui/sonner";
 
 import { TooltipProvider } from "../src/components/ui/tooltip";
 
@@ -19,6 +20,7 @@ const preview: Preview = {
 			return (
 				<TooltipProvider>
 					<Story />
+					<Toaster />
 				</TooltipProvider>
 			);
 		},
