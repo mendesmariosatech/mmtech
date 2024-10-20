@@ -1,3 +1,3 @@
-import { Dashboard } from "@repo/ui/components/composition/Dashboard/Dashboard";
+import { Dashboard } from "@repo/ui/domains/Marketing/Dashboard/Dashboard";
 
 export default Dashboard;
