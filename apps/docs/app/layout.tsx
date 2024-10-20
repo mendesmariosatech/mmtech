@@ -19,6 +19,9 @@ export default function RootLayout({
 }): JSX.Element {
 	return (
 		<html lang="en">
+			<head>
+				<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+			</head>
 			<QueryProvider>
 				<TooltipProvider>
 					<body className={inter.className}>
