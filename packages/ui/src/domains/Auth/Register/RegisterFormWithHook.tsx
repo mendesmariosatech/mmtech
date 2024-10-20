@@ -4,7 +4,6 @@ import { useRegister } from "@repo/hook-services";
 import { RegisterForm } from "../../../components/form-builder/Forms/Register";
 
 export function RegisterFormWithHook() {
-	// const router = useRouter();
 	const register = useRegister();
 
 	return (

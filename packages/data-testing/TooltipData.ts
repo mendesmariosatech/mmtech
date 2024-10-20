@@ -7,7 +7,7 @@ export const TooltipData = [
 		label: "Dashboard",
 		disable: false,
 		icon: "Home" as IconName,
-		link: Routes.client["/dashboard"],
+		link: Routes.client["/client/dashboard"],
 	},
 	{
 		label: "Orders",

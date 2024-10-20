@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { getIcon, IconName } from "../iconData/IconData";
+import React from "react";
 
 export type LinkFormerProps = {
 	link: string;
 	icon: IconName;
-	label?: string;
+	label?: React.ReactNode;
 };
 
 export function LinkFormer({ link, icon, label }: LinkFormerProps) {

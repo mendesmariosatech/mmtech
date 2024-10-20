@@ -9100,7 +9100,7 @@ next@14.2.7:
     "@next/swc-win32-ia32-msvc" "14.2.7"
     "@next/swc-win32-x64-msvc" "14.2.7"
 
-next@^14.2.8:
+next@^14.2.15, next@^14.2.8:
   version "14.2.15"
   resolved "https://registry.npmjs.org/next/-/next-14.2.15.tgz#348e5603e22649775d19c785c09a89c9acb5189a"
   integrity sha512-h9ctmOokpoDphRvMGnwOJAedT6zKhwqyZML9mDtspgf4Rh3Pn7UTYKqePNoDvhsWBAO5GoPNYshnAUGIazVGmw==

@@ -11,10 +11,14 @@
   "dependencies": {
     "@repo/server": "*",
     "@repo/zod-types": "*",
-    "@tanstack/react-query": "^5.56.2"
+    "@repo/data-testing": "*",
+    "@tanstack/react-query": "^5.56.2",
+    "next": "^14.2.15",
+    "sonner": "^1.5.0"
   },
   "peerDependencies": {
-    "react": "^18"
+    "react": "^18",
+    "sonner": "^1.5.0"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.58.1"

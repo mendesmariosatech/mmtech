@@ -4,6 +4,7 @@ import { RegisterFormWithHook } from "./RegisterFormWithHook";
 import { RegisterForm } from "@repo/ui/components/form-builder/Forms/Register/RegisterForm";
 import Link from "next/link";
 import { Logo } from "@repo/ui/components/ui/Logo";
+import { useRegister } from "@repo/hook-services";
 // import { RegisterForm } fr	om "../../../../components/form-builder/Forms/Register";
 
 export const metadata: Metadata = {
@@ -19,10 +20,12 @@ const texts = {
 						ever"`,
 		createAccount: "Create an account",
 		enterEmail: "Enter your email below to create your account",
+		haveAnAccount: "I already have an account. Login.",
 		terms: "By clicking continue, you agree to our terms and conditions",
 	},
 };
 export function RegisterPage() {
+	const register = useRegister();
 	return (
 		<>
 			{/* <div className="md:hidden"></div> */}
@@ -47,7 +50,17 @@ export function RegisterPage() {
 								{texts.EN.enterEmail}
 							</p>
 						</div>
-						<RegisterForm error={null} isPending={false} mutate={() => {}} />
+						<RegisterForm
+							error={register.error}
+							isPending={register.isPending}
+							mutate={register.mutateAsync}
+						/>
+						<Link href="/auth/login">
+							<p className="px-8 text-center text-sm text-muted-foreground">
+								{texts.EN.haveAnAccount}
+							</p>
+						</Link>
+
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{texts.EN.terms}
 						</p>
