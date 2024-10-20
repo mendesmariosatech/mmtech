@@ -4,6 +4,7 @@ import { LoginForm } from "@repo/ui/components/form-builder/Forms/Login/LoginFor
 import Link from "next/link";
 import Image from "next/image";
 import { Logo } from "@repo/ui/components/ui/Logo";
+import { useLogin } from "@repo/hook-services";
 
 export const metadata: Metadata = {
 	title: "Authentication",
@@ -22,6 +23,7 @@ const texts = {
 	},
 };
 export function LoginPage() {
+	const { mutateAsync: login, error, isPending } = useLogin();
 	return (
 		<div>
 			<div className="md:hidden"></div>
@@ -46,7 +48,7 @@ export function LoginPage() {
 								{texts.EN.enterEmail}
 							</p>
 						</div>
-						<LoginForm error={null} isPending={false} mutate={() => {}} />
+						<LoginForm error={error} isPending={isPending} mutate={login} />
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{texts.EN.dontHaveAccount}
 						</p>

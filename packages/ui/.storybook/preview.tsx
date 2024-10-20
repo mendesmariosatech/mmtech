@@ -4,6 +4,7 @@ import "../src/globals.css";
 import { Toaster } from "../src/components/ui/sonner";
 
 import { TooltipProvider } from "../src/components/ui/tooltip";
+import { QueryProvider } from "@repo/hook-services";
 
 const preview: Preview = {
 	parameters: {
@@ -18,10 +19,12 @@ const preview: Preview = {
 		(Story, { parameters }) => {
 			// 👇 Make it configurable by reading from parameters
 			return (
-				<TooltipProvider>
-					<Story />
-					<Toaster />
-				</TooltipProvider>
+				<QueryProvider>
+					<TooltipProvider>
+						<Story />
+						<Toaster />
+					</TooltipProvider>
+				</QueryProvider>
 			);
 		},
 	],
