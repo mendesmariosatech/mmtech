@@ -1,9 +1,13 @@
+"use client";
 import type { RegisterFields } from "@repo/zod-types";
 import { useMutation } from "@tanstack/react-query";
 import { hono_client } from "../hono_client";
 import { toast } from "sonner";
-
+import { useRouter } from "next/navigation";
+import { Routes } from "@repo/data-testing/Routes";
 export function useRegister() {
+	const router = useRouter();
+
 	return useMutation({
 		onError: (error) => {
 			// console.error(error.message);
@@ -19,6 +23,8 @@ export function useRegister() {
 			toast.success(
 				`Hi, ${resp.data.auth.name}. Your Registration was successful`,
 			);
+
+			router.push(Routes.client["/client/dashboard"]);
 		},
 
 		mutationFn: (data: RegisterFields) => {

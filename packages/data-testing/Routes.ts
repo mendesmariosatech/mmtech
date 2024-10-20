@@ -1,7 +1,7 @@
 export const Routes = {
 	client: {
 		"/": "/",
-		"/dashboard": "/dashboard",
+		"/client/dashboard": "/client/dashboard",
 		"/auth/register": "/auth/register",
 		"/auth/login": "/auth/login",
 		"/auth/logout": "/auth/logout",
