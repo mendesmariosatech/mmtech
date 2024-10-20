@@ -5,9 +5,7 @@ import { toast } from "sonner";
 
 export function useLogin() {
 	return useMutation({
-		onSettled: () => {
-			console.log("settles");
-		},
+		onSettled: () => {},
 		onError: (error) => {
 			// console.log("Server could not be reached: ", error.message);
 			toast.error("Server could not be reached");
