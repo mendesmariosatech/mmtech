@@ -21,7 +21,7 @@ export function useRegister() {
 				return;
 			}
 			toast.success(
-				`Hi, ${resp.data.auth.name}. Your Registration was successful`,
+				`Hi, ${resp.data.auth.name}. Your Registration was successful! 🎉`,
 			);
 
 			router.push(Routes.client["/client/dashboard"]);

@@ -23,8 +23,7 @@ export function useLogin() {
 				});
 				return;
 			}
-			console.log("Success Message:", resp.data.name);
-			toast.success("Login successful");
+			toast.success(`Hi, ${resp.data.name}. Welcome back!`);
 			router.push(Routes.client["/client/dashboard"]);
 		},
 
