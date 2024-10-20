@@ -14,7 +14,9 @@ export function useLogin() {
 			const resp = await data.json();
 
 			if ("error" in resp) {
-				toast.error(`Expected Error: ${resp.error}`);
+				toast.error(`Expected Error: ${resp.error}`, {
+					position: "top-right",
+				});
 				return;
 			}
 			console.log("Success Message:", resp.data.name);
