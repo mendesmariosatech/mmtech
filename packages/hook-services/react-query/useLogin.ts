@@ -4,16 +4,10 @@ import { useMutation } from "@tanstack/react-query";
 
 export function useLogin() {
 	return useMutation({
-		onError: (error) => {
-			console.log(error);
-		},
-		onSuccess: (data) => {
-			console.log(data);
-		},
+		onError: (error) => {},
+		onSuccess: (data) => {},
 
 		mutationFn: (data: LoginFields) => {
-			console.log({ data });
-
 			return Promise.resolve(data);
 			// return hono_client.api.auth.register.$post({
 			// 	json: {

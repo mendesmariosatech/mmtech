@@ -33,6 +33,7 @@ export const ControlledForm = <T extends FieldValues>({
 						<div key={key}>
 							{value.input === "text" ? (
 								<ControlledInput
+									key={key}
 									{...useForm}
 									{...value}
 									// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -42,6 +43,7 @@ export const ControlledForm = <T extends FieldValues>({
 								/>
 							) : (
 								<ControlledInput
+									key={key}
 									{...useForm}
 									{...value}
 									// eslint-disable-next-line @typescript-eslint/ban-ts-comment
