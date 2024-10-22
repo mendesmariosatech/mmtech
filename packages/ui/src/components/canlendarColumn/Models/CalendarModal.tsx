@@ -12,22 +12,45 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "../../ui/dialog";
+import { DataEvents } from "../CalendarColumnFull";
 
 interface GenericModalProps {
 	children: React.ReactNode;
 	title: string;
-	event?: { title: string; start: Date; end: Date; calendar?: string };
+	event?: DataEvents;
+	selectedDate: Date | null;
+	language: "EN" | "PT";
 }
 
-export function CalendarModal({ children, title, event }: GenericModalProps) {
+const texts = {
+	EN: {
+		buttonCancel: "Cancel",
+		buttonSave: "Save",
+	},
+	PT: {
+		buttonCancel: "Cancelar",
+		buttonSave: "Salvar",
+	},
+};
+
+export function CalendarModal({
+	children,
+	title,
+	event,
+	selectedDate,
+	language,
+}: GenericModalProps) {
 	const [eventTitle, setEventTitle] = React.useState(event?.title || "");
 	const [startDate, setStartDate] = React.useState(
-		event?.start ? event.start.toISOString().slice(0, 16) : "",
+		selectedDate ? selectedDate.toISOString().slice(0, 16) : "",
 	);
-	const [endDate, setEndDate] = React.useState(
-		event?.end ? event.end.toISOString().slice(0, 16) : "",
-	);
+	const [endDate, setEndDate] = React.useState("");
 	const [isOpen, setIsSheetOpen] = React.useState(false);
+	React.useEffect(() => {
+		if (isOpen && selectedDate) {
+			setStartDate(selectedDate.toISOString().slice(0, 16)); // Atualize startDate quando selectedDate mudar
+		}
+	}, [isOpen, selectedDate]);
 
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsSheetOpen}>
@@ -64,9 +87,9 @@ export function CalendarModal({ children, title, event }: GenericModalProps) {
 						className="mr-2"
 						onClick={() => setIsSheetOpen(false)}
 					>
-						Cancel
+						{texts[language].buttonCancel}
 					</Button>
-					<Button>Save</Button>
+					<Button>{texts[language].buttonSave}</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

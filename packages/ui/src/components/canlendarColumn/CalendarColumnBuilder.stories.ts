@@ -13,8 +13,10 @@ type Story = StoryObj<typeof CelendarColumnBuilder>;
 
 export const CalendarColumnBuilder: Story = {
 	args: {
+		language: "EN",
 		name: "John Doe",
 		email: "john.doe@example.com",
+		colorUser: "bg-blue-500",
 		collapseData: {
 			title: "Collapse Title",
 			icon: "ChevronRight",
