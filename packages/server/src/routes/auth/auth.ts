@@ -104,4 +104,10 @@ export const authRoute = new Hono()
 		const { passwordDigest: NOT_USE, ...rest } = user;
 
 		return c.json({ data: rest }, 201);
+	})
+	.delete("/logout", async (c) => {
+		setCookie(c, COOKIES.USER_ID, "", { maxAge: 0 });
+		setCookie(c, COOKIES.USER_TOKEN, "", { maxAge: 0 });
+
+		return c.json({ data: "Logged out" }, 200);
 	});

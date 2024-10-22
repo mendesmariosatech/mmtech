@@ -68,9 +68,11 @@ import { SideBarStaticFormer } from "../../../components/sideBar-builder/SideBar
 import { DashBoardData } from "@repo/data-testing/DashBoardData";
 import { Routes } from "@repo/data-testing/Routes";
 import { useRouter } from "next/navigation";
+import { useLogout } from "@repo/hook-services";
 
 export function Dashboard() {
 	const router = useRouter();
+	const logout = useLogout();
 
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -139,7 +141,10 @@ export function Dashboard() {
 							<DropdownMenuItem>Support</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem
-								onSelect={() => router.push(Routes.client["/"])}
+								onSelect={() => {
+									logout.mutateAsync();
+									router.push(Routes.client["/"]);
+								}}
 							>
 								Logout
 							</DropdownMenuItem>
