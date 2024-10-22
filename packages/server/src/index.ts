@@ -12,7 +12,7 @@ const route = app
 	.route("/personal", personalRoute)
 	.route("/private/secret", secret);
 
-app.get("/ui", swaggerUI({ urls: "api/docs" }));
+// app.get("/ui", swaggerUI({ urls: "api/docs" }));
 export default app;
 export { handle, hc };
 
