@@ -13,7 +13,7 @@ export type items = {
 	isChecked: boolean;
 };
 
-interface CollapsibleProps {
+export interface CollapsibleProps {
 	title: string;
 	icon: IconName;
 	items: items[];

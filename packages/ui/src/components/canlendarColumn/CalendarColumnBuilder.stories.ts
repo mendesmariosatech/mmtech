@@ -12,5 +12,24 @@ export default meta;
 type Story = StoryObj<typeof CelendarColumnBuilder>;
 
 export const CalendarColumnBuilder: Story = {
-	args: {},
+	args: {
+		name: "John Doe",
+		email: "john.doe@example.com",
+		collapseData: {
+			title: "Collapse Title",
+			icon: "ChevronRight",
+			items: [
+				{
+					id: 1,
+					label: "Teste 1",
+					isChecked: false,
+				},
+				{
+					id: 2,
+					label: "Teste 2",
+					isChecked: true,
+				},
+			],
+		},
+	},
 };
