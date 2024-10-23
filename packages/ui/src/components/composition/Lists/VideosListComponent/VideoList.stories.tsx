@@ -20,20 +20,20 @@ export const EmptyList: Story = {
 
 // Error path
 
-export const ErrorVideoList: Story = {
-	args: {
-		error: true,
-		data: [],
-		isLoading: false,
-	},
-};
+// export const ErrorVideoList: Story = {
+// 	args: {
+// 		error: true,
+// 		data: [],
+// 		isLoading: false,
+// 	},
+// };
 
-// Loading path
+// // Loading path
 
-export const LoadingVideoList: Story = {
-	args: {
-		error: false,
-		data: [],
-		isLoading: true,
-	},
-};
+// export const LoadingVideoList: Story = {
+// 	args: {
+// 		error: false,
+// 		data: [],
+// 		isLoading: true,
+// 	},
+// };
