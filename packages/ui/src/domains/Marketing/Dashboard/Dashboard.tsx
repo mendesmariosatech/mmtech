@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,7 +14,7 @@ import {
 	Truck,
 } from "lucide-react";
 
-import { Badge } from "../../ui/badge";
+import { Badge } from "../../../components/ui/badge";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -21,8 +22,8 @@ import {
 	BreadcrumbList,
 	BreadcrumbPage,
 	BreadcrumbSeparator,
-} from "../../ui/breadcrumb";
-import { Button } from "../../ui/button";
+} from "../../../components/ui/breadcrumb";
+import { Button } from "../../../components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -30,7 +31,7 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "../../ui/card";
+} from "../../../components/ui/card";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -39,15 +40,15 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
-import { Input } from "../../ui/input";
+} from "../../../components/ui/dropdown-menu";
+import { Input } from "../../../components/ui/input";
 import {
 	Pagination,
 	PaginationContent,
 	PaginationItem,
-} from "../../ui/pagination";
-import { Progress } from "../../ui/progress";
-import { Separator } from "../../ui/separator";
+} from "../../../components/ui/pagination";
+import { Progress } from "../../../components/ui/progress";
+import { Separator } from "../../../components/ui/separator";
 import {
 	Table,
 	TableBody,
@@ -55,13 +56,22 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from "../../ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import SheetFormer from "../../sheetFormer/SheetFormer";
-import { SideBarStaticFormer } from "../../sideBar-builder/SideBarStaticFormer";
+} from "../../../components/ui/table";
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from "../../../components/ui/tabs";
+import SheetFormer from "../../../components/sheetFormer/SheetFormer";
+import { SideBarStaticFormer } from "../../../components/sideBar-builder/SideBarStaticFormer";
 import { DashBoardData } from "@repo/data-testing/DashBoardData";
+import { Routes } from "@repo/data-testing/Routes";
+import { useRouter } from "next/navigation";
 
 export function Dashboard() {
+	const router = useRouter();
+
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
 			<SideBarStaticFormer
@@ -128,7 +138,11 @@ export function Dashboard() {
 							<DropdownMenuItem>Settings</DropdownMenuItem>
 							<DropdownMenuItem>Support</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem>Logout</DropdownMenuItem>
+							<DropdownMenuItem
+								onSelect={() => router.push(Routes.client["/"])}
+							>
+								Logout
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</header>
