@@ -1,35 +1,20 @@
 "use client";
 
 import * as React from "react";
-import {
-	addDays,
-	format,
-	startOfWeek,
-	addWeeks,
-	addMonths,
-	subWeeks,
-	subMonths,
-	startOfDay,
-	endOfDay,
-} from "date-fns";
-import { ptBR, enUS, te } from "date-fns/locale";
-import {
-	Calendar as CalendarIcon,
-	ChevronLeft,
-	ChevronRight,
-	Plus,
-} from "lucide-react";
-
+import { ptBR, enUS } from "date-fns/locale";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { CalendarModal } from "./Models/CalendarModal";
 import { FullCalendarBuilder } from "./Models/FullCalendar";
+import { Plus } from "lucide-react";
 
 export interface DataEvents {
-	id?: string; // Change to string
+	id?: string;
 	title?: string;
 	start?: Date;
 	end?: Date;
+	description: string;
+	tag: string;
 	calendar?: string;
 }
 
@@ -65,74 +50,65 @@ export const texts_ViewChanges = {
 	},
 };
 
-export default function CalendarPage({
+export function CalendarPage({
 	eventsData,
 	calendarData,
 	language,
 }: CalendarProps) {
 	const [date, setDate] = React.useState<Date>(new Date());
-	const [view, setView] = React.useState(texts_ViewChanges[language].month);
+	const [view, setView] = React.useState("month");
+	const [selectedEvent, setSelectedEvent] = React.useState<DataEvents | null>(
+		null,
+	);
+	const [isModalOpen, setIsModalOpen] = React.useState(false);
 	const [events, setEvents] = React.useState<DataEvents[]>(eventsData);
-	const [newEvent, setNewEvent] = React.useState<{
-		title: string;
-		start: Date;
-		end: Date;
-		calendar: string;
-	}>({
-		title: "",
-		start: new Date(),
-		end: new Date(),
-		calendar: "Personal",
-	});
 
-	const handleAddEvent = (event: { title: string; start: Date; end: Date }) => {
-		const newEventWithId = {
-			...newEvent,
-			...event,
-			id: (events.length + 1).toString(),
-		}; // Convert id to string
-		setEvents([...events, newEventWithId]);
+	const handleOpenModal = (event: DataEvents | null) => {
+		setSelectedEvent(event);
+		setIsModalOpen(true);
 	};
 
-	const handleDateClick = (arg: { date: Date; allDay: boolean }) => {
-		console.log("Date clicked:", arg.date);
-		// Logic to handle adding an event
+	const handleAddEvent = (newEvent: DataEvents) => {
+		setEvents((prevEvents) => [
+			...prevEvents,
+			{ ...newEvent, id: Date.now().toString() }, // Generate a new ID
+		]);
+		setIsModalOpen(false);
 	};
 
-	React.useEffect(() => {
-		const handleResize = () => {
-			if (
-				window.innerWidth < 768 &&
-				view === texts_ViewChanges[language].month
-			) {
-				setView(texts_ViewChanges[language].week);
-			}
-		};
-		window.addEventListener("resize", handleResize);
-		handleResize();
-		return () => window.removeEventListener("resize", handleResize);
-	}, [view]);
+	const handleEditEvent = (updatedEvent: DataEvents) => {
+		setEvents((prevEvents) =>
+			prevEvents.map((evt) =>
+				evt.id === updatedEvent.id ? updatedEvent : evt,
+			),
+		);
+		setIsModalOpen(false);
+	};
 
-	React.useEffect(() => {
-		if (view === texts_ViewChanges[language].month) {
-			setDate(new Date(date.getFullYear(), date.getMonth(), 1));
-		}
-	}, [view]);
+	const handleDeleteEvent = (eventId: string) => {
+		setEvents((prevEvents) => prevEvents.filter((evt) => evt.id !== eventId));
+		setIsModalOpen(false);
+	};
 
 	return (
 		<div className="flex h-screen bg-background">
 			<div className="hidden w-68 border-r p-4 md:flex flex-col">
+				<Button
+					className="mb-4"
+					variant="outline"
+					onClick={() => handleOpenModal(null)}
+				>
+					<Plus className="mr-2 h-4 w-4" /> {texts_ViewChanges[language].add}
+				</Button>
 				<CalendarModal
 					language={language}
-					title="Add Event"
-					event={newEvent}
-					selectedDate={date} // Adicione esta prop
-				>
-					<Button className="mb-4" variant="outline">
-						<Plus className="mr-2 h-4 w-4" /> {texts_ViewChanges[language].add}
-					</Button>
-				</CalendarModal>
-
+					isModalOpen={isModalOpen}
+					setIsModalOpen={setIsModalOpen}
+					event={selectedEvent}
+					onAddEvent={handleAddEvent}
+					onEditEvent={handleEditEvent}
+					onDeleteEvent={handleDeleteEvent}
+				/>
 				<Calendar
 					mode="single"
 					selected={date}
@@ -156,8 +132,7 @@ export default function CalendarPage({
 				language={language}
 				view={view}
 				events={events}
-				handleDateClick={handleAddEvent}
-				handleEventClick={handleDateClick}
+				onEventSelect={handleOpenModal} // Pass the function to handle event selection
 			/>
 		</div>
 	);
