@@ -18,7 +18,7 @@ const DataEvents = [
 		start: new Date(2024, 9, 21, 10, 0),
 		end: new Date(2024, 9, 21, 11, 0),
 		description: "Discuss project progress",
-		tag: "Important",
+		tag: [{ name: "Work", color: "#FF0000" }],
 		calendar: "Work",
 	},
 	{
@@ -27,7 +27,7 @@ const DataEvents = [
 		start: new Date(2024, 9, 21, 12, 30),
 		end: new Date(2024, 9, 21, 13, 30),
 		description: "Discuss project progress",
-		tag: "Important",
+		tag: [],
 		calendar: "Personal",
 	},
 	{
@@ -36,7 +36,7 @@ const DataEvents = [
 		start: new Date(2024, 9, 22, 9, 0),
 		end: new Date(2024, 9, 22, 17, 0),
 		description: "Discuss project progress",
-		tag: "Important",
+		tag: [],
 		calendar: "Work",
 	},
 	{
@@ -45,21 +45,14 @@ const DataEvents = [
 		start: new Date(2024, 9, 23, 18, 0),
 		end: new Date(2024, 9, 23, 20, 0),
 		description: "Discuss project progress",
-		tag: "Important",
+		tag: [],
 		calendar: "Family",
 	},
-];
-
-const calendars = [
-	{ name: "Personal", color: "bg-red-500" },
-	{ name: "Work", color: "bg-blue-500" },
-	{ name: "Family", color: "bg-green-500" },
 ];
 
 export const CalendarColumnFull: Story = {
 	args: {
 		language: "PT",
 		eventsData: DataEvents,
-		calendarData: calendars,
 	},
 };

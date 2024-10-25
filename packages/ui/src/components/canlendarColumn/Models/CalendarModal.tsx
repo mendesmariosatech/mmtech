@@ -6,13 +6,27 @@ import { Input } from "../../ui/input";
 import {
 	Dialog,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from "../../ui/dialog";
-import { DataEvents } from "../CalendarColumnFull";
+import { DataEvents, Tag } from "../CalendarColumnFull";
 import { Textarea } from "../../ui/textarea";
+
+const colors = [
+	"#FF0000",
+	"#FFA500",
+	"#FFFF00",
+	"#008000",
+	"#0000FF",
+	"#4B0082",
+	"#EE82EE",
+	"#A52A2A",
+	"#000000",
+	"#FFFFFF",
+	"#00FFFF",
+	"#FFD700",
+];
 
 const texts = {
 	EN: {
@@ -59,6 +73,9 @@ export function CalendarModal({
 	onDeleteEvent,
 }: CalendarModalProps) {
 	const [eventTitle, setEventTitle] = React.useState(event?.title || "");
+	const [tags, setTags] = React.useState<Tag[]>(
+		event?.tag?.map((tag) => ({ name: "", color: "" })) || [],
+	);
 	const [startDate, setStartDate] = React.useState(
 		event?.start ? event.start.toISOString().slice(0, 16) : "",
 	);
@@ -66,7 +83,8 @@ export function CalendarModal({
 		event?.end ? event.end.toISOString().slice(0, 16) : "",
 	);
 	const [textArea, setTextArea] = React.useState(event?.description || "");
-	const [addTag, setAddTag] = React.useState(event?.tag || "");
+	const [tagInput, setTagInput] = React.useState("");
+	const [selectedColor, setSelectedColor] = React.useState<string>("");
 
 	React.useEffect(() => {
 		if (event) {
@@ -74,27 +92,22 @@ export function CalendarModal({
 			setStartDate(event.start ? event.start.toISOString().slice(0, 16) : "");
 			setEndDate(event.end ? event.end.toISOString().slice(0, 16) : "");
 			setTextArea(event.description || "");
-			setAddTag(event.tag || "");
+			setTags(event.tag || []);
 		}
 	}, [event]);
 
-	const handleSave = () => {
-		const newEvent: DataEvents = {
-			id: event?.id,
-			title: eventTitle,
-			start: new Date(startDate),
-			end: new Date(endDate),
-			description: textArea,
-			tag: addTag,
-		};
-
-		if (event) {
-			onEditEvent(newEvent); // Edit existing event
-		} else {
-			onAddEvent(newEvent); // Add new event
+	const handleAddTag = () => {
+		if (tagInput && !tags.some((tag) => tag.name === tagInput)) {
+			setTags([...tags, { name: tagInput, color: selectedColor }]);
+			setTagInput("");
 		}
+	};
 
-		handleCloseModal(); // Close modal after saving
+	const handleTagInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "," || e.key === "Enter") {
+			e.preventDefault();
+			handleAddTag();
+		}
 	};
 
 	const handleDelete = () => {
@@ -102,6 +115,45 @@ export function CalendarModal({
 			onDeleteEvent(event.id); // Call delete function
 		}
 		handleCloseModal(); // Close modal after deletion
+	};
+
+	const handleDeleteTag = (tagToDelete: string) => {
+		setTags(tags.filter((tag) => tag.name !== tagToDelete));
+	};
+
+	const handleSave = () => {
+		if (!eventTitle || !startDate) {
+			alert("Please fill in all required fields.");
+			return;
+		}
+
+		const newEvent: DataEvents = {
+			id: event?.id || "",
+			title: eventTitle,
+			start: new Date(startDate),
+			end: endDate ? new Date(endDate) : undefined,
+			description: textArea,
+			tag: [], // Extrai apenas os nomes das tags
+		};
+
+		if (event && event.id) {
+			onEditEvent(newEvent);
+		} else {
+			onAddEvent(newEvent);
+		}
+
+		resetFields();
+		handleCloseModal();
+	};
+
+	const resetFields = () => {
+		setEventTitle("");
+		setStartDate("");
+		setEndDate("");
+		setTextArea("");
+		setTagInput("");
+		setTags([]);
+		setSelectedColor("");
 	};
 
 	const handleCloseModal = () => {
@@ -145,11 +197,52 @@ export function CalendarModal({
 						onChange={(e) => setTextArea(e.target.value)}
 						className="mb-2"
 					/>
-					<Input
-						value={addTag}
-						onChange={(e) => setAddTag(e.target.value)}
-						className="mb-2"
-					/>
+					<div className="mb-2">
+						<Input
+							placeholder="Add tag"
+							value={tagInput}
+							onChange={(e) => setTagInput(e.target.value)}
+							onKeyPress={handleTagInputKeyPress}
+							className="mb-2"
+						/>
+						<div className="flex flex-wrap mt-2">
+							{tags.map((tag, index) => (
+								<div
+									key={index}
+									className="flex items-center mb-2 mr-2"
+									style={{ backgroundColor: tag.color }}
+								>
+									<span className="p-1 rounded mr-1 text-white">
+										{tag.name}
+									</span>
+									<Button
+										variant="destructive"
+										size="sm"
+										onClick={() => handleDeleteTag(tag.name)}
+									>
+										Delete
+									</Button>
+								</div>
+							))}
+						</div>
+						<div className="mt-2">
+							{colors.map((color) => (
+								<button
+									key={color}
+									style={{
+										backgroundColor: color,
+										width: "24px",
+										height: "24px",
+										borderRadius: "50%",
+										margin: "4px",
+										border:
+											selectedColor === color ? "2px solid black" : "none",
+									}}
+									onClick={() => setSelectedColor(color)}
+								/>
+							))}
+						</div>
+					</div>
 				</div>
 				<DialogFooter className="flex justify-end">
 					{event && onDeleteEvent && (

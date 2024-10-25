@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -43,9 +42,9 @@ export function FullCalendarBuilder({
 			id: "", // Você pode gerar um ID único ou usar um UUID
 			title: "", // Título pode ser preenchido no modal
 			start: arg.date,
-			end: arg.date, // Você pode definir um horário de término padrão
+			end: undefined, // Você pode definir um horário de término padrão
 			description: "",
-			tag: "",
+			tag: [],
 		};
 
 		// Abre o modal para adicionar o novo evento

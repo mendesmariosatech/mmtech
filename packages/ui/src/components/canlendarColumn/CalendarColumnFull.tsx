@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { ptBR, enUS } from "date-fns/locale";
 import { Button } from "../ui/button";
@@ -8,24 +6,22 @@ import { CalendarModal } from "./Models/CalendarModal";
 import { FullCalendarBuilder } from "./Models/FullCalendar";
 import { Plus } from "lucide-react";
 
+export interface Tag {
+	name: string;
+	color: string;
+}
 export interface DataEvents {
 	id?: string;
 	title?: string;
 	start?: Date;
 	end?: Date;
 	description: string;
-	tag: string;
+	tag: Tag[];
 	calendar?: string;
-}
-
-export interface CalendarData {
-	name: string;
-	color: string;
 }
 
 export type CalendarProps = {
 	eventsData: DataEvents[];
-	calendarData: CalendarData[];
 	language: "EN" | "PT";
 };
 
@@ -50,11 +46,7 @@ export const texts_ViewChanges = {
 	},
 };
 
-export function CalendarPage({
-	eventsData,
-	calendarData,
-	language,
-}: CalendarProps) {
+export function CalendarPage({ eventsData, language }: CalendarProps) {
 	const [date, setDate] = React.useState<Date>(new Date());
 	const [view, setView] = React.useState("month");
 	const [selectedEvent, setSelectedEvent] = React.useState<DataEvents | null>(
@@ -63,15 +55,19 @@ export function CalendarPage({
 	const [isModalOpen, setIsModalOpen] = React.useState(false);
 	const [events, setEvents] = React.useState<DataEvents[]>(eventsData);
 
-	const handleOpenModal = (event: DataEvents | null) => {
-		setSelectedEvent(event);
+	const handleOpenModal = (event: DataEvents | null, date?: Date) => {
+		setSelectedEvent(
+			event
+				? event
+				: { start: date, end: undefined, title: "", description: "", tag: [] },
+		);
 		setIsModalOpen(true);
 	};
 
 	const handleAddEvent = (newEvent: DataEvents) => {
 		setEvents((prevEvents) => [
 			...prevEvents,
-			{ ...newEvent, id: Date.now().toString() }, // Generate a new ID
+			{ ...newEvent, id: Date.now().toString() }, // Gera um novo ID para o evento
 		]);
 		setIsModalOpen(false);
 	};
@@ -96,7 +92,7 @@ export function CalendarPage({
 				<Button
 					className="mb-4"
 					variant="outline"
-					onClick={() => handleOpenModal(null)}
+					onClick={() => handleOpenModal(null, date)}
 				>
 					<Plus className="mr-2 h-4 w-4" /> {texts_ViewChanges[language].add}
 				</Button>
@@ -120,10 +116,17 @@ export function CalendarPage({
 					<h3 className="font-semibold mb-2">
 						{texts_ViewChanges[language].calendar}
 					</h3>
-					{calendarData.map((cal) => (
-						<div key={cal.name} className="flex items-center mb-2">
-							<div className={`w-3 h-3 rounded-full mr-2 ${cal.color}`} />
-							<span>{cal.name}</span>
+					{eventsData.map((cal) => (
+						<div key={cal.id} className="flex items-center mb-2">
+							{cal.tag.map((tag, index) => (
+								<div key={index} className="flex items-center mr-2">
+									<div
+										className="w-3 h-3 rounded-full mr-2"
+										style={{ backgroundColor: tag.color }}
+									/>
+									<span>{tag.name}</span>
+								</div>
+							))}
 						</div>
 					))}
 				</div>
@@ -132,7 +135,7 @@ export function CalendarPage({
 				language={language}
 				view={view}
 				events={events}
-				onEventSelect={handleOpenModal} // Pass the function to handle event selection
+				onEventSelect={handleOpenModal}
 			/>
 		</div>
 	);
