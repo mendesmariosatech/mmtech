@@ -1,6 +1,5 @@
 import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
-import { loginFields } from "@repo/zod-types";
-import { ENV_TYPES } from "../../env/zod";
+import { ENV_TYPES, loginFields } from "@repo/zod-types";
 import { env } from "hono/adapter";
 import { AuthTable } from "./handlers";
 import { checkPassword } from "../../utils/bcrypt";

@@ -4,27 +4,37 @@ import { hc } from "hono/client";
 import { authRouter } from "./routes/auth";
 import { withOpenApi } from "./base/withOpenApi";
 import { personalRouter } from "./routes/personal";
+import { apiReference } from "@scalar/hono-api-reference";
 
-// VIDEOS ROUTES
-// videosRoutes.forEach(([route, handler]) => app.openapi(route, handler));
+const newApp = app.basePath(base_api_path);
 
-// authRouter.forEach();
+newApp.doc("/docs", {
+	openapi: "3.0.0",
+	info: {
+		title: "MM Tech API",
+		version: "0.0.9",
+	},
+});
 
-// authRouter.map((route) => app.route("/", route))
-
-// const route = app.basePath(base_api_path)
-//   .get("/", (c) => c.text("Hello Hono!"))
-//   .route("/personal", personalRoute)
-//   .route("/private/secret", secret)
-// .route("/auth", authRouter[1])
-
-const route = app
-	.basePath(base_api_path)
+const route = newApp
 	.get("/", (c) => c.text("Your API is working!"))
 	.route("/", authRouter)
 	.route("/", personalRouter);
+// withOpenApi(app);
 
-withOpenApi(app);
+newApp.get(
+	"/scalar",
+	apiReference({
+		theme: "bluePlanet",
+		defaultHttpClient: {
+			targetKey: "node",
+			clientKey: "axios",
+		},
+		spec: {
+			url: "/api/docs",
+		},
+	}),
+);
 
 export default app;
 export { handle, hc };
