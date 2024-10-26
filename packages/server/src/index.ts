@@ -3,6 +3,7 @@ import { app, base_api_path } from "./base/base-app";
 import { hc } from "hono/client";
 import { authRouter } from "./routes/auth";
 import { withOpenApi } from "./base/withOpenApi";
+import { personalRouter } from "./routes/personal";
 
 // VIDEOS ROUTES
 // videosRoutes.forEach(([route, handler]) => app.openapi(route, handler));
@@ -20,7 +21,8 @@ import { withOpenApi } from "./base/withOpenApi";
 const route = app
 	.basePath(base_api_path)
 	.get("/", (c) => c.text("Your API is working!"))
-	.route("/", authRouter);
+	.route("/", authRouter)
+	.route("/", personalRouter);
 
 withOpenApi(app);
 
