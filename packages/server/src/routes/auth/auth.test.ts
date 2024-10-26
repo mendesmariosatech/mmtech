@@ -4,7 +4,6 @@ import { authRoute } from "./auth";
 import { RegisterFields } from "@repo/zod-types";
 import { createId } from "@paralleldrive/cuid2";
 import { deleteDB } from "../tests/setup";
-import { JWTPayload } from "hono/utils/jwt/types";
 
 const newUniqueDate = createId();
 const testEmail = newUniqueDate + "validemailtest@email.com";
