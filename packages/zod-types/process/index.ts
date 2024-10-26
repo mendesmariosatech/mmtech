@@ -5,7 +5,7 @@ export const envVariables = z.object({
 	TURSO_AUTH_TOKEN: z.string(),
 	JWT_SECRET_KEY: z.string(),
 	COOkIE_SECRET_KEY: z.string(),
-	LANG: z.string(),
+	LANG: z.string().default("pt_BR"),
 });
 
 export const ENV_VARIABLES = envVariables.parse(process.env);
