@@ -10,7 +10,7 @@ import { COOKIES } from "../../env/cookies";
 
 export const registerSpec = createRoute({
 	method: "post",
-	path: "/register",
+	path: "/auth/register",
 	tags: ["auth"],
 	responses: {
 		201: {
