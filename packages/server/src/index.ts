@@ -1,14 +1,12 @@
 import { handle } from "hono/vercel";
-import { base_api_path, createApp } from "./base/base-app";
+import { base_api_path, app } from "./base/base-app";
 import { hc } from "hono/client";
 import { authRouter } from "./routes/auth";
 import { withOpenApi } from "./base/withOpenApi";
 import { personalRouter } from "./routes/personal";
-import { apiReference } from "@scalar/hono-api-reference";
-
-const app = createApp().basePath(base_api_path);
 
 const route = app
+	.basePath(base_api_path)
 	.get("/", (c) => c.text("Your API is working!"))
 	.route("/", authRouter)
 	.route("/", personalRouter);
