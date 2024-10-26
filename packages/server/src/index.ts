@@ -7,6 +7,9 @@ import { secret } from "./routes/secret/routeTest";
 import { swaggerUI } from "@hono/swagger-ui";
 import { videoHandler, videoSpec } from "./routes/videos/videos";
 import { apiReference } from "@scalar/hono-api-reference";
+import { registerHandler, registerSpec } from "./routes/auth/register";
+import { authRoutes } from "./routes/auth";
+import { videosRoutes } from "./routes/videos";
 
 app.doc("/docs", {
 	openapi: "3.0.0",
@@ -16,7 +19,10 @@ app.doc("/docs", {
 	},
 });
 
-app.openapi(videoSpec, videoHandler);
+// AUTH ROUTES
+authRoutes.forEach(([route, handler]) => app.openapi(route, handler));
+// VIDEOS ROUTES
+videosRoutes.forEach(([route, handler]) => app.openapi(route, handler));
 
 const route = app
 	.get("/", (c) => c.text("Hello Hono!"))
@@ -28,7 +34,6 @@ app.get(
 	"/scalar",
 	apiReference({
 		theme: "bluePlanet",
-		layout: "classic",
 		defaultHttpClient: {
 			targetKey: "node",
 			clientKey: "axios",
