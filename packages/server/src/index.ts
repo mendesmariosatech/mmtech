@@ -5,6 +5,18 @@ import { hc } from "hono/client";
 import { personalRoute } from "./routes/personal/me";
 import { secret } from "./routes/secret/routeTest";
 import { swaggerUI } from "@hono/swagger-ui";
+import { videoHandler, videoSpec } from "./routes/videos/videos";
+import { apiReference } from "@scalar/hono-api-reference";
+
+app.doc("/docs", {
+	openapi: "3.0.0",
+	info: {
+		title: "MM Tech API",
+		version: "1.0.0",
+	},
+});
+
+app.openapi(videoSpec, videoHandler);
 
 const route = app
 	.get("/", (c) => c.text("Hello Hono!"))
@@ -12,7 +24,21 @@ const route = app
 	.route("/personal", personalRoute)
 	.route("/private/secret", secret);
 
-app.get("/ui", swaggerUI({ urls: "api/docs" }));
+app.get(
+	"/scalar",
+	apiReference({
+		theme: "bluePlanet",
+		layout: "classic",
+		defaultHttpClient: {
+			targetKey: "node",
+			clientKey: "axios",
+		},
+		spec: {
+			url: "/api/docs",
+		},
+	}),
+);
+
 export default app;
 export { handle, hc };
 
