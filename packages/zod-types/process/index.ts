@@ -8,9 +8,14 @@ export const envVariables = z.object({
 	LANG: z.string().default("pt_BR"),
 });
 
-export const ENV_VARIABLES = envVariables.parse(process.env);
+const ENV_VARIABLES = envVariables.safeParse(process.env);
+
+if (!ENV_VARIABLES.success) {
+	console.error(ENV_VARIABLES.error.errors);
+}
 
 export type ENV_TYPES = z.infer<typeof envVariables>;
+export { ENV_VARIABLES };
 
 declare global {
 	namespace NodeJS {
