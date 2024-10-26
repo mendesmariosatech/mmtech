@@ -1,12 +1,12 @@
 import { afterAll, describe, expect, test, jest } from "@jest/globals";
 import { testClient } from "hono/testing";
-import { authRoute } from "./auth";
 import { RegisterFields } from "@repo/zod-types";
 import { createId } from "@paralleldrive/cuid2";
 import { deleteDB } from "../tests/setup";
+import { authRouter } from ".";
 
 const newUniqueDate = createId();
-const testEmail = newUniqueDate + "validemailtest@email.com";
+const testEmail = newUniqueDate + "+validemailtest@email.com";
 const testPassword = "12312349090ASAKkdk";
 
 jest.mock("../../jwt_token", () => {
@@ -104,7 +104,7 @@ async function createTestUser({
 		phone: "1233238274347",
 		agreeTerms: true,
 	};
-	const resp = await testClient(authRoute).register.$post({
+	const resp = await testClient(authRouter).auth.register.$post({
 		json: user,
 	});
 
@@ -118,7 +118,7 @@ async function loginTestUser({
 	email?: string;
 	password?: string;
 }) {
-	const resp = await testClient(authRoute).login.$post({
+	const resp = await testClient(authRouter).auth.login.$post({
 		json: {
 			email,
 			password,

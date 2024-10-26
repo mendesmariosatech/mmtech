@@ -1,6 +1,7 @@
 {
   "name": "@repo/server",
   "version": "0.0.1",
+  "type": "mudule",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
     "deploy": "wrangler deploy --minify src/index.ts",
