@@ -20,7 +20,6 @@ const route = newApp
 	.get("/", (c) => c.text("Your API is working!"))
 	.route("/", authRouter)
 	.route("/", personalRouter);
-// withOpenApi(app);
 
 newApp.get(
 	"/scalar",

@@ -12,7 +12,7 @@ export const loginSpec = createRoute({
 	path: "/auth/login",
 	tags: ["auth"],
 	responses: {
-		201: {
+		200: {
 			description: "Register Successful",
 			content: {
 				"application/json": {
@@ -104,5 +104,5 @@ export const loginHandler: RouteHandler<LoginRoute> = async (c) => {
 
 	const { passwordDigest: NOT_USE, ...rest } = user;
 
-	return c.json({ data: rest }, 201);
+	return c.json({ data: rest }, 200);
 };
