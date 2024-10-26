@@ -2,7 +2,7 @@ import { apiReference } from "@scalar/hono-api-reference";
 import { AppOpenAPI } from "./type";
 
 export function withOpenApi(app: AppOpenAPI) {
-	app.doc("/api/docs", {
+	app.doc("/docs", {
 		openapi: "3.0.0",
 		info: {
 			title: "MM Tech API",
@@ -11,7 +11,7 @@ export function withOpenApi(app: AppOpenAPI) {
 	});
 
 	app.get(
-		"/api/scalar",
+		"/scalar",
 		apiReference({
 			theme: "bluePlanet",
 			defaultHttpClient: {

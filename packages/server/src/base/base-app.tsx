@@ -4,6 +4,9 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 // Compatible with the Next.JS 14 API routes
 export const base_api_path = "/api";
 
-export const app = new OpenAPIHono({
-	strict: false,
-});
+export function createApp() {
+	const app = new OpenAPIHono({
+		strict: false,
+	});
+	return app;
+}
