@@ -1,10 +1,8 @@
 import { handle } from "hono/vercel";
-import { app, base_api_path, withOpenApi } from "./base/base-app";
+import { app, base_api_path } from "./base/base-app";
 import { hc } from "hono/client";
-import { personalRoute } from "./routes/personal/me";
-import { secret } from "./routes/secret/routeTest";
-import { videosRoutes } from "./routes/videos";
 import { authRouter } from "./routes/auth";
+import { withOpenApi } from "./base/withOpenApi";
 
 // VIDEOS ROUTES
 // videosRoutes.forEach(([route, handler]) => app.openapi(route, handler));

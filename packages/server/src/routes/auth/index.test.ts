@@ -26,7 +26,8 @@ describe("New User - POST /auth/register", () => {
 		await deleteDB.deleteTableAuth();
 	});
 	test("User can register using a new email and valid password and will return the auth token and the user info", async () => {
-		const data = await createTestUser({});
+		const createUserResponse = await createTestUser({});
+		const data = await createUserResponse.json();
 
 		if ("error" in data) {
 			throw new Error(data.error);
@@ -58,20 +59,24 @@ describe("Login - POST /auth/login", () => {
 		const newEmail = newUniqueDate + "alex@gmail.com";
 		const password = "123ASDADD";
 
-		const data = await createTestUser({
+		const createTestUserResp = await createTestUser({
 			email: newEmail,
 			password,
 		});
+
+		const data = await createTestUserResp.json();
 
 		if ("error" in data) {
 			throw new Error(data.error);
 		}
 		expect("data" in data).toStrictEqual(true);
 
-		const loginResp = await loginTestUser({
+		const resp = await loginTestUser({
 			email: newEmail,
 			password,
 		});
+
+		const loginResp = await resp.json();
 
 		if ("error" in loginResp) {
 			throw new Error(loginResp.error);
@@ -87,6 +92,42 @@ describe("Login - POST /auth/login", () => {
 			password: "password123",
 		});
 		expect("error" in loginResp).toBe(true);
+	});
+});
+
+describe("Logout - DELETE /auth/logout", () => {
+	afterAll(async () => {
+		await deleteDB.deleteTableAuth();
+	});
+	test("User can logout", async () => {
+		const newEmail = newUniqueDate + "alex@gmail.com";
+
+		const createTestUserResp = await createTestUser({
+			email: newEmail,
+		});
+
+		const data = await createTestUserResp.json();
+
+		if ("error" in data) {
+			throw new Error(data.error);
+		}
+
+		const response = await loginTestUser({
+			email: newEmail,
+		});
+
+		const loginResp = await response.json();
+
+		if ("error" in loginResp) {
+			throw new Error(loginResp.error);
+		}
+
+		expect("data" in loginResp).toStrictEqual(true);
+		expect(loginResp.data.email).toBe(newEmail);
+
+		const logoutResp = await testClient(authRouter).auth.logout.$delete();
+
+		expect(logoutResp.status).toBe(200);
 	});
 });
 
@@ -108,7 +149,7 @@ async function createTestUser({
 		json: user,
 	});
 
-	return resp.json();
+	return resp;
 }
 
 async function loginTestUser({
@@ -125,5 +166,5 @@ async function loginTestUser({
 		},
 	});
 
-	return resp.json();
+	return resp;
 }
