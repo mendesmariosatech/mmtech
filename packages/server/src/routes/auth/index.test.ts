@@ -37,17 +37,23 @@ describe("New User - POST /auth/register", () => {
 		expect(data.data.token).toBe("123");
 
 		const secondResp = await createTestUser({});
-		expect("error" in secondResp).toBe(true);
+		const secondRespData = await secondResp.json();
+
+		expect("error" in secondRespData).toBe(true);
 	});
 
 	test("User cannot register with an invalid email format", async () => {
-		const data = await createTestUser({ email: "invalid-email" });
+		const response = await createTestUser({ email: "invalid-email" });
+
+		const data = await response.json();
 		expect("error" in data).toBe(true);
 	});
 
 	test("User cannot register with a password that is too short", async () => {
 		const data = await createTestUser({ password: "123" });
-		expect("error" in data).toBe(true);
+		const response = await data.json();
+
+		expect("error" in response).toBe(true);
 	});
 });
 
@@ -91,7 +97,9 @@ describe("Login - POST /auth/login", () => {
 			email: "nonexistent@example.com",
 			password: "password123",
 		});
-		expect("error" in loginResp).toBe(true);
+		const loginData = await loginResp.json();
+
+		expect("error" in loginData).toBe(true);
 	});
 });
 
