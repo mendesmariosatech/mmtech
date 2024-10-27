@@ -1,4 +1,4 @@
-import { Header } from "./Header";
+import { Header } from "./Hero";
 import { CoreServices } from "./CoreServices";
 import { Section } from "./Section";
 

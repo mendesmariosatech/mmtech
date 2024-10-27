@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Header } from "./Header";
+import { Hero } from "./Hero";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-	title: "Marketing/Header",
-	component: Header,
+	title: "Marketing/Hero",
+	component: Hero,
 	parameters: {
 		// layout: "centered",
 	},
 	// tags: ["autodocs"],
 	argTypes: {},
 	args: {},
-} satisfies Meta<typeof Header>;
+} satisfies Meta<typeof Hero>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
