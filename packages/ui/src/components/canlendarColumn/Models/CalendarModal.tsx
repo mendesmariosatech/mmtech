@@ -12,6 +12,7 @@ import {
 } from "../../ui/dialog";
 import { DataEvents, Tag } from "../CalendarColumnFull";
 import { Textarea } from "../../ui/textarea";
+import { ChevronDownIcon } from "lucide-react";
 
 const colors = [
 	"#FF0000",
@@ -63,6 +64,51 @@ interface CalendarModalProps {
 	onDeleteEvent?: (eventId: string) => void;
 }
 
+export function ColorSelect({
+	selectedColor,
+	onChangeColor,
+}: {
+	selectedColor: string;
+	onChangeColor: (color: string) => void;
+}) {
+	const [isOpen, setIsOpen] = React.useState(false);
+
+	return (
+		<div className="relative">
+			<Button
+				onClick={() => setIsOpen(!isOpen)}
+				className="flex items-center px-2 py-1 border rounded"
+				variant={"ghost"}
+			>
+				<div
+					className="w-4 h-4 rounded-full"
+					style={{ backgroundColor: selectedColor || "#000000" }}
+				></div>
+				<ChevronDownIcon className="w-5 h-5" />
+			</Button>
+			{isOpen && (
+				<div className="absolute mt-1 bg-gray-200 border rounded shadow-md">
+					{colors.map((color) => (
+						<div
+							key={color}
+							className="flex items-center px-2 py-1 cursor-pointer"
+							onClick={() => {
+								onChangeColor(color);
+								setIsOpen(false);
+							}}
+						>
+							<div
+								className="w-4 h-4 rounded-full"
+								style={{ backgroundColor: color }}
+							></div>
+						</div>
+					))}
+				</div>
+			)}
+		</div>
+	);
+}
+
 export function CalendarModal({
 	language,
 	isModalOpen,
@@ -73,9 +119,7 @@ export function CalendarModal({
 	onDeleteEvent,
 }: CalendarModalProps) {
 	const [eventTitle, setEventTitle] = React.useState(event?.title || "");
-	const [tags, setTags] = React.useState<Tag[]>(
-		event?.tag?.map((tag) => ({ name: "", color: "" })) || [],
-	);
+	const [tags, setTags] = React.useState<Tag[]>(event?.tag || []);
 	const [startDate, setStartDate] = React.useState(
 		event?.start ? event.start.toISOString().slice(0, 16) : "",
 	);
@@ -83,8 +127,10 @@ export function CalendarModal({
 		event?.end ? event.end.toISOString().slice(0, 16) : "",
 	);
 	const [textArea, setTextArea] = React.useState(event?.description || "");
-	const [tagInput, setTagInput] = React.useState("");
-	const [selectedColor, setSelectedColor] = React.useState<string>("");
+	const [tagName, setTagName] = React.useState(event?.tag?.[0]?.name || "");
+	const [selectedColor, setSelectedColor] = React.useState(
+		event?.tag?.[0]?.color || "",
+	);
 
 	React.useEffect(() => {
 		if (event) {
@@ -93,33 +139,10 @@ export function CalendarModal({
 			setEndDate(event.end ? event.end.toISOString().slice(0, 16) : "");
 			setTextArea(event.description || "");
 			setTags(event.tag || []);
+			setTagName(event.tag?.[0]?.name || ""); // Atualiza o tagName
+			setSelectedColor(event.tag?.[0]?.color || ""); // Atualiza o selectedColor
 		}
 	}, [event]);
-
-	const handleAddTag = () => {
-		if (tagInput && !tags.some((tag) => tag.name === tagInput)) {
-			setTags([...tags, { name: tagInput, color: selectedColor }]);
-			setTagInput("");
-		}
-	};
-
-	const handleTagInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "," || e.key === "Enter") {
-			e.preventDefault();
-			handleAddTag();
-		}
-	};
-
-	const handleDelete = () => {
-		if (event?.id && onDeleteEvent) {
-			onDeleteEvent(event.id); // Call delete function
-		}
-		handleCloseModal(); // Close modal after deletion
-	};
-
-	const handleDeleteTag = (tagToDelete: string) => {
-		setTags(tags.filter((tag) => tag.name !== tagToDelete));
-	};
 
 	const handleSave = () => {
 		if (!eventTitle || !startDate) {
@@ -133,7 +156,7 @@ export function CalendarModal({
 			start: new Date(startDate),
 			end: endDate ? new Date(endDate) : undefined,
 			description: textArea,
-			tag: [], // Extrai apenas os nomes das tags
+			tag: [{ name: tagName, color: selectedColor }],
 		};
 
 		if (event && event.id) {
@@ -151,9 +174,9 @@ export function CalendarModal({
 		setStartDate("");
 		setEndDate("");
 		setTextArea("");
-		setTagInput("");
-		setTags([]);
+		setTagName("");
 		setSelectedColor("");
+		setTags([]);
 	};
 
 	const handleCloseModal = () => {
@@ -165,7 +188,7 @@ export function CalendarModal({
 			<DialogContent className="max-w-[400px] sm:max-w-[525px] rounded-lg">
 				<DialogHeader>
 					<DialogTitle>
-						{event
+						{event?.title !== ""
 							? texts[language].modalTitleEdit
 							: texts[language].modalTitleCreate}
 					</DialogTitle>
@@ -197,59 +220,26 @@ export function CalendarModal({
 						onChange={(e) => setTextArea(e.target.value)}
 						className="mb-2"
 					/>
-					<div className="mb-2">
+					<div className="flex items-center mb-2">
 						<Input
-							placeholder="Add tag"
-							value={tagInput}
-							onChange={(e) => setTagInput(e.target.value)}
-							onKeyPress={handleTagInputKeyPress}
-							className="mb-2"
+							placeholder="Tag Name"
+							value={tagName}
+							onChange={(e) => setTagName(e.target.value)}
+							defaultValue={tagName}
+							className="mr-2"
 						/>
-						<div className="flex flex-wrap mt-2">
-							{tags.map((tag, index) => (
-								<div
-									key={index}
-									className="flex items-center mb-2 mr-2"
-									style={{ backgroundColor: tag.color }}
-								>
-									<span className="p-1 rounded mr-1 text-white">
-										{tag.name}
-									</span>
-									<Button
-										variant="destructive"
-										size="sm"
-										onClick={() => handleDeleteTag(tag.name)}
-									>
-										Delete
-									</Button>
-								</div>
-							))}
-						</div>
-						<div className="mt-2">
-							{colors.map((color) => (
-								<button
-									key={color}
-									style={{
-										backgroundColor: color,
-										width: "24px",
-										height: "24px",
-										borderRadius: "50%",
-										margin: "4px",
-										border:
-											selectedColor === color ? "2px solid black" : "none",
-									}}
-									onClick={() => setSelectedColor(color)}
-								/>
-							))}
-						</div>
+						<ColorSelect
+							selectedColor={selectedColor}
+							onChangeColor={(color) => setSelectedColor(color)}
+						/>
 					</div>
 				</div>
 				<DialogFooter className="flex justify-end">
-					{event && onDeleteEvent && (
+					{event?.title !== "" && onDeleteEvent && (
 						<Button
 							variant="destructive"
 							className="mr-2"
-							onClick={handleDelete}
+							onClick={() => onDeleteEvent(event?.id!)}
 						>
 							{texts[language].modalTitleDelete}
 						</Button>
