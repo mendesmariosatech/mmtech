@@ -19,7 +19,6 @@ const DataEvents = [
 		end: new Date(2024, 9, 21, 11, 0),
 		description: "Discuss project progress",
 		tag: [{ name: "Work", color: "#FF0000" }],
-		calendar: "Work",
 	},
 	{
 		id: "2",
@@ -28,7 +27,6 @@ const DataEvents = [
 		end: new Date(2024, 9, 21, 13, 30),
 		description: "Discuss project progress",
 		tag: [],
-		calendar: "Personal",
 	},
 	{
 		id: "3",
@@ -37,7 +35,6 @@ const DataEvents = [
 		end: new Date(2024, 9, 22, 17, 0),
 		description: "Discuss project progress",
 		tag: [],
-		calendar: "Work",
 	},
 	{
 		id: "4",
@@ -46,7 +43,6 @@ const DataEvents = [
 		end: new Date(2024, 9, 23, 20, 0),
 		description: "Discuss project progress",
 		tag: [],
-		calendar: "Family",
 	},
 ];
 

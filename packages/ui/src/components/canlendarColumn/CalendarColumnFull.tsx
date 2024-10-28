@@ -18,6 +18,7 @@ export interface DataEvents {
 	description: string;
 	tag: Tag[];
 	calendar?: string;
+	allDay?: boolean;
 }
 
 export type CalendarProps = {
@@ -34,6 +35,13 @@ export const texts_ViewChanges = {
 		add: "Add",
 		calendar: "Calendar",
 		today: "Today",
+		allDayText: "All day",
+		buttonText: {
+			today: "Today",
+			month: "Month",
+			week: "Week",
+			day: "Day",
+		},
 	},
 	PT: {
 		day: "Dia",
@@ -43,12 +51,21 @@ export const texts_ViewChanges = {
 		add: "Adicionar",
 		calendar: "Calendário",
 		today: "Hoje",
+		allDayText: "Todo o dia",
+		buttonText: {
+			today: "Hoje",
+			month: "Mês",
+			week: "Semana",
+			day: "Dia",
+		},
 	},
 };
 
 export function CalendarPage({ eventsData, language }: CalendarProps) {
 	const [date, setDate] = React.useState<Date>(new Date());
-	const [view, setView] = React.useState("month");
+	const [view, setView] = React.useState<string>(
+		texts_ViewChanges[language].month,
+	);
 	const [selectedEvent, setSelectedEvent] = React.useState<DataEvents | null>(
 		null,
 	);
@@ -86,6 +103,12 @@ export function CalendarPage({ eventsData, language }: CalendarProps) {
 		setIsModalOpen(false);
 	};
 
+	React.useEffect(() => {
+		if (window.innerWidth <= 768) {
+			setView(texts_ViewChanges[language].week);
+		}
+	}, [window.innerWidth]);
+
 	return (
 		<div className="flex h-screen bg-background">
 			<div className="hidden w-68 border-r p-4 md:flex flex-col">
@@ -109,24 +132,26 @@ export function CalendarPage({ eventsData, language }: CalendarProps) {
 					mode="single"
 					selected={date}
 					onSelect={(newDate) => newDate && setDate(newDate)}
-					className="rounded-md border"
+					className="rounded-md border mb-2"
 					locale={texts_ViewChanges[language].locale}
 				/>
 				<div>
 					<h3 className="font-semibold mb-2">
 						{texts_ViewChanges[language].calendar}
 					</h3>
-					{eventsData.map((cal) => (
+					{events.map((cal) => (
 						<div key={cal.id} className="flex items-center mb-2">
-							{cal.tag.map((tag, index) => (
-								<div key={index} className="flex items-center mr-2">
-									<div
-										className="w-3 h-3 rounded-full mr-2"
-										style={{ backgroundColor: tag.color }}
-									/>
-									<span>{tag.name}</span>
-								</div>
-							))}
+							{cal.tag &&
+								cal.tag.length > 0 &&
+								cal.tag.map((tag, index) => (
+									<div key={index} className="flex items-center mr-2">
+										<div
+											className="w-3 h-3 rounded-full mr-2"
+											style={{ backgroundColor: tag.color }}
+										/>
+										<span>{tag.name}</span>
+									</div>
+								))}
 						</div>
 					))}
 				</div>

@@ -13,6 +13,7 @@ import {
 import { DataEvents, Tag } from "../CalendarColumnFull";
 import { Textarea } from "../../ui/textarea";
 import { ChevronDownIcon } from "lucide-react";
+import { Checkbox } from "../../ui/checkbox";
 
 const colors = [
 	"#FF0000",
@@ -23,8 +24,8 @@ const colors = [
 	"#4B0082",
 	"#EE82EE",
 	"#A52A2A",
-	"#000000",
-	"#FFFFFF",
+	"#3c5d92",
+	"#6d7b92",
 	"#00FFFF",
 	"#FFD700",
 ];
@@ -40,6 +41,7 @@ const texts = {
 		titleEvent: "Event Title",
 		StartDate: "Start Date",
 		EndDate: "End Date",
+		Alerts: "Filds title and start date are required",
 	},
 	PT: {
 		buttonCancel: "Cancelar",
@@ -51,6 +53,7 @@ const texts = {
 		titleEvent: "Título do Evento",
 		StartDate: "Data de Início",
 		EndDate: "Data de Término",
+		Alerts: "Os campos título e data de início são obrigatórios",
 	},
 };
 
@@ -82,7 +85,7 @@ export function ColorSelect({
 			>
 				<div
 					className="w-4 h-4 rounded-full"
-					style={{ backgroundColor: selectedColor || "#000000" }}
+					style={{ backgroundColor: selectedColor || "#6d7b92" }}
 				></div>
 				<ChevronDownIcon className="w-5 h-5" />
 			</Button>
@@ -131,32 +134,49 @@ export function CalendarModal({
 	const [selectedColor, setSelectedColor] = React.useState(
 		event?.tag?.[0]?.color || "",
 	);
+	const [isAllDay, setIsAllDay] = React.useState(event?.allDay || false); // Novo estado para evento de dia todo
 
 	React.useEffect(() => {
 		if (event) {
 			setEventTitle(event.title || "");
-			setStartDate(event.start ? event.start.toISOString().slice(0, 16) : "");
-			setEndDate(event.end ? event.end.toISOString().slice(0, 16) : "");
+			setStartDate(event.start ? formatDateTimeLocal(event.start) : "");
+			setEndDate(event.end ? formatDateTimeLocal(event.end) : "");
 			setTextArea(event.description || "");
 			setTags(event.tag || []);
-			setTagName(event.tag?.[0]?.name || ""); // Atualiza o tagName
-			setSelectedColor(event.tag?.[0]?.color || ""); // Atualiza o selectedColor
+			setTagName(event.tag?.[0]?.name || "");
+			setSelectedColor(event.tag?.[0]?.color || "");
+			setIsAllDay(event.allDay || false); // Atualiza o estado com base no evento existente
 		}
 	}, [event]);
 
+	// Função auxiliar para formatar a data no formato "yyyy-MM-ddTHH:mm"
+	const formatDateTimeLocal = (date: Date) => {
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, "0");
+		const day = String(date.getDate()).padStart(2, "0");
+		const hours = String(date.getHours()).padStart(2, "0");
+		const minutes = String(date.getMinutes()).padStart(2, "0");
+		return `${year}-${month}-${day}T${hours}:${minutes}`;
+	};
+
 	const handleSave = () => {
 		if (!eventTitle || !startDate) {
-			alert("Please fill in all required fields.");
+			alert(texts[language].Alerts);
 			return;
 		}
 
 		const newEvent: DataEvents = {
 			id: event?.id || "",
 			title: eventTitle,
-			start: new Date(startDate),
-			end: endDate ? new Date(endDate) : undefined,
+			start: new Date(startDate.replace("T", " ")),
+			end: isAllDay
+				? undefined
+				: endDate
+					? new Date(endDate.replace("T", " "))
+					: undefined, // Condicional para end
 			description: textArea,
-			tag: [{ name: tagName, color: selectedColor }],
+			tag: tagName ? [{ name: tagName, color: selectedColor }] : [],
+			allDay: isAllDay, // Adiciona a propriedade allDay ao evento
 		};
 
 		if (event && event.id) {
@@ -200,10 +220,21 @@ export function CalendarModal({
 						onChange={(e) => setEventTitle(e.target.value)}
 						className="mb-2"
 					/>
+					<div className="flex items-center mb-2 gap-2">
+						<Checkbox
+							className="ml-2"
+							id="allDay"
+							checked={isAllDay}
+							onCheckedChange={() => setIsAllDay(!isAllDay)}
+						/>
+						<label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+							{language === "EN" ? "All Day Event" : "Evento Dia Todo"}
+						</label>
+					</div>
 					<Input
-						type="datetime-local"
+						type={isAllDay ? "date" : "datetime-local"}
 						placeholder={texts[language].StartDate}
-						value={startDate}
+						value={isAllDay ? startDate.split("T")[0] : startDate}
 						onChange={(e) => setStartDate(e.target.value)}
 						className="mb-2"
 					/>
@@ -213,6 +244,7 @@ export function CalendarModal({
 						value={endDate}
 						onChange={(e) => setEndDate(e.target.value)}
 						className="mb-2"
+						disabled={isAllDay} // Desabilita o campo de data final se for um evento de dia todo
 					/>
 					<Textarea
 						placeholder={texts[language].textAreaLabel}
@@ -225,7 +257,6 @@ export function CalendarModal({
 							placeholder="Tag Name"
 							value={tagName}
 							onChange={(e) => setTagName(e.target.value)}
-							defaultValue={tagName}
 							className="mr-2"
 						/>
 						<ColorSelect

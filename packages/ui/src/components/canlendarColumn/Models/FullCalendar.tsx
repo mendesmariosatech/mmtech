@@ -5,6 +5,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { DataEvents, texts_ViewChanges } from "../CalendarColumnFull";
+import { useEffect, useState } from "react";
 
 interface FullCalendarProps {
 	events: DataEvents[];
@@ -19,7 +20,8 @@ export function FullCalendarBuilder({
 	language,
 	onEventSelect,
 }: FullCalendarProps) {
-	// Manipulador de clique em evento
+	const [isMobile, setIsMobile] = useState(false);
+
 	const handleEventSelect = (arg: any) => {
 		if (arg.event) {
 			const event = arg.event;
@@ -30,6 +32,7 @@ export function FullCalendarBuilder({
 				end: event.end,
 				description: event.extendedProps.description,
 				tag: event.extendedProps.tag,
+				allDay: event.allDay,
 			});
 		} else {
 			onEventSelect(null); // Passa null se não houver evento
@@ -41,18 +44,76 @@ export function FullCalendarBuilder({
 		const newEvent: DataEvents = {
 			id: "", // Você pode gerar um ID único ou usar um UUID
 			title: "", // Título pode ser preenchido no modal
-			start: arg.date,
+			start: arg.date, // Definido como a data clicada
 			end: undefined, // Você pode definir um horário de término padrão
 			description: "",
 			tag: [],
+			allDay: false,
 		};
+
+		// Verifica se a data clicada não contém hora (somente data)
+		const isAllDayEvent =
+			arg.date.getHours() === 0 && arg.date.getMinutes() === 0;
+		if (isAllDayEvent) {
+			// Marcar como evento de dia todo
+			newEvent.allDay = true; // A propriedade 'allDay' é uma convenção para eventos de dia todo
+		}
 
 		// Abre o modal para adicionar o novo evento
 		onEventSelect(newEvent);
 	};
 
+	const formattedEvents = events.map((event) => ({
+		...event,
+		backgroundColor: event.tag?.[0]?.color || "#6d7b92",
+		borderColor: event.tag?.[0]?.color || "#6d7b92",
+	}));
+
+	const renderEventContent = (eventInfo: any) => {
+		const { event } = eventInfo;
+		const tagColor = event.extendedProps.tag?.[0]?.color || "#6d7b92"; // Cor padrão
+
+		return (
+			<div style={{ display: "flex", alignItems: "center" }}>
+				<div
+					style={{
+						width: "10px",
+						height: "10px",
+						backgroundColor: tagColor,
+						marginRight: "5px",
+						borderRadius: "50%", // Para fazer um círculo
+					}}
+				/>
+				<span>{event.title}</span>
+			</div>
+		);
+	};
+
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobile(window.innerWidth < 1000);
+		};
+
+		handleResize();
+
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, [window.innerWidth]);
+
+	const headerToolbarConfig = isMobile
+		? {
+				start: "dayGridMonth,timeGridWeek,timeGridDay",
+				center: "",
+				right: "today prev,next",
+			}
+		: {
+				start: "today prev,next",
+				center: "title",
+				right: "dayGridMonth,timeGridWeek,timeGridDay",
+			};
+
 	return (
-		<div className="flex-1 p-4">
+		<div className={`flex-1 p-4 ${isMobile ? "mobile-calendar" : ""}`}>
 			<FullCalendar
 				plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 				initialView={
@@ -60,17 +121,16 @@ export function FullCalendarBuilder({
 						? "dayGridMonth"
 						: "timeGridWeek"
 				}
-				events={events}
+				events={formattedEvents}
 				eventClick={handleEventSelect}
 				dateClick={handleDateClick} // Adiciona o manipulador de clique em data
 				locales={[texts_ViewChanges[language].locale]}
-				headerToolbar={{
-					start: "today prev,next",
-					center: "title",
-					right: "dayGridMonth,timeGridWeek,timeGridDay",
-				}}
+				headerToolbar={headerToolbarConfig}
 				handleWindowResize={true}
 				height={"90vh"}
+				eventContent={renderEventContent}
+				allDayText={texts_ViewChanges[language].allDayText}
+				buttonText={texts_ViewChanges[language].buttonText}
 			/>
 		</div>
 	);

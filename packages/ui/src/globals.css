@@ -75,6 +75,43 @@
   }
 }
 
+.mobile-calendar .fc-toolbar-title {
+  font-size: 12px; /* Reduz o tamanho da fonte do título */
+}
+
+.mobile-calendar .fc-button {
+  font-size: 12px; /* Reduz o tamanho da fonte dos botões */
+}
+
+.mobile-calendar .fc-daygrid-day-number {
+  font-size: 12px; /* Reduz o tamanho da fonte dos números do calendário */
+}
+
+.mobile-calendar .fc-daygrid-day-number {
+  font-size: 12px; /* Reduz o tamanho da fonte dos números do calendário */
+}
+
+.mobile-calendar .fc-col-header-cell-cushion {
+  font-size: 12px; /* Reduz o tamanho da fonte dos dias da semana */
+}
+
+.mobile-calendar .fc-daygrid-event, 
+.mobile-calendar .fc-daygrid-day-frame {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Impede que o conteúdo de eventos seja exibido fora dos limites */
+.mobile-calendar .fc-daygrid-event {
+    max-width: 100%;
+}
+
+/* Ajuste a altura mínima para evitar sobreposição */
+.mobile-calendar .fc-daygrid-day-frame {
+    min-height: 60px; /* Ajuste conforme necessário */
+}
+
 @layer base {
   * {
     @apply border-border;

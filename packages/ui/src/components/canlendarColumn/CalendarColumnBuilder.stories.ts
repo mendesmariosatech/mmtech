@@ -33,5 +33,23 @@ export const CalendarColumnBuilder: Story = {
 				},
 			],
 		},
+		eventsData: [
+			{
+				id: "1",
+				title: "Meeting with Team",
+				start: new Date(2024, 9, 21, 10, 0),
+				end: new Date(2024, 9, 21, 11, 0),
+				description: "Discuss project progress",
+				tag: [{ name: "Work", color: "#FF0000" }],
+			},
+			{
+				id: "2",
+				title: "Lunch with Friends",
+				start: new Date(2024, 9, 21, 12, 30),
+				end: new Date(2024, 9, 21, 13, 30),
+				description: "Discuss project progress",
+				tag: [],
+			},
+		],
 	},
 };
