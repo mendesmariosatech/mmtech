@@ -20,6 +20,13 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
+"@asteasolutions/zod-to-openapi@^7.1.0":
+  version "7.2.0"
+  resolved "https://registry.npmjs.org/@asteasolutions/zod-to-openapi/-/zod-to-openapi-7.2.0.tgz#19bf1f8bbd380a2ca95d6b1818f7437703da69b1"
+  integrity sha512-Va+Fq1QzKkSgmiYINSp3cASFhMsbdRH/kmCk2feijhC+yNjGoC056CRqihrVFhR8MY8HOZHdlYm2Ns2lmszCiw==
+  dependencies:
+    openapi3-ts "^4.1.2"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.16.7", "@babel/code-frame@^7.25.7":
   version "7.25.7"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.25.7.tgz#438f2c524071531d643c6f0188e1e28f130cebc7"
@@ -1818,6 +1825,19 @@
   resolved "https://registry.npmjs.org/@hono/swagger-ui/-/swagger-ui-0.4.1.tgz#d67a31420c0f9c77946c820d1ab3a350998d0a9a"
   integrity sha512-kPaJatHffeYQ3yVkHo878hCqwfapqx54FczJVJ+eRWt8J4biyVVMIdCAJb6MyA8bcnHUoTmUpPc7OJAV1VTg2g==
 
+"@hono/zod-openapi@^0.16.4":
+  version "0.16.4"
+  resolved "https://registry.npmjs.org/@hono/zod-openapi/-/zod-openapi-0.16.4.tgz#eb1867cfedb792d68e7f097b25aa5bfe2643358d"
+  integrity sha512-mnF6GthBaKex0D5PsY/4lYNtkaGJNE38bjeUI//EUqq7Ee4TNm2su35IUiFH4HcmJp5fWYMLyOJOpjnkClzEGw==
+  dependencies:
+    "@asteasolutions/zod-to-openapi" "^7.1.0"
+    "@hono/zod-validator" "0.3.0"
+
+"@hono/zod-validator@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/@hono/zod-validator/-/zod-validator-0.3.0.tgz#987ffccdb5fc1b5fa87c321ad161e5f1f159e6a6"
+  integrity sha512-7XcTk3yYyk6ldrO/VuqsroE7stvDZxHJQcpATRAyha8rUxJNBPV3+6waDrARfgEqxOVlzIadm3/6sE/dPseXgQ==
+
 "@hono/zod-validator@^0.2.2":
   version "0.2.2"
   resolved "https://registry.npmjs.org/@hono/zod-validator/-/zod-validator-0.2.2.tgz#929a1c40aee5eac1ed9c84094d6d977e0b70187a"
@@ -3317,6 +3337,26 @@
   resolved "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.10.4.tgz#427d5549943a9c6fce808e39ea64dbe60d4047f1"
   integrity sha512-WJgX9nzTqknM393q1QJDJmoW28kUfEnybeTfVNcNAPnIx210RXm2DiXiHzfNPJNIUUb1tJnz/l4QGtJ30PgWmA==
 
+"@scalar/hono-api-reference@^0.5.156":
+  version "0.5.156"
+  resolved "https://registry.npmjs.org/@scalar/hono-api-reference/-/hono-api-reference-0.5.156.tgz#b1ff770568b0fbcdd7ba3938a93a4a8ab14d0c6f"
+  integrity sha512-/byPVH0rs40qxuOInnikDeq+19wQZ0NIq0K3WJMNBeZvr0lpGqsBf4frj0soon8UAVq/uZnOMcK6jwcC50a0bg==
+  dependencies:
+    "@scalar/types" "0.0.17"
+
+"@scalar/openapi-types@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.npmjs.org/@scalar/openapi-types/-/openapi-types-0.1.4.tgz#11b6bf90dc847f6925d3e437b834e42e84213025"
+  integrity sha512-+wRXgmqzgDnj8Dxqf4OOPMPo4or/LRd1Bsy4pnrIW0yBt8rKSdtBb+jH/aRnhgDDmKVjWxJ+KFk7WlSKvZwNTw==
+
+"@scalar/types@0.0.17":
+  version "0.0.17"
+  resolved "https://registry.npmjs.org/@scalar/types/-/types-0.0.17.tgz#f44c34a14ec27ab1d704d989ada8568796e96a7a"
+  integrity sha512-wUrvNnYFMULsHENX/9TP3oyECRTtZsP06mOZU+RlWg9sRtzWVTjlBCahkgUETL93J+Bz2RLFSKVgPyNN4fpIpA==
+  dependencies:
+    "@scalar/openapi-types" "0.1.4"
+    "@unhead/schema" "^1.9.5"
+
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"
@@ -4336,6 +4376,14 @@
   version "1.2.0"
   resolved "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
+
+"@unhead/schema@^1.9.5":
+  version "1.11.10"
+  resolved "https://registry.npmjs.org/@unhead/schema/-/schema-1.11.10.tgz#65f1e0897cca74ccfa06b428b04e22e2610a087b"
+  integrity sha512-lXh7cm5XtFaw3gc+ZVXTSfIHXiBpAywbjtEiOsz5TR4GxOjj2rtfOAl4C3Difk1yupP6L2otYmOZdn/i8EXSJg==
+  dependencies:
+    hookable "^5.5.3"
+    zhead "^2.2.4"
 
 "@vercel/style-guide@^6.0.0":
   version "6.0.0"
@@ -7608,6 +7656,11 @@ hono@^4.5.11:
   resolved "https://registry.npmjs.org/hono/-/hono-4.6.4.tgz#fbca01aa2b68dd4aea49d6eddf6b97a91cd9019f"
   integrity sha512-T5WqBkTOcIQblqBKB5mpzaH/A+dSpvVe938xZJCHOmOuYfF7DSwE/9/10+BMvwSPq9N/f6LiQ38HxrZSQOsXKw==
 
+hookable@^5.5.3:
+  version "5.5.3"
+  resolved "https://registry.npmjs.org/hookable/-/hookable-5.5.3.tgz#6cfc358984a1ef991e2518cb9ed4a778bbd3215d"
+  integrity sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==
+
 hosted-git-info@^2.1.4:
   version "2.8.9"
   resolved "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.8.9.tgz#dffc0bf9a21c02209090f2aa69429e1414daf3f9"
@@ -9344,6 +9397,13 @@ open@^8.0.4:
     define-lazy-prop "^2.0.0"
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
+
+openapi3-ts@^4.1.2:
+  version "4.4.0"
+  resolved "https://registry.npmjs.org/openapi3-ts/-/openapi3-ts-4.4.0.tgz#eff29958e601deec24459ea811989a4fb59d4116"
+  integrity sha512-9asTNB9IkKEzWMcHmVZE7Ts3kC9G7AFHfs8i7caD8HbI76gEjdkId4z/AkP83xdZsH7PLAnnbl47qZkXuxpArw==
+  dependencies:
+    yaml "^2.5.0"
 
 optionator@^0.9.3:
   version "0.9.4"
@@ -11931,7 +11991,7 @@ yaml@^1.10.0:
   resolved "https://registry.npmjs.org/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
-yaml@^2.3.4:
+yaml@^2.3.4, yaml@^2.5.0:
   version "2.6.0"
   resolved "https://registry.npmjs.org/yaml/-/yaml-2.6.0.tgz#14059ad9d0b1680d0f04d3a60fe00f3a857303c3"
   integrity sha512-a6ae//JvKDEra2kdi1qzCyrJW/WZCgFi8ydDV+eXExl95t+5R+ijnqHJbz9tmMh8FUjx3iv2fCQ4dclAQlO2UQ==
@@ -11977,6 +12037,11 @@ youch@^3.2.2:
     cookie "^0.7.1"
     mustache "^4.2.0"
     stacktracey "^2.1.8"
+
+zhead@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.npmjs.org/zhead/-/zhead-2.2.4.tgz#87cd1e2c3d2f465fa9f43b8db23f9716dfe6bed7"
+  integrity sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==
 
 zod@^3.22.3, zod@^3.23.8:
   version "3.23.8"

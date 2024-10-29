@@ -1,8 +1,7 @@
-import { ShoppingCart, Search, MessageCircle } from "lucide-react";
+import { ShoppingCart, Search } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ENV_VARIABLES, envVariables } from "@repo/zod-types";
 
 const texts = {
 	EN: {
