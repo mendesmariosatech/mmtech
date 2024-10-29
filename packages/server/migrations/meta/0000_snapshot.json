@@ -75,9 +75,7 @@
       "indexes": {
         "auth_email_unique": {
           "name": "auth_email_unique",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         }
       },
@@ -124,12 +122,8 @@
           "name": "client_auth_id_auth_id_fk",
           "tableFrom": "client",
           "tableTo": "auth",
-          "columnsFrom": [
-            "auth_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["auth_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
