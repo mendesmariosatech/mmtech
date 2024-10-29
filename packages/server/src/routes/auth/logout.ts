@@ -8,7 +8,7 @@ export const logoutSpec = createRoute({
 	tags: ["auth"],
 	responses: {
 		200: {
-			description: "Register Successful",
+			description: "Logout Successful",
 			content: {
 				"application/json": {
 					schema: z.object({
