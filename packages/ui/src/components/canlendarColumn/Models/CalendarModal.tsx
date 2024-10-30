@@ -14,6 +14,7 @@ import { DataEvents, Tag } from "../CalendarColumnFull";
 import { Textarea } from "../../ui/textarea";
 import { ChevronDownIcon } from "lucide-react";
 import { Checkbox } from "../../ui/checkbox";
+import { formatDateTimeLocal } from "../../data-formater/dataformater";
 
 const colors = [
 	"#FF0000",
@@ -148,16 +149,6 @@ export function CalendarModal({
 			setIsAllDay(event.allDay || false); // Atualiza o estado com base no evento existente
 		}
 	}, [event]);
-
-	// Função auxiliar para formatar a data no formato "yyyy-MM-ddTHH:mm"
-	const formatDateTimeLocal = (date: Date) => {
-		const year = date.getFullYear();
-		const month = String(date.getMonth() + 1).padStart(2, "0");
-		const day = String(date.getDate()).padStart(2, "0");
-		const hours = String(date.getHours()).padStart(2, "0");
-		const minutes = String(date.getMinutes()).padStart(2, "0");
-		return `${year}-${month}-${day}T${hours}:${minutes}`;
-	};
 
 	const handleSave = () => {
 		if (!eventTitle || !startDate) {
