@@ -3,20 +3,25 @@
 import { Button } from "../../../ui/button";
 import { ErrorAlert } from "./ErrorAlert";
 import { SkeletonList } from "./SkeletonList";
-import { VideoListComponent } from "./VideoListComponent";
+import {
+	VideoListComponent,
+	VideoListComponentProps,
+} from "./VideoListComponent";
 
-// if I don't have the data, that can be because it's loading or because there's an error
-type HappyPath = {};
-
-// this list should not even be considered if the user is not logged in
-type VideoListProps = {
-	data: [];
-	isLoading: false;
-	error: false;
+type HappyPath = {
+	data: VideoListComponentProps[];
 };
 
+type VideoListProps =
+	| HappyPath
+	| {
+			isLoading: true;
+	  }
+	| {
+			error: true;
+	  };
+
 const AddVideoText = () => {
-	// const { openSheet } = useSheetState()
 	const openSheet = () => {};
 
 	return (
@@ -33,24 +38,22 @@ const AddVideoText = () => {
 };
 
 export const VideoList: React.FC<VideoListProps> = (props) => {
-	const { data, isLoading, error } = props;
-
 	return (
 		<>
-			{error ? (
+			{"error" in props ? (
 				<ErrorAlert />
-			) : isLoading ? (
+			) : "isLoading" in props ? (
 				<SkeletonList />
-			) : data?.length && !isLoading ? (
+			) : props.data.length === 0 ? (
 				<AddVideoText />
 			) : (
-				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
-					{data?.map((video: any) => (
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full border-red-800">
+					{props.data?.map((video) => (
 						<VideoListComponent
 							key={video.id}
 							description={video.description}
 							title={video.title}
-							url={video.video_url}
+							url={video.url}
 							id={video.id}
 							num_comments={video.num_comments}
 						/>

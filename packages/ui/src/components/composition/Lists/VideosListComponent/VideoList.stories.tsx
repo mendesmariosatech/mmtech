@@ -9,31 +9,34 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Happy path
-export const EmptyList: Story = {
+const MultipleVideos = new Array(10).fill({
+	title: "Title",
+	description: "Description",
+	url: "https://www.youtube.com/watch?v=3QnD2c4Xovk",
+	id: "3QnD2c4Xovk",
+	num_comments: 10,
+});
+
+export const DataList: Story = {
 	args: {
-		error: false,
-		data: [],
-		isLoading: false,
+		data: MultipleVideos,
 	},
 };
 
-// Error path
+export const EmptyList: Story = {
+	args: {
+		data: [],
+	},
+};
 
-// export const ErrorVideoList: Story = {
-// 	args: {
-// 		error: true,
-// 		data: [],
-// 		isLoading: false,
-// 	},
-// };
+export const Error: Story = {
+	args: {
+		error: true,
+	},
+};
 
-// // Loading path
-
-// export const LoadingVideoList: Story = {
-// 	args: {
-// 		error: false,
-// 		data: [],
-// 		isLoading: true,
-// 	},
-// };
+export const Loading: Story = {
+	args: {
+		isLoading: true,
+	},
+};
