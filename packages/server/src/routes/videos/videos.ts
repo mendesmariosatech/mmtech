@@ -1,5 +1,9 @@
 import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 
+const requestBody = z.object({
+	message: z.string(),
+});
+
 const schema = z.object({
 	message: z.string(),
 });
@@ -8,6 +12,15 @@ export const videoSpec = createRoute({
 	method: "post",
 	path: "/videos",
 	tags: ["videos"],
+	request: {
+		body: {
+			content: {
+				"application/json": {
+					schema,
+				},
+			},
+		},
+	},
 	responses: {
 		200: {
 			description: "Video Created",
@@ -23,5 +36,10 @@ export const videoSpec = createRoute({
 type CreateVideoRoute = typeof videoSpec;
 
 export const videoHandler: RouteHandler<CreateVideoRoute> = (c) => {
-	return c.json({ message: "Hello from Hono!" }, 200);
+	const body = c.req.valid("json");
+	console.log(body);
+	console.log(body.message);
+	const message = body.message;
+
+	return c.json({ message }, 200);
 };
