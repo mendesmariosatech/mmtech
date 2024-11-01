@@ -15,6 +15,10 @@ import { Textarea } from "../../ui/textarea";
 import { ChevronDownIcon } from "lucide-react";
 import { Checkbox } from "../../ui/checkbox";
 import { formatDateTimeLocal } from "../../data-formater/dataformater";
+import { configModal } from "./configModal";
+import { text } from "stream/consumers";
+import { ControlledForm } from "../../form-builder/ControlledForm";
+import { useCalendarForm } from "./useCalendarModal.hooks";
 
 const colors = [
 	"#FF0000",
@@ -42,7 +46,10 @@ const texts = {
 		titleEvent: "Event Title",
 		StartDate: "Start Date",
 		EndDate: "End Date",
-		Alerts: "Filds title and start date are required",
+		Alerts: "Fields title and start date are required",
+		Color: "",
+		tagName: "Add Tag",
+		allDays: "All Day Event", // Add this line
 	},
 	PT: {
 		buttonCancel: "Cancelar",
@@ -55,8 +62,21 @@ const texts = {
 		StartDate: "Data de Início",
 		EndDate: "Data de Término",
 		Alerts: "Os campos título e data de início são obrigatórios",
+		Color: "",
+		tagName: "Adicionar Tag",
+		allDays: "Evento Dia Todo", // Add this line
 	},
-};
+} as const;
+
+const getLabels = (language: keyof typeof texts) => ({
+	titleEvent: texts[language].titleEvent,
+	StartDate: texts[language].StartDate,
+	EndDate: texts[language].EndDate,
+	textAreaLabel: texts[language].textAreaLabel,
+	tagName: texts[language].tagName,
+	Color: texts[language].Color,
+	allDays: texts[language].allDays, // Add this line
+});
 
 interface CalendarModalProps {
 	language: "EN" | "PT";
@@ -136,6 +156,7 @@ export function CalendarModal({
 		event?.tag?.[0]?.color || "",
 	);
 	const [isAllDay, setIsAllDay] = React.useState(event?.allDay || false); // Novo estado para evento de dia todo
+	const modalConfig = configModal(getLabels(language), isAllDay);
 
 	React.useEffect(() => {
 		if (event) {
@@ -194,6 +215,8 @@ export function CalendarModal({
 		setIsModalOpen(false);
 	};
 
+	const form = useCalendarForm();
+
 	return (
 		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 			<DialogContent className="max-w-[400px] sm:max-w-[525px] rounded-lg">
@@ -204,58 +227,26 @@ export function CalendarModal({
 							: texts[language].modalTitleCreate}
 					</DialogTitle>
 				</DialogHeader>
-				<div className="mb-4">
-					<Input
-						placeholder={texts[language].titleEvent}
-						value={eventTitle}
-						onChange={(e) => setEventTitle(e.target.value)}
-						className="mb-2"
-					/>
-					<div className="flex items-center mb-2 gap-2">
-						<Checkbox
-							className="ml-2"
-							id="allDay"
-							checked={isAllDay}
-							onCheckedChange={() => setIsAllDay(!isAllDay)}
-						/>
-						<label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-							{language === "EN" ? "All Day Event" : "Evento Dia Todo"}
-						</label>
-					</div>
-					<Input
-						type={isAllDay ? "date" : "datetime-local"}
-						placeholder={texts[language].StartDate}
-						value={isAllDay ? startDate.split("T")[0] : startDate}
-						onChange={(e) => setStartDate(e.target.value)}
-						className="mb-2"
-					/>
-					<Input
-						type="datetime-local"
-						placeholder={texts[language].EndDate}
-						value={endDate}
-						onChange={(e) => setEndDate(e.target.value)}
-						className="mb-2"
-						disabled={isAllDay} // Desabilita o campo de data final se for um evento de dia todo
-					/>
-					<Textarea
-						placeholder={texts[language].textAreaLabel}
-						value={textArea}
-						onChange={(e) => setTextArea(e.target.value)}
-						className="mb-2"
-					/>
-					<div className="flex items-center mb-2">
-						<Input
-							placeholder="Tag Name"
-							value={tagName}
-							onChange={(e) => setTagName(e.target.value)}
-							className="mr-2"
-						/>
-						<ColorSelect
-							selectedColor={selectedColor}
-							onChangeColor={(color) => setSelectedColor(color)}
-						/>
-					</div>
-				</div>
+				<ControlledForm
+					useForm={form}
+					config={modalConfig}
+					onSubmit={(data) => {
+						const newEvent: DataEvents = {
+							// Transform data fields as necessary to fit DataEvents format
+							id: event?.id || "",
+							title: data.titleEvent,
+							start: new Date(data.StartDate),
+							end: data.EndDate ? new Date(data.EndDate) : undefined,
+							description: data.textAreaLabel,
+							tag: [{ name: data.tagName, color: data.Color }],
+							allDay: isAllDay,
+						};
+
+						event && event.id ? onEditEvent(newEvent) : onAddEvent(newEvent);
+						resetFields(); // Custom function to clear fields
+						setIsModalOpen(false);
+					}}
+				></ControlledForm>
 				<DialogFooter className="flex justify-end">
 					{event?.title !== "" && onDeleteEvent && (
 						<Button
