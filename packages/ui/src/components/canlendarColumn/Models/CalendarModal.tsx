@@ -157,65 +157,53 @@ export function CalendarModal({
 	);
 	const [isAllDay, setIsAllDay] = React.useState(event?.allDay || false); // Novo estado para evento de dia todo
 	const modalConfig = configModal(getLabels(language), isAllDay);
+	const form = useCalendarForm();
 
 	React.useEffect(() => {
 		if (event) {
-			setEventTitle(event.title || "");
-			setStartDate(event.start ? formatDateTimeLocal(event.start) : "");
-			setEndDate(event.end ? formatDateTimeLocal(event.end) : "");
-			setTextArea(event.description || "");
-			setTags(event.tag || []);
-			setTagName(event.tag?.[0]?.name || "");
-			setSelectedColor(event.tag?.[0]?.color || "");
-			setIsAllDay(event.allDay || false); // Atualiza o estado com base no evento existente
+			form.setValue("titleEvent", event.title || "");
+			form.setValue("textAreaLabel", event.description || "");
+			form.setValue("tagName", event.tag?.[0]?.name || "");
+			form.setValue("allDays", event.allDay || false);
+			form.setValue(
+				"StartDate",
+				event.start ? event.start.toISOString().slice(0, 16) : "",
+			); // Convertendo para string
+			form.setValue(
+				"EndDate",
+				event.end ? event.end.toISOString().slice(0, 16) : "",
+			); // Convertendo para string
+			form.setValue("Color", event.tag?.[0]?.color || "#6d7b92");
 		}
-	}, [event]);
+	}, [event, form]);
 
 	const handleSave = () => {
-		if (!eventTitle || !startDate) {
-			alert(texts[language].Alerts);
-			return;
-		}
-
 		const newEvent: DataEvents = {
 			id: event?.id || "",
 			title: eventTitle,
-			start: new Date(startDate.replace("T", " ")),
-			end: isAllDay
-				? undefined
-				: endDate
-					? new Date(endDate.replace("T", " "))
-					: undefined, // Condicional para end
+			start: new Date(startDate),
+			end: isAllDay ? undefined : endDate ? new Date(endDate) : undefined,
 			description: textArea,
 			tag: tagName ? [{ name: tagName, color: selectedColor }] : [],
-			allDay: isAllDay, // Adiciona a propriedade allDay ao evento
+			allDay: isAllDay,
 		};
 
+		console.log("Evento a ser salvo:", newEvent);
+
 		if (event && event.id) {
-			onEditEvent(newEvent);
+			onEditEvent(newEvent); // editar o evento existente
 		} else {
-			onAddEvent(newEvent);
+			onAddEvent(newEvent); // adicionar um novo evento
 		}
 
-		resetFields();
+		form.reset(); // reset no formulário após salvar
 		handleCloseModal();
-	};
-
-	const resetFields = () => {
-		setEventTitle("");
-		setStartDate("");
-		setEndDate("");
-		setTextArea("");
-		setTagName("");
-		setSelectedColor("");
-		setTags([]);
 	};
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
+		form.reset();
 	};
-
-	const form = useCalendarForm();
 
 	return (
 		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -230,38 +218,28 @@ export function CalendarModal({
 				<ControlledForm
 					useForm={form}
 					config={modalConfig}
-					onSubmit={(data) => {
-						const newEvent: DataEvents = {
-							// Transform data fields as necessary to fit DataEvents format
-							id: event?.id || "",
-							title: data.titleEvent,
-							start: new Date(data.StartDate),
-							end: data.EndDate ? new Date(data.EndDate) : undefined,
-							description: data.textAreaLabel,
-							tag: [{ name: data.tagName, color: data.Color }],
-							allDay: isAllDay,
-						};
-
-						event && event.id ? onEditEvent(newEvent) : onAddEvent(newEvent);
-						resetFields(); // Custom function to clear fields
-						setIsModalOpen(false);
-					}}
-				></ControlledForm>
-				<DialogFooter className="flex justify-end">
-					{event?.title !== "" && onDeleteEvent && (
+					onSubmit={handleSave}
+				>
+					<div className="flex flex-row justify-center items-center">
+						{event?.title !== "" && onDeleteEvent && (
+							<Button
+								variant="destructive"
+								className="mr-2"
+								onClick={() => onDeleteEvent(event?.id!)}
+							>
+								{texts[language].modalTitleDelete}
+							</Button>
+						)}
 						<Button
-							variant="destructive"
+							variant="outline"
 							className="mr-2"
-							onClick={() => onDeleteEvent(event?.id!)}
+							onClick={handleCloseModal}
 						>
-							{texts[language].modalTitleDelete}
+							{texts[language].buttonCancel}
 						</Button>
-					)}
-					<Button variant="outline" className="mr-2" onClick={handleCloseModal}>
-						{texts[language].buttonCancel}
-					</Button>
-					<Button onClick={handleSave}>{texts[language].buttonSave}</Button>
-				</DialogFooter>
+						<Button onClick={handleSave}>{texts[language].buttonSave}</Button>
+					</div>
+				</ControlledForm>
 			</DialogContent>
 		</Dialog>
 	);
