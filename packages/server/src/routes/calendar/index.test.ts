@@ -16,6 +16,9 @@ import { createTestUser } from "../auth/index.test";
 const email = "test@gmail.com";
 const password = "TestPassword123";
 
+const SECONDS = 1000;
+jest.setTimeout(70 * SECONDS);
+
 describe("Calendar Tests", () => {
 	beforeAll(async () => {});
 

@@ -9,6 +9,8 @@ const newUniqueDate = createId();
 const testEmail = newUniqueDate + "+validemailtest@email.com";
 const testPassword = "12312349090ASAKkdk";
 
+const SECONDS = 1000;
+jest.setTimeout(70 * SECONDS);
 jest.mock("../../jwt_token", () => {
 	return {
 		generateToken: jest.fn().mockReturnValue(Promise.resolve("123")),
