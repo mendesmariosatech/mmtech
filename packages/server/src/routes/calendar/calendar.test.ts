@@ -11,7 +11,7 @@ import { testClient } from "hono/testing";
 import { calendarRouter } from ".";
 // import { createTestUser, loginTestUser } from "../auth/index.test";
 import { DBTestSetup } from "../tests/setup";
-import { createTestUser } from "../auth/index.test";
+import { createTestUser } from "../auth/auth.test";
 
 const genEmail = () => Date.now() + "test@gmail.com";
 const password = "TestPassword123";
@@ -38,17 +38,13 @@ describe("Calendar Tests", () => {
 	});
 
 	describe("Create Event - POST /calendar/events", () => {
-		test("User can create an event", async () => {
-			expect(true).toBe(true);
-		});
+		test.todo("User can create an event");
 
-		test("User cannot create an event if they are not authenticated", async () => {
-			expect(true).toBe(true);
-		});
+		test.todo("User cannot create an event if they are not authenticated");
 
-		test("User cannot create an event if they are not a business customer", async () => {
-			expect(true).toBe(true);
-		});
+		test.todo(
+			"User cannot create an event if they are not a business customer",
+		);
 
 		test("User cannot create an event if the business does not exist", async () => {
 			const resp = await createTestUser({
@@ -70,7 +66,7 @@ describe("Calendar Tests", () => {
 			).calendar.events.$post(
 				{
 					json: {
-						business_id: "123",
+						business_id: "BU_123",
 						title: "Event Title",
 						client_creator: userData.data.clientId,
 						date: new Date().toString(),
@@ -95,20 +91,20 @@ describe("Calendar Tests", () => {
 	});
 
 	describe("Calendar - GET /calendar/:businessId", () => {
-		test("User can get a calendar of all the events for the business their in", async () => {
-			expect(true).toBe(true);
-		});
+		test.todo(
+			"User can get a calendar of all the events for the business their in",
+		);
 
-		test("User cannot get a calendar of all the events for the business their in if they are not authenticated", async () => {
-			expect(true).toBe(true);
-		});
+		test.todo(
+			"User cannot get a calendar of all the events for the business their in if they are not authenticated",
+		);
 
-		test("User cannot get a calendar of all the events for the business their in if they are not a business customer", async () => {
-			expect(true).toBe(true);
-		});
+		test.todo(
+			"User cannot get a calendar of all the events for the business their in if they are not a business customer",
+		);
 
-		test("User cannot get a calendar of all the events for the business their in if the business does not exist", async () => {
-			expect(true).toBe(true);
-		});
+		test.todo(
+			"User cannot get a calendar of all the events for the business their in if the business does not exist",
+		);
 	});
 });
