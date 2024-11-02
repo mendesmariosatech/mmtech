@@ -1,4 +1,3 @@
-import { customer } from "./../../drizzle/schema";
 import { createRoute, RouteHandler } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 
@@ -32,17 +31,15 @@ type CreateEventRoute = typeof createEventSpec;
 export const createEventHandler: RouteHandler<CreateEventRoute> = async (c) => {
 	console.log(c.req.json());
 
+	const body = c.req.valid("json");
+
 	const { business_id, title, client_creator, date } = c.req.valid("json");
 
-	console.log({
-		business_id,
-		client_creator,
-		title,
-		date,
-	});
+	console.log({ body });
 
 	return c.json({
 		id: "123",
-		title: "Event Title",
+		title: body.title,
+		date: body.date,
 	});
 };

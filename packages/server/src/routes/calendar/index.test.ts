@@ -42,7 +42,7 @@ describe("Calendar Tests", () => {
 					business_id: "123",
 					title: "Event Title",
 					client_creator: "123",
-					date: new Date("2024-12-10"),
+					date: new Date().toString(),
 				},
 			});
 

@@ -215,9 +215,11 @@ export const SelectEventSchema = createSelectSchema(eventTable).pick({
 	title: true,
 });
 
+const StringToDate = z.string().transform((date) => new Date(date));
+
 export const InsertEventSchema = createInsertSchema(eventTable, {
-	date: z.coerce.date(),
-	time: z.coerce.date(),
+	date: StringToDate,
+	time: StringToDate,
 }).omit({
 	id: true,
 	createdAt: true,
