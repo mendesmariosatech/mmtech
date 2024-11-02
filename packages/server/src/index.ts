@@ -5,7 +5,7 @@ import { personalRouter } from "./routes/personal";
 import { calendarRouter } from "./routes/calendar";
 
 const route = app
-	.basePath(base_api_path)
+	.basePath(base_api_path) // in order to work with Next.js API routes
 	.get("/", (c) => c.text("Your API is working!"))
 	.route("/", authRouter)
 	.route("/", calendarRouter)
