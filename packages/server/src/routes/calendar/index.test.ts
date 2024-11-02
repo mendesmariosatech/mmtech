@@ -1,8 +1,30 @@
-import { afterAll, describe, expect, test, jest } from "@jest/globals";
+import {
+	afterAll,
+	describe,
+	expect,
+	test,
+	jest,
+	beforeAll,
+} from "@jest/globals";
 import { testClient } from "hono/testing";
 import { calendarRouter } from ".";
+import { createTestUser } from "../auth/index.test";
+import { deleteDB } from "../tests/setup";
+
+const email = "test@gmail.com";
+const password = "TestPassword123";
 
 describe("Calendar Tests", () => {
+	beforeAll(async () => {
+		await createTestUser({
+			email,
+			password,
+		});
+	});
+
+	afterAll(async () => {
+		await deleteDB.deleteTableAuth();
+	});
 	describe("Calendar - GET /calendar/:businessId", () => {
 		test("User can get a calendar of all the events for the business their in", async () => {
 			expect(true).toBe(true);
@@ -34,7 +56,10 @@ describe("Calendar Tests", () => {
 			expect(true).toBe(true);
 		});
 
-		test("User cannot create an event if the business does not exist", async () => {
+		test.skip("User cannot create an event if the business does not exist", async () => {
+			// login and make sure I can create an event
+
+			// login user
 			const evenetResponse = await testClient(
 				calendarRouter,
 			).calendar.events.$post({

@@ -1,10 +1,12 @@
 import { createRoute, RouteHandler } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
+import { authMiddleware } from "../middleware/authentication";
 
 export const createEventSpec = createRoute({
 	method: "post",
 	path: "/calendar/events",
 	tags: ["events"],
+	middleware: [authMiddleware],
 	request: {
 		body: {
 			content: {
@@ -31,9 +33,13 @@ type CreateEventRoute = typeof createEventSpec;
 export const createEventHandler: RouteHandler<CreateEventRoute> = async (c) => {
 	console.log(c.req.json());
 
+	console.log(c.get("jwtPayload"));
+
 	const body = c.req.valid("json");
 
 	const { business_id, title, client_creator, date } = c.req.valid("json");
+
+	// if the person is not authenticated don't even reach here
 
 	console.log({ body });
 

@@ -139,7 +139,7 @@ describe("Logout - DELETE /auth/logout", () => {
 	});
 });
 
-async function createTestUser({
+export async function createTestUser({
 	email = testEmail,
 	password = testPassword,
 }: {
