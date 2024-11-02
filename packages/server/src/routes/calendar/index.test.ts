@@ -57,15 +57,13 @@ describe("Calendar Tests", () => {
 			expect(true).toBe(true);
 		});
 
-		test.skip("User cannot create an event if the business does not exist", async () => {
+		test("User cannot create an event if the business does not exist", async () => {
 			const user = await DBTestSetup.getAccessToken({
 				email,
 				password,
 			});
 
-			if ("error" in user) {
-				throw new Error("Error logging in");
-			}
+			console.log(user);
 			// create the user and make sure that user
 			// can login and create an evet
 			const evenetResponse = await testClient(
@@ -74,12 +72,11 @@ describe("Calendar Tests", () => {
 				json: {
 					business_id: "123",
 					title: "Event Title",
-					client_creator: "123",
+					client_creator: user.userId,
 					date: new Date().toString(),
 				},
-
 				// headers: {
-				// 	authorization: `Bearer ${user.token}`,
+				// Authorization: `Bearer ${user.data.token}`,
 				// }
 			});
 
