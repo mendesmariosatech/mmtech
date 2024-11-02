@@ -9,6 +9,8 @@ export const authMiddleware = createMiddleware(async (c, next) => {
 
 	if (!token) return c.json({ error: "Unauthorized" }, 401);
 
+	console.log("token", token);
+
 	const decode = await decodeToken(token, JWT_SECRET_KEY);
 	c.set("jwtPayload", decode.jwtPayload);
 	c.set("email", decode.email);
