@@ -11,17 +11,13 @@ import { testClient } from "hono/testing";
 import { calendarRouter } from ".";
 // import { createTestUser, loginTestUser } from "../auth/index.test";
 import { DBTestSetup } from "../tests/setup";
+import { createTestUser } from "../auth/index.test";
 
 const email = "test@gmail.com";
 const password = "TestPassword123";
 
 describe("Calendar Tests", () => {
-	// beforeAll(async () => {
-	// 	await DBTestSetup.createTestUser({
-	// 		email,
-	// 		password,
-	// 	});
-	// });
+	beforeAll(async () => {});
 
 	afterAll(async () => {
 		await DBTestSetup.deleteTableAuth();
@@ -57,28 +53,36 @@ describe("Calendar Tests", () => {
 			expect(true).toBe(true);
 		});
 
-		test.skip("User cannot create an event if the business does not exist", async () => {
+		test("User cannot create an event if the business does not exist", async () => {
+			await createTestUser({
+				email,
+				password,
+			});
+
 			const user = await DBTestSetup.getAccessToken({
 				email,
 				password,
 			});
 
-			console.log(user);
 			// create the user and make sure that user
 			// can login and create an evet
 			const evenetResponse = await testClient(
 				calendarRouter,
-			).calendar.events.$post({
-				json: {
-					business_id: "123",
-					title: "Event Title",
-					client_creator: user.userId,
-					date: new Date().toString(),
+			).calendar.events.$post(
+				{
+					json: {
+						business_id: "123",
+						title: "Event Title",
+						client_creator: user.userId,
+						date: new Date().toString(),
+					},
 				},
-				// headers: {
-				// Authorization: `Bearer ${user.data.token}`,
-				// }
-			});
+				{
+					headers: {
+						authorization: `Bearer ${user.token}`,
+					},
+				},
+			);
 
 			if ("error" in evenetResponse) {
 				throw new Error("Error creating event");

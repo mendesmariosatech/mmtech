@@ -5,8 +5,6 @@ import { decodeToken } from "../../jwt_token";
 export const authMiddleware = createMiddleware(async (c, next) => {
 	const { COOkIE_SECRET_KEY, JWT_SECRET_KEY } = env(c);
 
-	console.log("MIDDLEWARE");
-
 	const token = c.req.header("authorization")?.split(" ")[1];
 
 	if (!token) return c.json({ error: "Unauthorized" }, 401);

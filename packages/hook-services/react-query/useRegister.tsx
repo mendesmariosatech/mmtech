@@ -10,7 +10,6 @@ export function useRegister() {
 
 	return useMutation({
 		onError: (error) => {
-			// console.error(error.message);
 			toast.error(error.message);
 		},
 		onSuccess: async (data) => {

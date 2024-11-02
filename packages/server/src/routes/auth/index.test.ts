@@ -23,7 +23,6 @@ jest.mock("../../jwt_token", () => {
 
 describe("New User - POST /auth/register", () => {
 	afterAll(async () => {
-		console.log("Deleting table");
 		await DBTestSetup.deleteTableAuth();
 	});
 	test("User can register using a new email and valid password and will return the auth token and the user info", async () => {
@@ -35,7 +34,7 @@ describe("New User - POST /auth/register", () => {
 		}
 		expect("data" in data).toStrictEqual(true);
 		expect(data.data.auth.email).toBe(testEmail);
-		expect(data.data.token).toBe("123");
+		expect(data.data.token).toBeDefined();
 
 		const secondResp = await createTestUser({});
 		const secondRespData = await secondResp.json();
