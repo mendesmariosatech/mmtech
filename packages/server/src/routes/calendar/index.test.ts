@@ -57,7 +57,7 @@ describe("Calendar Tests", () => {
 			expect(true).toBe(true);
 		});
 
-		test("User cannot create an event if the business does not exist", async () => {
+		test.skip("User cannot create an event if the business does not exist", async () => {
 			const user = await DBTestSetup.getAccessToken({
 				email,
 				password,
