@@ -1,28 +1,25 @@
-// create an event endpoint
-
 import { createRoute } from "@hono/zod-openapi";
-import { z } from "zod";
+import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 
 export const createEventSpec = createRoute({
 	method: "post",
-	path: "/events",
+	path: "/calendar/events",
 	tags: ["events"],
+	request: {
+		body: {
+			content: {
+				"application/json": {
+					schema: InsertEventSchema,
+				},
+			},
+		},
+	},
 	responses: {
 		200: {
 			description: "Event Created",
 			content: {
 				"application/json": {
-					schema: z.object({
-						id: z.string(),
-						title: z.string(),
-						description: z.string(),
-						date: z.string(),
-						time: z.string(),
-						location: z.string(),
-						attendees: z.array(z.string()),
-						createdAt: z.string(),
-						updatedAt: z.string(),
-					}),
+					schema: SelectEventSchema,
 				},
 			},
 		},

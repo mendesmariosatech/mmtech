@@ -1,6 +1,7 @@
 import { createId } from "@paralleldrive/cuid2";
-import { name, relations, sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 const Initial = z.string().min(2).max(2).toUpperCase();
@@ -127,7 +128,7 @@ export const eventRelations = relations(eventTable, ({ one }) => ({
 		fields: [eventTable.business_id],
 		references: [businessTable.id],
 	}),
-	addres: one(addressTable, {
+	address: one(addressTable, {
 		fields: [eventTable.address],
 		references: [addressTable.id],
 	}),
@@ -207,4 +208,15 @@ export const addressTable = sqliteTable("address", {
 	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
+});
+
+export const SelectEventSchema = createSelectSchema(eventTable);
+
+export const InsertEventSchema = createInsertSchema(eventTable, {
+	date: z.coerce.date(),
+	time: z.coerce.date(),
+}).omit({
+	id: true,
+	createdAt: true,
+	updateAt: true,
 });
