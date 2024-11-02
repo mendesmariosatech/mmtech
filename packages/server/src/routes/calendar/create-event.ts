@@ -7,6 +7,14 @@ export const createEventSpec = createRoute({
 	path: "/calendar/events",
 	tags: ["events"],
 	middleware: [authMiddleware],
+	headers: {
+		authorization: {
+			description: "Bearer token",
+			schema: {
+				type: "string",
+			},
+		},
+	},
 	request: {
 		body: {
 			content: {

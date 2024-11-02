@@ -1,3 +1,4 @@
+import { options } from "./../../../../../node_modules/fast-uri/types/index.d";
 import {
 	afterAll,
 	describe,
@@ -76,6 +77,10 @@ describe("Calendar Tests", () => {
 					client_creator: "123",
 					date: new Date().toString(),
 				},
+
+				// headers: {
+				// 	authorization: `Bearer ${user.token}`,
+				// }
 			});
 
 			if ("error" in evenetResponse) {
