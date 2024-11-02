@@ -8,22 +8,22 @@ import {
 } from "@jest/globals";
 import { testClient } from "hono/testing";
 import { calendarRouter } from ".";
-import { createTestUser } from "../auth/index.test";
-import { deleteDB } from "../tests/setup";
+// import { createTestUser, loginTestUser } from "../auth/index.test";
+import { DBTestSetup } from "../tests/setup";
 
 const email = "test@gmail.com";
 const password = "TestPassword123";
 
 describe("Calendar Tests", () => {
 	beforeAll(async () => {
-		await createTestUser({
+		await DBTestSetup.createTestUser({
 			email,
 			password,
 		});
 	});
 
 	afterAll(async () => {
-		await deleteDB.deleteTableAuth();
+		await DBTestSetup.deleteTableAuth();
 	});
 	describe("Calendar - GET /calendar/:businessId", () => {
 		test("User can get a calendar of all the events for the business their in", async () => {
@@ -57,9 +57,16 @@ describe("Calendar Tests", () => {
 		});
 
 		test.skip("User cannot create an event if the business does not exist", async () => {
-			// login and make sure I can create an event
+			const user = await DBTestSetup.getAccessToken({
+				email,
+				password,
+			});
 
-			// login user
+			if ("error" in user) {
+				throw new Error("Error logging in");
+			}
+			// create the user and make sure that user
+			// can login and create an evet
 			const evenetResponse = await testClient(
 				calendarRouter,
 			).calendar.events.$post({

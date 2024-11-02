@@ -1,3 +1,4 @@
+import { tokTypes } from "./../../../../../node_modules/acorn/dist/acorn.d";
 import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 import { ENV_TYPES, loginFields } from "@repo/zod-types";
 import { env } from "hono/adapter";
@@ -26,6 +27,7 @@ export const loginSpec = createRoute({
 							deletedAt: z.string().nullable(),
 							createdAt: z.string(),
 							updateAt: z.string().nullable(),
+							token: z.string(),
 						}),
 					}),
 				},
@@ -92,7 +94,7 @@ export const loginHandler: RouteHandler<LoginRoute> = async (c) => {
 	const user = await Auth.findAuthUser(email);
 	if (!user) return c.json({ error: "User not found" }, 404);
 
-	const doesPasswordMatch = await checkPassword(password, user.passwordDigest);
+	const doesPasswordMatch = await checkPassword(password, user.password);
 
 	if (!doesPasswordMatch)
 		return c.json({ error: "Password does not match" }, 403);
@@ -102,7 +104,9 @@ export const loginHandler: RouteHandler<LoginRoute> = async (c) => {
 	setCookie(c, COOKIES.USER_ID, user.email);
 	setCookie(c, COOKIES.USER_TOKEN, token);
 
-	const { passwordDigest: NOT_USE, ...rest } = user;
+	const { password: NOT_USE, ...rest } = user;
 
-	return c.json({ data: rest }, 200);
+	const data = { ...rest, token };
+
+	return c.json({ data }, 200);
 };

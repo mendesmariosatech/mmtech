@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test, jest } from "@jest/globals";
 import { testClient } from "hono/testing";
 import { RegisterFields } from "@repo/zod-types";
 import { createId } from "@paralleldrive/cuid2";
-import { deleteDB } from "../tests/setup";
+import { DBTestSetup } from "../tests/setup";
 import { authRouter } from ".";
 
 const newUniqueDate = createId();
@@ -23,7 +23,7 @@ jest.mock("../../jwt_token", () => {
 
 describe("New User - POST /auth/register", () => {
 	afterAll(async () => {
-		await deleteDB.deleteTableAuth();
+		await DBTestSetup.deleteTableAuth();
 	});
 	test("User can register using a new email and valid password and will return the auth token and the user info", async () => {
 		const createUserResponse = await createTestUser({});
@@ -59,7 +59,7 @@ describe("New User - POST /auth/register", () => {
 
 describe("Login - POST /auth/login", () => {
 	afterAll(async () => {
-		await deleteDB.deleteTableAuth();
+		await DBTestSetup.deleteTableAuth();
 	});
 	test("User can login with valid credentials", async () => {
 		const newEmail = newUniqueDate + "alex@gmail.com";
@@ -105,7 +105,7 @@ describe("Login - POST /auth/login", () => {
 
 describe("Logout - DELETE /auth/logout", () => {
 	afterAll(async () => {
-		await deleteDB.deleteTableAuth();
+		await DBTestSetup.deleteTableAuth();
 	});
 	test("User can logout", async () => {
 		const newEmail = newUniqueDate + "alex@gmail.com";
@@ -160,7 +160,7 @@ export async function createTestUser({
 	return resp;
 }
 
-async function loginTestUser({
+export async function loginTestUser({
 	email = testEmail,
 	password = testPassword,
 }: {

@@ -13,7 +13,7 @@ export const authTable = sqliteTable("auth", {
 		.$defaultFn(() => genEntityId("AU") + createId())
 		.primaryKey(),
 	name: text("name").notNull(),
-	passwordDigest: text("password_digest").notNull(),
+	password: text("password").notNull(),
 	email: text("email").unique().notNull(),
 	phone: text("phone"),
 	emailConfirmedAt: integer("email_confirmed_at", { mode: "timestamp" }),
@@ -22,6 +22,13 @@ export const authTable = sqliteTable("auth", {
 	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
+});
+
+export const RegisterFields = createInsertSchema(authTable).pick({
+	name: true,
+	email: true,
+	password: true,
+	phone: true,
 });
 
 export type InsertAuth = typeof authTable.$inferInsert;

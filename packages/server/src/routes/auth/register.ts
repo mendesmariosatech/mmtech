@@ -79,8 +79,8 @@ export const registerHandler: RouteHandler<RegisterRoute> = async (c) => {
 	if (!passwordDigest) return c.json({ error: "Password digest failed" }, 400);
 
 	const newAuthUser = await Auth.registerAuthUser({
+		password: passwordDigest,
 		email,
-		passwordDigest,
 		name,
 		phone,
 	});
