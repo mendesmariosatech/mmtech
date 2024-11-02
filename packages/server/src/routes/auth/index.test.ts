@@ -16,8 +16,7 @@ jest.mock("../../jwt_token", () => {
 		generateToken: jest.fn().mockReturnValue(Promise.resolve("123")),
 		decodeToken: jest.fn().mockReturnValue(
 			Promise.resolve({
-				jwtPayload:
-					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFVX01HVzBNWFBDTUtVQUs5MksxR09FSzlFQnUzb2lsZG5hcHRybzE1YTdveGQ5NnE0NiIsIm5hbWUiOiJBbGV4IiwicGFzc3dvcmQiOiIkMmEkMTAkMnl1QTVudjBMb3hQN1pVL2liTzZoLldnS0NSSW9ubEVsUzI0bXRZcVJVckZHWlRuUUNPN0MiLCJlbWFpbCI6IjE3MzA1NzU3MTk1NTF0ZXN0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJlbWFpbENvbmZpcm1lZEF0IjpudWxsLCJkZWxldGVkQXQiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMTEtMDIgMTk6Mjg6MzkiLCJ1cGRhdGVBdCI6IjIwMjQtMTEtMDJUMTk6Mjg6MzkuMDAwWiJ9.iZzue8HHlbbfLeEptvYhcUZ20G9ndTMxY5GX_kO7jTU",
+				jwtPayload: "Token123",
 				email: "email@gmail.com",
 			}),
 		),
