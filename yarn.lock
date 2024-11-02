@@ -1820,6 +1820,11 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.8.tgz#21a907684723bbbaa5f0974cf7730bd797eb8e62"
   integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
 
+"@hono/node-server@^1.13.4":
+  version "1.13.4"
+  resolved "https://registry.npmjs.org/@hono/node-server/-/node-server-1.13.4.tgz#56d575bb9ba010739d6388c9949112907ba26d6f"
+  integrity sha512-3tW9lC0+2mRmoGUEnq0d8Pi3SToWjg8flM9Z+h5Aamy23jjpiFr7n3/HLqXve6EudOsgN2tG2hZusqzNYVRmRw==
+
 "@hono/swagger-ui@^0.4.1":
   version "0.4.1"
   resolved "https://registry.npmjs.org/@hono/swagger-ui/-/swagger-ui-0.4.1.tgz#d67a31420c0f9c77946c820d1ab3a350998d0a9a"
@@ -6519,7 +6524,7 @@ esbuild@0.17.19:
     "@esbuild/win32-ia32" "0.17.19"
     "@esbuild/win32-x64" "0.17.19"
 
-"esbuild@^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0":
+"esbuild@^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0", esbuild@~0.23.0:
   version "0.23.1"
   resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.23.1.tgz#40fdc3f9265ec0beae6f59824ade1bd3d3d2dab8"
   integrity sha512-VVNz/9Sa0bs5SELtn3f7qhJCDPCF5oMEl5cO9/SSinpE9hbPVvxbd572HH5AKiP7WD8INO53GgfDDhRjkylHEg==
@@ -7329,7 +7334,7 @@ fs.realpath@^1.0.0:
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
 
-fsevents@^2.3.2, fsevents@~2.3.2:
+fsevents@^2.3.2, fsevents@~2.3.2, fsevents@~2.3.3:
   version "2.3.3"
   resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
   integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
@@ -11359,6 +11364,16 @@ tsutils@^3.21.0:
   integrity sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==
   dependencies:
     tslib "^1.8.1"
+
+tsx@^4.19.2:
+  version "4.19.2"
+  resolved "https://registry.npmjs.org/tsx/-/tsx-4.19.2.tgz#2d7814783440e0ae42354d0417d9c2989a2ae92c"
+  integrity sha512-pOUl6Vo2LUq/bSa8S5q7b91cgNSjctn9ugq/+Mvow99qW6x/UZYwzxy/3NmqoT66eHYfCVvFvACC58UBPFf28g==
+  dependencies:
+    esbuild "~0.23.0"
+    get-tsconfig "^4.7.5"
+  optionalDependencies:
+    fsevents "~2.3.3"
 
 tty-browserify@^0.0.1:
   version "0.0.1"
