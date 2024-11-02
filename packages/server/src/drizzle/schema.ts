@@ -210,7 +210,10 @@ export const addressTable = sqliteTable("address", {
 	),
 });
 
-export const SelectEventSchema = createSelectSchema(eventTable);
+export const SelectEventSchema = createSelectSchema(eventTable).pick({
+	id: true,
+	title: true,
+});
 
 export const InsertEventSchema = createInsertSchema(eventTable, {
 	date: z.coerce.date(),
