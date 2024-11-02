@@ -36,23 +36,6 @@ describe("Calendar Tests", () => {
 	afterAll(async () => {
 		await DBTestSetup.deleteTableAuth();
 	});
-	describe("Calendar - GET /calendar/:businessId", () => {
-		test("User can get a calendar of all the events for the business their in", async () => {
-			expect(true).toBe(true);
-		});
-
-		test("User cannot get a calendar of all the events for the business their in if they are not authenticated", async () => {
-			expect(true).toBe(true);
-		});
-
-		test("User cannot get a calendar of all the events for the business their in if they are not a business customer", async () => {
-			expect(true).toBe(true);
-		});
-
-		test("User cannot get a calendar of all the events for the business their in if the business does not exist", async () => {
-			expect(true).toBe(true);
-		});
-	});
 
 	describe("Create Event - POST /calendar/events", () => {
 		test("User can create an event", async () => {
@@ -108,6 +91,24 @@ describe("Calendar Tests", () => {
 
 			expect(evenetResponse.status).toBe(200);
 			expect(data.id).toBeDefined();
+		});
+	});
+
+	describe("Calendar - GET /calendar/:businessId", () => {
+		test("User can get a calendar of all the events for the business their in", async () => {
+			expect(true).toBe(true);
+		});
+
+		test("User cannot get a calendar of all the events for the business their in if they are not authenticated", async () => {
+			expect(true).toBe(true);
+		});
+
+		test("User cannot get a calendar of all the events for the business their in if they are not a business customer", async () => {
+			expect(true).toBe(true);
+		});
+
+		test("User cannot get a calendar of all the events for the business their in if the business does not exist", async () => {
+			expect(true).toBe(true);
 		});
 	});
 });
