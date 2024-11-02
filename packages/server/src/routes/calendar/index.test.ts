@@ -1,4 +1,4 @@
-import { options } from "./../../../../../node_modules/fast-uri/types/index.d";
+import { userEvent } from "@storybook/test";
 import {
 	afterAll,
 	describe,
@@ -13,7 +13,7 @@ import { calendarRouter } from ".";
 import { DBTestSetup } from "../tests/setup";
 import { createTestUser } from "../auth/index.test";
 
-const email = "test@gmail.com";
+const genEmail = () => Date.now() + "test@gmail.com";
 const password = "TestPassword123";
 
 const SECONDS = 1000;
@@ -57,15 +57,17 @@ describe("Calendar Tests", () => {
 		});
 
 		test("User cannot create an event if the business does not exist", async () => {
-			await createTestUser({
-				email,
+			const resp = await createTestUser({
+				email: genEmail(),
 				password,
 			});
 
-			const user = await DBTestSetup.getAccessToken({
-				email,
-				password,
-			});
+			// if error throw error
+			if (resp.status !== 201) {
+				throw new Error("Error creating user");
+			}
+
+			const userData = await resp.json();
 
 			// create the user and make sure that user
 			// can login and create an evet
@@ -76,13 +78,13 @@ describe("Calendar Tests", () => {
 					json: {
 						business_id: "123",
 						title: "Event Title",
-						client_creator: user.userId,
+						client_creator: userData.data.clientId,
 						date: new Date().toString(),
 					},
 				},
 				{
 					headers: {
-						authorization: `Bearer ${user.token}`,
+						authorization: `Bearer ${userData.data.token}`,
 					},
 				},
 			);

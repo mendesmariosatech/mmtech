@@ -27,7 +27,7 @@ describe("New User - POST /auth/register", () => {
 	afterAll(async () => {
 		await DBTestSetup.deleteTableAuth();
 	});
-	test("User can register using a new email and valid password and will return the auth token and the user info", async () => {
+	test("User can register using a new email and valid password, but will fail to register again with same credentials", async () => {
 		const createUserResponse = await createTestUser({});
 		const data = await createUserResponse.json();
 
