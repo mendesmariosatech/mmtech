@@ -23,6 +23,7 @@ jest.mock("../../jwt_token", () => {
 
 describe("New User - POST /auth/register", () => {
 	afterAll(async () => {
+		console.log("Deleting table");
 		await DBTestSetup.deleteTableAuth();
 	});
 	test("User can register using a new email and valid password and will return the auth token and the user info", async () => {

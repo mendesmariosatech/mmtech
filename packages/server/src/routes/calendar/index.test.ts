@@ -16,12 +16,12 @@ const email = "test@gmail.com";
 const password = "TestPassword123";
 
 describe("Calendar Tests", () => {
-	beforeAll(async () => {
-		await DBTestSetup.createTestUser({
-			email,
-			password,
-		});
-	});
+	// beforeAll(async () => {
+	// 	await DBTestSetup.createTestUser({
+	// 		email,
+	// 		password,
+	// 	});
+	// });
 
 	afterAll(async () => {
 		await DBTestSetup.deleteTableAuth();

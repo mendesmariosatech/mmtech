@@ -1,4 +1,4 @@
-import { decode, sign, verify } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 
 //whats the value of the object that is passed in???
 export async function generateToken(payload: any, secret: string) {
