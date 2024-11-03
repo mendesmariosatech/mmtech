@@ -101,6 +101,8 @@ export const CreateBusinessSchema = createInsertSchema(businessTable).pick({
 	clientId: true,
 });
 
+export type CreateBusinessSchema = z.infer<typeof CreateBusinessSchema>;
+
 export const GetBusinessSchema = createSelectSchema(businessTable).pick({
 	name: true,
 	id: true,
