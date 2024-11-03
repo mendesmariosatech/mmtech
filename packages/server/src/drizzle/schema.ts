@@ -10,7 +10,7 @@ const genEntityId = (initials: string) =>
 
 export const authTable = sqliteTable("auth", {
 	id: text("id", { length: 128 })
-		.$defaultFn(() => genEntityId("AU") + createId())
+		.$defaultFn(() => genEntityId("AU"))
 		.primaryKey(),
 	name: text("name").notNull(),
 	password: text("password").notNull(),
