@@ -14,12 +14,13 @@ const texts = {
 } as const;
 
 export const modalFields = z.object({
+	id: z.string().optional(),
 	titleEvent: z.string().min(1, { message: texts.EN.error.title }),
-	textAreaLabel: z.string(),
-	tagName: z.string(),
-	allDays: z.boolean(),
-	StartDate: z.string(),
-	EndDate: z.string(),
+	textAreaLabel: z.string().optional(),
+	tagName: z.string().optional(),
+	allDays: z.boolean().optional(),
+	StartDate: z.string().min(1, { message: "Start date please" }),
+	EndDate: z.string().optional(),
 	Color: z.string(),
 });
 

@@ -18,7 +18,11 @@ import { formatDateTimeLocal } from "../../data-formater/dataformater";
 import { configModal } from "./configModal";
 import { text } from "stream/consumers";
 import { ControlledForm } from "../../form-builder/ControlledForm";
-import { useCalendarForm } from "./useCalendarModal.hooks";
+// import { useCalendarForm } from "./useCalendarModal.hooks";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { modalFields, ModalFields } from "./modalFields";
+import { DevTool } from "@hookform/devtools";
 
 const colors = [
 	"#FF0000",
@@ -88,50 +92,19 @@ interface CalendarModalProps {
 	onDeleteEvent?: (eventId: string) => void;
 }
 
-export function ColorSelect({
-	selectedColor,
-	onChangeColor,
-}: {
-	selectedColor: string;
-	onChangeColor: (color: string) => void;
-}) {
-	const [isOpen, setIsOpen] = React.useState(false);
-
-	return (
-		<div className="relative">
-			<Button
-				onClick={() => setIsOpen(!isOpen)}
-				className="flex items-center px-2 py-1 border rounded"
-				variant={"ghost"}
-			>
-				<div
-					className="w-4 h-4 rounded-full"
-					style={{ backgroundColor: selectedColor || "#6d7b92" }}
-				></div>
-				<ChevronDownIcon className="w-5 h-5" />
-			</Button>
-			{isOpen && (
-				<div className="absolute mt-1 bg-gray-200 border rounded shadow-md">
-					{colors.map((color) => (
-						<div
-							key={color}
-							className="flex items-center px-2 py-1 cursor-pointer"
-							onClick={() => {
-								onChangeColor(color);
-								setIsOpen(false);
-							}}
-						>
-							<div
-								className="w-4 h-4 rounded-full"
-								style={{ backgroundColor: color }}
-							></div>
-						</div>
-					))}
-				</div>
-			)}
-		</div>
-	);
-}
+export const useCalendarForm = () =>
+	useForm<ModalFields>({
+		resolver: zodResolver(modalFields),
+		defaultValues: {
+			titleEvent: "",
+			textAreaLabel: "",
+			tagName: "",
+			allDays: false,
+			StartDate: "",
+			EndDate: "",
+			Color: "#6d7b92",
+		},
+	});
 
 export function CalendarModal({
 	language,
@@ -142,58 +115,22 @@ export function CalendarModal({
 	onEditEvent,
 	onDeleteEvent,
 }: CalendarModalProps) {
-	const [eventTitle, setEventTitle] = React.useState(event?.title || "");
-	const [tags, setTags] = React.useState<Tag[]>(event?.tag || []);
-	const [startDate, setStartDate] = React.useState(
-		event?.start ? event.start.toISOString().slice(0, 16) : "",
-	);
-	const [endDate, setEndDate] = React.useState(
-		event?.end ? event.end.toISOString().slice(0, 16) : "",
-	);
-	const [textArea, setTextArea] = React.useState(event?.description || "");
-	const [tagName, setTagName] = React.useState(event?.tag?.[0]?.name || "");
-	const [selectedColor, setSelectedColor] = React.useState(
-		event?.tag?.[0]?.color || "",
-	);
-	const [isAllDay, setIsAllDay] = React.useState(event?.allDay || false); // Novo estado para evento de dia todo
-	const modalConfig = configModal(getLabels(language), isAllDay);
+	const modalConfig = configModal(getLabels(language), true);
 	const form = useCalendarForm();
 
-	React.useEffect(() => {
-		if (event) {
-			form.setValue("titleEvent", event.title || "");
-			form.setValue("textAreaLabel", event.description || "");
-			form.setValue("tagName", event.tag?.[0]?.name || "");
-			form.setValue("allDays", event.allDay || false);
-			form.setValue(
-				"StartDate",
-				event.start ? event.start.toISOString().slice(0, 16) : "",
-			); // Convertendo para string
-			form.setValue(
-				"EndDate",
-				event.end ? event.end.toISOString().slice(0, 16) : "",
-			); // Convertendo para string
-			form.setValue("Color", event.tag?.[0]?.color || "#6d7b92");
-		}
-	}, [event, form]);
+	const handleSave = (input: ModalFields) => {
+		console.log(
+			`%cEvento a ser salvo:`,
+			"background-color: yellow; color: black;",
+		);
+		console.log({
+			input,
+		});
 
-	const handleSave = () => {
-		const newEvent: DataEvents = {
-			id: event?.id || "",
-			title: eventTitle,
-			start: new Date(startDate),
-			end: isAllDay ? undefined : endDate ? new Date(endDate) : undefined,
-			description: textArea,
-			tag: tagName ? [{ name: tagName, color: selectedColor }] : [],
-			allDay: isAllDay,
-		};
-
-		console.log("Evento a ser salvo:", newEvent);
-
-		if (event && event.id) {
-			onEditEvent(newEvent); // editar o evento existente
+		if (input && input.id) {
+			// onEditEvent(input); // editar o evento existente
 		} else {
-			onAddEvent(newEvent); // adicionar um novo evento
+			// onAddEvent(input); // adicionar um novo evento
 		}
 
 		form.reset(); // reset no formulário após salvar
@@ -215,6 +152,7 @@ export function CalendarModal({
 							: texts[language].modalTitleCreate}
 					</DialogTitle>
 				</DialogHeader>
+				<DevTool control={form.control} />
 				<ControlledForm
 					useForm={form}
 					config={modalConfig}
@@ -237,7 +175,7 @@ export function CalendarModal({
 						>
 							{texts[language].buttonCancel}
 						</Button>
-						<Button onClick={handleSave}>{texts[language].buttonSave}</Button>
+						<Button type="submit">{texts[language].buttonSave}</Button>
 					</div>
 				</ControlledForm>
 			</DialogContent>
