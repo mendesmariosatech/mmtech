@@ -2,8 +2,7 @@
   "name": "@repo/server",
   "version": "0.0.1",
   "scripts": {
-    "node:dev": "tsx watch app.ts",
-    "dev": "ts-node app.ts",
+    "dev": "tsx watch app.ts",
     "deploy": "wrangler deploy --minify src/index.ts",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",

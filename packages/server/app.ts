@@ -7,4 +7,4 @@ serve({
 	port: PORT,
 });
 
-console.log(`🚀 node server started on port http://localhost:${PORT}`);
+console.log(`🚀 node server started on port http://localhost:${PORT}/api`);
