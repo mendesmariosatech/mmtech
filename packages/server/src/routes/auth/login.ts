@@ -1,13 +1,13 @@
-import { tokTypes } from "./../../../../../node_modules/acorn/dist/acorn.d";
-import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
-import { ENV_TYPES, loginFields } from "@repo/zod-types";
+import { createRoute, z } from "@hono/zod-openapi";
+import { loginFields } from "@repo/zod-types";
 import { env } from "hono/adapter";
-import { AuthTable } from "./handlers";
+import { AuthTable, ClientTable } from "./handlers";
 import { checkPassword } from "../../utils/bcrypt";
 import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
 import { AppRouteHandler } from "../../base/type";
+import { BusinessTable } from "../business/dto/business.dto";
 
 export const loginSpec = createRoute({
 	method: "post",
@@ -80,12 +80,7 @@ type LoginRoute = typeof loginSpec;
 
 export const loginHandler: AppRouteHandler<LoginRoute> = async (c) => {
 	const form = c.req.valid("json");
-	const {
-		TURSO_AUTH_TOKEN,
-		TURSO_CONNECTION_URL,
-		COOkIE_SECRET_KEY,
-		JWT_SECRET_KEY,
-	} = env(c);
+	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL, JWT_SECRET_KEY } = env(c);
 
 	if (!form) return c.json({ error: "Invalid form data" }, 400);
 
@@ -100,17 +95,20 @@ export const loginHandler: AppRouteHandler<LoginRoute> = async (c) => {
 	if (!doesPasswordMatch)
 		return c.json({ error: "Password does not match" }, 403);
 
-	// look for client profile
-	// const client = await Auth.findClient(user.id);
+	const Client = new ClientTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
-	// look for business
-	// const business = await Auth.findBusiness(user.businessId);
+	const client = await Client.findClientByAuth(user.id);
+
+	if (!client) return c.json({ error: "Client not found" }, 404);
+
+	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+	const business = await Business.findBusinessByClientId(client.id);
 
 	const token = await generateToken(
 		{
-			clientId: user.id,
+			clientId: client.id,
 			authId: user.id,
-			businessId: user.email,
+			businessId: business?.id,
 		},
 		JWT_SECRET_KEY,
 	);

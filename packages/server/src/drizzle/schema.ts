@@ -99,6 +99,11 @@ export const businessTable = sqliteTable("business", {
 export const CreateBusinessSchema = createInsertSchema(businessTable).pick({
 	name: true,
 	clientId: true,
+	description: true,
+});
+
+const SelectedSchema = createSelectSchema(businessTable).pick({
+	clientId: true,
 });
 
 export type CreateBusinessSchema = z.infer<typeof CreateBusinessSchema>;
