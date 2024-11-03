@@ -4,9 +4,10 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { DataEvents, texts_ViewChanges } from "../CalendarColumnFull";
+import { texts_ViewChanges } from "../CalendarColumnFull";
 import { useEffect, useState } from "react";
 import { EventClickArg, EventSourceInput } from "@fullcalendar/core/index.js";
+import { DataEvents } from "../types";
 
 interface FullCalendarProps {
 	events: DataEvents[];

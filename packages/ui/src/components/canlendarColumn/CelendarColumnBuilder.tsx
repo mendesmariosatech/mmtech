@@ -11,26 +11,7 @@ import {
 } from "../collapsable/CollapsableBuilder";
 import { CalendarModal } from "./Models/CalendarModal";
 import { FullCalendarBuilder } from "./Models/FullCalendar";
-
-export interface Tag {
-	name: string;
-	color: string;
-}
-export interface DataEvents {
-	id?: string;
-	title?: string;
-	start?: Date;
-	end?: Date;
-	description: string;
-	tag: Tag[];
-	calendar?: string;
-	allDay?: boolean;
-}
-
-export type CalendarProps = {
-	eventsData: DataEvents[];
-	language: "EN" | "PT";
-};
+import { DataEvents } from "./types";
 
 interface CalendarColumnBuilderProps {
 	name: string;
@@ -92,12 +73,18 @@ export default function CalendarColumnBuilder({
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [events, setEvents] = useState<DataEvents[]>(eventsData);
 
-	const handleOpenModal = (event: DataEvents | null, date?: Date) => {
-		setSelectedEvent(
-			event
-				? event
-				: { start: date, end: undefined, title: "", description: "", tag: [] },
-		);
+	const handleOpenModal = (event: DataEvents | null, date: Date | null) => {
+		const selectedEvent = event
+			? event
+			: ({
+					start: date,
+					end: null,
+					title: "",
+					description: "",
+					tag: [],
+				} as DataEvents);
+
+		setSelectedEvent(selectedEvent);
 		setIsModalOpen(true);
 	};
 

@@ -7,7 +7,7 @@ import {
 import { Checkbox } from "../ui/checkbox"; // Make sure you import the Checkbox component
 import { getIcon, IconName } from "../iconData/IconData";
 
-export type items = {
+export type Item = {
 	id: number;
 	label: string;
 	isChecked: boolean;
@@ -16,7 +16,7 @@ export type items = {
 export interface CollapsibleProps {
 	title: string;
 	icon: IconName;
-	items: items[];
+	items: Item[];
 }
 
 export function CollapsableBuilder({ icon, title, items }: CollapsibleProps) {

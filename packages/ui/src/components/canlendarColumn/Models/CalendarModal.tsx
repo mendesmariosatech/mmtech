@@ -8,7 +8,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "../../ui/dialog";
-import { DataEvents } from "../CalendarColumnFull";
+import { DataEvents } from "../types";
 import { configModal } from "./configModal";
 import { ControlledForm } from "../../form-builder/ControlledForm";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -82,7 +82,7 @@ interface CalendarModalProps {
 	language: "EN" | "PT";
 	isModalOpen: boolean;
 	setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	event?: DataEvents | null;
+	event: DataEvents | null;
 	onAddEvent: (event: DataEvents) => void;
 	onEditEvent: (event: DataEvents) => void;
 	onDeleteEvent?: (eventId: string) => void;

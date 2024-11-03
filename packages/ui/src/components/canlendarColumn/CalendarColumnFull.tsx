@@ -5,26 +5,7 @@ import { Calendar } from "../ui/calendar";
 import { CalendarModal } from "./Models/CalendarModal";
 import { FullCalendarBuilder } from "./Models/FullCalendar";
 import { Plus } from "lucide-react";
-
-export interface Tag {
-	name: string;
-	color: string;
-}
-export interface DataEvents {
-	id?: string;
-	title?: string;
-	start: Date | null;
-	end: Date | null;
-	description: string;
-	tag: Tag[];
-	calendar?: string;
-	allDay?: boolean;
-}
-
-export type CalendarProps = {
-	eventsData: DataEvents[];
-	language: "EN" | "PT";
-};
+import { CalendarProps, DataEvents } from "./types";
 
 export const texts_ViewChanges = {
 	EN: {
