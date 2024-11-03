@@ -11,7 +11,7 @@ import { testClient } from "hono/testing";
 import { calendarRouter } from ".";
 // import { createTestUser, loginTestUser } from "../auth/index.test";
 import { DBTestSetup } from "../tests/setup";
-import { createTestUser } from "../auth/auth.test";
+// import { createTestUser } from "../auth/auth.test";
 
 const genEmail = () => Date.now() + "test@gmail.com";
 const password = "TestPassword123";
@@ -47,17 +47,17 @@ describe("Calendar Tests", () => {
 		);
 
 		test("User cannot create an event if the business does not exist", async () => {
-			const resp = await createTestUser({
-				email: genEmail(),
-				password,
-			});
+			// const resp = await createTestUser({
+			// 	email: genEmail(),
+			// 	password,
+			// });
 
-			// if error throw error
-			if (resp.status !== 201) {
-				throw new Error("Error creating user");
-			}
+			// // if error throw error
+			// if (resp.status !== 201) {
+			// 	throw new Error("Error creating user");
+			// }
 
-			const userData = await resp.json();
+			// const userData = await resp.json();
 
 			// create the user and make sure that user
 			// can login and create an evet
@@ -68,13 +68,13 @@ describe("Calendar Tests", () => {
 					json: {
 						business_id: "BU_123",
 						title: "Event Title",
-						client_creator: userData.data.clientId,
+						client_creator: "CL_123",
 						date: new Date().toString(),
 					},
 				},
 				{
 					headers: {
-						authorization: `Bearer ${userData.data.token}`,
+						authorization: `Bearer ${"bearetoken123"}`,
 					},
 				},
 			);

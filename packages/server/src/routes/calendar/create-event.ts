@@ -45,6 +45,17 @@ export const createEventHandler: RouteHandler<CreateEventRoute> = async (c) => {
 
 	// if the person is not authenticated don't even reach here
 
+	// if the person is not a business customer don't reach here
+	const token = c.get("jwtPayload");
+
+	// @ts-ignore
+	const email = c.get("email");
+
+	console.log({
+		token,
+		email,
+	});
+
 	return c.json({
 		id: "123",
 		title: body.title,

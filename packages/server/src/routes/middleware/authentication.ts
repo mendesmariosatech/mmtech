@@ -1,6 +1,7 @@
 import { createMiddleware } from "hono/factory";
 import { env } from "hono/adapter";
 import { decodeToken } from "../../jwt_token";
+import { safeAwait } from "../../utils/fafeAwait";
 
 export const authMiddleware = createMiddleware(async (c, next) => {
 	const { COOkIE_SECRET_KEY, JWT_SECRET_KEY } = env(c);
@@ -11,9 +12,12 @@ export const authMiddleware = createMiddleware(async (c, next) => {
 
 	console.log("token", token);
 
-	const decode = await decodeToken(token, JWT_SECRET_KEY);
-	c.set("jwtPayload", decode.jwtPayload);
-	c.set("email", decode.email);
+	const [decoded, error] = await safeAwait(decodeToken(token, JWT_SECRET_KEY));
+
+	if (!decoded || error) return c.json({ error: "Unauthorized" }, 401);
+
+	c.set("jwtPayload", decoded.jwtPayload);
+	c.set("email", decoded.email);
 
 	await next();
 });
