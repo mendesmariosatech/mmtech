@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "../../ui/button";
+import { Button } from "../../components/ui/button";
 import Link from "next/link";
 
 export const Header = ({
@@ -14,6 +14,7 @@ export const Header = ({
 			<h1 className="text-4xl font-bold">Hello, Status</h1>
 			<p className="text-lg text-muted-foreground">{email}</p>
 			<p className="text-lg text-muted-foreground">{name}</p>
+			{/* FIX */}
 			<p>{process.env.NEXT_PUBLIC_URL}</p>
 			<Button>
 				<Link href="/auth/register">Register</Link>

@@ -1,8 +1,7 @@
-import { ShoppingCart, Search, MessageCircle } from "lucide-react";
+import { ShoppingCart, Search } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ENV_VARIABLES, envVariables } from "@repo/zod-types";
 
 const texts = {
 	EN: {
@@ -115,11 +114,10 @@ export function Header() {
 						<h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
 							MM Tech <span className="text-blue-600">Startup</span>
 							<br />
-							Agency template
+							Agency
 						</h1>
 						<p className="text-xl text-gray-600 mb-6">
-							We make it a priority to offer flexible results and data to
-							include your must needs do it.
+							We deliver your ideas in days, not months.
 						</p>
 						<div className="flex flex-col sm:flex-row gap-4">
 							<Button asChild size="lg" variant={"default"}>
