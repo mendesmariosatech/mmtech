@@ -47,20 +47,6 @@ describe("Calendar Tests", () => {
 		);
 
 		test("User cannot create an event if the business does not exist", async () => {
-			// const resp = await createTestUser({
-			// 	email: genEmail(),
-			// 	password,
-			// });
-
-			// // if error throw error
-			// if (resp.status !== 201) {
-			// 	throw new Error("Error creating user");
-			// }
-
-			// const userData = await resp.json();
-
-			// create the user and make sure that user
-			// can login and create an evet
 			const evenetResponse = await testClient(
 				calendarRouter,
 			).calendar.events.$post(
@@ -79,8 +65,9 @@ describe("Calendar Tests", () => {
 				},
 			);
 
-			if ("error" in evenetResponse) {
-				throw new Error("Error creating event");
+			if (evenetResponse.status !== 201) {
+				const error = await evenetResponse.json();
+				throw new Error("Error creating event: " + error.error);
 			}
 
 			const data = await evenetResponse.json();

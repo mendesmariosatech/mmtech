@@ -1,4 +1,4 @@
-import { createRoute, RouteHandler } from "@hono/zod-openapi";
+import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
 
@@ -25,11 +25,21 @@ export const createEventSpec = createRoute({
 		},
 	},
 	responses: {
-		200: {
+		201: {
 			description: "Event Created",
 			content: {
 				"application/json": {
 					schema: SelectEventSchema,
+				},
+			},
+		},
+		403: {
+			description: "Not Authorized",
+			content: {
+				"application/json": {
+					schema: z.object({
+						error: z.string(),
+					}),
 				},
 			},
 		},
@@ -38,27 +48,35 @@ export const createEventSpec = createRoute({
 
 type CreateEventRoute = typeof createEventSpec;
 
-export const createEventHandler: RouteHandler<CreateEventRoute> = async (c) => {
-	const body = c.req.valid("json");
+type Variables = {
+	authId: string;
+	clientId: string;
+	businessId?: string;
+};
 
-	const { business_id, title, client_creator, date } = c.req.valid("json");
-
+export const createEventHandler: RouteHandler<
+	CreateEventRoute,
+	{ Variables: Variables }
+> = async (c) => {
 	// if the person is not authenticated don't even reach here
-
 	// if the person is not a business customer don't reach here
 	const token = c.get("jwtPayload");
+	const authId = c.get("authId");
+	const clientId = c.get("clientId");
+	const businessId = c.get("businessId");
 
-	// @ts-ignore
-	const email = c.get("email");
+	if (!businessId || !authId || !clientId) {
+		return c.json({ error: "Not authorized" }, 403);
+	}
 
-	console.log({
-		token,
-		email,
-	});
+	const { title, date } = c.req.valid("json");
 
-	return c.json({
-		id: "123",
-		title: body.title,
-		date: body.date,
-	});
+	return c.json(
+		{
+			id: "123",
+			title,
+			date,
+		},
+		201,
+	);
 };

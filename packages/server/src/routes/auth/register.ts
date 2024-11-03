@@ -86,17 +86,23 @@ export const registerHandler: RouteHandler<RegisterRoute> = async (c) => {
 	});
 	if (!newAuthUser) return c.json({ error: "User creation failed" }, 400);
 
-	const token = await generateToken(newAuthUser, JWT_SECRET_KEY);
-
-	setCookie(c, COOKIES.USER_ID, newAuthUser.email);
-	setCookie(c, COOKIES.USER_TOKEN, token);
-
 	const [newClient, error] = await Client.createNewClient({
 		authId: newAuthUser.id,
 	});
 
 	if (error) return c.json({ error: error.message }, 400);
 	if (!newClient) return c.json({ error: "Client creation failed" }, 400);
+
+	const token = await generateToken(
+		{
+			authId: newAuthUser.id,
+			clientId: newClient.id,
+		},
+		JWT_SECRET_KEY,
+	);
+
+	setCookie(c, COOKIES.USER_ID, newAuthUser.email);
+	setCookie(c, COOKIES.USER_TOKEN, token);
 
 	return c.json(
 		{

@@ -6,7 +6,7 @@ type ClientToken = {
 	businessId?: string;
 };
 
-export async function generateToken(payload: any, secret: string) {
+export async function generateToken(payload: ClientToken, secret: string) {
 	const token = await sign(payload, secret);
 	return token;
 }
