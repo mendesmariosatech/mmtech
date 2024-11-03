@@ -27,12 +27,9 @@ import { Label } from "../ui/label";
 type FormConfig = {
 	label?: string;
 	description?: string;
+	placeholder?: string;
+	disabled?: boolean;
 };
-
-type ColorInput<D extends FieldValues> = {
-	name: FieldPath<D>;
-	input: "color"; // New input type for color
-} & FormConfig;
 
 type CheckBox<D extends FieldValues> = {
 	name: FieldPath<D>;
@@ -53,23 +50,15 @@ type DropdownProps<D extends FieldValues> = {
 
 type InputText<D extends FieldValues> = {
 	name: FieldPath<D>;
-	input: "text";
-	placeholder?: string;
+	input: "text" | "date" | "datetime-local" | "color";
 } & InputProps &
 	FormConfig;
-
-type DateInput<D extends FieldValues> = {
-	name: FieldPath<D>;
-	input: "date" | "datetime-local" | "color";
-	placeholder?: string;
-	disabled?: boolean;
-} & FormConfig;
+//
 
 // Add the TextAreaInput type
 type TextAreaInput<D extends FieldValues> = {
 	name: FieldPath<D>;
 	input: "textarea"; // New type for textarea
-	placeholder?: string;
 } & FormConfig;
 
 export type ConfigObject<D extends FieldValues> = {
@@ -77,19 +66,11 @@ export type ConfigObject<D extends FieldValues> = {
 		| DropdownProps<D>
 		| InputText<D>
 		| CheckBox<D>
-		| DateInput<D>
-		| TextAreaInput<D>
-		| ColorInput<D>; // Include color input here
+		| TextAreaInput<D>;
 };
 
 type ControlledInputProps<D extends FieldValues> = UseFormReturn<D, any> &
-	(
-		| DropdownProps<D>
-		| InputText<D>
-		| CheckBox<D>
-		| DateInput<D>
-		| TextAreaInput<D>
-	); // Include textarea here
+	(DropdownProps<D> | InputText<D> | CheckBox<D> | TextAreaInput<D>); // Include textarea here
 
 export const ControlledInput = <D extends FieldValues>(
 	props: ControlledInputProps<D>,
@@ -114,7 +95,7 @@ export const ControlledInput = <D extends FieldValues>(
 								>
 									<FormControl>
 										<SelectTrigger>
-											<SelectValue placeholder="Select an option" />
+											<SelectValue placeholder={props.placeholder} />
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
@@ -159,14 +140,14 @@ export const ControlledInput = <D extends FieldValues>(
 									className="color-input-class" // Add necessary classes
 								/>
 							</FormControl> // Handle date or datetime-local input
-						) : (
+						) : props.input === "date" || props.input === "datetime-local" ? (
 							<FormControl>
 								<Input
 									{...field}
 									type={props.input} // "date" or "datetime-local"
 								/>
 							</FormControl>
-						)}
+						) : null}
 						{props.description ? (
 							<FormDescription>{props.description}</FormDescription>
 						) : null}
