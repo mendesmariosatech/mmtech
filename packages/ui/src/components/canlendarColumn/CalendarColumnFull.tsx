@@ -13,8 +13,8 @@ export interface Tag {
 export interface DataEvents {
 	id?: string;
 	title?: string;
-	start?: Date;
-	end?: Date;
+	start: Date | null;
+	end: Date | null;
 	description: string;
 	tag: Tag[];
 	calendar?: string;
@@ -72,11 +72,11 @@ export function CalendarPage({ eventsData, language }: CalendarProps) {
 	const [isModalOpen, setIsModalOpen] = React.useState(false);
 	const [events, setEvents] = React.useState<DataEvents[]>(eventsData);
 
-	const handleOpenModal = (event: DataEvents | null, date?: Date) => {
+	const handleOpenModal = (event: DataEvents | null, date: Date | null) => {
 		setSelectedEvent(
 			event
 				? event
-				: { start: date, end: undefined, title: "", description: "", tag: [] },
+				: { start: date, end: null, title: "", description: "", tag: [] },
 		);
 		setIsModalOpen(true);
 	};

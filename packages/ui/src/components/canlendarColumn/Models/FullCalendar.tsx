@@ -3,15 +3,16 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { DataEvents, texts_ViewChanges } from "../CalendarColumnFull";
 import { useEffect, useState } from "react";
+import { EventClickArg, EventSourceInput } from "@fullcalendar/core/index.js";
 
 interface FullCalendarProps {
 	events: DataEvents[];
 	view: string;
 	language: "EN" | "PT";
-	onEventSelect: (event: DataEvents | null) => void;
+	onEventSelect: (event: DataEvents | null, date: Date | null) => void;
 }
 
 export function FullCalendarBuilder({
@@ -22,30 +23,33 @@ export function FullCalendarBuilder({
 }: FullCalendarProps) {
 	const [isMobile, setIsMobile] = useState(false);
 
-	const handleEventSelect = (arg: any) => {
+	const handleEventSelect = (arg: EventClickArg) => {
 		if (arg.event) {
 			const event = arg.event;
-			onEventSelect({
-				id: event.id,
-				title: event.title,
-				start: event.start,
-				end: event.end,
-				description: event.extendedProps.description,
-				tag: event.extendedProps.tag,
-				allDay: event.allDay,
-			});
+			onEventSelect(
+				{
+					id: event.id,
+					title: event.title,
+					start: event.start,
+					end: event.end,
+					description: event.extendedProps.description,
+					tag: event.extendedProps.tag,
+					allDay: event.allDay,
+				},
+				null,
+			);
 		} else {
-			onEventSelect(null); // Passa null se não houver evento
+			onEventSelect(null, null); // Passa null se não houver evento
 		}
 	};
 
 	// Manipulador de clique em data
-	const handleDateClick = (arg: any) => {
+	const handleDateClick = (arg: DateClickArg) => {
 		const newEvent: DataEvents = {
 			id: "", // Você pode gerar um ID único ou usar um UUID
 			title: "", // Título pode ser preenchido no modal
 			start: arg.date, // Definido como a data clicada
-			end: undefined, // Você pode definir um horário de término padrão
+			end: null, // Você pode definir um horário de término padrão
 			description: "",
 			tag: [],
 			allDay: false,
@@ -60,14 +64,14 @@ export function FullCalendarBuilder({
 		}
 
 		// Abre o modal para adicionar o novo evento
-		onEventSelect(newEvent);
+		onEventSelect(newEvent, null);
 	};
 
 	const formattedEvents = events.map((event) => ({
 		...event,
 		backgroundColor: event.tag?.[0]?.color || "#6d7b92",
 		borderColor: event.tag?.[0]?.color || "#6d7b92",
-	}));
+	})) as EventSourceInput;
 
 	const renderEventContent = (eventInfo: any) => {
 		const { event } = eventInfo;
