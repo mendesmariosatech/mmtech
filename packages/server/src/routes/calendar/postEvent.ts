@@ -52,12 +52,6 @@ export const createEventSpec = createRoute({
 
 type CreateEventRoute = typeof createEventSpec;
 
-type Variables = {
-	authId: string;
-	clientId: string;
-	businessId?: string;
-};
-
 export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	c,
 ) => {
@@ -86,6 +80,17 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 
 	// how to create a new event
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+	console.log("CREATE EVENT");
+	// const event = await Event.createEvent({
+	// 	title,
+	// 	date: 10000,
+	// 	business_id: "businessId",
+	// 	client_creator: "clientId",
+	// });
+
+	// console.log({
+	// 	event
+	// })
 
 	return c.json(
 		{
