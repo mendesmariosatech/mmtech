@@ -80,10 +80,6 @@ export const createBusinessHandler: AppRouteHandler<
 		return c.json({ error: "Not Authorized" }, 403);
 	}
 
-	console.log({
-		business,
-	});
-
 	if (business) {
 		return c.json({ error: "You already have a business" }, 403);
 	}
@@ -99,7 +95,6 @@ export const createBusinessHandler: AppRouteHandler<
 	);
 
 	if (error || !newBusiness) {
-		console.log(error);
 		return c.json({ error: "Failed to create business" }, 400);
 	}
 

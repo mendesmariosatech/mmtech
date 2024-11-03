@@ -5,6 +5,7 @@ import { EventTable } from "./event.dto";
 import { ENV_TYPES } from "@repo/zod-types";
 import { env } from "hono/adapter";
 import { AppRouteHandler } from "../../base/type";
+import { BusinessTable } from "../business/dto/business.dto";
 
 export const createEventSpec = createRoute({
 	method: "post",
@@ -56,9 +57,6 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	c,
 ) => {
 	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
-	// if the person is not authenticated don't even reach here
-	// if the person is not a business customer don't reach here
-	const token = c.get("jwtPayload");
 	const authId = c.get("authId");
 	const clientId = c.get("clientId");
 	const businessId = c.get("businessId");
@@ -67,37 +65,28 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		return c.json({ error: "Not authorized" }, 403);
 	}
 
-	// get the business id from the token
-	// get the client id from the token
-	// get the auth id from the token
+	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
-	// if no business return
-	// if no client return
+	const business = await Business.findBusinessByClientId(clientId);
 
-	// create the new event
+	if (!business) {
+		return c.json({ error: "Not authorized, you don't have a business" }, 403);
+	}
 
 	const { title, date } = c.req.valid("json");
 
 	// how to create a new event
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
-	console.log("CREATE EVENT");
-	// const event = await Event.createEvent({
-	// 	title,
-	// 	date: 10000,
-	// 	business_id: "businessId",
-	// 	client_creator: "clientId",
-	// });
+	const newEvent = await Event.createEvent({
+		title,
+		date: Number(date),
+		business_id: businessId,
+		client_creator: clientId,
+	});
 
-	// console.log({
-	// 	event
-	// })
+	if (!newEvent) {
+		return c.json({ error: "Event not created" }, 403);
+	}
 
-	return c.json(
-		{
-			id: "123",
-			title,
-			date,
-		},
-		201,
-	);
+	return c.json(newEvent, 201);
 };
