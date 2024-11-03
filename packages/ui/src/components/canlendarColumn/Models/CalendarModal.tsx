@@ -2,42 +2,19 @@
 
 import * as React from "react";
 import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
 import {
 	Dialog,
 	DialogContent,
-	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from "../../ui/dialog";
-import { DataEvents, Tag } from "../CalendarColumnFull";
-import { Textarea } from "../../ui/textarea";
-import { ChevronDownIcon } from "lucide-react";
-import { Checkbox } from "../../ui/checkbox";
-import { formatDateTimeLocal } from "../../data-formater/dataformater";
+import { DataEvents } from "../CalendarColumnFull";
 import { configModal } from "./configModal";
-import { text } from "stream/consumers";
 import { ControlledForm } from "../../form-builder/ControlledForm";
-// import { useCalendarForm } from "./useCalendarModal.hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { modalFields, ModalFields } from "./modalFields";
 import { DevTool } from "@hookform/devtools";
-
-const colors = [
-	"#FF0000",
-	"#FFA500",
-	"#FFFF00",
-	"#008000",
-	"#0000FF",
-	"#4B0082",
-	"#EE82EE",
-	"#A52A2A",
-	"#3c5d92",
-	"#6d7b92",
-	"#00FFFF",
-	"#FFD700",
-];
+import { z } from "zod";
 
 const texts = {
 	EN: {
@@ -54,6 +31,9 @@ const texts = {
 		Color: "",
 		tagName: "Add Tag",
 		allDays: "All Day Event", // Add this line
+		error: {
+			title: "title is required to have +3 characters",
+		},
 	},
 	PT: {
 		buttonCancel: "Cancelar",
@@ -69,8 +49,24 @@ const texts = {
 		Color: "",
 		tagName: "Adicionar Tag",
 		allDays: "Evento Dia Todo", // Add this line
+		error: {
+			title: "Nome é obrigatório e deve ter pelo menos 3 caracteres",
+		},
 	},
 } as const;
+
+export const modalFields = z.object({
+	id: z.string().optional(),
+	titleEvent: z.string().min(1, { message: texts.EN.error.title }),
+	textAreaLabel: z.string().optional(),
+	tagName: z.string().optional(),
+	allDays: z.boolean().optional(),
+	StartDate: z.string().min(1, { message: "Start date please" }),
+	EndDate: z.string().optional(),
+	Color: z.string(),
+});
+
+export type ModalFields = z.infer<typeof modalFields>;
 
 const getLabels = (language: keyof typeof texts) => ({
 	titleEvent: texts[language].titleEvent,

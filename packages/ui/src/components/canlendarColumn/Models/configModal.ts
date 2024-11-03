@@ -1,5 +1,5 @@
 import { ConfigObject } from "../../form-builder/ControlledInput"; // Ensure the import is correct
-import { ModalFields } from "./modalFields"; // Ensure ModalFields is imported correctly
+import { ModalFields } from "./CalendarModal";
 
 // Define the type for modal fields including the checkbox
 interface ConfigModalFields {
@@ -16,7 +16,7 @@ interface ConfigModalFields {
 export const configModal = (
 	labels: ConfigModalFields,
 	isAllDay: boolean,
-): ConfigObject<ModalFields> => ({
+): ConfigObject<Omit<ModalFields, "id">> => ({
 	titleEvent: {
 		name: "titleEvent",
 		input: "text",
