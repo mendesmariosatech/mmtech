@@ -1,13 +1,12 @@
 import { afterAll, describe, expect, test, jest } from "@jest/globals";
 import { testClient } from "hono/testing";
-import { authRoute } from "./auth";
 import { RegisterFields } from "@repo/zod-types";
 import { createId } from "@paralleldrive/cuid2";
 import { deleteDB } from "../tests/setup";
-import { JWTPayload } from "hono/utils/jwt/types";
+import { authRouter } from ".";
 
 const newUniqueDate = createId();
-const testEmail = newUniqueDate + "validemailtest@email.com";
+const testEmail = newUniqueDate + "+validemailtest@email.com";
 const testPassword = "12312349090ASAKkdk";
 
 jest.mock("../../jwt_token", () => {
@@ -27,7 +26,8 @@ describe("New User - POST /auth/register", () => {
 		await deleteDB.deleteTableAuth();
 	});
 	test("User can register using a new email and valid password and will return the auth token and the user info", async () => {
-		const data = await createTestUser({});
+		const createUserResponse = await createTestUser({});
+		const data = await createUserResponse.json();
 
 		if ("error" in data) {
 			throw new Error(data.error);
@@ -37,17 +37,23 @@ describe("New User - POST /auth/register", () => {
 		expect(data.data.token).toBe("123");
 
 		const secondResp = await createTestUser({});
-		expect("error" in secondResp).toBe(true);
+		const secondRespData = await secondResp.json();
+
+		expect("error" in secondRespData).toBe(true);
 	});
 
 	test("User cannot register with an invalid email format", async () => {
-		const data = await createTestUser({ email: "invalid-email" });
+		const response = await createTestUser({ email: "invalid-email" });
+
+		const data = await response.json();
 		expect("error" in data).toBe(true);
 	});
 
 	test("User cannot register with a password that is too short", async () => {
 		const data = await createTestUser({ password: "123" });
-		expect("error" in data).toBe(true);
+		const response = await data.json();
+
+		expect("error" in response).toBe(true);
 	});
 });
 
@@ -59,20 +65,24 @@ describe("Login - POST /auth/login", () => {
 		const newEmail = newUniqueDate + "alex@gmail.com";
 		const password = "123ASDADD";
 
-		const data = await createTestUser({
+		const createTestUserResp = await createTestUser({
 			email: newEmail,
 			password,
 		});
+
+		const data = await createTestUserResp.json();
 
 		if ("error" in data) {
 			throw new Error(data.error);
 		}
 		expect("data" in data).toStrictEqual(true);
 
-		const loginResp = await loginTestUser({
+		const resp = await loginTestUser({
 			email: newEmail,
 			password,
 		});
+
+		const loginResp = await resp.json();
 
 		if ("error" in loginResp) {
 			throw new Error(loginResp.error);
@@ -87,7 +97,45 @@ describe("Login - POST /auth/login", () => {
 			email: "nonexistent@example.com",
 			password: "password123",
 		});
-		expect("error" in loginResp).toBe(true);
+		const loginData = await loginResp.json();
+
+		expect("error" in loginData).toBe(true);
+	});
+});
+
+describe("Logout - DELETE /auth/logout", () => {
+	afterAll(async () => {
+		await deleteDB.deleteTableAuth();
+	});
+	test("User can logout", async () => {
+		const newEmail = newUniqueDate + "alex@gmail.com";
+
+		const createTestUserResp = await createTestUser({
+			email: newEmail,
+		});
+
+		const data = await createTestUserResp.json();
+
+		if ("error" in data) {
+			throw new Error(data.error);
+		}
+
+		const response = await loginTestUser({
+			email: newEmail,
+		});
+
+		const loginResp = await response.json();
+
+		if ("error" in loginResp) {
+			throw new Error(loginResp.error);
+		}
+
+		expect("data" in loginResp).toStrictEqual(true);
+		expect(loginResp.data.email).toBe(newEmail);
+
+		const logoutResp = await testClient(authRouter).auth.logout.$delete();
+
+		expect(logoutResp.status).toBe(200);
 	});
 });
 
@@ -105,11 +153,11 @@ async function createTestUser({
 		phone: "1233238274347",
 		agreeTerms: true,
 	};
-	const resp = await testClient(authRoute).register.$post({
+	const resp = await testClient(authRouter).auth.register.$post({
 		json: user,
 	});
 
-	return resp.json();
+	return resp;
 }
 
 async function loginTestUser({
@@ -119,12 +167,12 @@ async function loginTestUser({
 	email?: string;
 	password?: string;
 }) {
-	const resp = await testClient(authRoute).login.$post({
+	const resp = await testClient(authRouter).auth.login.$post({
 		json: {
 			email,
 			password,
 		},
 	});
 
-	return resp.json();
+	return resp;
 }
