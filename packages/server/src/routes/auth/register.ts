@@ -6,6 +6,7 @@ import { hashPassword } from "../../utils/bcrypt";
 import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
+import { AppRouteHandler } from "../../base/type";
 
 export const registerSpec = createRoute({
 	method: "post",
@@ -55,9 +56,8 @@ export const registerSpec = createRoute({
 
 type RegisterRoute = typeof registerSpec;
 
-export const registerHandler: RouteHandler<RegisterRoute> = async (c) => {
-	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL, JWT_SECRET_KEY } =
-		env<ENV_TYPES>(c);
+export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
+	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL, JWT_SECRET_KEY } = env(c);
 	// get the ENV variable from a zod validator
 	// if (!TURSO_CONNECTION_URL || !TURSO_AUTH_TOKEN) {
 	//   return c.json({ error: "No ENV file" }, 500);

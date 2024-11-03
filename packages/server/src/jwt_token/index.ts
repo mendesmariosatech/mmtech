@@ -11,7 +11,17 @@ export async function generateToken(payload: ClientToken, secret: string) {
 	return token;
 }
 
-export async function decodeToken(token: string, secret: string) {
-	const decoded = verify(token, secret);
-	return decoded;
+type JWTDecoded = Awaited<ReturnType<typeof verify>> & ClientToken;
+
+export async function decodeToken(
+	token: string,
+	secret: string,
+): Promise<JWTDecoded> {
+	const decoded = await verify(token, secret);
+	return {
+		...decoded,
+		authId: decoded.authId as string,
+		clientId: decoded.clientId as string,
+		businessId: decoded.businessId as string,
+	};
 }

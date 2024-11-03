@@ -23,8 +23,9 @@ jest.mock("../../jwt_token", () => {
 		generateToken: jest.fn().mockReturnValue(Promise.resolve("123")),
 		decodeToken: jest.fn().mockReturnValue(
 			Promise.resolve({
-				jwtPayload: "Token123",
-				email: "email@gmail.com",
+				authId: "AU_123",
+				clientId: "CL_123",
+				businessId: "BU_123",
 			}),
 		),
 	};
@@ -72,7 +73,7 @@ describe("Calendar Tests", () => {
 
 			const data = await evenetResponse.json();
 
-			expect(evenetResponse.status).toBe(200);
+			expect(evenetResponse.status).toBe(201);
 			expect(data.id).toBeDefined();
 		});
 	});

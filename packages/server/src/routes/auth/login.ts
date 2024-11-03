@@ -7,6 +7,7 @@ import { checkPassword } from "../../utils/bcrypt";
 import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
+import { AppRouteHandler } from "../../base/type";
 
 export const loginSpec = createRoute({
 	method: "post",
@@ -77,14 +78,14 @@ export const loginSpec = createRoute({
 
 type LoginRoute = typeof loginSpec;
 
-export const loginHandler: RouteHandler<LoginRoute> = async (c) => {
+export const loginHandler: AppRouteHandler<LoginRoute> = async (c) => {
 	const form = c.req.valid("json");
 	const {
 		TURSO_AUTH_TOKEN,
 		TURSO_CONNECTION_URL,
 		COOkIE_SECRET_KEY,
 		JWT_SECRET_KEY,
-	} = env<ENV_TYPES>(c);
+	} = env(c);
 
 	if (!form) return c.json({ error: "Invalid form data" }, 400);
 
@@ -99,7 +100,20 @@ export const loginHandler: RouteHandler<LoginRoute> = async (c) => {
 	if (!doesPasswordMatch)
 		return c.json({ error: "Password does not match" }, 403);
 
-	const token = await generateToken(user, JWT_SECRET_KEY);
+	// look for client profile
+	// const client = await Auth.findClient(user.id);
+
+	// look for business
+	// const business = await Auth.findBusiness(user.businessId);
+
+	const token = await generateToken(
+		{
+			clientId: user.id,
+			authId: user.id,
+			businessId: user.email,
+		},
+		JWT_SECRET_KEY,
+	);
 
 	setCookie(c, COOKIES.USER_ID, user.email);
 	setCookie(c, COOKIES.USER_TOKEN, token);

@@ -1,6 +1,10 @@
 import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
+import { EventTable } from "./event.dto";
+import { ENV_TYPES } from "@repo/zod-types";
+import { env } from "hono/adapter";
+import { AppRouteHandler } from "../../base/type";
 
 export const createEventSpec = createRoute({
 	method: "post",
@@ -54,10 +58,10 @@ type Variables = {
 	businessId?: string;
 };
 
-export const createEventHandler: RouteHandler<
-	CreateEventRoute,
-	{ Variables: Variables }
-> = async (c) => {
+export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
+	c,
+) => {
+	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
 	// if the person is not authenticated don't even reach here
 	// if the person is not a business customer don't reach here
 	const token = c.get("jwtPayload");
@@ -69,7 +73,19 @@ export const createEventHandler: RouteHandler<
 		return c.json({ error: "Not authorized" }, 403);
 	}
 
+	// get the business id from the token
+	// get the client id from the token
+	// get the auth id from the token
+
+	// if no business return
+	// if no client return
+
+	// create the new event
+
 	const { title, date } = c.req.valid("json");
+
+	// how to create a new event
+	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
 	return c.json(
 		{

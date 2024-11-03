@@ -232,3 +232,5 @@ export const InsertEventSchema = createInsertSchema(eventTable, {
 	createdAt: true,
 	updateAt: true,
 });
+
+export type InsertEvent = typeof eventTable.$inferInsert;

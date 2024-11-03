@@ -10,14 +10,23 @@ export const authMiddleware = createMiddleware(async (c, next) => {
 
 	if (!token) return c.json({ error: "Unauthorized" }, 401);
 
-	console.log("token", token);
-
+	console.log("Frontend will be sending this:", token);
 	const [decoded, error] = await safeAwait(decodeToken(token, JWT_SECRET_KEY));
 
+	console.log("Decoded", token);
 	if (!decoded || error) return c.json({ error: "Unauthorized" }, 401);
 
 	c.set("jwtPayload", decoded.jwtPayload);
-	c.set("email", decoded.email);
+	c.set("clientId", decoded.clientId);
+	c.set("businessId", decoded.businessId);
+	c.set("authId", decoded.authId);
+
+	console.log({
+		decoded,
+		decodedClientId: decoded.clientId,
+		decodedBusinessId: decoded.businessId,
+		decodedAuthId: decoded.authId,
+	});
 
 	await next();
 });
