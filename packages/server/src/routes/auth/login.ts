@@ -25,7 +25,7 @@ export const loginSpec = createRoute({
 							emailConfirmedAt: z.string().nullable(),
 							deletedAt: z.string().nullable(),
 							createdAt: z.string(),
-							updateAt: z.string().nullable(),
+							updatedAt: z.string().nullable(),
 						}),
 					}),
 				},
