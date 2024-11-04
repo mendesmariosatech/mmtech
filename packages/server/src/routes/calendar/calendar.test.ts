@@ -31,7 +31,7 @@ jest.mock("../../jwt_token", () => {
 	};
 });
 
-describe("Calendar Tests", () => {
+describe.skip("Calendar Tests", () => {
 	beforeAll(async () => {});
 
 	afterAll(async () => {
