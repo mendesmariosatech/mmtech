@@ -7,16 +7,7 @@ export class EventTable extends DBConnection {
 	}
 
 	public async createEvent(args: InsertEvent) {
-		const [event] = await this.db
-			.insert(eventTable)
-			.values({
-				date: args.date,
-				time: args.time,
-				title: args.title,
-				business_id: args.business_id,
-				client_creator: args.client_creator,
-			})
-			.returning();
+		const [event] = await this.db.insert(eventTable).values(args).returning();
 
 		return event;
 	}
