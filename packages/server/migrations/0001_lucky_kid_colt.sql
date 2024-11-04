@@ -1,1 +1,0 @@
-ALTER TABLE `auth` RENAME COLUMN `password_digest` TO `password`;

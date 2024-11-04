@@ -129,7 +129,7 @@ export const eventTable = sqliteTable("event", {
 	clientId: text("client_id")
 		.references(() => clientTable.id, { onDelete: "cascade" })
 		.notNull(),
-	business_id: text("business_id")
+	businessId: text("business_id")
 		.references(() => businessTable.id, { onDelete: "cascade" })
 		.notNull(),
 	addressId: text("address_id").references(() => addressTable.id, {
@@ -152,7 +152,7 @@ export const eventRelations = relations(eventTable, ({ one }) => ({
 		references: [clientTable.id],
 	}),
 	business: one(businessTable, {
-		fields: [eventTable.business_id],
+		fields: [eventTable.businessId],
 		references: [businessTable.id],
 	}),
 	address: one(addressTable, {
@@ -250,7 +250,7 @@ export const InsertEventSchema = createInsertSchema(eventTable, {
 }).omit({
 	id: true,
 	createdAt: true,
-	updateAt: true,
+	updatedAt: true,
 });
 
 export type InsertEvent = typeof eventTable.$inferInsert;

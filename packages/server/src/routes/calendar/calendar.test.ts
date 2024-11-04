@@ -53,9 +53,9 @@ describe.skip("Calendar Tests", () => {
 			).calendar.events.$post(
 				{
 					json: {
-						business_id: "BU_123",
+						businessId: "BU_123",
 						title: "Event Title",
-						client_creator: "CL_123",
+						clientId: "CL_123",
 						date: new Date().toString(),
 					},
 				},
