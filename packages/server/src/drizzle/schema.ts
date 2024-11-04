@@ -9,7 +9,7 @@ const genEntityId = (initials: string) =>
 
 export const authTable = sqliteTable("auth", {
 	id: text("id", { length: 128 })
-		.$defaultFn(() => genEntityId("AU") + createId())
+		.$defaultFn(() => genEntityId("AU"))
 		.primaryKey(),
 	name: text("name").notNull(),
 	passwordDigest: text("password_digest").notNull(),
@@ -18,7 +18,7 @@ export const authTable = sqliteTable("auth", {
 	emailConfirmedAt: integer("email_confirmed_at", { mode: "timestamp" }),
 	deletedAt: integer("deleted_at", { mode: "timestamp" }),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
 });
@@ -28,13 +28,13 @@ export type SelectAuth = typeof authTable.$inferSelect;
 
 export const clientTable = sqliteTable("client", {
 	id: text("id", { length: 128 })
-		.$defaultFn(() => genEntityId(`CL`))
+		.$defaultFn(() => genEntityId("CL"))
 		.primaryKey(),
 	authId: text("auth_id")
 		.references(() => authTable.id, { onDelete: "cascade" })
 		.notNull(),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
 });
@@ -51,13 +51,13 @@ export type SelectClient = typeof clientTable.$inferSelect;
 
 export const customer = sqliteTable("customer", {
 	id: text("id", { length: 128 })
-		.$defaultFn(() => genEntityId(`CU`))
+		.$defaultFn(() => genEntityId("CU"))
 		.primaryKey(),
 	authId: text("auth_id").references(() => authTable.id, {
 		onDelete: "cascade",
 	}),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
 });
@@ -77,12 +77,12 @@ export const businessTable = sqliteTable("business", {
 		.references(() => clientTable.id, { onDelete: "cascade" })
 		.notNull(),
 	name: text("name").notNull(),
-	address: text("address").references(() => addressTable.id, {
+	addressId: text("address_id").references(() => addressTable.id, {
 		onDelete: "cascade",
 	}),
 	description: text("description"),
-	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+	createdAt: integer("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
 });
@@ -96,15 +96,15 @@ export const businessRelations = relations(businessTable, ({ one }) => ({
 
 export const eventTable = sqliteTable("event", {
 	id: text("id", { length: 128 })
-		.$defaultFn(() => genEntityId(`EV`))
+		.$defaultFn(() => genEntityId("EV"))
 		.primaryKey(),
-	client_creator: text("client_id")
+	clientId: text("client_id")
 		.references(() => clientTable.id, { onDelete: "cascade" })
 		.notNull(),
 	business_id: text("business_id")
 		.references(() => businessTable.id, { onDelete: "cascade" })
 		.notNull(),
-	address: text("address").references(() => addressTable.id, {
+	addressId: text("address_id").references(() => addressTable.id, {
 		onDelete: "cascade",
 	}),
 	title: text("title").notNull(),
@@ -113,29 +113,29 @@ export const eventTable = sqliteTable("event", {
 	time: integer("time"),
 	location: text("location"),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
 });
 
 export const eventRelations = relations(eventTable, ({ one }) => ({
 	client: one(clientTable, {
-		fields: [eventTable.client_creator],
+		fields: [eventTable.clientId],
 		references: [clientTable.id],
 	}),
 	business: one(businessTable, {
 		fields: [eventTable.business_id],
 		references: [businessTable.id],
 	}),
-	addres: one(addressTable, {
-		fields: [eventTable.address],
+	address: one(addressTable, {
+		fields: [eventTable.addressId],
 		references: [addressTable.id],
 	}),
 }));
 
 export const customerAttendeeTable = sqliteTable("customer_attendee", {
 	id: text("id", { length: 128 })
-		.$defaultFn(() => genEntityId(`CA`))
+		.$defaultFn(() => genEntityId("CA"))
 		.primaryKey(),
 	customerId: text("customer_id")
 		.references(() => customer.id, { onDelete: "cascade" })
@@ -144,7 +144,7 @@ export const customerAttendeeTable = sqliteTable("customer_attendee", {
 		.references(() => eventTable.id, { onDelete: "cascade" })
 		.notNull(),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
 });
@@ -165,7 +165,7 @@ export const customerAttendeeRelations = relations(
 
 export const businessCustomers = sqliteTable("business_customers", {
 	id: text("id", { length: 128 })
-		.$defaultFn(() => genEntityId(`BC`))
+		.$defaultFn(() => genEntityId("BC"))
 		.primaryKey(),
 	businessId: text("business_id")
 		.references(() => businessTable.id, { onDelete: "cascade" })
@@ -174,7 +174,7 @@ export const businessCustomers = sqliteTable("business_customers", {
 		.references(() => customer.id, { onDelete: "cascade" })
 		.notNull(),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
 });
@@ -195,16 +195,26 @@ export const businessCustomersRelations = relations(
 
 export const addressTable = sqliteTable("address", {
 	id: text("id", { length: 128 })
-		.$defaultFn(() => genEntityId(`AD`))
+		.$defaultFn(() => genEntityId("AD"))
 		.primaryKey(),
 	streetAddress: text("street_address").notNull(),
 	complement: text("complement"),
 	stateOrProvince: text("state_or_province").notNull(),
 	city: text("city").notNull(),
 	postalCode: text("postal_code").notNull(),
-	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
 	country: text("country").notNull(),
-	updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
 });
+
+export const addressRelations = relations(addressTable, ({ one }) => ({
+	businesses: one(businessTable, {
+		fields: [addressTable.id],
+		references: [businessTable.addressId],
+	}),
+	events: one(eventTable, {
+		fields: [addressTable.id],
+		references: [eventTable.addressId],
+	}),
+}));

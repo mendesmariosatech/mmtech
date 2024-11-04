@@ -5,7 +5,6 @@ CREATE TABLE `address` (
 	`state_or_province` text NOT NULL,
 	`city` text NOT NULL,
 	`postal_code` text NOT NULL,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`country` text NOT NULL,
 	`updated_at` integer
 );
@@ -36,12 +35,12 @@ CREATE TABLE `business` (
 	`id` text(128) PRIMARY KEY NOT NULL,
 	`client_id` text NOT NULL,
 	`name` text NOT NULL,
-	`address` text,
+	`address_id` text,
 	`description` text,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`created_at` integer DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updated_at` integer,
 	FOREIGN KEY (`client_id`) REFERENCES `client`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`address`) REFERENCES `address`(`id`) ON UPDATE no action ON DELETE cascade
+	FOREIGN KEY (`address_id`) REFERENCES `address`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `client` (
@@ -74,7 +73,7 @@ CREATE TABLE `event` (
 	`id` text(128) PRIMARY KEY NOT NULL,
 	`client_id` text NOT NULL,
 	`business_id` text NOT NULL,
-	`address` text,
+	`address_id` text,
 	`title` text NOT NULL,
 	`description` text,
 	`date` integer NOT NULL,
@@ -84,7 +83,7 @@ CREATE TABLE `event` (
 	`updated_at` integer,
 	FOREIGN KEY (`client_id`) REFERENCES `client`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`business_id`) REFERENCES `business`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`address`) REFERENCES `address`(`id`) ON UPDATE no action ON DELETE cascade
+	FOREIGN KEY (`address_id`) REFERENCES `address`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `auth_email_unique` ON `auth` (`email`);

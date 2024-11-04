@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "4902ed64-9aef-4f5c-9351-eb19c92c68da",
+  "id": "8cc67870-f7ea-4f01-9bdf-522b1e12b496",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "address": {
@@ -48,14 +48,6 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
         },
         "country": {
           "name": "country",
@@ -254,8 +246,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "address": {
-          "name": "address",
+        "address_id": {
+          "name": "address_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -270,7 +262,7 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
@@ -299,12 +291,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "business_address_address_id_fk": {
-          "name": "business_address_address_id_fk",
+        "business_address_id_address_id_fk": {
+          "name": "business_address_id_address_id_fk",
           "tableFrom": "business",
           "tableTo": "address",
           "columnsFrom": [
-            "address"
+            "address_id"
           ],
           "columnsTo": [
             "id"
@@ -516,8 +508,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "address": {
-          "name": "address",
+        "address_id": {
+          "name": "address_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -602,12 +594,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "event_address_address_id_fk": {
-          "name": "event_address_address_id_fk",
+        "event_address_id_address_id_fk": {
+          "name": "event_address_id_address_id_fk",
           "tableFrom": "event",
           "tableTo": "address",
           "columnsFrom": [
-            "address"
+            "address_id"
           ],
           "columnsTo": [
             "id"
