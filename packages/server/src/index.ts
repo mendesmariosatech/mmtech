@@ -1,21 +1,19 @@
 import { handle } from "hono/vercel";
-import { app } from "./base/base-app";
-import { authRoute } from "./routes/auth/auth";
+import { base_api_path, app } from "./base/base-app";
 import { hc } from "hono/client";
-import { personalRoute } from "./routes/personal/me";
-import { secret } from "./routes/secret/routeTest";
-import { swaggerUI } from "@hono/swagger-ui";
+import { authRouter } from "./routes/auth";
+import { withOpenApi } from "./base/withOpenApi";
+import { personalRouter } from "./routes/personal";
 
 const route = app
-	.get("/", (c) => c.text("Hello Hono!"))
-	.route("/auth", authRoute)
-	.route("/personal", personalRoute)
-	.route("/private/secret", secret);
+	.basePath(base_api_path)
+	.get("/", (c) => c.text("Your API is working!"))
+	.route("/", authRouter)
+	.route("/", personalRouter);
 
-app.get("/ui", swaggerUI({ urls: "api/docs" }));
+withOpenApi(app);
+
 export default app;
 export { handle, hc };
-
-// front ou o backend que deveria se preocupar com o endereço da URL
 
 export type AppType = typeof route;
