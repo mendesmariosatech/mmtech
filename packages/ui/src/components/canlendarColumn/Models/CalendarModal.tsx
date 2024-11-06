@@ -61,8 +61,8 @@ export const modalFields = z.object({
 	textAreaLabel: z.string().optional(),
 	tagName: z.string().optional(),
 	allDays: z.boolean().optional(),
-	StartDate: z.string().min(1, { message: "Start date please" }),
-	EndDate: z.string().optional(),
+	StartDate: z.union([z.date(), z.string().datetime()]), // Permite string ou Date
+	EndDate: z.union([z.date(), z.string().datetime()]).optional(),
 	Color: z.string(),
 });
 
@@ -88,17 +88,17 @@ interface CalendarModalProps {
 	onDeleteEvent?: (eventId: string) => void;
 }
 
-export const useCalendarForm = () =>
+export const useCalendarForm = (events: DataEvents | null) =>
 	useForm<ModalFields>({
 		resolver: zodResolver(modalFields),
 		defaultValues: {
-			titleEvent: "",
-			textAreaLabel: "",
-			tagName: "",
-			allDays: false,
-			StartDate: "",
-			EndDate: "",
-			Color: "#6d7b92",
+			titleEvent: events?.title || "",
+			textAreaLabel: events?.description || "",
+			tagName: events?.tag[0]?.name || "",
+			allDays: events?.allDay || false,
+			StartDate: events?.start ? new Date(events.start) : undefined,
+			EndDate: events?.end ? new Date(events.end) : undefined,
+			Color: events?.tag[0]?.color || "#6d7b92",
 		},
 	});
 
@@ -112,7 +112,26 @@ export function CalendarModal({
 	onDeleteEvent,
 }: CalendarModalProps) {
 	const modalConfig = configModal(getLabels(language), true);
-	const form = useCalendarForm();
+
+	const form = useCalendarForm(event);
+	console.log(event);
+	React.useEffect(() => {
+		if (event) {
+			form.reset({
+				titleEvent: event.title || "",
+				textAreaLabel: event.description || "",
+				tagName: event.tag[0]?.name || "",
+				allDays: event.allDay || false,
+				StartDate: event.start
+					? new Date(event.start).toISOString().slice(0, 16)
+					: "",
+				EndDate: event.end
+					? new Date(event.end).toISOString().slice(0, 16)
+					: "",
+				Color: event.tag[0]?.color || "#6d7b92",
+			});
+		}
+	}, [event, form]);
 
 	const handleSave = (input: ModalFields) => {
 		if (input && input.id) {
