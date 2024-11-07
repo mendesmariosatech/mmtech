@@ -1,8 +1,7 @@
-import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
+import { createRoute, z } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./event.dto";
-import { ENV_TYPES } from "@repo/zod-types";
 import { env } from "hono/adapter";
 import { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
