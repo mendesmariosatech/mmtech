@@ -1,4 +1,4 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./event.dto";
@@ -33,7 +33,9 @@ export const createEventSpec = createRoute({
 			description: "Event Created",
 			content: {
 				"application/json": {
-					schema: SelectEventSchema,
+					schema: z.object({
+						data: SelectEventSchema,
+					}),
 				},
 			},
 		},
@@ -89,5 +91,5 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		return c.json({ error: "Event not created" }, 403);
 	}
 
-	return c.json(newEvent, 201);
+	return c.json({ data: newEvent }, 201);
 };

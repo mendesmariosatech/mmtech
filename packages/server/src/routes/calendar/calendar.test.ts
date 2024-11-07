@@ -74,7 +74,7 @@ describe.skip("Calendar Tests", () => {
 			const data = await evenetResponse.json();
 
 			expect(evenetResponse.status).toBe(201);
-			expect(data.id).toBeDefined();
+			expect(data.data).toBeDefined();
 		});
 	});
 

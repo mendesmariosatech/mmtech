@@ -4,6 +4,7 @@ import { withOpenApi } from "./base/withOpenApi";
 import { personalRouter } from "./routes/personal";
 import { calendarRouter } from "./routes/calendar";
 import { businessRouter } from "./routes/business";
+import { logger } from "hono/logger";
 
 const route = app
 	.basePath(base_api_path) // in order to work with Next.js API routes
@@ -12,6 +13,8 @@ const route = app
 	.route("/", businessRouter)
 	.route("/", calendarRouter)
 	.route("/", personalRouter);
+
+app.use(logger());
 
 withOpenApi(app);
 
