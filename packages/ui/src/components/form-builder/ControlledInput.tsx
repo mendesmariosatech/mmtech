@@ -35,7 +35,6 @@ type CheckBox<D extends FieldValues> = {
 	name: FieldPath<D>;
 	input: "checkbox";
 	checkboxLabel: string;
-	value: boolean;
 } & FormConfig;
 
 type DropdownOptions = {
@@ -111,7 +110,7 @@ export const ControlledInput = <D extends FieldValues>(
 							</>
 						) : props.input === "checkbox" ? (
 							<FormControl>
-								<div className="flex items-center space-x-2 pl-2 py-2">
+								<>
 									<Checkbox
 										id={field.name}
 										checked={field.value}
@@ -123,7 +122,7 @@ export const ControlledInput = <D extends FieldValues>(
 									>
 										{props.checkboxLabel}
 									</Label>
-								</div>
+								</>
 							</FormControl>
 						) : props.input === "textarea" ? ( // Handle textarea input
 							<FormControl>

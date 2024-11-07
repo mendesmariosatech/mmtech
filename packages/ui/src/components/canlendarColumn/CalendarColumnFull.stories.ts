@@ -23,8 +23,8 @@ const DataEvents = [
 	{
 		id: "2",
 		title: "Lunch with Friends",
-		start: new Date(2024, 9, 21),
-		end: null,
+		start: new Date(2024, 9, 21, 12, 30),
+		end: new Date(2024, 9, 21, 13, 30),
 		description: "Discuss project progress",
 		tag: [],
 	},
