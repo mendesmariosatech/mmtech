@@ -6,13 +6,14 @@ CREATE TABLE `address` (
 	`city` text NOT NULL,
 	`postal_code` text NOT NULL,
 	`country` text NOT NULL,
+	`created_at` integer DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updated_at` integer
 );
 --> statement-breakpoint
 CREATE TABLE `auth` (
 	`id` text(128) PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
-	`password_digest` text NOT NULL,
+	`password` text NOT NULL,
 	`email` text NOT NULL,
 	`phone` text,
 	`email_confirmed_at` integer,
@@ -25,7 +26,7 @@ CREATE TABLE `business_customers` (
 	`id` text(128) PRIMARY KEY NOT NULL,
 	`business_id` text NOT NULL,
 	`customer_id` text NOT NULL,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`created_at` integer DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updated_at` integer,
 	FOREIGN KEY (`business_id`) REFERENCES `business`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`customer_id`) REFERENCES `customer`(`id`) ON UPDATE no action ON DELETE cascade

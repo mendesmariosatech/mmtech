@@ -1,6 +1,7 @@
 import { createId } from "@paralleldrive/cuid2";
-import { name, relations, sql } from "drizzle-orm";
+import { not, relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 const Initial = z.string().min(2).max(2).toUpperCase();
@@ -12,7 +13,7 @@ export const authTable = sqliteTable("auth", {
 		.$defaultFn(() => genEntityId("AU"))
 		.primaryKey(),
 	name: text("name").notNull(),
-	passwordDigest: text("password_digest").notNull(),
+	password: text("password").notNull(),
 	email: text("email").unique().notNull(),
 	phone: text("phone"),
 	emailConfirmedAt: integer("email_confirmed_at", { mode: "timestamp" }),
@@ -21,6 +22,13 @@ export const authTable = sqliteTable("auth", {
 	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
+});
+
+export const RegisterFields = createInsertSchema(authTable).pick({
+	name: true,
+	email: true,
+	password: true,
+	phone: true,
 });
 
 export type InsertAuth = typeof authTable.$inferInsert;
@@ -72,7 +80,8 @@ export const customerRelations = relations(customer, ({ one }) => ({
 export const businessTable = sqliteTable("business", {
 	id: text("id", { length: 128 })
 		.$defaultFn(() => genEntityId("BS"))
-		.primaryKey(),
+		.primaryKey()
+		.notNull(),
 	clientId: text("client_id")
 		.references(() => clientTable.id, { onDelete: "cascade" })
 		.notNull(),
@@ -86,6 +95,25 @@ export const businessTable = sqliteTable("business", {
 		() => new Date(),
 	),
 });
+
+export const CreateBusinessSchema = createInsertSchema(businessTable).pick({
+	name: true,
+	clientId: true,
+	description: true,
+});
+
+const SelectedSchema = createSelectSchema(businessTable).pick({
+	clientId: true,
+});
+
+export type CreateBusinessSchema = z.infer<typeof CreateBusinessSchema>;
+
+export const GetBusinessSchema = createSelectSchema(businessTable).pick({
+	name: true,
+	id: true,
+});
+
+export type CreateBusiness = z.infer<typeof CreateBusinessSchema>;
 
 export const businessRelations = relations(businessTable, ({ one }) => ({
 	client: one(clientTable, {
@@ -101,7 +129,7 @@ export const eventTable = sqliteTable("event", {
 	clientId: text("client_id")
 		.references(() => clientTable.id, { onDelete: "cascade" })
 		.notNull(),
-	business_id: text("business_id")
+	businessId: text("business_id")
 		.references(() => businessTable.id, { onDelete: "cascade" })
 		.notNull(),
 	addressId: text("address_id").references(() => addressTable.id, {
@@ -124,7 +152,7 @@ export const eventRelations = relations(eventTable, ({ one }) => ({
 		references: [clientTable.id],
 	}),
 	business: one(businessTable, {
-		fields: [eventTable.business_id],
+		fields: [eventTable.businessId],
 		references: [businessTable.id],
 	}),
 	address: one(addressTable, {
@@ -173,7 +201,7 @@ export const businessCustomers = sqliteTable("business_customers", {
 	customerId: text("customer_id")
 		.references(() => customer.id, { onDelete: "cascade" })
 		.notNull(),
-	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+	createdAt: integer("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
 	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
@@ -203,18 +231,26 @@ export const addressTable = sqliteTable("address", {
 	city: text("city").notNull(),
 	postalCode: text("postal_code").notNull(),
 	country: text("country").notNull(),
+	createdAt: integer("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
 	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
 	),
 });
 
-export const addressRelations = relations(addressTable, ({ one }) => ({
-	businesses: one(businessTable, {
-		fields: [addressTable.id],
-		references: [businessTable.addressId],
-	}),
-	events: one(eventTable, {
-		fields: [addressTable.id],
-		references: [eventTable.addressId],
-	}),
-}));
+export const SelectEventSchema = createSelectSchema(eventTable).pick({
+	id: true,
+	title: true,
+});
+
+const StringToDate = z.string().transform((date) => new Date(date));
+
+export const InsertEventSchema = createInsertSchema(eventTable, {
+	date: StringToDate,
+	time: StringToDate,
+}).omit({
+	id: true,
+	createdAt: true,
+	updatedAt: true,
+});
+
+export type InsertEvent = typeof eventTable.$inferInsert;

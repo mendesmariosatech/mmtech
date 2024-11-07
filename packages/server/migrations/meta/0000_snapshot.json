@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "8cc67870-f7ea-4f01-9bdf-522b1e12b496",
+  "id": "56e5c989-ab73-42b6-a5b1-2f141612557f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "address": {
@@ -56,6 +56,14 @@
           "notNull": true,
           "autoincrement": false
         },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "integer",
@@ -86,8 +94,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "password_digest": {
-          "name": "password_digest",
+        "password": {
+          "name": "password",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -174,7 +182,7 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
