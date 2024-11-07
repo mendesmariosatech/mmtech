@@ -3,6 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { authMiddleware } from "../middleware/authentication";
 import { createRoute, RouteHandler } from "@hono/zod-openapi";
+import { AppRouteHandler } from "../../base/type";
 
 export const personalRoute = createRoute({
 	method: "get",
@@ -43,7 +44,7 @@ export const personalRoute = createRoute({
 
 type PersonalRoute = typeof personalRoute;
 
-export const personalHandler: RouteHandler<PersonalRoute> = async (c) => {
+export const personalHandler: AppRouteHandler<PersonalRoute> = async (c) => {
 	return c.json(
 		{
 			data: {

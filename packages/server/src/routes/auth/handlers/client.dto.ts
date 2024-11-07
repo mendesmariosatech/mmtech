@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { DBConnection } from "../../../drizzle/drizzle-client";
 import {
 	clientTable,
@@ -25,5 +26,14 @@ export class ClientTable extends DBConnection {
 		if (!created) return [null, new Error("Failed to create new client")];
 
 		return [created, null];
+	}
+
+	public async findClientByAuth(authId: SelectClient["authId"]) {
+		const [client] = await this.db
+			.select()
+			.from(clientTable)
+			.where(eq(clientTable.authId, authId));
+
+		return client;
 	}
 }

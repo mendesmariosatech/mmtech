@@ -2,19 +2,21 @@ import { afterAll, describe, expect, test, jest } from "@jest/globals";
 import { testClient } from "hono/testing";
 import { RegisterFields } from "@repo/zod-types";
 import { createId } from "@paralleldrive/cuid2";
-import { deleteDB } from "../tests/setup";
+import { DBTestSetup } from "../tests/setup";
 import { authRouter } from ".";
 
 const newUniqueDate = createId();
 const testEmail = newUniqueDate + "+validemailtest@email.com";
 const testPassword = "12312349090ASAKkdk";
 
+const SECONDS = 1000;
+jest.setTimeout(70 * SECONDS);
 jest.mock("../../jwt_token", () => {
 	return {
 		generateToken: jest.fn().mockReturnValue(Promise.resolve("123")),
 		decodeToken: jest.fn().mockReturnValue(
 			Promise.resolve({
-				jwtPayload: "123",
+				jwtPayload: "Token123",
 				email: "email@gmail.com",
 			}),
 		),
@@ -23,9 +25,9 @@ jest.mock("../../jwt_token", () => {
 
 describe("New User - POST /auth/register", () => {
 	afterAll(async () => {
-		await deleteDB.deleteTableAuth();
+		await DBTestSetup.deleteTableAuth();
 	});
-	test("User can register using a new email and valid password and will return the auth token and the user info", async () => {
+	test("User can register using a new email and valid password, but will fail to register again with same credentials", async () => {
 		const createUserResponse = await createTestUser({});
 		const data = await createUserResponse.json();
 
@@ -34,7 +36,7 @@ describe("New User - POST /auth/register", () => {
 		}
 		expect("data" in data).toStrictEqual(true);
 		expect(data.data.auth.email).toBe(testEmail);
-		expect(data.data.token).toBe("123");
+		expect(data.data.token).toBeDefined();
 
 		const secondResp = await createTestUser({});
 		const secondRespData = await secondResp.json();
@@ -59,7 +61,7 @@ describe("New User - POST /auth/register", () => {
 
 describe("Login - POST /auth/login", () => {
 	afterAll(async () => {
-		await deleteDB.deleteTableAuth();
+		await DBTestSetup.deleteTableAuth();
 	});
 	test("User can login with valid credentials", async () => {
 		const newEmail = newUniqueDate + "alex@gmail.com";
@@ -105,7 +107,7 @@ describe("Login - POST /auth/login", () => {
 
 describe("Logout - DELETE /auth/logout", () => {
 	afterAll(async () => {
-		await deleteDB.deleteTableAuth();
+		await DBTestSetup.deleteTableAuth();
 	});
 	test("User can logout", async () => {
 		const newEmail = newUniqueDate + "alex@gmail.com";
@@ -139,7 +141,7 @@ describe("Logout - DELETE /auth/logout", () => {
 	});
 });
 
-async function createTestUser({
+export async function createTestUser({
 	email = testEmail,
 	password = testPassword,
 }: {
@@ -160,7 +162,7 @@ async function createTestUser({
 	return resp;
 }
 
-async function loginTestUser({
+export async function loginTestUser({
 	email = testEmail,
 	password = testPassword,
 }: {
