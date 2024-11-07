@@ -13,7 +13,6 @@ import { configModal } from "./configModal";
 import { ControlledForm } from "../../form-builder/ControlledForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 import { z } from "zod";
 
 const texts = {
@@ -140,7 +139,6 @@ export function CalendarModal({
 							: texts[language].modalTitleCreate}
 					</DialogTitle>
 				</DialogHeader>
-				<DevTool control={form.control} />
 				<ControlledForm
 					useForm={form}
 					config={modalConfig}

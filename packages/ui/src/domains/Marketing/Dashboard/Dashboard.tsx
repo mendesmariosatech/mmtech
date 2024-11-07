@@ -69,13 +69,21 @@ import { DashBoardData } from "@repo/data-testing/DashBoardData";
 import { Routes } from "@repo/data-testing/Routes";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@repo/hook-services";
+import { BusinessFormModal } from "@repo/ui/components/form-builder/Forms/CreateBusiness/CreateBusinessForm";
 
 export function Dashboard() {
 	const router = useRouter();
 	const logout = useLogout();
 
+	// if the user is does not have a bunsess, prompt to create one now
+
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
+			<BusinessFormModal
+				isPending={false}
+				error={null}
+				mutate={() => console.log("")}
+			/>
 			<SideBarStaticFormer
 				companyName={DashBoardData.companyName}
 				buttonTop={DashBoardData.buttonTop}
