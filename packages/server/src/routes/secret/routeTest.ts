@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { authMiddleware } from "../middleware/authentication";
+import { authMiddleware } from "../../middleware/authentication";
 
 export const secret = new Hono().use("*", authMiddleware).get("/", (c) => {
 	const message = c.get("jwtPayload");

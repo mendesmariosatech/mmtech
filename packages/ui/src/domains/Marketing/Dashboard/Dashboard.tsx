@@ -142,7 +142,7 @@ export function Dashboard() {
 							<DropdownMenuSeparator />
 							<DropdownMenuItem
 								onSelect={() => {
-									logout.mutate();
+									logout.mutateAsync();
 									router.push(Routes.client["/"]);
 								}}
 							>

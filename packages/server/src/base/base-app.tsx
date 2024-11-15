@@ -1,9 +1,9 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
+import { Hono } from "hono";
 
 // type Variables = JwtVariables
 // Compatible with the Next.JS 14 API routes
 export const base_api_path = "/api";
 
-export const app = new OpenAPIHono({
-	strict: false,
-});
+const app = new Hono().basePath(base_api_path);
+
+export { app };

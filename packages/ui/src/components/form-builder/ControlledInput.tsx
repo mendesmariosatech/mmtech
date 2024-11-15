@@ -21,14 +21,10 @@ import {
 	SelectValue,
 } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
-import { Textarea } from "../ui/textarea";
-import { Label } from "../ui/label";
 
 type FormConfig = {
 	label?: string;
 	description?: string;
-	placeholder?: string;
-	disabled?: boolean;
 };
 
 type CheckBox<D extends FieldValues> = {
@@ -47,30 +43,20 @@ type DropdownProps<D extends FieldValues> = {
 	input: "select";
 	options: DropdownOptions[];
 } & FormConfig;
+// & Omit<Props<{ label: string }>, "onChange">;
 
 type InputText<D extends FieldValues> = {
 	name: FieldPath<D>;
-	input: "text" | "date" | "datetime-local" | "color";
+	input: "text";
 } & InputProps &
 	FormConfig;
-//
-
-// Add the TextAreaInput type
-type TextAreaInput<D extends FieldValues> = {
-	name: FieldPath<D>;
-	input: "textarea"; // New type for textarea
-} & FormConfig;
 
 export type ConfigObject<D extends FieldValues> = {
-	[K in FieldPath<D>]:
-		| DropdownProps<D>
-		| InputText<D>
-		| CheckBox<D>
-		| TextAreaInput<D>;
+	[K in FieldPath<D>]: DropdownProps<D> | InputText<D> | CheckBox<D>;
 };
 
 type ControlledInputProps<D extends FieldValues> = UseFormReturn<D, any> &
-	(DropdownProps<D> | InputText<D> | CheckBox<D> | TextAreaInput<D>); // Include textarea here
+	(DropdownProps<D> | InputText<D> | CheckBox<D>);
 
 export const ControlledInput = <D extends FieldValues>(
 	props: ControlledInputProps<D>,
@@ -79,6 +65,7 @@ export const ControlledInput = <D extends FieldValues>(
 		<FormField
 			name={props.name}
 			control={props.control}
+			// TODO: Have a standard TextInput component
 			render={({ field }) => {
 				return (
 					<FormItem>
@@ -95,7 +82,7 @@ export const ControlledInput = <D extends FieldValues>(
 								>
 									<FormControl>
 										<SelectTrigger>
-											<SelectValue placeholder={props.placeholder} />
+											<SelectValue placeholder="Select a verified email to display" />
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
@@ -108,46 +95,23 @@ export const ControlledInput = <D extends FieldValues>(
 								</Select>
 								<FormMessage />
 							</>
-						) : props.input === "checkbox" ? (
+						) : (
 							<FormControl>
 								<>
 									<Checkbox
-										id={field.name}
+										id="terms"
 										checked={field.value}
 										onCheckedChange={field.onChange}
 									/>
-									<Label
-										htmlFor={field.name}
+									<label
+										htmlFor="terms"
 										className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 									>
 										{props.checkboxLabel}
-									</Label>
+									</label>
 								</>
 							</FormControl>
-						) : props.input === "textarea" ? ( // Handle textarea input
-							<FormControl>
-								<Textarea
-									{...field}
-									placeholder={props.placeholder}
-									className="textarea-class" // Add necessary classes
-								/>
-							</FormControl>
-						) : props.input === "color" ? ( // Handle color input
-							<FormControl>
-								<Input
-									{...field}
-									type="color" // Set the type to color
-									className="color-input-class" // Add necessary classes
-								/>
-							</FormControl> // Handle date or datetime-local input
-						) : props.input === "date" || props.input === "datetime-local" ? (
-							<FormControl>
-								<Input
-									{...field}
-									type={props.input} // "date" or "datetime-local"
-								/>
-							</FormControl>
-						) : null}
+						)}
 						{props.description ? (
 							<FormDescription>{props.description}</FormDescription>
 						) : null}

@@ -1,6 +1,9 @@
+import { COOKIES } from "../env/cookies";
 import { createMiddleware } from "hono/factory";
+import type { ENV_TYPES } from "../env/zod";
+import { getSignedCookie, getCookie } from "hono/cookie";
 import { env } from "hono/adapter";
-import { decodeToken } from "../../jwt_token";
+import { decodeToken } from "../jwt_token";
 
 export const authMiddleware = createMiddleware(async (c, next) => {
 	const { COOkIE_SECRET_KEY, JWT_SECRET_KEY } = env(c);
