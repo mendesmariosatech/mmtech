@@ -1,21 +1,20 @@
-import { handle } from "hono/vercel";
-import { app } from "./base/base-app";
-import { authRoute } from "./routes/auth/auth";
-import { hc } from "hono/client";
-import { personalRoute } from "./routes/personal/me";
-import { secret } from "./routes/secret/routeTest";
-import { swaggerUI } from "@hono/swagger-ui";
+import { base_api_path, app } from "./base/base-app";
+import { authRouter } from "./routes/auth";
+import { withOpenApi } from "./base/withOpenApi";
+import { personalRouter } from "./routes/personal";
+import { calendarRouter } from "./routes/calendar";
+import { businessRouter } from "./routes/business";
 
 const route = app
-	.get("/", (c) => c.text("Hello Hono!"))
-	.route("/auth", authRoute)
-	.route("/personal", personalRoute)
-	.route("/private/secret", secret);
+	.basePath(base_api_path) // in order to work with Next.js API routes
+	.get("/", (c) => c.text("Your API is working!"))
+	.route("/", authRouter)
+	.route("/", businessRouter)
+	.route("/", calendarRouter)
+	.route("/", personalRouter);
 
-app.get("/ui", swaggerUI({ urls: "api/docs" }));
+withOpenApi(app);
+
 export default app;
-export { handle, hc };
-
-// front ou o backend que deveria se preocupar com o endereço da URL
 
 export type AppType = typeof route;

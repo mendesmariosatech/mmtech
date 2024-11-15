@@ -2,7 +2,7 @@
   "name": "@repo/server",
   "version": "0.0.1",
   "scripts": {
-    "dev": "wrangler dev src/index.ts",
+    "dev": "tsx watch app.ts",
     "deploy": "wrangler deploy --minify src/index.ts",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
@@ -12,13 +12,19 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "@hono/node-server": "^1.13.4",
+    "@hono/zod-openapi": "^0.16.4",
     "@hono/zod-validator": "^0.2.2",
     "@libsql/client": "^0.10.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@repo/zod-types": "*",
+    "@scalar/hono-api-reference": "^0.5.156",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
+    "drizzle-zod": "^0.5.1",
     "hono": "^4.5.11",
+    "tsx": "^4.19.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {

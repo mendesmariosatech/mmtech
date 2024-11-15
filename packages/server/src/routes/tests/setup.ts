@@ -6,7 +6,15 @@ const dbConnection = new DBConnection(
 	process.env.TURSO_AUTH_TOKEN,
 );
 
-export const deleteDB = {
+type Cache = {
+	USER_ID: string;
+	USER_TOKEN: string;
+};
+
+type Keys = keyof Cache;
+
+export const DBTestSetup = {
+	userCache: new Map<Keys, string>(),
 	async deleteTableAuth() {
 		await dbConnection.db.delete(authTable);
 	},

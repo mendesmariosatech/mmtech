@@ -11,7 +11,6 @@ export function useLogin() {
 	return useMutation({
 		onSettled: () => {},
 		onError: (error) => {
-			// console.log("Server could not be reached: ", error.message);
 			toast.error("Server could not be reached");
 		},
 		onSuccess: async (data) => {
