@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { iconsNames } from "../iconData/IconData";
-import { CollapsableBuilder, items } from "./CollapsableBuilder";
+import { CollapsableBuilder, Item } from "./CollapsableBuilder";
 
 const meta = {
 	title: "Collapsable Builder",
@@ -17,7 +17,7 @@ export default meta;
 
 type Story = StoryObj<typeof CollapsableBuilder>;
 
-const Data: items[] = [
+const Data: Item[] = [
 	{
 		id: 1,
 		label: "Label teste",
