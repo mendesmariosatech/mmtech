@@ -75,10 +75,18 @@ export default function CalendarColumnBuilder({
 
 	const handleOpenModal = (event: DataEvents | null, date: Date | null) => {
 		const selectedEvent = event
-			? event
+			? {
+					eventDate: event.eventDate,
+					start: event.start,
+					end: event.end,
+					title: event.title,
+					description: event.description,
+					tag: event.tag,
+				}
 			: ({
-					start: date,
-					end: null,
+					eventDate: date?.toISOString().split("T")[0],
+					start: "",
+					end: "",
 					title: "",
 					description: "",
 					tag: [],
