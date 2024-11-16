@@ -51,7 +51,7 @@ export const RebanhoForm = (props: LoginFormProps) => {
 
 	const handleSubmit = (data: CadastroRebanhoFields) => {
 		// props.mutate(data);
-		alert(data);
+		alert(JSON.stringify(data));
 	};
 
 	return (
@@ -67,7 +67,7 @@ export const RebanhoForm = (props: LoginFormProps) => {
 						{props.isPending ? (
 							<ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
 						) : null}
-						{props.isPending ? texts.EN.loading : texts.EN.button}
+						{props.isPending ? texts.PT.loading : texts.PT.button}
 					</Button>
 				</div>
 			</ControlledForm>

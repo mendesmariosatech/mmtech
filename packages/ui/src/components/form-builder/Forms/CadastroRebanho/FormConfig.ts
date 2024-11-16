@@ -3,7 +3,7 @@ import type { ConfigObject } from "../../ControlledInput";
 
 export const cadatroRebanhoFields = z.object({
 	nickname: z.string().min(1),
-	type: z.string().email(),
+	type: z.string(),
 	breed: z.string(),
 	bornDate: z.string(), // should be date
 	identification: z.string(),
