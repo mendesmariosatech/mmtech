@@ -13,15 +13,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ChartContainer, ChartTooltip } from "../ui/chart";
 import { Circle } from "./circle";
-
-const celebridades = [
-	{ nome: "Cristiano Ronaldo", salario: 70000000 },
-	{ nome: "Messi", salario: 65000000 },
-	{ nome: "Neymar", salario: 60000000 },
-	{ nome: "Elon Musk", salario: 2300000000 },
-	{ nome: "Eduardo Saverin", salario: 950000000 },
-	{ nome: "Taylor Swift", salario: 300000000 },
-];
+import { celebridades } from "./data";
+import { formatarMoeda } from "./formatCurrency";
 
 // lets set local storage to not have to type it always
 
@@ -52,13 +45,6 @@ export function Component() {
 		{ nome: "Você", salario: salarioUsuario || 0 },
 		...celebridades,
 	];
-
-	const formatarMoeda = (valor: number) => {
-		return new Intl.NumberFormat("pt-BR", {
-			style: "currency",
-			currency: "BRL",
-		}).format(valor);
-	};
 
 	const calcularDiferenca = (salarioCelebridade: number) => {
 		if (!salarioUsuario) return "N/A";
