@@ -12,17 +12,31 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ChartContainer, ChartTooltip } from "../ui/chart";
+import { Circle } from "./circle";
 
 const celebridades = [
-	{ nome: "Cristiano Ronaldo", salario: 70_000_000 },
-	{ nome: "Messi", salario: 65_000_000 },
-	{ nome: "Neymar", salario: 600_00_000 },
-	{ nome: "Elon Musk", salario: 2_300_000_000 },
-	{ nome: "Eduardo Saverin", salario: 950_000_000 },
+	{ nome: "Cristiano Ronaldo", salario: 70000000 },
+	{ nome: "Messi", salario: 65000000 },
+	{ nome: "Neymar", salario: 60000000 },
+	{ nome: "Elon Musk", salario: 2300000000 },
+	{ nome: "Eduardo Saverin", salario: 950000000 },
+	{ nome: "Taylor Swift", salario: 300000000 },
 ];
 
+// lets set local storage to not have to type it always
+
+const getLocalStorage = () => {
+	return localStorage.getItem("salario");
+};
+
+const setLocalStorage = (str: string) => {
+	return localStorage.setItem("salario", str);
+};
+
 export function Component() {
-	const [salarioUsuario, setSalarioUsuario] = useState<number | null>(null);
+	const [salarioUsuario, setSalarioUsuario] = useState<number | null>(
+		Number(getLocalStorage()),
+	);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -31,6 +45,7 @@ export function Component() {
 		console.log("input", e.currentTarget);
 		const salario = Number(formData.get("salario"));
 		setSalarioUsuario(salario);
+		setLocalStorage(salario.toString());
 	};
 
 	const dadosGrafico = [
@@ -53,12 +68,16 @@ export function Component() {
 
 	return (
 		<Card className="w-full max-w-4xl mx-auto">
-			<CardHeader>
-				<CardTitle>Comparador de Salários</CardTitle>
-				<CardDescription>
-					Compare seu salário com o de celebridades
-				</CardDescription>
-			</CardHeader>
+			<div className="bg-pink-300 flex justify-between">
+				<CardHeader>
+					<CardTitle>Comparador de Salários</CardTitle>
+					<CardDescription>
+						Compare seu salário com o de celebridades
+					</CardDescription>
+				</CardHeader>
+
+				<div>Seu Registro: {formatarMoeda(salarioUsuario || 0)}</div>
+			</div>
 			<CardContent>
 				<form onSubmit={handleSubmit} className="mb-6 flex gap-4">
 					<Input
@@ -91,7 +110,7 @@ export function Component() {
 								<Bar dataKey="salario" fill="hsl(var(--primary))" />
 							</BarChart>
 						</ChartContainer>
-
+						<Circle />
 						<div className="mt-6">
 							<h3 className="text-lg font-semibold mb-2">
 								Diferença Salarial:
