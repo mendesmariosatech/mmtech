@@ -2,8 +2,8 @@ import { z } from "zod";
 import type { ConfigObject } from "../../ControlledInput";
 
 export const cadatroLeiteFields = z.object({
-	valor: z.string().min(3, { message: "Data de nascimento Requerido" }), // should be date,
-	month: z.string().min(3, { message: "Data de nascimento Requerido" }), // should be date
+	valor: z.string().min(3, { message: "Valo Requerido" }), // should be date,
+	month: z.string().min(3, { message: "Data" }), // should be date
 });
 
 export type CadastroLeiteFields = z.infer<typeof cadatroLeiteFields>;
@@ -17,7 +17,7 @@ export const leiteFormConfig: ConfigObject<CadastroLeiteFields> = {
 	},
 	month: {
 		name: "month",
-		input: "date",
+		input: "month",
 		label: "Mes",
 		placeholder: "12/2024",
 	},

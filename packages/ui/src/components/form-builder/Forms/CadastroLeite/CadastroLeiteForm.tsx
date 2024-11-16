@@ -35,7 +35,7 @@ const useRebanhoForm = () =>
 		resolver: zodResolver(cadatroLeiteFields),
 		defaultValues: {
 			valor: "",
-			month: "",
+			month: "2024-01",
 		},
 	});
 
