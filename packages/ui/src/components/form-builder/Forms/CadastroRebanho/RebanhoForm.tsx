@@ -3,10 +3,7 @@ import { DevTool } from "@hookform/devtools";
 
 import { ControlledForm } from "../../ControlledForm";
 import { Button } from "../../../ui/button";
-// import { LoginFormConfig } from "./Login.config";
-import { type LoginFields } from "@repo/zod-types";
 import { useLogin } from "@repo/hook-services";
-// import { loginFormConfig } from "./LoginConfig";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import {
 	CadastroRebanhoFields,
@@ -15,7 +12,6 @@ import {
 } from "./FormConfig";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { useLoginForm } from "./useLogin.hooks";
 
 const texts = {
 	EN: {

@@ -2,11 +2,11 @@ import { z } from "zod";
 import type { ConfigObject } from "../../ControlledInput";
 
 export const cadatroRebanhoFields = z.object({
-	nickname: z.string().min(1),
-	type: z.string(),
-	breed: z.string(),
-	bornDate: z.string(), // should be date
-	identification: z.string(),
+	nickname: z.string().min(3, { message: "Apelido" }),
+	type: z.string().min(3, { message: "Tipo Requerido" }),
+	breed: z.string().min(3, { message: "Raca Requerido" }),
+	bornDate: z.string().min(3, { message: "Data de nascimento Requerido" }), // should be date
+	identification: z.string().optional(),
 });
 
 export type CadastroRebanhoFields = z.infer<typeof cadatroRebanhoFields>;
