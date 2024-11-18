@@ -91,7 +91,7 @@ interface CalendarModalProps {
 	onDeleteEvent?: (eventId: string) => void;
 }
 
-export const useCalendarForm = (event?: DataEvents) =>
+export const useCalendarForm = (event?: DataEvents | null) =>
 	useForm<ModalFields>({
 		resolver: zodResolver(modalFields),
 		defaultValues: {
@@ -114,8 +114,20 @@ export function CalendarModal({
 	onEditEvent,
 	onDeleteEvent,
 }: CalendarModalProps) {
-	const form = useCalendarForm();
-
+	const form = useCalendarForm(event);
+	React.useEffect(() => {
+		if (event) {
+			form.reset({
+				titleEvent: event.title,
+				textAreaLabel: event.description,
+				tagName: event.tag[0]?.name || "",
+				EventDate: event.eventDate,
+				StartEvent: event.start,
+				EndEvent: event.end,
+				Color: event.tag[0]?.color || "#6d7b92",
+			});
+		}
+	}, [event, form]);
 	const modalConfig = configModal(getLabels(language));
 	const handleSave = (input: ModalFields) => {
 		if (input && input.id) {
@@ -154,7 +166,7 @@ export function CalendarModal({
 							<Button
 								variant="destructive"
 								className="mr-2"
-								onClick={() => event?.id && onDeleteEvent(event.id)}
+								onClick={() => event?.id && onDeleteEvent(event?.id)}
 							>
 								{texts[language].modalTitleDelete}
 							</Button>
