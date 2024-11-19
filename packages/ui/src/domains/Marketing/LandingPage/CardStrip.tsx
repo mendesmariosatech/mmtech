@@ -2,7 +2,7 @@ import React from "react";
 import { ArrowRight, Save, Lock, Settings } from "lucide-react";
 import Link from "next/link";
 
-export function CoreServices() {
+export function CardStrip() {
 	const services = [
 		{
 			icon: <Save className="w-8 h-8 text-emerald-500" />,
