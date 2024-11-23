@@ -30,7 +30,7 @@ export const videoRelations = relations(videosTable, ({ one }) => ({
 	}),
 }));
 
-export const createSchema = createInsertSchema(videosTable)
+export const createVideoSchema = createInsertSchema(videosTable)
 	.omit({
 		id: true,
 		createdAt: true,
@@ -40,4 +40,4 @@ export const createSchema = createInsertSchema(videosTable)
 		url: z.string().url(),
 	});
 
-export type CreateVideo = z.infer<typeof createSchema>;
+export type CreateVideoSchema = z.infer<typeof createVideoSchema>;
