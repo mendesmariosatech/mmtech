@@ -6,6 +6,7 @@ import { hashPassword } from "../../utils/bcrypt";
 import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
+import { AppRouteHandler } from "../../base/type";
 
 export const registerSpec = createRoute({
 	method: "post",
@@ -55,9 +56,8 @@ export const registerSpec = createRoute({
 
 type RegisterRoute = typeof registerSpec;
 
-export const registerHandler: RouteHandler<RegisterRoute> = async (c) => {
-	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL, JWT_SECRET_KEY } =
-		env<ENV_TYPES>(c);
+export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
+	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL, JWT_SECRET_KEY } = env(c);
 	// get the ENV variable from a zod validator
 	// if (!TURSO_CONNECTION_URL || !TURSO_AUTH_TOKEN) {
 	//   return c.json({ error: "No ENV file" }, 500);
@@ -79,17 +79,12 @@ export const registerHandler: RouteHandler<RegisterRoute> = async (c) => {
 	if (!passwordDigest) return c.json({ error: "Password digest failed" }, 400);
 
 	const newAuthUser = await Auth.registerAuthUser({
+		password: passwordDigest,
 		email,
-		passwordDigest,
 		name,
 		phone,
 	});
 	if (!newAuthUser) return c.json({ error: "User creation failed" }, 400);
-
-	const token = await generateToken(newAuthUser, JWT_SECRET_KEY);
-
-	setCookie(c, COOKIES.USER_ID, newAuthUser.email);
-	setCookie(c, COOKIES.USER_TOKEN, token);
 
 	const [newClient, error] = await Client.createNewClient({
 		authId: newAuthUser.id,
@@ -97,6 +92,17 @@ export const registerHandler: RouteHandler<RegisterRoute> = async (c) => {
 
 	if (error) return c.json({ error: error.message }, 400);
 	if (!newClient) return c.json({ error: "Client creation failed" }, 400);
+
+	const token = await generateToken(
+		{
+			authId: newAuthUser.id,
+			clientId: newClient.id,
+		},
+		JWT_SECRET_KEY,
+	);
+
+	setCookie(c, COOKIES.USER_ID, newAuthUser.email);
+	setCookie(c, COOKIES.USER_TOKEN, token);
 
 	return c.json(
 		{

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { hono_client } from "../hono_client";
+import { toast } from "sonner";
 export const useLogout = () => {
 	// invalidate query client
 	const queryClient = useQueryClient();
@@ -8,7 +9,7 @@ export const useLogout = () => {
 			return hono_client.api.auth.logout.$delete();
 		},
 		onError: (error) => {
-			console.log("Server could not be reached: ", error.message);
+			toast.error("Server could not be reached");
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries();

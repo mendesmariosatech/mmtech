@@ -1,11 +1,13 @@
-import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
-import { ENV_TYPES, loginFields } from "@repo/zod-types";
+import { createRoute, z } from "@hono/zod-openapi";
+import { loginFields } from "@repo/zod-types";
 import { env } from "hono/adapter";
-import { AuthTable } from "./handlers";
+import { AuthTable, ClientTable } from "./handlers";
 import { checkPassword } from "../../utils/bcrypt";
 import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
+import { AppRouteHandler } from "../../base/type";
+import { BusinessTable } from "../business/dto/business.dto";
 
 export const loginSpec = createRoute({
 	method: "post",
@@ -23,9 +25,10 @@ export const loginSpec = createRoute({
 							phone: z.string().nullable(),
 							id: z.string(),
 							emailConfirmedAt: z.string().nullable(),
-							deletedAt: z.string().nullable(),
 							createdAt: z.string(),
-							updateAt: z.string().nullable(),
+							deletedAt: z.string().nullable(),
+							updatedAt: z.string().nullable(),
+							token: z.string(),
 						}),
 					}),
 				},
@@ -75,14 +78,9 @@ export const loginSpec = createRoute({
 
 type LoginRoute = typeof loginSpec;
 
-export const loginHandler: RouteHandler<LoginRoute> = async (c) => {
+export const loginHandler: AppRouteHandler<LoginRoute> = async (c) => {
 	const form = c.req.valid("json");
-	const {
-		TURSO_AUTH_TOKEN,
-		TURSO_CONNECTION_URL,
-		COOkIE_SECRET_KEY,
-		JWT_SECRET_KEY,
-	} = env<ENV_TYPES>(c);
+	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL, JWT_SECRET_KEY } = env(c);
 
 	if (!form) return c.json({ error: "Invalid form data" }, 400);
 
@@ -92,17 +90,35 @@ export const loginHandler: RouteHandler<LoginRoute> = async (c) => {
 	const user = await Auth.findAuthUser(email);
 	if (!user) return c.json({ error: "User not found" }, 404);
 
-	const doesPasswordMatch = await checkPassword(password, user.passwordDigest);
+	const doesPasswordMatch = await checkPassword(password, user.password);
 
 	if (!doesPasswordMatch)
 		return c.json({ error: "Password does not match" }, 403);
 
-	const token = await generateToken(user, JWT_SECRET_KEY);
+	const Client = new ClientTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+
+	const client = await Client.findClientByAuth(user.id);
+
+	if (!client) return c.json({ error: "Client not found" }, 404);
+
+	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+	const business = await Business.findBusinessByClientId(client.id);
+
+	const token = await generateToken(
+		{
+			clientId: client.id,
+			authId: user.id,
+			businessId: business?.id,
+		},
+		JWT_SECRET_KEY,
+	);
 
 	setCookie(c, COOKIES.USER_ID, user.email);
 	setCookie(c, COOKIES.USER_TOKEN, token);
 
-	const { passwordDigest: NOT_USE, ...rest } = user;
+	const { password: NOT_USE, ...rest } = user;
 
-	return c.json({ data: rest }, 200);
+	const data = { ...rest, token };
+
+	return c.json({ data }, 200);
 };
