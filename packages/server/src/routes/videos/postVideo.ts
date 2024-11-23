@@ -10,7 +10,7 @@ const schema = z.object({
 	message: z.string(),
 });
 
-export const videoSpec = createRoute({
+export const postVideoSpec = createRoute({
 	method: "post",
 	path: "/videos",
 	tags: ["videos"],
@@ -36,9 +36,9 @@ export const videoSpec = createRoute({
 	},
 });
 
-type CreateVideoRoute = typeof videoSpec;
+type CreateVideoRoute = typeof postVideoSpec;
 
-export const videoHandler: AppRouteHandler<CreateVideoRoute> = (c) => {
+export const postVideoHandler: AppRouteHandler<CreateVideoRoute> = (c) => {
 	const body = c.req.valid("json");
 	console.log(body);
 	console.log(body.message);
