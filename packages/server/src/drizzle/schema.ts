@@ -1,12 +1,11 @@
-import { createId } from "@paralleldrive/cuid2";
-import { not, relations, sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { genEntityId } from "./utils";
+import { videosTable } from "./videos/videos";
 
-const Initial = z.string().min(2).max(2).toUpperCase();
-const genEntityId = (initials: string) =>
-	`${Initial.parse(initials)}_${createId().toUpperCase()}`;
+export { videosTable } from "./videos/videos";
 
 export const authTable = sqliteTable("auth", {
 	id: text("id", { length: 128 })
@@ -115,11 +114,12 @@ export const GetBusinessSchema = createSelectSchema(businessTable).pick({
 
 export type CreateBusiness = z.infer<typeof CreateBusinessSchema>;
 
-export const businessRelations = relations(businessTable, ({ one }) => ({
+export const businessRelations = relations(businessTable, ({ one, many }) => ({
 	client: one(clientTable, {
 		fields: [businessTable.clientId],
 		references: [clientTable.id],
 	}),
+	videos: many(videosTable),
 }));
 
 export const eventTable = sqliteTable("event", {

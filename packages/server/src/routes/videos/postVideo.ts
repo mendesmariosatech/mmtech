@@ -44,5 +44,9 @@ export const postVideoHandler: AppRouteHandler<CreateVideoRoute> = (c) => {
 	console.log(body.message);
 	const message = body.message;
 
+	// create the table and the relationships
+	// create the video
+	// attach to a business and or a user
+
 	return c.json({ message }, 200);
 };
