@@ -75,13 +75,14 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		return c.json({ error: "Not authorized, you don't have a business" }, 403);
 	}
 
-	const { title, date } = c.req.valid("json");
+	const { title, date, startTime, endTime } = c.req.valid("json");
 
 	// how to create a new event
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const newEvent = await Event.createEvent({
 		title,
 		date: Number(date),
+		startTime,
 		businessId: businessId,
 		clientId: clientId,
 	});

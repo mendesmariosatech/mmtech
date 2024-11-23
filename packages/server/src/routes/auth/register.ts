@@ -67,7 +67,7 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 
 	if (!form) return c.json({ error: "Invalid form data" }, 400);
 
-	const { email, password, name, phone } = form;
+	const { email, password, name, phone, agreeTerms } = form;
 
 	const Auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const Client = new ClientTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
@@ -83,6 +83,7 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 		email,
 		name,
 		phone,
+		agreeTems: agreeTerms,
 	});
 	if (!newAuthUser) return c.json({ error: "User creation failed" }, 400);
 
