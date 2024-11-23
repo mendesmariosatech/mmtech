@@ -1,8 +1,5 @@
-import { Hono } from "hono";
-import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { authMiddleware } from "../middleware/authentication";
-import { createRoute, RouteHandler } from "@hono/zod-openapi";
+import { createRoute } from "@hono/zod-openapi";
 import { AppRouteHandler } from "../../base/type";
 
 export const personalRoute = createRoute({

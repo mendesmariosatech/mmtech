@@ -1,4 +1,5 @@
-import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
+import { createRoute, z } from "@hono/zod-openapi";
+import { AppRouteHandler } from "../../base/type";
 
 const requestBody = z.object({
 	message: z.string(),
@@ -35,7 +36,7 @@ export const videoSpec = createRoute({
 
 type CreateVideoRoute = typeof videoSpec;
 
-export const videoHandler: RouteHandler<CreateVideoRoute> = (c) => {
+export const videoHandler: AppRouteHandler<CreateVideoRoute> = (c) => {
 	const body = c.req.valid("json");
 	console.log(body);
 	console.log(body.message);
