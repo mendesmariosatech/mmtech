@@ -18,9 +18,9 @@ export const personalRoute = createRoute({
 				"application/json": {
 					schema: z.object({
 						data: z.object({
-							email: z.string(),
-							password: z.string(),
-							token: z.string(),
+							clientId: z.string(),
+							businessId: z.string().optional(),
+							authId: z.string(),
 						}),
 					}),
 				},
@@ -46,12 +46,17 @@ type PersonalRoute = typeof personalRoute;
 export const personalHandler: AppRouteHandler<PersonalRoute> = async (c) => {
 	// make sure the user is authenticated here
 	console.log("personal handler");
+
+	const clientId = c.get("clientId");
+	const businessId = c.get("businessId");
+	const authId = c.get("authId");
+
 	return c.json(
 		{
 			data: {
-				email: "Alex",
-				password: "123456",
-				token: "123456",
+				clientId,
+				businessId,
+				authId,
 			},
 		},
 		200,
