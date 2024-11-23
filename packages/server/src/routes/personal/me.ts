@@ -1,11 +1,13 @@
 import { z } from "zod";
 import { createRoute } from "@hono/zod-openapi";
 import { AppRouteHandler } from "../../base/type";
+import { authMiddleware } from "../middleware/authentication";
 
 export const personalRoute = createRoute({
 	method: "get",
 	path: "/personal/me",
 	tags: ["personal"],
+	middleware: [authMiddleware],
 	header: {
 		authorization: z.string(),
 	},
@@ -42,6 +44,8 @@ export const personalRoute = createRoute({
 type PersonalRoute = typeof personalRoute;
 
 export const personalHandler: AppRouteHandler<PersonalRoute> = async (c) => {
+	// make sure the user is authenticated here
+	console.log("personal handler");
 	return c.json(
 		{
 			data: {

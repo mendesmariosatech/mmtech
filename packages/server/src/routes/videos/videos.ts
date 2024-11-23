@@ -1,5 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { AppRouteHandler } from "../../base/type";
+import { authMiddleware } from "../middleware/authentication";
 
 const requestBody = z.object({
 	message: z.string(),
@@ -13,6 +14,7 @@ export const videoSpec = createRoute({
 	method: "post",
 	path: "/videos",
 	tags: ["videos"],
+	middleware: [authMiddleware],
 	request: {
 		body: {
 			content: {
