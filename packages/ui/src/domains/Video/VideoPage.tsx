@@ -1,16 +1,15 @@
+"use client";
 import { useGetAllVideos } from "@repo/hook-services";
 import { VideoList } from "@repo/ui/components/composition/Lists/VideosListComponent/VideoListComponent";
 
-export const VideoPage = async () => {
+export const VideoPage = () => {
 	const { data, isLoading, error } = useGetAllVideos();
 
 	if (isLoading) return <VideoList isLoading />;
 
-	if (data?.status !== 200) return <VideoList error />;
+	if (error || !data) return <VideoList error />;
 
-	const response = await data.json();
-
-	const newMap = response.data.map((video) => ({
+	const newMap = data.data.map((video) => ({
 		title: video.title,
 		description: video.description,
 		url: video.url,

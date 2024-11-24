@@ -1,9 +1,6 @@
 "use client";
-// import { useGetVideosQuery } from "@/lib/api/api";
 import Link from "next/link";
 import ReactPlayer from "react-player";
-// import { usePopoverState } from "../NavBar/Auth/hooks";
-// import { useSheetState } from "../CreateVideoSheet/hooks";
 import { Button } from "../../../ui/button";
 
 function trimString(str: string, maxLength: number) {
@@ -111,8 +108,6 @@ type VideoListProps =
 	  };
 
 export const VideoList: React.FC<VideoListProps> = (props) => {
-	// const { data, isLoading, error } = props;
-
 	return (
 		<>
 			{"error" in props ? (
@@ -123,12 +118,12 @@ export const VideoList: React.FC<VideoListProps> = (props) => {
 				<AddVideoText />
 			) : (
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
-					{props.data?.map((video: any) => (
+					{props.data.map((video) => (
 						<VideoListComponent
 							key={video.id}
 							description={video.description}
 							title={video.title}
-							url={video.video_url}
+							url={video.url}
 							id={video.id}
 							num_comments={video.num_comments}
 						/>
