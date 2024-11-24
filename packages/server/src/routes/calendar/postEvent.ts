@@ -86,7 +86,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	});
 
 	if (!newEvent) {
-		return c.json({ error: "Event not created" }, 403);
+		return c.json({ error: "Event not created" }, 500);
 	}
 
 	return c.json(newEvent, 201);
