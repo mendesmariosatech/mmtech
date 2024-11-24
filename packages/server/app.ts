@@ -2,9 +2,22 @@ import app from "./src";
 import { serve } from "@hono/node-server";
 
 const PORT = process.env.PORT || 4000;
-serve({
-	fetch: app.fetch,
-	port: PORT,
-});
+try {
+  const server = serve({
+    fetch: app.fetch,
+    port: PORT,
+  });
+
+  process.on('SIGTERM', () => {
+    console.log('Recebido SIGTERM. Iniciando graceful shutdown...');
+    server.close(() => {
+      console.log('Servidor encerrado com sucesso');
+      process.exit(0);
+    });
+  });
+} catch (error) {
+  console.error('Erro ao iniciar o servidor:', error);
+  process.exit(1);
+}
 
 console.log(`🚀 node server started on port http://localhost:${PORT}/api`);
