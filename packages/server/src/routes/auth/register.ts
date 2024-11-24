@@ -83,7 +83,7 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 		email,
 		name,
 		phone,
-		agreeTems: agreeTerms,
+		agreeTerms,
 	});
 	if (!newAuthUser) return c.json({ error: "User creation failed" }, 400);
 

@@ -81,8 +81,9 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const newEvent = await Event.createEvent({
 		title,
-		date: Number(date),
+		date,
 		startTime,
+		endTime,
 		businessId: businessId,
 		clientId: clientId,
 	});

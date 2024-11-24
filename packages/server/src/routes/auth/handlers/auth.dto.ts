@@ -19,7 +19,7 @@ export class AuthTable extends DBConnection {
 				password: args.password,
 				name: args.name,
 				phone: args.phone,
-				agreeTems: args.agreeTems,
+				agreeTerms: args.agreeTerms,
 			})
 			.returning();
 
