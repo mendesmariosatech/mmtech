@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { hono_client } from "../hono_client";
 
 export const useGetAllVideos = () => {
+	const routeKey = hono_client.api.videos.$url();
+	console.log({ routeKey: routeKey.pathname });
 	return useQuery({
-		queryKey: [hono_client.api.videos.$get.name],
+		queryKey: [routeKey.pathname],
 		queryFn: async () => {
 			const resp = await hono_client.api.videos.$get({
 				query: {
