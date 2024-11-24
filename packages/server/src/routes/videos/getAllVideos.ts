@@ -3,11 +3,7 @@ import { SelectVideoSchema } from "../../drizzle/videos/videos";
 import { AppRouteHandler } from "../../base/type";
 import { env } from "hono/adapter";
 import { VideoTable } from "../../drizzle/videos/videos.dto";
-
-const PaginationSchema = z.object({
-	page: z.number().default(1),
-	limit: z.number().default(10),
-});
+import { PaginationSchema } from "../../utils/pagination";
 
 export const getAllVideoSpec = createRoute({
 	method: "get",
