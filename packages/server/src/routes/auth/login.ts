@@ -6,7 +6,7 @@ import { checkPassword } from "../../utils/bcrypt";
 import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
-import { AppRouteHandler } from "../../base/type";
+import type { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
 
 export const loginSpec = createRoute({
