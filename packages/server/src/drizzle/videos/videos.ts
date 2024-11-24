@@ -2,7 +2,7 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { genEntityId } from "../utils";
 import { businessTable } from "../schema";
 import { relations } from "drizzle-orm";
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const videosTable = sqliteTable("videos", {
@@ -30,7 +30,7 @@ export const videoRelations = relations(videosTable, ({ one }) => ({
 	}),
 }));
 
-export const createVideoSchema = createInsertSchema(videosTable)
+export const CreateVideoSchema = createInsertSchema(videosTable)
 	.omit({
 		id: true,
 		createdAt: true,
@@ -40,6 +40,7 @@ export const createVideoSchema = createInsertSchema(videosTable)
 		url: z.string().url(),
 	});
 
-export type CreateVideoSchema = z.infer<typeof createVideoSchema>;
+export type CreateVideoSchema = z.infer<typeof CreateVideoSchema>;
 
-export const selectedSchema = createInsertSchema(videosTable);
+export const SelectVideoSchema = createSelectSchema(videosTable);
+export type SelectVideoSchema = z.infer<typeof SelectVideoSchema>;

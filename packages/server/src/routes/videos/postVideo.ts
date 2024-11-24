@@ -2,11 +2,11 @@ import { createRoute, z } from "@hono/zod-openapi";
 import { AppRouteHandler } from "../../base/type";
 import { authMiddleware } from "../middleware/authentication";
 import { VideoTable } from "../../drizzle/videos/videos.dto";
-import { selectedSchema } from "../../drizzle/videos/videos";
-
-const schema = z.object({
-	data: selectedSchema,
-});
+import {
+	CreateVideoSchema,
+	SelectVideoSchema,
+} from "../../drizzle/videos/videos";
+import { env } from "hono/adapter";
 
 export const postVideoSpec = createRoute({
 	method: "post",
@@ -17,7 +17,7 @@ export const postVideoSpec = createRoute({
 		body: {
 			content: {
 				"application/json": {
-					schema,
+					schema: CreateVideoSchema,
 				},
 			},
 		},
@@ -27,12 +27,24 @@ export const postVideoSpec = createRoute({
 			description: "Video Created",
 			content: {
 				"application/json": {
-					schema,
+					schema: z.object({
+						data: SelectVideoSchema,
+					}),
 				},
 			},
 		},
 		400: {
 			description: "Bad Request",
+			content: {
+				"application/json": {
+					schema: z.object({
+						error: z.string(),
+					}),
+				},
+			},
+		},
+		500: {
+			description: "Internal Server Error",
 			content: {
 				"application/json": {
 					schema: z.object({
@@ -49,8 +61,7 @@ type CreateVideoRoute = typeof postVideoSpec;
 export const postVideoHandler: AppRouteHandler<CreateVideoRoute> = async (
 	c,
 ) => {
-	const body = c.req.valid("json");
-	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = c.env;
+	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
 
 	const businessId = c.get("businessId");
 
@@ -66,6 +77,10 @@ export const postVideoHandler: AppRouteHandler<CreateVideoRoute> = async (
 		title: "Gangnam Style",
 		description: "The best video ever",
 	});
+
+	if (!newVideo) {
+		return c.json({ error: "Video not created" }, 500);
+	}
 
 	return c.json({ data: newVideo }, 200);
 };
