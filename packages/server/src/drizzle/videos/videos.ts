@@ -40,6 +40,10 @@ export const CreateVideoSchema = createInsertSchema(videosTable)
 		url: z.string().url(),
 	});
 
+export const CreateVideoFields = CreateVideoSchema.omit({
+	businessId: true,
+});
+
 export type CreateVideoSchema = z.infer<typeof CreateVideoSchema>;
 
 export const SelectVideoSchema = createSelectSchema(videosTable);

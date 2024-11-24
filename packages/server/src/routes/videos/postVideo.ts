@@ -3,7 +3,7 @@ import { AppRouteHandler } from "../../base/type";
 import { authMiddleware } from "../middleware/authentication";
 import { VideoTable } from "../../drizzle/videos/videos.dto";
 import {
-	CreateVideoSchema,
+	CreateVideoFields,
 	SelectVideoSchema,
 } from "../../drizzle/videos/videos";
 import { env } from "hono/adapter";
@@ -17,7 +17,7 @@ export const postVideoSpec = createRoute({
 		body: {
 			content: {
 				"application/json": {
-					schema: CreateVideoSchema,
+					schema: CreateVideoFields,
 				},
 			},
 		},
