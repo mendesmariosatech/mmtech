@@ -3,7 +3,7 @@ import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./event.dto";
 import { env } from "hono/adapter";
-import { AppRouteHandler } from "../../base/type";
+import type { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
 
 export const createEventSpec = createRoute({
