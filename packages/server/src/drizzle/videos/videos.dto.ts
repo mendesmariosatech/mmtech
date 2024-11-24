@@ -1,6 +1,7 @@
 import { DBConnection } from "../../drizzle/drizzle-client";
 import { PaginationSchema } from "../../utils/pagination";
 import { CreateVideoSchema, videosTable } from "./videos";
+import { count } from "drizzle-orm";
 
 export class VideoTable extends DBConnection {
 	constructor(TURSO_CONNECTION_URL: string, TURSO_AUTH_TOKEN: string) {
@@ -21,5 +22,11 @@ export class VideoTable extends DBConnection {
 		});
 
 		return videos;
+	}
+
+	public async getVideosCounts() {
+		const [videos] = await this.db.select({ count: count() }).from(videosTable);
+
+		return videos.count;
 	}
 }

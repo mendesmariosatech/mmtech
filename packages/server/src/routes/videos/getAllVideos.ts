@@ -70,11 +70,12 @@ export const getAllVideosHandler: AppRouteHandler<
 	const Video = new VideoTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
 	const videos = await Video.getAllPaginatedVideos({ page, limit });
+	const count = await Video.getVideosCounts();
 
 	return c.json({
 		data: videos,
 		pagination: {
-			total: 0,
+			total: count,
 			page,
 			limit,
 		},
