@@ -16,8 +16,10 @@ export const createDrizzleClient = (
 		},
 	);
 
+export type DB = ReturnType<typeof createDrizzleClient>;
+
 export class DBConnection {
-	db: ReturnType<typeof createDrizzleClient>;
+	db: DB;
 
 	constructor(TURSO_CONNECTION_URL: string, TURSO_AUTH_TOKEN: string) {
 		this.db = createDrizzleClient(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);

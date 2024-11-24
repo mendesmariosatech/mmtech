@@ -68,6 +68,8 @@ export const getAllVideosHandler: AppRouteHandler<
 	const { TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN } = env(c);
 	const { page, limit } = c.req.valid("query");
 
+	const db = c.get("db");
+
 	const Video = new VideoTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	// safe await both queries
 	const result = await safeAwait(
