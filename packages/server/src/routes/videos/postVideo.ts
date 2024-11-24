@@ -71,11 +71,13 @@ export const postVideoHandler: AppRouteHandler<CreateVideoRoute> = async (
 
 	const videoTable = new VideoTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
+	const input = c.req.valid("json");
+
 	const newVideo = await videoTable.createVideo({
 		businessId,
-		url: "https://www.youtube.com/watch?v=9bZkp7q19f0",
-		title: "Gangnam Style",
-		description: "The best video ever",
+		url: input.url,
+		title: input.title,
+		description: input.description,
 	});
 
 	if (!newVideo) {
