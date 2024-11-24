@@ -41,3 +41,5 @@ export const createVideoSchema = createInsertSchema(videosTable)
 	});
 
 export type CreateVideoSchema = z.infer<typeof createVideoSchema>;
+
+export const selectedSchema = createInsertSchema(videosTable);
