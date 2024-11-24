@@ -1,4 +1,5 @@
-import app, { handle } from "@repo/server";
+import app from "@repo/server";
+import { handle } from "hono/vercel";
 
 // export const runtime = "edge"; //
 export const runtime = "nodejs";

@@ -16,7 +16,7 @@ export class AuthTable extends DBConnection {
 			.insert(authTable)
 			.values({
 				email: args.email,
-				passwordDigest: args.passwordDigest,
+				password: args.password,
 				name: args.name,
 			})
 			.returning();

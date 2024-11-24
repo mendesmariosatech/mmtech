@@ -115,14 +115,6 @@ export function CalendarModal({
 	const form = useCalendarForm();
 
 	const handleSave = (input: ModalFields) => {
-		console.log(
-			`%cEvento a ser salvo:`,
-			"background-color: yellow; color: black;",
-		);
-		console.log({
-			input,
-		});
-
 		if (input && input.id) {
 			// onEditEvent(input); // editar o evento existente
 		} else {

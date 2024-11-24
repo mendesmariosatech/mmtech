@@ -1,6 +1,7 @@
 import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
+import { AppRouteHandler } from "../../base/type";
 
 export const logoutSpec = createRoute({
 	method: "delete",
@@ -22,7 +23,7 @@ export const logoutSpec = createRoute({
 
 type LogoutRoute = typeof logoutSpec;
 
-export const logoutHandler: RouteHandler<LogoutRoute> = async (c) => {
+export const logoutHandler: AppRouteHandler<LogoutRoute> = async (c) => {
 	setCookie(c, COOKIES.USER_ID, "", { maxAge: 0 });
 	setCookie(c, COOKIES.USER_TOKEN, "", { maxAge: 0 });
 
