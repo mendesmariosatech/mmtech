@@ -1,22 +1,12 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { SelectVideoSchema } from "../../drizzle/videos/videos";
 import { AppRouteHandler } from "../../base/type";
+import { env } from "hono/adapter";
+import { VideoTable } from "../../drizzle/videos/videos.dto";
 
 const PaginationSchema = z.object({
-	page: z
-		.string()
-		.default("1")
-		.refine((value) => !isNaN(Number(value)), {
-			message: "Page must be a number",
-		})
-		.transform(Number),
-	limit: z
-		.string()
-		.default("10")
-		.refine((value) => !isNaN(Number(value)), {
-			message: "Limit must be a number",
-		})
-		.transform(Number),
+	page: z.number().default(1),
+	limit: z.number().default(10),
 });
 
 export const getAllVideoSpec = createRoute({
@@ -78,23 +68,19 @@ type GetAllVideosResponse = typeof getAllVideoSpec;
 export const getAllVideosHandler: AppRouteHandler<
 	GetAllVideosResponse
 > = async (c) => {
+	const { TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN } = env(c);
 	const { page, limit } = c.req.valid("query");
 
-	console.log({
-		page,
-		limit,
-	});
+	const Video = new VideoTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+
+	const videos = await Video.getAllPaginatedVideos({ page, limit });
 
 	return c.json({
-		data: [],
+		data: videos,
 		pagination: {
 			total: 0,
-			page: 0,
-			limit: 0,
+			page,
+			limit,
 		},
 	});
 };
-
-// "currentPage": 1,
-// "pageSize": 10,
-// "totalItems": 25
