@@ -117,15 +117,15 @@ export const loginHandler: AppRouteHandler<LoginRoute> = async (c) => {
 	setCookie(c, COOKIES.USER_TOKEN, token);
 
 	const userData = {
-	  id: user.id,
-	  name: user.name,
-	  email: user.email,
-	  phone: user.phone,
-	  emailConfirmedAt: user.emailConfirmedAt,
-	  createdAt: user.createdAt,
-	  deletedAt: user.deletedAt,
-	  updatedAt: user.updatedAt,
-	  token
+		id: user.id,
+		name: user.name,
+		email: user.email,
+		phone: user.phone,
+		emailConfirmedAt: user.emailConfirmedAt,
+		createdAt: user.createdAt,
+		deletedAt: user.deletedAt,
+		updatedAt: user.updatedAt,
+		token,
 	};
 
 	const data = userData;

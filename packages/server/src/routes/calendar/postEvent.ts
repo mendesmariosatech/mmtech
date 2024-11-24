@@ -47,6 +47,16 @@ export const createEventSpec = createRoute({
 				},
 			},
 		},
+		500: {
+			description: "Not Authorized",
+			content: {
+				"application/json": {
+					schema: z.object({
+						error: z.string(),
+					}),
+				},
+			},
+		},
 	},
 });
 
@@ -86,7 +96,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	});
 
 	if (!newEvent) {
-		return c.json({ error: "Event not created" }, 500);
+		return c.json({ error: "Server Error: Event not created" }, 500);
 	}
 
 	return c.json(newEvent, 201);
