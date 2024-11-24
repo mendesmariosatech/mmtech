@@ -104,8 +104,6 @@ export const loginHandler: AppRouteHandler<LoginRoute> = async (c) => {
 	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const business = await Business.findBusinessByClientId(client.id);
 
-	if (!business) return c.json({ error: "Business not found" }, 404);
-
 	const token = await generateToken(
 		{
 			clientId: client.id,
