@@ -1,7 +1,7 @@
 import app from "./src";
 import { serve } from "@hono/node-server";
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 serve({
 	fetch: app.fetch,
 	port: PORT,
