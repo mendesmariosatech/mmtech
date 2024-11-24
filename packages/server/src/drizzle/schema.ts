@@ -101,6 +101,10 @@ export const CreateBusinessSchema = createInsertSchema(businessTable).pick({
 	description: true,
 });
 
+export const CreateBusinessInput = CreateBusinessSchema.omit({
+	clientId: true,
+});
+
 const SelectedSchema = createSelectSchema(businessTable).pick({
 	clientId: true,
 });

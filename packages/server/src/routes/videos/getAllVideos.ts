@@ -4,6 +4,7 @@ import { AppRouteHandler } from "../../base/type";
 import { env } from "hono/adapter";
 import { VideoTable } from "../../drizzle/videos/videos.dto";
 import { PaginationSchema } from "../../utils/pagination";
+import { safeAwait } from "../../utils/safeAwait";
 
 export const getAllVideoSpec = createRoute({
 	method: "get",
@@ -46,16 +47,16 @@ export const getAllVideoSpec = createRoute({
 		// 		},
 		// 	},
 		// },
-		// 500: {
-		// 	description: "Internal Server Error",
-		// 	content: {
-		// 		"application/json": {
-		// 			schema: z.object({
-		// 				error: z.string(),
-		// 			}),
-		// 		},
-		// 	},
-		// },
+		500: {
+			description: "Internal Server Error",
+			content: {
+				"application/json": {
+					schema: z.object({
+						error: z.string(),
+					}),
+				},
+			},
+		},
 	},
 });
 
@@ -68,16 +69,31 @@ export const getAllVideosHandler: AppRouteHandler<
 	const { page, limit } = c.req.valid("query");
 
 	const Video = new VideoTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+	// safe await both queries
+	const result = await safeAwait(
+		Promise.all([
+			Video.getAllPaginatedVideos({ page, limit }),
+			Video.getVideosCounts(),
+		]),
+	);
 
-	const videos = await Video.getAllPaginatedVideos({ page, limit });
-	const count = await Video.getVideosCounts();
+	if (result.success === false || !result.data)
+		return c.json({ error: "Error querying videos" }, 500);
 
-	return c.json({
-		data: videos,
-		pagination: {
-			total: count,
-			page,
-			limit,
+	const [allVideos, count] = result.data;
+
+	if (!allVideos) return c.json({ error: "Error querying videos" }, 500);
+	if (!count) return c.json({ error: "Error querying videos" }, 500);
+
+	return c.json(
+		{
+			data: allVideos,
+			pagination: {
+				total: count.count,
+				page,
+				limit,
+			},
 		},
-	});
+		200,
+	);
 };
