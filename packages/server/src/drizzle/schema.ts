@@ -2,7 +2,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { not, relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { string, z } from "zod";
 
 const Initial = z.string().min(2).max(2).toUpperCase();
 const genEntityId = (initials: string) =>
@@ -16,6 +16,9 @@ export const authTable = sqliteTable("auth", {
 	password: text("password").notNull(),
 	email: text("email").unique().notNull(),
 	phone: text("phone"),
+	agreeTerms: integer("agree_terms", { mode: "boolean" })
+		.default(false)
+		.notNull(),
 	emailConfirmedAt: integer("email_confirmed_at", { mode: "timestamp" }),
 	deletedAt: integer("deleted_at", { mode: "timestamp" }),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
@@ -29,6 +32,7 @@ export const RegisterFields = createInsertSchema(authTable).pick({
 	email: true,
 	password: true,
 	phone: true,
+	agreeTerms: true,
 });
 
 export type InsertAuth = typeof authTable.$inferInsert;
@@ -137,9 +141,9 @@ export const eventTable = sqliteTable("event", {
 	}),
 	title: text("title").notNull(),
 	description: text("description"),
-	date: integer("date").notNull(),
-	time: integer("time"),
-	location: text("location"),
+	date: integer("date", { mode: "timestamp" }).notNull(),
+	startTime: integer("startTime", { mode: "timestamp" }),
+	endTime: integer("endTime", { mode: "timestamp" }),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
 	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
@@ -246,7 +250,8 @@ const StringToDate = z.string().transform((date) => new Date(date));
 
 export const InsertEventSchema = createInsertSchema(eventTable, {
 	date: StringToDate,
-	time: StringToDate,
+	startTime: StringToDate,
+	endTime: StringToDate,
 }).omit({
 	id: true,
 	createdAt: true,
