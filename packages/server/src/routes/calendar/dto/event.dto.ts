@@ -1,5 +1,5 @@
-import { DBConnection } from "../../drizzle/drizzle-client";
-import { eventTable, InsertEvent } from "../../drizzle/schema";
+import { DBConnection } from "../../../drizzle/drizzle-client";
+import { eventTable, InsertEvent } from "../../../drizzle/schema";
 
 export class EventTable extends DBConnection {
 	constructor(TURSO_CONNECTION_URL: string, TURSO_AUTH_TOKEN: string) {

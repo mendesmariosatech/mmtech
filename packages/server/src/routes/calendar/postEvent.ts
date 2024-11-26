@@ -1,7 +1,7 @@
 import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
-import { EventTable } from "./event.dto";
+import { EventTable } from "./dto/event.dto";
 import { ENV_TYPES } from "@repo/zod-types";
 import { env } from "hono/adapter";
 import { AppRouteHandler } from "../../base/type";
@@ -61,8 +61,6 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	const clientId = c.get("clientId");
 	const businessId = c.get("businessId");
 
-	console.log(authId, clientId, businessId);
-
 	if (!businessId || !authId || !clientId) {
 		return c.json({ error: "Not authorized" }, 403);
 	}
@@ -86,8 +84,8 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		date,
 		startTime,
 		endTime,
-		businessId: businessId,
-		clientId: clientId,
+		businessId,
+		clientId,
 	});
 
 	if (!newEvent) {
