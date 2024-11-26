@@ -256,6 +256,9 @@ export const InsertEventSchema = createInsertSchema(eventTable, {
 	id: true,
 	createdAt: true,
 	updatedAt: true,
+	businessId: true,
+	clientId: true,
+	addressId: true,
 });
 
 export type InsertEvent = typeof eventTable.$inferInsert;
