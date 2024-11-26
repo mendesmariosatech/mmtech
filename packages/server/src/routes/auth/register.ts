@@ -67,10 +67,11 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 
 	if (!form) return c.json({ error: "Invalid form data" }, 400);
 
-	const { email, password, name, phone } = form;
+	const { email, password, name, phone, agreeTerms } = form;
 
 	const Auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const Client = new ClientTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
 	const authUser = await Auth.findAuthUser(email);
 	if (authUser) return c.json({ error: "User already exists" }, 400);
@@ -83,12 +84,21 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 		email,
 		name,
 		phone,
+		agreeTerms,
 	});
 	if (!newAuthUser) return c.json({ error: "User creation failed" }, 400);
 
 	const [newClient, error] = await Client.createNewClient({
 		authId: newAuthUser.id,
 	});
+
+	const business = await Business.createBusiness({
+		name: name,
+		clientId: newClient!.id,
+		description: "My business",
+	});
+
+	if (!business) return c.json({ error: "Business creation failed" }, 400);
 
 	if (error) return c.json({ error: error.message }, 400);
 	if (!newClient) return c.json({ error: "Client creation failed" }, 400);

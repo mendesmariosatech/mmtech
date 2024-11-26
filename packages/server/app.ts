@@ -1,7 +1,8 @@
+import "dotenv/config";
 import app from "./src";
 import { serve } from "@hono/node-server";
 
-const PORT = 4000;
+const PORT = 3000;
 serve({
 	fetch: app.fetch,
 	port: PORT,

@@ -1,7 +1,9 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
-import { EventTable } from "./event.dto";
+import { EventTable } from "./dto/event.dto";
+import { ENV_TYPES } from "@repo/zod-types";
+
 import { env } from "hono/adapter";
 import { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
@@ -59,7 +61,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	const authId = c.get("authId");
 	const clientId = c.get("clientId");
 	const businessId = c.get("businessId");
-
+  
 	if (!businessId || !authId || !clientId) {
 		return c.json({ error: "Not authorized" }, 403);
 	}
@@ -73,16 +75,19 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	if (!business) {
 		return c.json({ error: "Not authorized, you don't have a business" }, 403);
 	}
-
-	const { title, date } = c.req.valid("json");
+  
+	const { title, date, startTime, endTime } = c.req.valid("json");
 
 	// how to create a new event
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const newEvent = await Event.createEvent({
 		title,
-		date: Number(date),
-		businessId: businessId,
-		clientId: clientId,
+		date,
+		startTime,
+		endTime,
+		businessId,
+		clientId,
+
 	});
 
 	if (!newEvent) {
