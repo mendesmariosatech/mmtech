@@ -7,7 +7,6 @@ import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
 import { AppRouteHandler } from "../../base/type";
-import { BusinessTable } from "../business/dto/business.dto";
 
 export const registerSpec = createRoute({
 	method: "post",
@@ -108,7 +107,6 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 		{
 			authId: newAuthUser.id,
 			clientId: newClient.id,
-			businessId: business.id,
 		},
 		JWT_SECRET_KEY,
 	);

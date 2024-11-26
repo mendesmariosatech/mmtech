@@ -3,6 +3,7 @@ import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./dto/event.dto";
 import { ENV_TYPES } from "@repo/zod-types";
+
 import { env } from "hono/adapter";
 import { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
@@ -60,7 +61,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	const authId = c.get("authId");
 	const clientId = c.get("clientId");
 	const businessId = c.get("businessId");
-	console.log(authId, clientId, businessId);
+  
 	if (!businessId || !authId || !clientId) {
 		return c.json({ error: "Not authorized" }, 403);
 	}
@@ -74,7 +75,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	if (!business) {
 		return c.json({ error: "Not authorized, you don't have a business" }, 403);
 	}
-
+  
 	const { title, date, startTime, endTime } = c.req.valid("json");
 
 	// how to create a new event
@@ -86,6 +87,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		endTime,
 		businessId,
 		clientId,
+
 	});
 
 	if (!newEvent) {

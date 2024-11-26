@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { CoreServices } from "./CoreServices";
+import { CardStrip } from "./CardStrip";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-	title: "Marketing/CoreServices",
-	component: CoreServices,
+	title: "Marketing/CardStrip",
+	component: CardStrip,
 	parameters: {
 		// layout: "centered",
 	},
 	// tags: ["autodocs"],
 	argTypes: {},
 	args: {},
-} satisfies Meta<typeof CoreServices>;
+} satisfies Meta<typeof CardStrip>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
