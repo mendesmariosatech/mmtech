@@ -61,6 +61,8 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	const clientId = c.get("clientId");
 	const businessId = c.get("businessId");
 
+	console.log(authId, clientId, businessId);
+
 	if (!businessId || !authId || !clientId) {
 		return c.json({ error: "Not authorized" }, 403);
 	}

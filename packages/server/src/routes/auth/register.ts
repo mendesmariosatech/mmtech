@@ -7,6 +7,7 @@ import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
 import { AppRouteHandler } from "../../base/type";
+import { BusinessTable } from "../business/dto/business.dto";
 
 export const registerSpec = createRoute({
 	method: "post",
@@ -71,6 +72,7 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 
 	const Auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const Client = new ClientTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
 	const authUser = await Auth.findAuthUser(email);
 	if (authUser) return c.json({ error: "User already exists" }, 400);
@@ -91,6 +93,14 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 		authId: newAuthUser.id,
 	});
 
+	const business = await Business.createBusiness({
+		name: name,
+		clientId: newClient!.id,
+		description: "My business",
+	});
+
+	if (!business) return c.json({ error: "Business creation failed" }, 400);
+
 	if (error) return c.json({ error: error.message }, 400);
 	if (!newClient) return c.json({ error: "Client creation failed" }, 400);
 
@@ -98,6 +108,7 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 		{
 			authId: newAuthUser.id,
 			clientId: newClient.id,
+			businessId: business.id,
 		},
 		JWT_SECRET_KEY,
 	);
