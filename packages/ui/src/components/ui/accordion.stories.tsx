@@ -6,10 +6,10 @@ import {
 	AccordionTrigger,
 } from "./accordion";
 
-type accordionprops = {
+type AccordionProps = {
 	type: "single" | "multiple";
 };
-function AccordionDemo(props: accordionprops) {
+function AccordionDemo(props: AccordionProps) {
 	return (
 		<Accordion type={props.type} collapsible className="w-full">
 			<AccordionItem value="item-1">
