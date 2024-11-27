@@ -21,3 +21,4 @@ try {
 }
 
 console.log(`🚀 node server started on port http://localhost:${PORT}/api`);
+console.log(`📜 Open API Docs on port http://localhost:${PORT}/api/swagger`);
