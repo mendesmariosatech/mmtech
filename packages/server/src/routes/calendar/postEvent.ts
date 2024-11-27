@@ -3,7 +3,7 @@ import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./event.dto";
 import { env } from "hono/adapter";
-import { AppRouteHandler } from "../../base/type";
+import type { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
 
 export const createEventSpec = createRoute({
@@ -38,6 +38,16 @@ export const createEventSpec = createRoute({
 			},
 		},
 		403: {
+			description: "Not Authorized",
+			content: {
+				"application/json": {
+					schema: z.object({
+						error: z.string(),
+					}),
+				},
+			},
+		},
+		500: {
 			description: "Not Authorized",
 			content: {
 				"application/json": {
@@ -86,7 +96,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	});
 
 	if (!newEvent) {
-		return c.json({ error: "Event not created" }, 403);
+		return c.json({ error: "Server Error: Event not created" }, 500);
 	}
 
 	return c.json(newEvent, 201);
