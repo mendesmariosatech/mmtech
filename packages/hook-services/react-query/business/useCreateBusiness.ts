@@ -1,12 +1,10 @@
 "use client";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { hono_client } from "../../hono_client";
 import type { CreateBusinessInput } from "@repo/server/business";
 
-export function useLogin() {
-	const router = useRouter();
+export function useCreateBusiness() {
 	return useMutation({
 		onSettled: () => {},
 		onError: (error) => {
@@ -22,6 +20,8 @@ export function useLogin() {
 				return;
 			}
 			toast.success(`Business Created: ${resp.data.name}`);
+
+			// validate something that trigger the modal
 		},
 
 		mutationFn: (data: CreateBusinessInput) => {
