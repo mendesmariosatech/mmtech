@@ -42,6 +42,7 @@
   },
   "private": true,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./business": "./src/drizzle/Business/business.ts"
   }
 }

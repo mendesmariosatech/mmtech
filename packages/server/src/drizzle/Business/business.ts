@@ -22,7 +22,7 @@ export const businessTable = sqliteTable("business", {
 	description: text("description"),
 	//  IDK if I keep thi or use new Date()
 	createdAt: integer("created_at", { mode: "timestamp" })
-		.default(sql`(CURRENT_TIMESTAMP)`)
+		.default(new Date())
 		.notNull(),
 	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
@@ -39,6 +39,8 @@ export const CreateBusinessSchema = createInsertSchema(businessTable).pick({
 export const CreateBusinessInput = CreateBusinessSchema.omit({
 	clientId: true,
 });
+
+export type CreateBusinessInput = z.infer<typeof CreateBusinessInput>;
 
 const SelectedSchema = createSelectSchema(businessTable).pick({
 	clientId: true,

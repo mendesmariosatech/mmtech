@@ -38,8 +38,10 @@ export const createBusinessSpec = createRoute({
 			description: "Business Created",
 			content: {
 				"application/json": {
-					schema: GetBusinessSchema.extend({
-						token: z.string(),
+					schema: z.object({
+						data: GetBusinessSchema.extend({
+							token: z.string(),
+						}),
 					}),
 				},
 			},
@@ -116,9 +118,11 @@ export const createBusinessHandler: AppRouteHandler<
 
 	return c.json(
 		{
-			name: newBusinessResult.data.name,
-			id: newBusinessResult.data.id,
-			token,
+			data: {
+				name: newBusinessResult.data.name,
+				id: newBusinessResult.data.id,
+				token,
+			},
 		},
 		201,
 	);
