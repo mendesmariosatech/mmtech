@@ -115,6 +115,7 @@ export const createBusinessHandler: AppRouteHandler<
 
 	// change the cookies, give a new token and refresh the frontend
 	setCookie(c, COOKIES.USER_TOKEN, token);
+	setCookie(c, COOKIES.BUSINESS_ID, newBusinessResult.data.id);
 
 	return c.json(
 		{

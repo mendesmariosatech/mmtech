@@ -26,6 +26,7 @@ type LogoutRoute = typeof logoutSpec;
 export const logoutHandler: AppRouteHandler<LogoutRoute> = async (c) => {
 	setCookie(c, COOKIES.USER_ID, "", { maxAge: 0 });
 	setCookie(c, COOKIES.USER_TOKEN, "", { maxAge: 0 });
+	setCookie(c, COOKIES.BUSINESS_ID, "", { maxAge: 0 });
 
 	return c.json({ data: "Logged out" }, 200);
 };
