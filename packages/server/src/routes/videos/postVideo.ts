@@ -1,11 +1,11 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { AppRouteHandler } from "../../base/type";
 import { authMiddleware } from "../middleware/authentication";
-import { VideoTable } from "../../drizzle/videos/videos.dto";
+import { VideoTable } from "../../drizzle/Video/videos.dto";
 import {
 	CreateVideoFields,
 	SelectVideoSchema,
-} from "../../drizzle/videos/videos";
+} from "../../drizzle/Video/videos";
 import { env } from "hono/adapter";
 
 export const postVideoSpec = createRoute({

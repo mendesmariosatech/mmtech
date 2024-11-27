@@ -18,6 +18,7 @@ export const businessTable = sqliteTable("business", {
 	addressId: text("address_id").references(() => addressTable.id, {
 		onDelete: "cascade",
 	}),
+	slug: text("slug").unique(),
 	description: text("description"),
 	//  IDK if I keep thi or use new Date()
 	createdAt: integer("created_at", { mode: "timestamp" })
@@ -32,6 +33,7 @@ export const CreateBusinessSchema = createInsertSchema(businessTable).pick({
 	name: true,
 	clientId: true,
 	description: true,
+	slug: true,
 });
 
 export const CreateBusinessInput = CreateBusinessSchema.omit({

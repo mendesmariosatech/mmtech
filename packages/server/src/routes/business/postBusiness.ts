@@ -94,6 +94,7 @@ export const createBusinessHandler: AppRouteHandler<
 			name: body.name,
 			clientId: client,
 			description: body.description,
+			slug: body.slug,
 		}),
 	);
 

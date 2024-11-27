@@ -14,6 +14,7 @@ export class BusinessTable extends DBConnection {
 				name: args.name,
 				clientId: args.clientId,
 				description: args.description,
+				slug: args.slug,
 			})
 			.returning();
 		return business;
