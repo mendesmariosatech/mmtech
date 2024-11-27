@@ -112,26 +112,7 @@ export function CalendarModal({
 	onDeleteEvent,
 }: CalendarModalProps) {
 	const modalConfig = configModal(getLabels(language), true);
-
 	const form = useCalendarForm(event);
-	console.log(event);
-	React.useEffect(() => {
-		if (event) {
-			form.reset({
-				titleEvent: event.title || "",
-				textAreaLabel: event.description || "",
-				tagName: event.tag[0]?.name || "",
-				allDays: event.allDay || false,
-				StartDate: event.start
-					? new Date(event.start).toISOString().slice(0, 16)
-					: "",
-				EndDate: event.end
-					? new Date(event.end).toISOString().slice(0, 16)
-					: "",
-				Color: event.tag[0]?.color || "#6d7b92",
-			});
-		}
-	}, [event, form]);
 
 	const handleSave = (input: ModalFields) => {
 		if (input && input.id) {

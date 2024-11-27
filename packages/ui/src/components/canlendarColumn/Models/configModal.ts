@@ -35,7 +35,7 @@ export const configModal = (
 		name: "allDays",
 		input: "checkbox",
 		checkboxLabel: labels.allDays ? "All Day Event" : "Evento Dia Todo",
-		value: isAllDay, // Set the value to true if it's an all-day event
+		value: isAllDay,
 	},
 	EndDate: {
 		name: "EndDate",

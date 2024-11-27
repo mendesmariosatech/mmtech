@@ -20,7 +20,6 @@
     "@repo/zod-types": "*",
     "@scalar/hono-api-reference": "^0.5.156",
     "bcryptjs": "^2.4.3",
-    "cjs-loader": "^0.1.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
     "drizzle-zod": "^0.5.1",

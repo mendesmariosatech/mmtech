@@ -7,7 +7,6 @@ import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
 import { AppRouteHandler } from "../../base/type";
-import { BusinessTable } from "../business/dto/business.dto";
 
 export const registerSpec = createRoute({
 	method: "post",
@@ -68,11 +67,10 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 
 	if (!form) return c.json({ error: "Invalid form data" }, 400);
 
-	const { email, password, name, phone, agreeTerms } = form;
+	const { email, password, name, phone } = form;
 
 	const Auth = new AuthTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const Client = new ClientTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
-	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
 	const authUser = await Auth.findAuthUser(email);
 	if (authUser) return c.json({ error: "User already exists" }, 400);
@@ -85,7 +83,6 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 		email,
 		name,
 		phone,
-		agreeTerms,
 	});
 	if (!newAuthUser) return c.json({ error: "User creation failed" }, 400);
 

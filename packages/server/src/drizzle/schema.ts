@@ -2,7 +2,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { not, relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { string, z } from "zod";
+import { z } from "zod";
 
 const Initial = z.string().min(2).max(2).toUpperCase();
 const genEntityId = (initials: string) =>
@@ -10,6 +10,7 @@ const genEntityId = (initials: string) =>
 
 export const authTable = sqliteTable("auth", {
 	id: text("id", { length: 128 })
+		.$defaultFn(() => genEntityId("AU"))
 		.$defaultFn(() => genEntityId("AU"))
 		.primaryKey(),
 	name: text("name").notNull(),
