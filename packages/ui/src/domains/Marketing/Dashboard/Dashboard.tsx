@@ -68,12 +68,14 @@ import { SideBarStaticFormer } from "../../../components/sideBar-builder/SideBar
 import { DashBoardData } from "@repo/data-testing/DashBoardData";
 import { Routes } from "@repo/data-testing/Routes";
 import { useRouter } from "next/navigation";
-import { useLogout } from "@repo/hook-services";
+import { useCreateBusiness, useLogout } from "@repo/hook-services";
 import { BusinessFormModal } from "@repo/ui/components/form-builder/Forms/CreateBusiness/CreateBusinessForm";
 
 export function Dashboard() {
 	const router = useRouter();
 	const logout = useLogout();
+
+	const createBusiness = useCreateBusiness();
 
 	// if the user is does not have a bunsess, prompt to create one now
 

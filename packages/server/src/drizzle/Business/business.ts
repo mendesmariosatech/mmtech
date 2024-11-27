@@ -6,6 +6,17 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { videosTable } from "../Video/videos";
 
+const texts = {
+	EN: {
+		nameRequired: "Name is required to have +3 backend characters",
+		businessSlug: "Unique Identifier",
+	},
+	PT: {
+		nameRequired: "Nome é obrigatório e deve ter pelo menos 3 caracteres",
+		businessSlug: "Identificador Único",
+	},
+} as const;
+
 export const businessTable = sqliteTable("business", {
 	id: text("id", { length: 128 })
 		.$defaultFn(() => genEntityId("BS"))
@@ -20,7 +31,6 @@ export const businessTable = sqliteTable("business", {
 	}),
 	slug: text("slug").unique(),
 	description: text("description"),
-	//  IDK if I keep thi or use new Date()
 	createdAt: integer("created_at", { mode: "timestamp" })
 		.default(new Date())
 		.notNull(),
@@ -38,6 +48,9 @@ export const CreateBusinessSchema = createInsertSchema(businessTable).pick({
 
 export const CreateBusinessInput = CreateBusinessSchema.omit({
 	clientId: true,
+}).extend({
+	name: z.string().min(3, { message: texts["EN"].nameRequired }),
+	slug: z.string().min(3, { message: texts["EN"].businessSlug }),
 });
 
 export type CreateBusinessInput = z.infer<typeof CreateBusinessInput>;

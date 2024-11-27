@@ -7,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { ConfigObject } from "../../ControlledInput";
 import { Dialog, DialogContent } from "../../../ui/dialog";
+import { useCreateBusiness } from "@repo/hook-services";
+import { CreateBusinessInput } from "@repo/server/business";
 
 const texts = {
 	EN: {
@@ -32,37 +34,27 @@ const texts = {
 } as const;
 
 type LoginFormProps = {
-	mutate: (input: any) => void;
+	mutate: ReturnType<typeof useCreateBusiness>["mutate"];
 	isPending: boolean;
 	error: Error | null;
 };
 
-// the business path needs to some path that will serve as a unique identifier for the business
-// this will be used to generate the business URL
-
-// zod refine type will transform any test to a dash version of the string
-
-const businessSchema = z.object({
-	businessName: z.string().min(3, { message: texts["EN"].nameRequired }),
-	businessPath: z
-		.string()
-		.min(3, { message: texts["EN"].businessSlug })
-		.refine((path) => {
-			return /^[a-z0-9-]+$/.test(path);
-		}),
-});
-
-type BusinessSchema = z.infer<typeof businessSchema>;
-
-export const businessFormConfig: ConfigObject<BusinessSchema> = {
-	businessName: {
-		name: "businessName",
+// remove unused keys
+export const businessFormConfig: ConfigObject<CreateBusinessInput> = {
+	name: {
+		name: "name",
 		input: "text",
 		label: texts["EN"].businessNamelabel,
 		placeholder: texts["EN"].businessNamePlaceholder,
 	},
-	businessPath: {
-		name: "businessPath",
+	description: {
+		name: "description",
+		input: "textarea",
+		label: "Description",
+		placeholder: "Enter your business description",
+	},
+	slug: {
+		name: "slug",
 		input: "text",
 		label: texts["EN"].businessSluglabel,
 		placeholder: texts["EN"].businessSlugPlaceholder,
@@ -72,15 +64,16 @@ export const businessFormConfig: ConfigObject<BusinessSchema> = {
 // if the business exists, the user will not see this modal
 // right now, we want to send the business information to the server
 export const BusinessFormModal = (props: LoginFormProps) => {
-	const form = useForm<BusinessSchema>({
-		resolver: zodResolver(businessSchema),
+	const form = useForm<CreateBusinessInput>({
+		resolver: zodResolver(CreateBusinessInput),
 		defaultValues: {
-			businessName: "",
-			businessPath: "",
+			name: "",
+			slug: "",
+			description: "",
 		},
 	});
 
-	const handleSubmit = (data: BusinessSchema) => {
+	const handleSubmit = (data: CreateBusinessInput) => {
 		props.mutate(data);
 	};
 
