@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { hono_client } from "../../hono_client";
 import type { CreateBusinessInput } from "@repo/server/business";
+import { ClientProps } from "../../context";
 
-export function useCreateBusiness() {
+export function useCreateBusiness(auth: ClientProps | null) {
 	return useMutation({
-		onSettled: () => {},
 		onError: (error) => {
 			toast.error("Server could not be reached");
 		},
@@ -25,13 +25,24 @@ export function useCreateBusiness() {
 		},
 
 		mutationFn: (data: CreateBusinessInput) => {
-			return hono_client.api.business.$post({
-				json: {
-					name: data.name,
-					description: data.description,
-					slug: data.slug,
+			if (!auth?.token) {
+				throw new Error("No Auth provided");
+			}
+
+			return hono_client.api.business.$post(
+				{
+					json: {
+						name: data.name,
+						description: data.description,
+						slug: data.slug,
+					},
 				},
-			});
+				{
+					headers: {
+						Authorization: `Bearer ${auth.token}`,
+					},
+				},
+			);
 		},
 	});
 }

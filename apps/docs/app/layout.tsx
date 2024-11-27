@@ -1,9 +1,10 @@
 import "@repo/ui/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { QueryProvider } from "@repo/hook-services";
+import { AuthProvider, QueryProvider } from "@repo/hook-services";
 import { Toaster } from "@repo/ui/components/ui/sonner";
 import { TooltipProvider } from "@repo/ui/components/ui/tooltip";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,18 +18,30 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }): JSX.Element {
+	const cookieStore = cookies();
+	const token = cookieStore.get("USER_TOKEN");
+
+	const clientToken = token?.value
+		? {
+				clientId: "1",
+				token: token.value,
+			}
+		: null;
+
 	return (
 		<html lang="en">
 			<head>
 				<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 			</head>
 			<QueryProvider>
-				<TooltipProvider>
-					<body className={inter.className}>
-						{children}
-						<Toaster />
-					</body>
-				</TooltipProvider>
+				<AuthProvider auth={clientToken}>
+					<TooltipProvider>
+						<body className={inter.className}>
+							{children}
+							<Toaster />
+						</body>
+					</TooltipProvider>
+				</AuthProvider>
 			</QueryProvider>
 		</html>
 	);
