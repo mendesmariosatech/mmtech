@@ -117,7 +117,7 @@ export const loginHandler: AppRouteHandler<LoginRoute> = async (c) => {
 	setCookie(c, COOKIES.USER_TOKEN, token);
 
 	// business might be undefined
-	if (business.id) {
+	if (business?.id) {
 		setCookie(c, COOKIES.BUSINESS_ID, business.id);
 	}
 
