@@ -6,7 +6,7 @@ import { checkPassword } from "../../utils/bcrypt";
 import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
-import { AppRouteHandler } from "../../base/type";
+import type { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
 
 export const loginSpec = createRoute({
@@ -116,9 +116,19 @@ export const loginHandler: AppRouteHandler<LoginRoute> = async (c) => {
 	setCookie(c, COOKIES.USER_ID, user.email);
 	setCookie(c, COOKIES.USER_TOKEN, token);
 
-	const { password: NOT_USE, ...rest } = user;
+	const userData = {
+		id: user.id,
+		name: user.name,
+		email: user.email,
+		phone: user.phone,
+		emailConfirmedAt: user.emailConfirmedAt,
+		createdAt: user.createdAt,
+		deletedAt: user.deletedAt,
+		updatedAt: user.updatedAt,
+		token,
+	};
 
-	const data = { ...rest, token };
+	const data = userData;
 
 	return c.json({ data }, 200);
 };
