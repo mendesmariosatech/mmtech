@@ -81,12 +81,10 @@ export function Dashboard() {
 	const auth = useAuthContext();
 	const createBusiness = useCreateBusiness(auth);
 
-	console.log("Use Auth", auth);
-	// if the user is does not have a bunsess, prompt to create one now
-
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
 			<BusinessFormModal
+				isOpen={!auth?.businessId}
 				isPending={createBusiness.isPending}
 				error={createBusiness.error}
 				mutate={createBusiness.mutateAsync}

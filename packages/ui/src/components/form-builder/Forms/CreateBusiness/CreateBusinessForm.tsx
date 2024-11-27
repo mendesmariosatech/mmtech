@@ -14,21 +14,17 @@ const texts = {
 	EN: {
 		button: "Submit",
 		loading: "Loading...",
-		nameRequired: "Name is required to have +3 characters",
-		businessSlug: "Unique Identifier",
-		businessNamelabel: "Business name",
+		businessNameLabel: "Business name",
 		businessNamePlaceholder: "Enter your business name",
-		businessSluglabel: "Unique Identifier",
+		businessSlugLabel: "Unique Identifier",
 		businessSlugPlaceholder: "E.g. acme-business-123",
 	},
 	PT: {
 		button: "Entrar",
 		loading: "Carregando...",
-		nameRequired: "Nome é obrigatório e deve ter pelo menos 3 caracteres",
-		businessSlug: "Identificador Único",
-		businessNamelabel: "Nome do business",
+		businessNameLabel: "Nome do business",
 		businessNamePlaceholder: "Acme. S/A",
-		businessSluglabel: "Slug",
+		businessSlugLabel: "Slug",
 		businessSlugPlaceholder: "Ex: acme-business-123",
 	},
 } as const;
@@ -37,6 +33,7 @@ type LoginFormProps = {
 	mutate: ReturnType<typeof useCreateBusiness>["mutate"];
 	isPending: boolean;
 	error: Error | null;
+	isOpen: boolean;
 };
 
 // remove unused keys
@@ -44,7 +41,7 @@ export const businessFormConfig: ConfigObject<CreateBusinessInput> = {
 	name: {
 		name: "name",
 		input: "text",
-		label: texts["EN"].businessNamelabel,
+		label: texts["EN"].businessNameLabel,
 		placeholder: texts["EN"].businessNamePlaceholder,
 	},
 	description: {
@@ -56,7 +53,7 @@ export const businessFormConfig: ConfigObject<CreateBusinessInput> = {
 	slug: {
 		name: "slug",
 		input: "text",
-		label: texts["EN"].businessSluglabel,
+		label: texts["EN"].businessSlugLabel,
 		placeholder: texts["EN"].businessSlugPlaceholder,
 	},
 };
@@ -78,7 +75,7 @@ export const BusinessFormModal = (props: LoginFormProps) => {
 	};
 
 	return (
-		<Dialog open modal>
+		<Dialog open={props.isOpen} modal>
 			<DialogContent className="sm:max-w-md [&>button]:hidden">
 				<div className="border-2 border-primary-foreground p-6 rounded-md">
 					<ControlledForm

@@ -43,6 +43,7 @@
   "private": true,
   "exports": {
     ".": "./src/index.ts",
+    "./cookies": "./src/env.cookies.ts",
     "./business": "./src/drizzle/Business/business.ts"
   }
 }

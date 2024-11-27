@@ -5,6 +5,7 @@ import { AuthProvider, QueryProvider } from "@repo/hook-services";
 import { Toaster } from "@repo/ui/components/ui/sonner";
 import { TooltipProvider } from "@repo/ui/components/ui/tooltip";
 import { cookies } from "next/headers";
+// import { COOKIES } from "@repo/server/cookies"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +21,17 @@ export default function RootLayout({
 }): JSX.Element {
 	const cookieStore = cookies();
 	const token = cookieStore.get("USER_TOKEN");
+	const userId = cookieStore.get("USER_ID");
+	const businessId = cookieStore.get("BUSINESS_ID");
 
-	const clientToken = token?.value
-		? {
-				clientId: "1",
-				token: token.value,
-			}
-		: null;
+	const clientToken =
+		token?.value && userId?.value
+			? {
+					token: token.value,
+					clientId: userId.value,
+					businessId: businessId?.value,
+				}
+			: null;
 
 	return (
 		<html lang="en">
