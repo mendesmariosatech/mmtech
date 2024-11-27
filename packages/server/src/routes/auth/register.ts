@@ -7,6 +7,7 @@ import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
 import { AppRouteHandler } from "../../base/type";
+import { BusinessTable } from "../business/dto/business.dto";
 
 export const registerSpec = createRoute({
 	method: "post",
@@ -91,14 +92,6 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 	const [newClient, error] = await Client.createNewClient({
 		authId: newAuthUser.id,
 	});
-
-	const business = await Business.createBusiness({
-		name: name,
-		clientId: newClient!.id,
-		description: "My business",
-	});
-
-	if (!business) return c.json({ error: "Business creation failed" }, 400);
 
 	if (error) return c.json({ error: error.message }, 400);
 	if (!newClient) return c.json({ error: "Client creation failed" }, 400);

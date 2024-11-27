@@ -4,7 +4,6 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { string, z } from "zod";
 
-
 const Initial = z.string().min(2).max(2).toUpperCase();
 const genEntityId = (initials: string) =>
 	`${Initial.parse(initials)}_${createId().toUpperCase()}`;
@@ -253,7 +252,6 @@ export const InsertEventSchema = createInsertSchema(eventTable, {
 	date: StringToDate,
 	startTime: StringToDate,
 	endTime: StringToDate,
-
 }).omit({
 	id: true,
 	createdAt: true,
@@ -261,7 +259,6 @@ export const InsertEventSchema = createInsertSchema(eventTable, {
 	businessId: true,
 	clientId: true,
 	addressId: true,
-
 });
 
 export type InsertEvent = typeof eventTable.$inferInsert;
