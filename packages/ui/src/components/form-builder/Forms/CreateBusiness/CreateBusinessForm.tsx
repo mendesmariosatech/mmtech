@@ -12,15 +12,27 @@ const texts = {
 	EN: {
 		button: "Submit",
 		loading: "Loading...",
+		nameRequired: "Name is required to have +3 characters",
+		businessSlug: "Unique Identifier",
+		businessNamelabel: "Business name",
+		businessNamePlaceholder: "Enter your business name",
+		businessSluglabel: "Unique Identifier",
+		businessSlugPlaceholder: "E.g. acme-business-123",
 	},
 	PT: {
 		button: "Entrar",
 		loading: "Carregando...",
+		nameRequired: "Nome é obrigatório e deve ter pelo menos 3 caracteres",
+		businessSlug: "Identificador Único",
+		businessNamelabel: "Nome do business",
+		businessNamePlaceholder: "Acme. S/A",
+		businessSluglabel: "Slug",
+		businessSlugPlaceholder: "Ex: acme-business-123",
 	},
 } as const;
 
 type LoginFormProps = {
-	mutate: () => void;
+	mutate: (input: any) => void;
 	isPending: boolean;
 	error: Error | null;
 };
@@ -31,12 +43,10 @@ type LoginFormProps = {
 // zod refine type will transform any test to a dash version of the string
 
 const businessSchema = z.object({
-	businessName: z
-		.string()
-		.min(3, { message: "Name is required to have +3 characters" }),
+	businessName: z.string().min(3, { message: texts["EN"].nameRequired }),
 	businessPath: z
 		.string()
-		.min(3, { message: "Name is required to have +3 characters" })
+		.min(3, { message: texts["EN"].businessSlug })
 		.refine((path) => {
 			return /^[a-z0-9-]+$/.test(path);
 		}),
@@ -48,15 +58,14 @@ export const businessFormConfig: ConfigObject<BusinessSchema> = {
 	businessName: {
 		name: "businessName",
 		input: "text",
-		label: "Business name",
-		placeholder: "Enter your business name",
-		// required: "Email is required",
+		label: texts["EN"].businessNamelabel,
+		placeholder: texts["EN"].businessNamePlaceholder,
 	},
 	businessPath: {
 		name: "businessPath",
 		input: "text",
-		label: "Unique Identifier",
-		placeholder: "E.g. my-cool-ass-business",
+		label: texts["EN"].businessSluglabel,
+		placeholder: texts["EN"].businessSlugPlaceholder,
 	},
 };
 
@@ -70,10 +79,7 @@ export const BusinessFormModal = (props: LoginFormProps) => {
 	});
 
 	const handleSubmit = (data: BusinessSchema) => {
-		// props.mutate(data);
-		console.log({
-			data,
-		});
+		props.mutate(data);
 	};
 
 	return (
