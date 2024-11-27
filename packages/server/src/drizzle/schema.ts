@@ -3,9 +3,7 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { genEntityId } from "./utils";
-import { videosTable } from "./videos/videos";
-
-export { videosTable } from "./videos/videos";
+import { videosTable } from "./Video/videos";
 
 export const authTable = sqliteTable("auth", {
 	id: text("id", { length: 128 })
@@ -258,3 +256,5 @@ export const InsertEventSchema = createInsertSchema(eventTable, {
 });
 
 export type InsertEvent = typeof eventTable.$inferInsert;
+
+export { videosTable };

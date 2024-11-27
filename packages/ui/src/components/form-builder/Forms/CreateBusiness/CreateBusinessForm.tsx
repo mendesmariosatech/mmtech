@@ -69,6 +69,8 @@ export const businessFormConfig: ConfigObject<BusinessSchema> = {
 	},
 };
 
+// if the business exists, the user will not see this modal
+// right now, we want to send the business information to the server
 export const BusinessFormModal = (props: LoginFormProps) => {
 	const form = useForm<BusinessSchema>({
 		resolver: zodResolver(businessSchema),
