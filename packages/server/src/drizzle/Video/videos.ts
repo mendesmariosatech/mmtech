@@ -1,9 +1,9 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { genEntityId } from "../utils";
-import { businessTable } from "../schema";
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { businessTable } from "../Business/business";
 
 export const videosTable = sqliteTable("videos", {
 	id: text("id", { length: 128 })

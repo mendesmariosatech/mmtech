@@ -7,7 +7,7 @@ import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
 import type { AppRouteHandler } from "../../base/type";
-import { BusinessTable } from "../business/dto/business.dto";
+import { BusinessTable } from "../../drizzle/Business/business.dto";
 
 export const loginSpec = createRoute({
 	method: "post",

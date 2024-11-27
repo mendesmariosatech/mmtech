@@ -4,7 +4,7 @@ import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./event.dto";
 import { env } from "hono/adapter";
 import type { AppRouteHandler } from "../../base/type";
-import { BusinessTable } from "../business/dto/business.dto";
+import { BusinessTable } from "../../drizzle/Business/business.dto";
 
 export const createEventSpec = createRoute({
 	method: "post",

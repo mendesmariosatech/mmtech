@@ -1,19 +1,18 @@
 // an spec for /business/
 
 import { createRoute, z } from "@hono/zod-openapi";
-import {
-	CreateBusinessInput,
-	CreateBusinessSchema,
-	GetBusinessSchema,
-} from "../../drizzle/schema";
 import { AppRouteHandler } from "../../base/type";
-import { BusinessTable } from "./dto/business.dto";
+import { BusinessTable } from "../../drizzle/Business/business.dto";
 import { env } from "hono/adapter";
 import { safeAwait } from "../../utils/safeAwait";
 import { authMiddleware } from "../middleware/authentication";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
 import { generateToken } from "../../jwt_token";
+import {
+	CreateBusinessInput,
+	GetBusinessSchema,
+} from "../../drizzle/Business/business";
 
 export const createBusinessSpec = createRoute({
 	method: "post",

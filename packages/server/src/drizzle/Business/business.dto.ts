@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { DBConnection } from "../../../drizzle/drizzle-client";
-import { businessTable, CreateBusinessSchema } from "../../../drizzle/schema";
+import { DBConnection } from "../drizzle-client";
+import { businessTable, CreateBusinessSchema } from "./business";
 
 export class BusinessTable extends DBConnection {
 	constructor(TURSO_CONNECTION_URL: string, TURSO_AUTH_TOKEN: string) {
