@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { hono_client } from "../hono_client";
+import { hono_client } from "../../hono_client";
 import { toast } from "sonner";
 export const useLogout = () => {
 	// invalidate query client
