@@ -82,9 +82,9 @@ export function Dashboard() {
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
 			<BusinessFormModal
-				isPending={false}
-				error={null}
-				mutate={() => console.log("")}
+				isPending={createBusiness.isPending}
+				error={createBusiness.error}
+				mutate={createBusiness.mutateAsync}
 			/>
 			<SideBarStaticFormer
 				companyName={DashBoardData.companyName}
