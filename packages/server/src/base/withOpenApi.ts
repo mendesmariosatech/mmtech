@@ -12,7 +12,7 @@ export function withOpenApi(app: OpenAPIHono<AppOpenAPI>) {
 	});
 
 	app.get(
-		"/api/scalar",
+		"/api/swagger",
 		apiReference({
 			theme: "bluePlanet",
 			defaultHttpClient: {

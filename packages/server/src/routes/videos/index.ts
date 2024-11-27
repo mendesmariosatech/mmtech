@@ -1,3 +1,9 @@
-import { videoHandler, videoSpec } from "./videos";
+import { postVideoHandler, postVideoSpec } from "./postVideo";
+import { app } from "../../base/base-app";
+import { getAllVideosHandler, getAllVideoSpec } from "./getAllVideos";
 
-export const videosRoutes = [[videoSpec, videoHandler]] as const;
+const videosRouter = app
+	.openapi(postVideoSpec, postVideoHandler)
+	.openapi(getAllVideoSpec, getAllVideosHandler);
+
+export { videosRouter };
