@@ -17,7 +17,7 @@ type Props = {
 	description: string;
 };
 
-function AlertDialogDemo() {
+function AlertDialogDemo(props: Props) {
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
@@ -51,7 +51,7 @@ type Story = StoryObj<typeof meta>;
 
 export const AlertDialogTest: Story = {
 	args: {
-		// title: "Warning!",
-		// description: "Are you sure you want to proceed?",
+		title: "Warning!",
+		description: "Are you sure you want to proceed?",
 	},
 };
