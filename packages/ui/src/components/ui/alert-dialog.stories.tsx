@@ -1,9 +1,16 @@
 import { Meta, StoryObj } from "@storybook/react";
 import {
 	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
 	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
 	AlertDialogTitle,
+	AlertDialogTrigger,
 } from "./alert-dialog";
+import { Button } from "./button";
 
 type Props = {
 	title: string;
