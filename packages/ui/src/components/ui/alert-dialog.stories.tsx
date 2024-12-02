@@ -12,6 +12,11 @@ import {
 } from "./alert-dialog";
 import { Button } from "./button";
 
+type Props = {
+	title: string;
+	description: string;
+};
+
 function AlertDialogDemo() {
 	return (
 		<AlertDialog>
@@ -46,7 +51,7 @@ type Story = StoryObj<typeof meta>;
 
 export const AlertDialogTest: Story = {
 	args: {
-		title: "Warning!",
-		description: "Are you sure you want to proceed?",
+		// title: "Warning!",
+		// description: "Are you sure you want to proceed?",
 	},
 };
