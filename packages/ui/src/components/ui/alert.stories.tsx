@@ -1,7 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-// import { Alert } from "./alert";
 import { AlertTitle, AlertDescription, Alert } from "./alert";
-import { Terminal } from "lucide-react";
 
 type Props = {
 	title: string;
@@ -10,7 +8,6 @@ type Props = {
 function AlertDemo(props: Props) {
 	return (
 		<Alert>
-			<Terminal />
 			<AlertTitle>{props.title}</AlertTitle>
 			<AlertDescription>{props.body}</AlertDescription>
 		</Alert>
