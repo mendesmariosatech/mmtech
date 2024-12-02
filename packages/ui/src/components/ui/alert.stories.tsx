@@ -1,14 +1,18 @@
 import { Meta, StoryObj } from "@storybook/react";
 // import { Alert } from "./alert";
 import { AlertTitle, AlertDescription, Alert } from "./alert";
+import { Terminal } from "lucide-react";
 
-export function AlertDemo() {
+type Props = {
+	title: string;
+	body: string;
+};
+function AlertDemo(props: Props) {
 	return (
 		<Alert>
-			<AlertTitle>Heads up!</AlertTitle>
-			<AlertDescription>
-				You can add components to your app using the cli.
-			</AlertDescription>
+			<Terminal />
+			<AlertTitle>{props.title}</AlertTitle>
+			<AlertDescription>{props.body}</AlertDescription>
 		</Alert>
 	);
 }
@@ -17,9 +21,14 @@ const meta = {
 	title: "Design System/Alert",
 	component: AlertDemo,
 	tags: ["autodocs"],
-} satisfies Meta<typeof Alert>;
+} satisfies Meta<typeof AlertDemo>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const AlertTest: Story = {};
+export const AlertTest: Story = {
+	args: {
+		title: "EXAMPLE",
+		body: "Corpo",
+	},
+};
