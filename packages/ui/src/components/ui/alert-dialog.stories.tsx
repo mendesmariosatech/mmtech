@@ -12,15 +12,25 @@ import {
 } from "./alert-dialog";
 import { Button } from "./button";
 
-type Props = {
-	title: string;
-	description: string;
-};
-function AlertDialogDemo(props: Props) {
+function AlertDialogDemo() {
 	return (
 		<AlertDialog>
-			<AlertDialogTitle>{props.title}</AlertDialogTitle>
-			<AlertDialogDescription>{props.description}</AlertDialogDescription>
+			<AlertDialogTrigger asChild>
+				<Button variant="outline">Show Dialog</Button>
+			</AlertDialogTrigger>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+					<AlertDialogDescription>
+						This action cannot be undone. This will permanently delete your
+						account and remove your data from our servers.
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					<AlertDialogAction>Continue</AlertDialogAction>
+				</AlertDialogFooter>
+			</AlertDialogContent>
 		</AlertDialog>
 	);
 }
