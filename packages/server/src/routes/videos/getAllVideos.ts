@@ -1,8 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { SelectVideoSchema } from "../../drizzle/videos/videos";
 import { AppRouteHandler } from "../../base/type";
-import { env } from "hono/adapter";
-import { VideoTable } from "../../drizzle/videos/videos.dto";
 import { PaginationSchema } from "../../utils/pagination";
 import { safeAwait } from "../../utils/safeAwait";
 
@@ -65,12 +63,10 @@ type GetAllVideosResponse = typeof getAllVideoSpec;
 export const getAllVideosHandler: AppRouteHandler<
 	GetAllVideosResponse
 > = async (c) => {
-	const { TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN } = env(c);
 	const { page, limit } = c.req.valid("query");
 
-	const db = c.get("db");
+	const Video = c.get("dto").Videos;
 
-	const Video = new VideoTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	// safe await both queries
 	const result = await safeAwait(
 		Promise.all([
