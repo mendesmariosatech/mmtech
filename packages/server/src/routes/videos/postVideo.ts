@@ -1,12 +1,10 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { AppRouteHandler } from "../../base/type";
 import { authMiddleware } from "../middleware/authentication";
-import { VideoTable } from "../../drizzle/videos/videos.dto";
 import {
 	CreateVideoFields,
 	SelectVideoSchema,
 } from "../../drizzle/videos/videos";
-import { env } from "hono/adapter";
 
 export const postVideoSpec = createRoute({
 	method: "post",
@@ -61,19 +59,17 @@ type CreateVideoRoute = typeof postVideoSpec;
 export const postVideoHandler: AppRouteHandler<CreateVideoRoute> = async (
 	c,
 ) => {
-	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
-
 	const businessId = c.get("businessId");
 
 	if (!businessId) {
 		return c.json({ error: "Business ID is required" }, 400);
 	}
 
-	const videoTable = new VideoTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+	const Video = c.get("dto").Videos;
 
 	const input = c.req.valid("json");
 
-	const newVideo = await videoTable.createVideo({
+	const newVideo = await Video.createVideo({
 		businessId,
 		url: input.url,
 		title: input.title,
