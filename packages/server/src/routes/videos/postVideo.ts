@@ -5,7 +5,6 @@ import {
 	CreateVideoFields,
 	SelectVideoSchema,
 } from "../../drizzle/videos/videos";
-import { env } from "hono/adapter";
 
 export const postVideoSpec = createRoute({
 	method: "post",
