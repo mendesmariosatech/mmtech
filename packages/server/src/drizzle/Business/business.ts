@@ -66,8 +66,6 @@ export const GetBusinessSchema = createSelectSchema(businessTable).pick({
 	id: true,
 });
 
-export type CreateBusiness = z.infer<typeof CreateBusinessSchema>;
-
 export const businessRelations = relations(businessTable, ({ one, many }) => ({
 	client: one(clientTable, {
 		fields: [businessTable.clientId],
