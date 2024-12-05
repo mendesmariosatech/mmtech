@@ -110,7 +110,7 @@ export const createBusinessHandler: AppRouteHandler<
 		}),
 	);
 
-	if (newBusinessResult.success === false) {
+	if (newBusinessResult.success === false || !newBusinessResult.data) {
 		return c.json({ error: "Failed to create business" }, 500);
 	}
 
