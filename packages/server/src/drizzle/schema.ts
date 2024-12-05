@@ -208,4 +208,5 @@ export const InsertEventSchema = createInsertSchema(eventTable, {
 
 export type InsertEvent = typeof eventTable.$inferInsert;
 
+// All exports should start from here
 export { videosTable, businessTable };
