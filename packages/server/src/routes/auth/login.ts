@@ -7,7 +7,7 @@ import { generateToken } from "../../jwt_token";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
 import type { AppRouteHandler } from "../../base/type";
-import { BusinessTable } from "../business/dto/business.dto";
+import { BusinessTable } from "../../drizzle/Business/business.dto";
 
 export const loginSpec = createRoute({
 	method: "post",
@@ -115,6 +115,11 @@ export const loginHandler: AppRouteHandler<LoginRoute> = async (c) => {
 
 	setCookie(c, COOKIES.USER_ID, user.email);
 	setCookie(c, COOKIES.USER_TOKEN, token);
+
+	// business might be undefined
+	if (business?.id) {
+		setCookie(c, COOKIES.BUSINESS_ID, business.id);
+	}
 
 	const userData = {
 		id: user.id,

@@ -1,8 +1,8 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { SelectVideoSchema } from "../../drizzle/videos/videos";
+import { SelectVideoSchema } from "../../drizzle/Video/videos";
 import { AppRouteHandler } from "../../base/type";
 import { env } from "hono/adapter";
-import { VideoTable } from "../../drizzle/videos/videos.dto";
+import { VideoTable } from "../../drizzle/Video/videos.dto";
 import { PaginationSchema } from "../../utils/pagination";
 import { safeAwait } from "../../utils/safeAwait";
 

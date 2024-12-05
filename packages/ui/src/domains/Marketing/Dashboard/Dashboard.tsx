@@ -68,14 +68,27 @@ import { SideBarStaticFormer } from "../../../components/sideBar-builder/SideBar
 import { DashBoardData } from "@repo/data-testing/DashBoardData";
 import { Routes } from "@repo/data-testing/Routes";
 import { useRouter } from "next/navigation";
-import { useLogout } from "@repo/hook-services";
-
+import {
+	useAuthContext,
+	useCreateBusiness,
+	useLogout,
+} from "@repo/hook-services";
+import { BusinessFormModal } from "@repo/ui/components/form-builder/Forms/CreateBusiness/CreateBusinessForm";
 export function Dashboard() {
 	const router = useRouter();
 	const logout = useLogout();
 
+	const auth = useAuthContext();
+	const createBusiness = useCreateBusiness(auth);
+
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
+			<BusinessFormModal
+				isOpen={!auth?.businessId}
+				isPending={createBusiness.isPending}
+				error={createBusiness.error}
+				mutate={createBusiness.mutateAsync}
+			/>
 			<SideBarStaticFormer
 				companyName={DashBoardData.companyName}
 				buttonTop={DashBoardData.buttonTop}

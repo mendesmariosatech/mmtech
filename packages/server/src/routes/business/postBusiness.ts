@@ -1,19 +1,18 @@
 // an spec for /business/
 
 import { createRoute, z } from "@hono/zod-openapi";
-import {
-	CreateBusinessInput,
-	CreateBusinessSchema,
-	GetBusinessSchema,
-} from "../../drizzle/schema";
 import { AppRouteHandler } from "../../base/type";
-import { BusinessTable } from "./dto/business.dto";
+import { BusinessTable } from "../../drizzle/Business/business.dto";
 import { env } from "hono/adapter";
 import { safeAwait } from "../../utils/safeAwait";
 import { authMiddleware } from "../middleware/authentication";
 import { setCookie } from "hono/cookie";
 import { COOKIES } from "../../env/cookies";
 import { generateToken } from "../../jwt_token";
+import {
+	CreateBusinessInput,
+	GetBusinessSchema,
+} from "../../drizzle/Business/business";
 
 export const createBusinessSpec = createRoute({
 	method: "post",
@@ -39,8 +38,10 @@ export const createBusinessSpec = createRoute({
 			description: "Business Created",
 			content: {
 				"application/json": {
-					schema: GetBusinessSchema.extend({
-						token: z.string(),
+					schema: z.object({
+						data: GetBusinessSchema.extend({
+							token: z.string(),
+						}),
 					}),
 				},
 			},
@@ -57,6 +58,16 @@ export const createBusinessSpec = createRoute({
 		},
 		403: {
 			description: "Forbidden",
+			content: {
+				"application/json": {
+					schema: z.object({
+						error: z.string(),
+					}),
+				},
+			},
+		},
+		500: {
+			description: "Server Error",
 			content: {
 				"application/json": {
 					schema: z.object({
@@ -95,11 +106,12 @@ export const createBusinessHandler: AppRouteHandler<
 			name: body.name,
 			clientId: client,
 			description: body.description,
+			slug: body.slug,
 		}),
 	);
 
 	if (newBusinessResult.success === false || !newBusinessResult.data) {
-		return c.json({ error: "Failed to create business" }, 400);
+		return c.json({ error: "Failed to create business" }, 500);
 	}
 
 	const token = await generateToken(
@@ -113,12 +125,15 @@ export const createBusinessHandler: AppRouteHandler<
 
 	// change the cookies, give a new token and refresh the frontend
 	setCookie(c, COOKIES.USER_TOKEN, token);
+	setCookie(c, COOKIES.BUSINESS_ID, newBusinessResult.data.id);
 
 	return c.json(
 		{
-			name: newBusinessResult.data.name,
-			id: newBusinessResult.data.id,
-			token,
+			data: {
+				name: newBusinessResult.data.name,
+				id: newBusinessResult.data.id,
+				token,
+			},
 		},
 		201,
 	);

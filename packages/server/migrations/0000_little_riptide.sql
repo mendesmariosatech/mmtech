@@ -37,8 +37,9 @@ CREATE TABLE `business` (
 	`client_id` text NOT NULL,
 	`name` text NOT NULL,
 	`address_id` text,
+	`slug` text,
 	`description` text,
-	`created_at` integer DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`created_at` integer DEFAULT '"2024-12-05T04:31:41.220Z"' NOT NULL,
 	`updated_at` integer,
 	FOREIGN KEY (`client_id`) REFERENCES `client`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`address_id`) REFERENCES `address`(`id`) ON UPDATE no action ON DELETE cascade
@@ -87,4 +88,16 @@ CREATE TABLE `event` (
 	FOREIGN KEY (`address_id`) REFERENCES `address`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `auth_email_unique` ON `auth` (`email`);
+CREATE TABLE `videos` (
+	`id` text(128) PRIMARY KEY NOT NULL,
+	`business_id` text NOT NULL,
+	`title` text NOT NULL,
+	`url` text NOT NULL,
+	`description` text,
+	`created_at` integer NOT NULL,
+	`updated_at` integer,
+	FOREIGN KEY (`business_id`) REFERENCES `business`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `auth_email_unique` ON `auth` (`email`);--> statement-breakpoint
+CREATE UNIQUE INDEX `business_slug_unique` ON `business` (`slug`);

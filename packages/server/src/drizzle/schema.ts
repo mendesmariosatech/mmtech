@@ -3,9 +3,8 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { genEntityId } from "./utils";
-import { videosTable } from "./videos/videos";
-
-export { videosTable } from "./videos/videos";
+import { videosTable } from "./Video/videos";
+import { businessTable } from "./Business/business";
 
 export const authTable = sqliteTable("auth", {
 	id: text("id", { length: 128 })
@@ -74,56 +73,6 @@ export const customerRelations = relations(customer, ({ one }) => ({
 		fields: [customer.authId],
 		references: [authTable.id],
 	}),
-}));
-
-export const businessTable = sqliteTable("business", {
-	id: text("id", { length: 128 })
-		.$defaultFn(() => genEntityId("BS"))
-		.primaryKey()
-		.notNull(),
-	clientId: text("client_id")
-		.references(() => clientTable.id, { onDelete: "cascade" })
-		.notNull(),
-	name: text("name").notNull(),
-	addressId: text("address_id").references(() => addressTable.id, {
-		onDelete: "cascade",
-	}),
-	description: text("description"),
-	createdAt: integer("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
-	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
-		() => new Date(),
-	),
-});
-
-export const CreateBusinessSchema = createInsertSchema(businessTable).pick({
-	name: true,
-	clientId: true,
-	description: true,
-});
-
-export const CreateBusinessInput = CreateBusinessSchema.omit({
-	clientId: true,
-});
-
-const SelectedSchema = createSelectSchema(businessTable).pick({
-	clientId: true,
-});
-
-export type CreateBusinessSchema = z.infer<typeof CreateBusinessSchema>;
-
-export const GetBusinessSchema = createSelectSchema(businessTable).pick({
-	name: true,
-	id: true,
-});
-
-export type CreateBusiness = z.infer<typeof CreateBusinessSchema>;
-
-export const businessRelations = relations(businessTable, ({ one, many }) => ({
-	client: one(clientTable, {
-		fields: [businessTable.clientId],
-		references: [clientTable.id],
-	}),
-	videos: many(videosTable),
 }));
 
 export const eventTable = sqliteTable("event", {
@@ -258,3 +207,6 @@ export const InsertEventSchema = createInsertSchema(eventTable, {
 });
 
 export type InsertEvent = typeof eventTable.$inferInsert;
+
+// All exports should start from here
+export { videosTable, businessTable };

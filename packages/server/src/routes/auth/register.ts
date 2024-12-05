@@ -101,7 +101,7 @@ export const registerHandler: AppRouteHandler<RegisterRoute> = async (c) => {
 		JWT_SECRET_KEY,
 	);
 
-	setCookie(c, COOKIES.USER_ID, newAuthUser.email);
+	setCookie(c, COOKIES.USER_ID, newAuthUser.id);
 	setCookie(c, COOKIES.USER_TOKEN, token);
 
 	return c.json(

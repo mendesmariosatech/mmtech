@@ -7,6 +7,7 @@ import type {
 
 import { type ConfigObject, ControlledInput } from "./ControlledInput";
 import { Form } from "../ui/form";
+import { DevTool } from "@hookform/devtools";
 
 type ControlledForm<T extends FieldValues> = {
 	// TODO: improve typing Generic
@@ -24,10 +25,8 @@ export const ControlledForm = <T extends FieldValues>({
 }: ControlledForm<T>) => {
 	return (
 		<Form {...useForm}>
-			<form
-				onSubmit={useForm.handleSubmit(onSubmit)}
-				// className="border-2 border-red-500 p-4"
-			>
+			<DevTool control={useForm.control} />
+			<form onSubmit={useForm.handleSubmit(onSubmit)}>
 				{Object.entries(config).map(([key, value]) => {
 					return (
 						<div key={key}>

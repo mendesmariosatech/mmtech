@@ -1,5 +1,4 @@
 "use client";
-import { DevTool } from "@hookform/devtools";
 
 import { ControlledForm } from "../../ControlledForm";
 import { Button } from "../../../ui/button";
@@ -37,7 +36,6 @@ export const LoginForm = (props: LoginFormProps) => {
 
 	return (
 		<div className="border-2 border-primary-foreground p-6 rounded-md">
-			<DevTool control={form.control} />
 			<ControlledForm
 				useForm={form}
 				config={loginFormConfig}

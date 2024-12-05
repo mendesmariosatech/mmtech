@@ -1,7 +1,7 @@
 "use client";
 import type { RegisterFields } from "@repo/zod-types";
 import { useMutation } from "@tanstack/react-query";
-import { hono_client } from "../hono_client";
+import { hono_client } from "../../hono_client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Routes } from "@repo/data-testing/Routes";

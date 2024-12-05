@@ -1,5 +1,4 @@
 "use client";
-import { DevTool } from "@hookform/devtools";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
 import { ControlledForm } from "../../ControlledForm";
@@ -35,7 +34,6 @@ export const RegisterForm = (props: RegisterFormProps) => {
 
 	return (
 		<div className="border-2 border-primary-foreground p-6 rounded-md">
-			<DevTool control={form.control} />
 			<ControlledForm
 				useForm={form}
 				config={registerFormConfig}
