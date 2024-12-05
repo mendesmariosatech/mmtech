@@ -66,6 +66,16 @@ export const createBusinessSpec = createRoute({
 				},
 			},
 		},
+		500: {
+			description: "Server Error",
+			content: {
+				"application/json": {
+					schema: z.object({
+						error: z.string(),
+					}),
+				},
+			},
+		},
 	},
 });
 
@@ -100,8 +110,8 @@ export const createBusinessHandler: AppRouteHandler<
 		}),
 	);
 
-	if (newBusinessResult.success === false || !newBusinessResult.data) {
-		return c.json({ error: "Failed to create business" }, 400);
+	if (newBusinessResult.success === false) {
+		return c.json({ error: "Failed to create business" }, 500);
 	}
 
 	const token = await generateToken(
