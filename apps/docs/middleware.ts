@@ -14,6 +14,11 @@ export function middleware(request: NextRequest) {
 		return NextResponse.next();
 	}
 
+	// no token but it's not inside client, fine
+	if (!request.nextUrl.pathname.includes("/client")) {
+		return NextResponse.next();
+	}
+
 	if (
 		request.nextUrl.pathname.startsWith("/auth") ||
 		request.nextUrl.pathname === "/"
