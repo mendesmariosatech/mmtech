@@ -103,7 +103,7 @@ interface HeaderConfig {
 export function LandingPageBuilder() {
 	const [containers, setContainers] = useState<Container[]>([]);
 	const [headerConfig, setHeaderConfig] = useState<HeaderConfig>({
-		logo: "/placeholder.svg?height=50&width=100",
+		logo: "/marketing/logo.svg?height=50&width=100",
 		navItems: [
 			{ label: "Home", href: "#" },
 			{ label: "About", href: "#" },
@@ -279,7 +279,7 @@ export function LandingPageBuilder() {
 				};
 			case "image":
 				return {
-					src: "/placeholder.svg?height=200&width=300",
+					src: "/marketing/logo.svg?height=200&width=300",
 					alt: "Placeholder image",
 					width: 300,
 					height: 200,
@@ -300,7 +300,7 @@ export function LandingPageBuilder() {
 				return {
 					items: [
 						{
-							image: "/placeholder.svg?height=200&width=300",
+							image: "/marketing/logo.svg?height=200&width=300",
 							text: "",
 							link: "",
 							buttonText: "",
@@ -1598,7 +1598,7 @@ function CarouselComponent({
 		const newItems = [
 			...items,
 			{
-				image: "/placeholder.svg?height=200&width=300",
+				image: "/marketing/logo.svg?height=200&width=300",
 				text: "",
 				link: "",
 				buttonText: "",
