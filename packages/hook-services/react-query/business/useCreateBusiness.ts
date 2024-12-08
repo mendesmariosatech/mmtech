@@ -8,7 +8,11 @@ import { ClientProps } from "../../context";
 export function useCreateBusiness(auth: ClientProps | null) {
 	return useMutation({
 		onError: (error) => {
-			toast.error("Server could not be reached");
+			console.error('Erro ao criar negócio:', error);
+			const message = error instanceof Error 
+				? error.message 
+				: "Não foi possível conectar ao servidor";
+			toast.error(message);
 		},
 		onSuccess: async (data) => {
 			const resp = await data.json();
