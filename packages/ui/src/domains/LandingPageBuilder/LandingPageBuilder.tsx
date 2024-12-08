@@ -57,6 +57,7 @@ import {
 	TableRow,
 } from "../../components/ui/table";
 import Image from "next/image";
+import { throws } from "assert";
 
 type ComponentType =
 	| "paragraph"
@@ -140,6 +141,11 @@ export function LandingPageBuilder() {
 		if (parentIndex !== undefined) {
 			const newContainers = [...containers];
 			const parentContainer = newContainers[parentIndex];
+
+			if (!parentContainer) {
+				throw new Error("Parent container not found");
+			}
+
 			if (
 				parentContainer.components.filter((c) => c.type === "container")
 					.length < 4
@@ -163,11 +169,11 @@ export function LandingPageBuilder() {
 		const newContainers = [...containers];
 		const targetContainer =
 			subContainerIndex !== undefined
-				? (newContainers[containerIndex].components[subContainerIndex]
+				? (newContainers[containerIndex]?.components[subContainerIndex]!
 						.props as Container)
 				: newContainers[containerIndex];
 
-		if (targetContainer.components.length < 4) {
+		if (targetContainer && targetContainer.components.length < 4) {
 			targetContainer.components.push({ type, props: getDefaultProps(type) });
 			setContainers(newContainers);
 		}
@@ -182,9 +188,13 @@ export function LandingPageBuilder() {
 		const newContainers = [...containers];
 		const targetContainer =
 			subContainerIndex !== undefined
-				? (newContainers[containerIndex].components[subContainerIndex]
+				? (newContainers[containerIndex]?.components[subContainerIndex]!
 						.props as Container)
 				: newContainers[containerIndex];
+
+		if (!targetContainer?.components[componentIndex]) {
+			throw new Error("Container not found");
+		}
 
 		targetContainer.components[componentIndex].props = {
 			...targetContainer.components[componentIndex].props,
@@ -201,9 +211,13 @@ export function LandingPageBuilder() {
 		const newContainers = [...containers];
 		const targetContainer =
 			subContainerIndex !== undefined
-				? (newContainers[containerIndex].components[subContainerIndex]
+				? (newContainers[containerIndex]?.components[subContainerIndex]!
 						.props as Container)
 				: newContainers[containerIndex];
+
+		if (!targetContainer) {
+			throw new Error("Container not found");
+		}
 
 		targetContainer.components.splice(componentIndex, 1);
 		setContainers(newContainers);
@@ -217,9 +231,13 @@ export function LandingPageBuilder() {
 		const newContainers = [...containers];
 		const targetContainer =
 			subContainerIndex !== undefined
-				? (newContainers[containerIndex].components[subContainerIndex]
+				? (newContainers[containerIndex]?.components[subContainerIndex]!
 						.props as Container)
 				: newContainers[containerIndex];
+
+		if (!targetContainer) {
+			throw new Error("Container not found");
+		}
 
 		targetContainer.config = {
 			...targetContainer.config,
@@ -590,6 +608,10 @@ function Header({
 										value={item.label}
 										onChange={(e) => {
 											const newNavItems = [...config.navItems];
+
+											if (!newNavItems[index]) {
+												throw new Error("Navigation item not found");
+											}
 											newNavItems[index] = {
 												...newNavItems[index],
 												label: e.target.value,
@@ -602,6 +624,11 @@ function Header({
 										value={item.href}
 										onChange={(e) => {
 											const newNavItems = [...config.navItems];
+
+											if (!newNavItems[index]) {
+												throw new Error("Navigation item not found");
+											}
+
 											newNavItems[index] = {
 												...newNavItems[index],
 												href: e.target.value,
@@ -614,6 +641,11 @@ function Header({
 										checked={item.isList || false}
 										onCheckedChange={(checked) => {
 											const newNavItems = [...config.navItems];
+
+											if (!newNavItems[index]) {
+												throw new Error("Navigation item not found");
+											}
+
 											newNavItems[index] = {
 												...newNavItems[index],
 												isList: checked,
@@ -1872,6 +1904,10 @@ function FormComponent({
 							value={field.label}
 							onChange={(e) => {
 								const newFields = [...fields];
+								if (!newFields[index]?.type) {
+									return;
+								}
+
 								newFields[index] = {
 									...newFields[index],
 									label: e.target.value,
@@ -1883,6 +1919,11 @@ function FormComponent({
 						<Select
 							onValueChange={(value) => {
 								const newFields = [...fields];
+
+								if (!newFields[index]?.label) {
+									return;
+								}
+
 								newFields[index] = { ...newFields[index], type: value };
 								onUpdate({ fields: newFields });
 							}}
@@ -1990,6 +2031,11 @@ function TableComponent({
 
 	const updateCell = (rowIndex: number, colIndex: number, value: string) => {
 		const newData = [...data];
+
+		if (!newData[rowIndex]) {
+			newData[rowIndex] = Array(columns).fill("");
+		}
+
 		newData[rowIndex][colIndex] = value;
 		onUpdate({ data: newData });
 	};
