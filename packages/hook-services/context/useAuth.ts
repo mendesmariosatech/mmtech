@@ -11,5 +11,11 @@ export type ClientProps = {
 export const AuthContext = createContext<ClientProps | null>(null);
 
 export const useAuthContext = () => {
-	return useContext(AuthContext);
+	const context = useContext(AuthContext);
+	if (!context) {
+		throw new Error(
+			"useAuthContext deve ser utilizado dentro de um AuthProvider"
+		);
+	}
+	return context;
 };
