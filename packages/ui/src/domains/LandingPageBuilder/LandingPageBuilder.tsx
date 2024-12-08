@@ -57,7 +57,6 @@ import {
 	TableRow,
 } from "../../components/ui/table";
 import Image from "next/image";
-import { throws } from "assert";
 
 type ComponentType =
 	| "paragraph"
