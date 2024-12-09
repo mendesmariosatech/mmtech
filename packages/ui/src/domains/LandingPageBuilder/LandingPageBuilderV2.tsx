@@ -85,6 +85,7 @@ interface BaseComponent {
 		padding?: string;
 		margin?: string;
 		borderRadius?: string;
+		border?: string;
 		display?: string;
 		flexDirection?: string;
 		justifyContent?: string;
@@ -109,6 +110,7 @@ interface CarouselComponent extends BaseComponent {
 
 interface CardComponent extends BaseComponent {
 	type: "card";
+	border: string;
 	content: {
 		title: string;
 		content: string;
@@ -503,7 +505,9 @@ export function LandingPageBuilderV2() {
 				};
 				break;
 			case "card":
+				/* eslint-disable rule-name */
 				newComponent = {
+					border: "1px solid #ddd",
 					id: Date.now().toString(),
 					type,
 					content: {
@@ -513,9 +517,10 @@ export function LandingPageBuilderV2() {
 					},
 					style: {
 						width: "300px",
+						height: "auto",
 						border: "1px solid #ddd",
 						borderRadius: "8px",
-						overflow: "hidden",
+						// overflow: "hidden",
 					},
 				};
 				break;
@@ -870,10 +875,7 @@ export function LandingPageBuilderV2() {
 														draggableId={section.id}
 														index={index}
 													>
-														{(
-															provided: DroppableProvided,
-															snapshot: DroppableStateSnapshot,
-														) => (
+														{(provided, snapshot) => (
 															<div
 																ref={provided.innerRef}
 																{...provided.draggableProps}
@@ -1035,10 +1037,7 @@ export function LandingPageBuilderV2() {
 															draggableId={component.id}
 															index={index}
 														>
-															{(
-																provided: DroppableProvided,
-																snapshot: DroppableStateSnapshot,
-															) => (
+															{(provided, snapshot) => (
 																<div
 																	ref={provided.innerRef}
 																	{...provided.draggableProps}
