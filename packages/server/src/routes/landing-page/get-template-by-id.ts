@@ -4,7 +4,7 @@ import { env } from "hono/adapter";
 import { TemplateTable } from "../../drizzle/landing-page/template.dto";
 import { AppRouteHandler } from "../../base/type";
 
-export const getTemplateSpec = createRoute({
+export const getTemplateByIdSpec = createRoute({
 	method: "get",
 	path: "/landing-page/templates/{templateId}",
 	tags: ["templates"],
@@ -25,9 +25,9 @@ export const getTemplateSpec = createRoute({
 	},
 });
 
-type GetTemplateSpec = typeof getTemplateSpec;
+type GetTemplateSpec = typeof getTemplateByIdSpec;
 
-export const getTemplateHandler: AppRouteHandler<GetTemplateSpec> = async (
+export const getTemplateByIdHandler: AppRouteHandler<GetTemplateSpec> = async (
 	c,
 ) => {
 	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);

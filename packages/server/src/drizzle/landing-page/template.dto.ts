@@ -27,4 +27,10 @@ export class TemplateTable extends DBConnection {
 
 		return template;
 	}
+
+	public async getAllTemplates() {
+		const template = await this.db.query.templateTable.findMany();
+
+		return template;
+	}
 }
