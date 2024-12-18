@@ -13,6 +13,16 @@ export class PageTable extends DBConnection {
 		return page;
 	}
 
+	public async getAllPagesByTemplate(
+		templateId: SelectPageSchema["templateId"],
+	) {
+		const pages = await this.db.query.pageTable.findMany({
+			where: eq(pageTable.templateId, templateId),
+		});
+
+		return pages;
+	}
+
 	public async getPageById(id: SelectPageSchema["id"]) {
 		const pages = await this.db.query.templateTable.findFirst({
 			where: eq(pageTable.id, id),

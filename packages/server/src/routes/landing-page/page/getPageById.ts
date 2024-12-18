@@ -6,7 +6,7 @@ import { TemplateTable } from "../../../drizzle/landing-page/template/template.d
 import { SelectPageSchema } from "../../../drizzle/landing-page/page/page";
 import { PageTable } from "../../../drizzle/landing-page/page/page.dto";
 
-export const createTemplateSpec = createRoute({
+export const getPageByIdSpec = createRoute({
 	method: "get",
 	path: "/landing-page/templates/{templateId}/pages/{pageId}",
 	tags: ["templates"],
@@ -28,11 +28,11 @@ export const createTemplateSpec = createRoute({
 	},
 });
 
-type CreateTemplateSpec = typeof createTemplateSpec;
+type GetPageByIdSpec = typeof getPageByIdSpec;
 
-export const createTemplateHandler: AppRouteHandler<
-	CreateTemplateSpec
-> = async (c) => {
+export const getPageByIdHandler: AppRouteHandler<GetPageByIdSpec> = async (
+	c,
+) => {
 	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
 	const Page = new PageTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const { pageId } = c.req.valid("param");

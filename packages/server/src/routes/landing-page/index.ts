@@ -1,6 +1,11 @@
 import { app } from "../../base/base-app";
 import { createPageHandler, createPageSpec } from "./page/create-page";
 import {
+	getAllPagesByTemplateHandler,
+	getAllPagesByTemplateSpec,
+} from "./page/getAllPages";
+import { getPageByIdHandler, getPageByIdSpec } from "./page/getPageById";
+import {
 	createTemplateHandler,
 	createTemplateSpec,
 } from "./template/create-template";
@@ -17,6 +22,8 @@ const templateRouter = app
 	.openapi(createTemplateSpec, createTemplateHandler)
 	.openapi(getTemplateByIdSpec, getTemplateByIdHandler)
 	.openapi(getAllTemplatesSpec, getAllTemplatesHandler)
-	.openapi(createPageSpec, createPageHandler);
+	.openapi(createPageSpec, createPageHandler)
+	.openapi(getAllPagesByTemplateSpec, getAllPagesByTemplateHandler)
+	.openapi(getPageByIdSpec, getPageByIdHandler);
 
 export { templateRouter };
