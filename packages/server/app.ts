@@ -1,5 +1,6 @@
 import app from "./src";
 import { serve } from "@hono/node-server";
+import "dotenv/config";
 
 const PORT = process.env.PORT || 4000;
 try {

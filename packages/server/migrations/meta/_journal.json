@@ -15,6 +15,13 @@
       "when": 1732404942667,
       "tag": "0001_heavy_kulan_gath",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1734484488991,
+      "tag": "0002_military_moira_mactaggert",
+      "breakpoints": true
     }
   ]
 }
