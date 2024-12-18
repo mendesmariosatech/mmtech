@@ -64,7 +64,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from "@repo/ui/components/ui/sheet";
+} from "../../components/ui/sheet";
 
 type ComponentType =
 	| "paragraph"
