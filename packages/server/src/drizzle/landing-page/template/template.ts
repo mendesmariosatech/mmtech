@@ -30,8 +30,6 @@ export const CreateTemplateSchema = createInsertSchema(templateTable).omit({
 
 export type CreateTemplateSchema = z.infer<typeof CreateTemplateSchema>;
 
-export const SelectTemplateSchema = createSelectSchema(templateTable).pick({
-	id: true,
-});
+export const SelectTemplateSchema = createSelectSchema(templateTable);
 
 export type SelectTemplateSchema = z.infer<typeof SelectTemplateSchema>;
