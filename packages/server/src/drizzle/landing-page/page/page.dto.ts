@@ -8,16 +8,16 @@ export class PageTable extends DBConnection {
 	}
 
 	public async createPage(args: CreatePageSchema) {
-		const [video] = await this.db.insert(pageTable).values(args).returning();
+		const [page] = await this.db.insert(pageTable).values(args).returning();
 
-		return video;
+		return page;
 	}
 
-	public async getTemplateById(id: SelectPageSchema["id"]) {
-		const videos = await this.db.query.templateTable.findFirst({
+	public async getPageById(id: SelectPageSchema["id"]) {
+		const pages = await this.db.query.templateTable.findFirst({
 			where: eq(pageTable.id, id),
 		});
 
-		return videos;
+		return pages;
 	}
 }

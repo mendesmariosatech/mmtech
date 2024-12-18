@@ -1,7 +1,7 @@
 import { env } from "hono/adapter";
-import { AppRouteHandler } from "../../base/type";
-import { CreatePageSchema } from "../../drizzle/landing-page/page/page";
-import { PageTable } from "../../drizzle/landing-page/page/page.dto";
+import { AppRouteHandler } from "../../../base/type";
+import { CreatePageSchema } from "../../../drizzle/landing-page/page/page";
+import { PageTable } from "../../../drizzle/landing-page/page/page.dto";
 import { createRoute, z } from "@hono/zod-openapi";
 
 export const createPageSpec = createRoute({

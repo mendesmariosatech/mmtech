@@ -1,14 +1,17 @@
 import { app } from "../../base/base-app";
-import { createPageHandler, createPageSpec } from "./create-page";
-import { createTemplateHandler, createTemplateSpec } from "./create-template";
+import { createPageHandler, createPageSpec } from "./page/create-page";
+import {
+	createTemplateHandler,
+	createTemplateSpec,
+} from "./template/create-template";
 import {
 	getAllTemplatesHandler,
 	getAllTemplatesSpec,
-} from "./get-all-templates";
+} from "./template/get-all-templates";
 import {
 	getTemplateByIdHandler,
 	getTemplateByIdSpec,
-} from "./get-template-by-id";
+} from "./template/get-template-by-id";
 
 const templateRouter = app
 	.openapi(createTemplateSpec, createTemplateHandler)
