@@ -1,7 +1,9 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { genEntityId } from "../utils";
+import { genEntityId } from "../../utils";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { relations } from "drizzle-orm";
+import { pageTable } from "../page/page";
 
 export const templateTable = sqliteTable("landing_page.template", {
 	id: text("id", { length: 128 })
@@ -15,6 +17,10 @@ export const templateTable = sqliteTable("landing_page.template", {
 		() => new Date(),
 	),
 });
+
+export const templateRelations = relations(templateTable, ({ many }) => ({
+	pages: many(pageTable),
+}));
 
 export const CreateTemplateSchema = createInsertSchema(templateTable).omit({
 	id: true,

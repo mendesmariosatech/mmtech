@@ -1,8 +1,8 @@
 import { createRoute } from "@hono/zod-openapi";
-import { CreateTemplateSchema } from "../../drizzle/landing-page/template";
+import { CreateTemplateSchema } from "../../drizzle/landing-page/template/template";
 import { AppRouteHandler } from "../../base/type";
 import { env } from "hono/adapter";
-import { TemplateTable } from "../../drizzle/landing-page/template.dto";
+import { TemplateTable } from "../../drizzle/landing-page/template/template.dto";
 
 export const createTemplateSpec = createRoute({
 	method: "post",
