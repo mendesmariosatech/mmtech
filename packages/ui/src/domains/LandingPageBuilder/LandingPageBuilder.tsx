@@ -16,6 +16,8 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
+	DialogClose,
+	DialogFooter,
 } from "../../components/ui/dialog";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
@@ -66,6 +68,7 @@ import {
 	SheetTrigger,
 } from "@repo/ui/components/ui/sheet";
 import SelectFont from "./LadingPageBuilder/components/selectFont";
+import { RemoveComponentButton } from "./LadingPageBuilder/components/DialogConfirm";
 
 type ComponentType =
 	| "paragraph"
@@ -479,14 +482,11 @@ function ContainerComponent({
 						disabled={container.components.length >= 4}
 						onAddSubContainer={onAddSubContainer}
 					/>
-					<Button
-						variant="outline"
-						size="icon"
-						className="text-red-500 border-red-500 hover:bg-red-100"
-						onClick={() => onRemoveContainer(containerIndex)} // Chama a função para remover o container
-					>
-						<X className="h-4 w-4" />
-					</Button>
+					<RemoveComponentButton
+						component={`container ${containerIndex + 1}`}
+						componentIndex={containerIndex}
+						onRemoveComponent={() => onRemoveComponent(containerIndex)}
+					/>
 				</div>
 			</div>
 			<div
@@ -494,14 +494,11 @@ function ContainerComponent({
 			>
 				{container.components.map((component, componentIndex) => (
 					<div key={componentIndex} className="relative w-full">
-						<Button
-							variant="outline"
-							size="icon"
-							className="absolute top-1 right-1 z-10 h-6 w-6 text-red-500 border-red-500"
-							onClick={() => onRemoveComponent(componentIndex)}
-						>
-							<X className="h-4 w-4" />
-						</Button>
+						<RemoveComponentButton
+							component={component.type}
+							componentIndex={componentIndex}
+							onRemoveComponent={() => onRemoveComponent(componentIndex)}
+						/>
 						{component.type === "container" ? (
 							<ContainerComponent
 								container={component.props}
