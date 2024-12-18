@@ -65,6 +65,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@repo/ui/components/ui/sheet";
+import SelectFont from "./LadingPageBuilder/components/selectFont";
 
 type ComponentType =
 	| "paragraph"
@@ -1048,19 +1049,7 @@ function ParagraphComponent({
 						{/* Configurações de estilo do parágrafo */}
 						<div className="flex flex-wrap gap-2">
 							<div className="flex space-x-2">
-								<Select
-									onValueChange={(value) => onUpdate({ font: value })}
-									value={font}
-								>
-									<SelectTrigger className="w-[180px]">
-										<SelectValue placeholder="Select font" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="font-sans">Sans-serif</SelectItem>
-										<SelectItem value="font-serif">Serif</SelectItem>
-										<SelectItem value="font-mono">Monospace</SelectItem>
-									</SelectContent>
-								</Select>
+								<SelectFont font={font} onUpdate={onUpdate} />
 								<Input
 									type="text"
 									placeholder="Fonte personalizada"
@@ -1072,7 +1061,7 @@ function ParagraphComponent({
 								type="number"
 								value={fontSize}
 								onChange={(e) =>
-									onUpdate({ fontSize: parseInt(e.target.value) })
+									onUpdate({ fontSize: Number.parseInt(e.target.value) })
 								}
 								className="w-20"
 								placeholder="Tamanho da Fonte"
@@ -1275,19 +1264,7 @@ function ButtonComponent({
 					/>
 					<div className="flex flex-wrap gap-2">
 						<div className="flex space-x-2">
-							<Select
-								onValueChange={(value) => onUpdate({ font: value })}
-								value={font}
-							>
-								<SelectTrigger className="w-[180px]">
-									<SelectValue placeholder="Select font" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="font-sans">Sans-serif</SelectItem>
-									<SelectItem value="font-serif">Serif</SelectItem>
-									<SelectItem value="font-mono">Monospace</SelectItem>
-								</SelectContent>
-							</Select>
+							<SelectFont font={font} onUpdate={onUpdate} />
 							<Input
 								type="text"
 								placeholder="Custom font"
@@ -1297,7 +1274,9 @@ function ButtonComponent({
 						<Input
 							type="number"
 							value={fontSize}
-							onChange={(e) => onUpdate({ fontSize: parseInt(e.target.value) })}
+							onChange={(e) =>
+								onUpdate({ fontSize: Number.parseInt(e.target.value) })
+							}
 							className="w-20"
 							placeholder="Font size"
 						/>
@@ -1623,7 +1602,9 @@ function VideoComponent({
 						<Input
 							type="number"
 							value={width}
-							onChange={(e) => onUpdate({ width: parseInt(e.target.value) })}
+							onChange={(e) =>
+								onUpdate({ width: Number.parseInt(e.target.value) })
+							}
 							className="w-20"
 							placeholder="Width"
 							disabled={defaultSize}
@@ -1860,7 +1841,10 @@ function CarouselComponent({
 							value={slideCount}
 							onChange={(e) =>
 								onUpdate({
-									slideCount: Math.min(parseInt(e.target.value), items.length),
+									slideCount: Math.min(
+										Number.parseInt(e.target.value),
+										items.length,
+									),
 								})
 							}
 							className="w-20"
@@ -2051,19 +2035,7 @@ function FormComponent({
 					</SheetHeader>
 					<div className="flex flex-wrap gap-2 mt-4">
 						<div className="flex space-x-2">
-							<Select
-								onValueChange={(value) => onUpdate({ font: value })}
-								value={font}
-							>
-								<SelectTrigger className="w-[180px]">
-									<SelectValue placeholder="Select font" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="font-sans">Sans-serif</SelectItem>
-									<SelectItem value="font-serif">Serif</SelectItem>
-									<SelectItem value="font-mono">Monospace</SelectItem>
-								</SelectContent>
-							</Select>
+							<SelectFont font={font} onUpdate={onUpdate} />
 							<Input
 								type="text"
 								placeholder="Custom font"
@@ -2073,7 +2045,9 @@ function FormComponent({
 						<Input
 							type="number"
 							value={fontSize}
-							onChange={(e) => onUpdate({ fontSize: parseInt(e.target.value) })}
+							onChange={(e) =>
+								onUpdate({ fontSize: Number.parseInt(e.target.value) })
+							}
 							className="w-20"
 							placeholder="Font size"
 						/>
