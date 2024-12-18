@@ -26,26 +26,6 @@ export const createTemplateSpec = createRoute({
 				},
 			},
 		},
-		// 403: {
-		//     description: "Not Authorized",
-		//     content: {
-		//         "application/json": {
-		//             schema: z.object({
-		//                 error: z.string(),
-		//             }),
-		//         },
-		//     },
-		// },
-		// 500: {
-		//     description: "Not Authorized",
-		//     content: {
-		//         "application/json": {
-		//             schema: z.object({
-		//                 error: z.string(),
-		//             }),
-		//         },
-		//     },
-		// },
 	},
 });
 

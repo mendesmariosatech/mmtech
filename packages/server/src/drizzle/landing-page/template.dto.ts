@@ -12,19 +12,19 @@ export class TemplateTable extends DBConnection {
 	}
 
 	public async createTemplate(args: CreateTemplateSchema) {
-		const [video] = await this.db
+		const [template] = await this.db
 			.insert(templateTable)
 			.values(args)
 			.returning();
 
-		return video;
+		return template;
 	}
 
-	public async getTemplateById({ id }: SelectTemplateSchema) {
-		const videos = await this.db.query.templateTable.findFirst({
+	public async getTemplateById(id: SelectTemplateSchema["id"]) {
+		const template = await this.db.query.templateTable.findFirst({
 			where: eq(templateTable.id, id),
 		});
 
-		return videos;
+		return template;
 	}
 }
