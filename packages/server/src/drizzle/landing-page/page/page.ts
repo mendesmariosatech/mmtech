@@ -27,3 +27,15 @@ export const pageRelations = relations(pageTable, ({ one }) => ({
 		references: [templateTable.id],
 	}),
 }));
+
+export const CreatePageSchema = createInsertSchema(pageTable).omit({
+	id: true,
+	createdAt: true,
+	updatedAt: true,
+});
+
+export type CreatePageSchema = z.infer<typeof CreatePageSchema>;
+
+export const SelectPageSchema = createSelectSchema(pageTable);
+
+export type SelectPageSchema = z.infer<typeof SelectPageSchema>;
