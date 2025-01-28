@@ -16,6 +16,8 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
+	DialogClose,
+	DialogFooter,
 } from "../../components/ui/dialog";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
@@ -57,6 +59,16 @@ import {
 	TableRow,
 } from "../../components/ui/table";
 import Image from "next/image";
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@repo/ui/components/ui/sheet";
+import SelectFont from "./LadingPageBuilder/components/selectFont";
+import { RemoveComponentButton } from "./LadingPageBuilder/components/DialogConfirm";
 
 type ComponentType =
 	| "paragraph"
@@ -245,6 +257,14 @@ export function LandingPageBuilder() {
 		setContainers(newContainers);
 	};
 
+	function removeContainer(containerIndex: number) {
+		setContainers((prevContainers) => {
+			const newContainers = [...prevContainers];
+			newContainers.splice(containerIndex, 1);
+			return newContainers;
+		});
+	}
+
 	const getDefaultProps = (type: ComponentType) => {
 		switch (type) {
 			case "paragraph":
@@ -346,7 +366,7 @@ export function LandingPageBuilder() {
 					config: {
 						backgroundColor: "bg-white",
 						backgroundImage: "",
-						alignment: "flex-col",
+						alignment: "flex-row",
 						justifyContent: "justify-start",
 						alignItems: "items-start",
 						padding: "16px 16px 16px 16px",
@@ -363,7 +383,7 @@ export function LandingPageBuilder() {
 	return (
 		<div className="min-h-screen flex flex-col">
 			<Header config={headerConfig} onConfigUpdate={setHeaderConfig} />
-			<main className="flex-grow p-4">
+			<main className="flex-grow p-0">
 				{containers.map((container, containerIndex) => (
 					<ContainerComponent
 						key={containerIndex}
@@ -380,11 +400,12 @@ export function LandingPageBuilder() {
 							updateContainerConfig(containerIndex, newConfig)
 						}
 						onAddSubContainer={() => addContainer(containerIndex)}
+						onRemoveContainer={() => removeContainer(containerIndex)}
 					/>
 				))}
 			</main>
 			<Footer />
-			<div className="fixed bottom-4 right-4 flex space-x-2">
+			<div className="fixed bottom-16 right-4 flex space-x-2">
 				<Button
 					onClick={() => setShowPreview(true)}
 					className="rounded-full w-12 h-12 p-0"
@@ -425,6 +446,7 @@ function ContainerComponent({
 	onRemoveComponent,
 	onUpdateConfig,
 	onAddSubContainer,
+	onRemoveContainer,
 }: {
 	container: Container;
 	containerIndex: number;
@@ -433,6 +455,7 @@ function ContainerComponent({
 	onRemoveComponent: (componentIndex: number) => void;
 	onUpdateConfig: (newConfig: Partial<ContainerConfig>) => void;
 	onAddSubContainer: () => void;
+	onRemoveContainer: (containerIndex: number) => void;
 }) {
 	return (
 		<div
@@ -450,7 +473,7 @@ function ContainerComponent({
 					Container {containerIndex + 1}
 				</h2>
 				<div className="flex space-x-2">
-					<ContainerConfigDialog
+					<ContainerConfigSheet
 						config={container.config}
 						onUpdate={onUpdateConfig}
 					/>
@@ -459,6 +482,11 @@ function ContainerComponent({
 						disabled={container.components.length >= 4}
 						onAddSubContainer={onAddSubContainer}
 					/>
+					<RemoveComponentButton
+						component={`container ${containerIndex + 1}`}
+						componentIndex={containerIndex}
+						onRemoveComponent={() => onRemoveComponent(containerIndex)}
+					/>
 				</div>
 			</div>
 			<div
@@ -466,14 +494,11 @@ function ContainerComponent({
 			>
 				{container.components.map((component, componentIndex) => (
 					<div key={componentIndex} className="relative w-full">
-						<Button
-							variant="outline"
-							size="icon"
-							className="absolute top-2 right-2 z-10"
-							onClick={() => onRemoveComponent(componentIndex)}
-						>
-							<X className="h-4 w-4" />
-						</Button>
+						<RemoveComponentButton
+							component={component.type}
+							componentIndex={componentIndex}
+							onRemoveComponent={() => onRemoveComponent(componentIndex)}
+						/>
 						{component.type === "container" ? (
 							<ContainerComponent
 								container={component.props}
@@ -502,6 +527,7 @@ function ContainerComponent({
 									})
 								}
 								onAddSubContainer={() => {}}
+								onRemoveContainer={onRemoveContainer}
 							/>
 						) : (
 							<ComponentRenderer
@@ -697,7 +723,7 @@ function Footer() {
 	);
 }
 
-function ContainerConfigDialog({
+function ContainerConfigSheet({
 	config,
 	onUpdate,
 }: {
@@ -705,17 +731,17 @@ function ContainerConfigDialog({
 	onUpdate: (newConfig: Partial<ContainerConfig>) => void;
 }) {
 	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant="outline" size="sm">
+		<Sheet>
+			<SheetTrigger asChild>
+				<Button variant="outline">
 					<Settings className="h-4 w-4 mr-2" />
 					Config
 				</Button>
-			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Container Configuration</DialogTitle>
-				</DialogHeader>
+			</SheetTrigger>
+			<SheetContent side="right">
+				<SheetHeader>
+					<SheetTitle>Container Configuration</SheetTitle>
+				</SheetHeader>
 				<div className="space-y-4">
 					<div>
 						<Label htmlFor="backgroundColor">Background Color</Label>
@@ -861,8 +887,6 @@ function ContainerConfigDialog({
 									<SelectItem value="w-1/2">Half</SelectItem>
 									<SelectItem value="w-1/3">One Third</SelectItem>
 									<SelectItem value="w-2/3">Two Thirds</SelectItem>
-									<SelectItem value="w-1/4">One Quarter</SelectItem>
-									<SelectItem value="w-3/4">Three Quarters</SelectItem>
 								</SelectContent>
 							</Select>
 							<Input
@@ -872,33 +896,9 @@ function ContainerConfigDialog({
 							/>
 						</div>
 					</div>
-					<div>
-						<Label htmlFor="height">Height</Label>
-						<div className="flex space-x-2">
-							<Select
-								onValueChange={(value) => onUpdate({ height: value })}
-								defaultValue={config.height}
-							>
-								<SelectTrigger id="height">
-									<SelectValue placeholder="Select height" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="h-auto">Auto</SelectItem>
-									<SelectItem value="h-full">Full</SelectItem>
-									<SelectItem value="h-screen">Screen</SelectItem>
-									<SelectItem value="h-64">Fixed (16rem)</SelectItem>
-								</SelectContent>
-							</Select>
-							<Input
-								type="text"
-								placeholder="Custom height"
-								onChange={(e) => onUpdate({ height: e.target.value })}
-							/>
-						</div>
-					</div>
 				</div>
-			</DialogContent>
-		</Dialog>
+			</SheetContent>
+		</Sheet>
 	);
 }
 
@@ -911,10 +911,13 @@ function AddComponentButton({
 	disabled: boolean;
 	onAddSubContainer: () => void;
 }) {
+	const [isOpen, setIsOpen] = useState(false);
 	return (
-		<Dialog>
+		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
-				<Button disabled={disabled}>Add Component</Button>
+				<Button disabled={disabled} onClick={() => setIsOpen(true)}>
+					Add Component
+				</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
@@ -934,14 +937,20 @@ function AddComponentButton({
 					).map((type) => (
 						<Button
 							key={type}
-							onClick={() => onAddComponent(type)}
+							onClick={() => {
+								setIsOpen(false);
+								onAddComponent(type);
+							}}
 							className="h-20 text-lg capitalize"
 						>
 							{type}
 						</Button>
 					))}
 					<Button
-						onClick={onAddSubContainer}
+						onClick={() => {
+							setIsOpen(false);
+							onAddSubContainer;
+						}}
 						className="h-20 text-lg capitalize"
 					>
 						Sub-Container
@@ -1006,145 +1015,173 @@ function ParagraphComponent({
 	margin: string;
 	onUpdate: (newProps: any) => void;
 }) {
+	const [isSheetOpen, setSheetOpen] = useState(false); // Estado para controlar a abertura do sheet
+
 	return (
 		<div className="space-y-2">
 			<Textarea
 				value={content}
 				onChange={(e) => onUpdate({ content: e.target.value })}
-				className="w-full mb-2"
+				className="w-full"
 			/>
-			<div className="flex flex-wrap gap-2">
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ font: value })}
-						value={font}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Select font" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="font-sans">Sans-serif</SelectItem>
-							<SelectItem value="font-serif">Serif</SelectItem>
-							<SelectItem value="font-mono">Monospace</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="Custom font"
-						onChange={(e) => onUpdate({ font: e.target.value })}
-					/>
-				</div>
-				<Input
-					type="number"
-					value={fontSize}
-					onChange={(e) => onUpdate({ fontSize: parseInt(e.target.value) })}
-					className="w-20"
-					placeholder="Font size"
-				/>
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ alignment: value })}
-						value={alignment}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Alignment" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="text-left">Left</SelectItem>
-							<SelectItem value="text-center">Center</SelectItem>
-							<SelectItem value="text-right">Right</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="Custom alignment"
-						onChange={(e) => onUpdate({ alignment: e.target.value })}
-					/>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={bold}
-						onCheckedChange={(checked) => onUpdate({ bold: checked })}
-						id="bold"
-					/>
-					<Label htmlFor="bold">Bold</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={italic}
-						onCheckedChange={(checked) => onUpdate({ italic: checked })}
-						id="italic"
-					/>
-					<Label htmlFor="italic">Italic</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={underline}
-						onCheckedChange={(checked) => onUpdate({ underline: checked })}
-						id="underline"
-					/>
-					<Label htmlFor="underline">Underline</Label>
-				</div>
-			</div>
-			<div className="flex flex-wrap gap-2">
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ textColor: value })}
-						value={textColor}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Text color" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="text-gray-900">Black</SelectItem>
-							<SelectItem value="text-white">White</SelectItem>
-							<SelectItem value="text-blue-500">Blue</SelectItem>
-							<SelectItem value="text-green-500">Green</SelectItem>
-							<SelectItem value="text-red-500">Red</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="RGB or Hex"
-						onChange={(e) => onUpdate({ textColor: e.target.value })}
-					/>
-				</div>
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ backgroundColor: value })}
-						value={backgroundColor}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Background color" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="bg-transparent">Transparent</SelectItem>
-							<SelectItem value="bg-white">White</SelectItem>
-							<SelectItem value="bg-gray-100">Light Gray</SelectItem>
-							<SelectItem value="bg-blue-100">Light Blue</SelectItem>
-							<SelectItem value="bg-green-100">Light Green</SelectItem>
-							<SelectItem value="bg-red-100">Light Red</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="RGB or Hex"
-						onChange={(e) => onUpdate({ backgroundColor: e.target.value })}
-					/>
-				</div>
-				<Input
-					value={padding}
-					onChange={(e) => onUpdate({ padding: e.target.value })}
-					placeholder="Padding (top right bottom left)"
-					className="w-full"
-				/>
-				<Input
-					value={margin}
-					onChange={(e) => onUpdate({ margin: e.target.value })}
-					placeholder="Margin (top right bottom left)"
-					className="w-full"
-				/>
-			</div>
+
+			{/* Botão para abrir o Bottom Sheet */}
+			<Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
+				<SheetTrigger asChild>
+					<Button variant="outline">
+						<Settings className="h-4 w-4 mr-2" />
+						Estilos
+					</Button>
+				</SheetTrigger>
+
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Personalizar Parágrafo</SheetTitle>
+						<SheetDescription>
+							Edite as propriedades de estilo do texto.
+						</SheetDescription>
+					</SheetHeader>
+
+					<div className="space-y-4 mt-4">
+						{/* Configurações de estilo do parágrafo */}
+						<div className="flex flex-wrap gap-2">
+							<div className="flex space-x-2">
+								<SelectFont font={font} onUpdate={onUpdate} />
+								<Input
+									type="text"
+									placeholder="Fonte personalizada"
+									onChange={(e) => onUpdate({ font: e.target.value })}
+								/>
+							</div>
+
+							<Input
+								type="number"
+								value={fontSize}
+								onChange={(e) =>
+									onUpdate({ fontSize: Number.parseInt(e.target.value) })
+								}
+								className="w-20"
+								placeholder="Tamanho da Fonte"
+							/>
+
+							<div className="flex space-x-2">
+								<Select
+									onValueChange={(value) => onUpdate({ alignment: value })}
+									value={alignment}
+								>
+									<SelectTrigger className="w-[180px]">
+										<SelectValue placeholder="Alinhamento" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="text-left">Esquerda</SelectItem>
+										<SelectItem value="text-center">Centro</SelectItem>
+										<SelectItem value="text-right">Direita</SelectItem>
+									</SelectContent>
+								</Select>
+								<Input
+									type="text"
+									placeholder="Alinhamento personalizado"
+									onChange={(e) => onUpdate({ alignment: e.target.value })}
+								/>
+							</div>
+
+							<div className="flex items-center space-x-2">
+								<Switch
+									checked={bold}
+									onCheckedChange={(checked) => onUpdate({ bold: checked })}
+									id="bold"
+								/>
+								<Label htmlFor="bold">Negrito</Label>
+							</div>
+
+							<div className="flex items-center space-x-2">
+								<Switch
+									checked={italic}
+									onCheckedChange={(checked) => onUpdate({ italic: checked })}
+									id="italic"
+								/>
+								<Label htmlFor="italic">Itálico</Label>
+							</div>
+
+							<div className="flex items-center space-x-2">
+								<Switch
+									checked={underline}
+									onCheckedChange={(checked) =>
+										onUpdate({ underline: checked })
+									}
+									id="underline"
+								/>
+								<Label htmlFor="underline">Sublinhado</Label>
+							</div>
+						</div>
+
+						<div className="flex flex-wrap gap-2">
+							<div className="flex space-x-2">
+								<Select
+									onValueChange={(value) => onUpdate({ textColor: value })}
+									value={textColor}
+								>
+									<SelectTrigger className="w-[180px]">
+										<SelectValue placeholder="Cor do Texto" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="text-gray-900">Preto</SelectItem>
+										<SelectItem value="text-white">Branco</SelectItem>
+										<SelectItem value="text-blue-500">Azul</SelectItem>
+										<SelectItem value="text-green-500">Verde</SelectItem>
+										<SelectItem value="text-red-500">Vermelho</SelectItem>
+									</SelectContent>
+								</Select>
+								<Input
+									type="text"
+									placeholder="RGB ou Hex"
+									onChange={(e) => onUpdate({ textColor: e.target.value })}
+								/>
+							</div>
+
+							<div className="flex space-x-2">
+								<Select
+									onValueChange={(value) =>
+										onUpdate({ backgroundColor: value })
+									}
+									value={backgroundColor}
+								>
+									<SelectTrigger className="w-[180px]">
+										<SelectValue placeholder="Cor do Fundo" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="bg-transparent">Transparente</SelectItem>
+										<SelectItem value="bg-white">Branco</SelectItem>
+										<SelectItem value="bg-gray-100">Cinza Claro</SelectItem>
+										<SelectItem value="bg-blue-100">Azul Claro</SelectItem>
+									</SelectContent>
+								</Select>
+								<Input
+									type="text"
+									placeholder="RGB ou Hex"
+									onChange={(e) =>
+										onUpdate({ backgroundColor: e.target.value })
+									}
+								/>
+							</div>
+
+							<Input
+								value={padding}
+								onChange={(e) => onUpdate({ padding: e.target.value })}
+								placeholder="Padding (cima direita baixo esquerda)"
+								className="w-full"
+							/>
+
+							<Input
+								value={margin}
+								onChange={(e) => onUpdate({ margin: e.target.value })}
+								placeholder="Margem (cima direita baixo esquerda)"
+								className="w-full"
+							/>
+						</div>
+					</div>
+				</SheetContent>
+			</Sheet>
 		</div>
 	);
 }
@@ -1180,183 +1217,193 @@ function ButtonComponent({
 	width: string;
 	onUpdate: (newProps: any) => void;
 }) {
+	const [isSheetOpen, setSheetOpen] = useState(false);
 	return (
 		<div className="space-y-2">
-			<Input
-				value={text}
-				onChange={(e) => onUpdate({ text: e.target.value })}
-				placeholder="Button text"
-				className="mb-2"
-			/>
-			<Input
-				value={link}
-				onChange={(e) => onUpdate({ link: e.target.value })}
-				placeholder="Button link"
-				className="mb-2"
-			/>
-			<div className="flex flex-wrap gap-2">
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ font: value })}
-						value={font}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Select font" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="font-sans">Sans-serif</SelectItem>
-							<SelectItem value="font-serif">Serif</SelectItem>
-							<SelectItem value="font-mono">Monospace</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="Custom font"
-						onChange={(e) => onUpdate({ font: e.target.value })}
-					/>
-				</div>
-				<Input
-					type="number"
-					value={fontSize}
-					onChange={(e) => onUpdate({ fontSize: parseInt(e.target.value) })}
-					className="w-20"
-					placeholder="Font size"
-				/>
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ alignment: value })}
-						value={alignment}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Alignment" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="text-left">Left</SelectItem>
-							<SelectItem value="text-center">Center</SelectItem>
-							<SelectItem value="text-right">Right</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="Custom alignment"
-						onChange={(e) => onUpdate({ alignment: e.target.value })}
-					/>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={bold}
-						onCheckedChange={(checked) => onUpdate({ bold: checked })}
-						id="bold"
-					/>
-					<Label htmlFor="bold">Bold</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={italic}
-						onCheckedChange={(checked) => onUpdate({ italic: checked })}
-						id="italic"
-					/>
-					<Label htmlFor="italic">Italic</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={underline}
-						onCheckedChange={(checked) => onUpdate({ underline: checked })}
-						id="underline"
-					/>
-					<Label htmlFor="underline">Underline</Label>
-				</div>
+			<div>
+				<Button
+					className={`${font} text-${fontSize} ${alignment} ${
+						bold ? "font-bold" : ""
+					} ${italic ? "italic" : ""} ${
+						underline ? "underline" : ""
+					} ${textColor} ${backgroundColor}`}
+					style={{ padding, margin }}
+				>
+					{text}
+				</Button>
 			</div>
-			<div className="flex flex-wrap gap-2">
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ textColor: value })}
-						value={textColor}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Text color" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="text-white">White</SelectItem>
-							<SelectItem value="text-gray-900">Black</SelectItem>
-							<SelectItem value="text-blue-500">Blue</SelectItem>
-							<SelectItem value="text-green-500">Green</SelectItem>
-							<SelectItem value="text-red-500">Red</SelectItem>
-						</SelectContent>
-					</Select>
+
+			<Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
+				<SheetTrigger asChild>
+					<Button variant="outline">
+						<Settings className="h-4 w-4 mr-2" />
+						Estilos
+					</Button>
+				</SheetTrigger>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Personalizar Botão</SheetTitle>
+						<SheetDescription>
+							Edite as propriedades de estilo do botão.
+						</SheetDescription>
+					</SheetHeader>
 					<Input
-						type="text"
-						placeholder="RGB or Hex"
-						onChange={(e) => onUpdate({ textColor: e.target.value })}
+						value={text}
+						onChange={(e) => onUpdate({ text: e.target.value })}
+						placeholder="Button text"
+						className="mb-2"
 					/>
-				</div>
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ backgroundColor: value })}
-						value={backgroundColor}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Background color" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="bg-blue-500">Blue</SelectItem>
-							<SelectItem value="bg-green-500">Green</SelectItem>
-							<SelectItem value="bg-red-500">Red</SelectItem>
-							<SelectItem value="bg-gray-500">Gray</SelectItem>
-							<SelectItem value="bg-transparent">Transparent</SelectItem>
-						</SelectContent>
-					</Select>
 					<Input
-						type="text"
-						placeholder="RGB or Hex"
-						onChange={(e) => onUpdate({ backgroundColor: e.target.value })}
+						value={link}
+						onChange={(e) => onUpdate({ link: e.target.value })}
+						placeholder="Button link"
+						className="mb-2"
 					/>
-				</div>
-				<Input
-					value={padding}
-					onChange={(e) => onUpdate({ padding: e.target.value })}
-					placeholder="Padding (top right bottom left)"
-					className="w-full"
-				/>
-				<Input
-					value={margin}
-					onChange={(e) => onUpdate({ margin: e.target.value })}
-					placeholder="Margin (top right bottom left)"
-					className="w-full"
-				/>
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ width: value })}
-						value={width}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Width" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="w-auto">Auto</SelectItem>
-							<SelectItem value="w-full">Full</SelectItem>
-							<SelectItem value="w-1/2">Half</SelectItem>
-							<SelectItem value="w-1/3">One Third</SelectItem>
-							<SelectItem value="w-2/3">Two Thirds</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="Custom width"
-						onChange={(e) => onUpdate({ width: e.target.value })}
-					/>
-				</div>
-			</div>
-			<Button
-				className={`${font} text-${fontSize} ${alignment} ${
-					bold ? "font-bold" : ""
-				} ${italic ? "italic" : ""} ${
-					underline ? "underline" : ""
-				} ${textColor} ${backgroundColor}`}
-				style={{ padding, margin }}
-			>
-				{text}
-			</Button>
+					<div className="flex flex-wrap gap-2">
+						<div className="flex space-x-2">
+							<SelectFont font={font} onUpdate={onUpdate} />
+							<Input
+								type="text"
+								placeholder="Custom font"
+								onChange={(e) => onUpdate({ font: e.target.value })}
+							/>
+						</div>
+						<Input
+							type="number"
+							value={fontSize}
+							onChange={(e) =>
+								onUpdate({ fontSize: Number.parseInt(e.target.value) })
+							}
+							className="w-20"
+							placeholder="Font size"
+						/>
+						<div className="flex space-x-2">
+							<Select
+								onValueChange={(value) => onUpdate({ alignment: value })}
+								value={alignment}
+							>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Alignment" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="text-left">Left</SelectItem>
+									<SelectItem value="text-center">Center</SelectItem>
+									<SelectItem value="text-right">Right</SelectItem>
+								</SelectContent>
+							</Select>
+							<Input
+								type="text"
+								placeholder="Custom alignment"
+								onChange={(e) => onUpdate({ alignment: e.target.value })}
+							/>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={bold}
+								onCheckedChange={(checked) => onUpdate({ bold: checked })}
+								id="bold"
+							/>
+							<Label htmlFor="bold">Bold</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={italic}
+								onCheckedChange={(checked) => onUpdate({ italic: checked })}
+								id="italic"
+							/>
+							<Label htmlFor="italic">Italic</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={underline}
+								onCheckedChange={(checked) => onUpdate({ underline: checked })}
+								id="underline"
+							/>
+							<Label htmlFor="underline">Underline</Label>
+						</div>
+					</div>
+					<div className="flex flex-wrap gap-2">
+						<div className="flex space-x-2">
+							<Select
+								onValueChange={(value) => onUpdate({ textColor: value })}
+								value={textColor}
+							>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Text color" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="text-white">White</SelectItem>
+									<SelectItem value="text-gray-900">Black</SelectItem>
+									<SelectItem value="text-blue-500">Blue</SelectItem>
+									<SelectItem value="text-green-500">Green</SelectItem>
+									<SelectItem value="text-red-500">Red</SelectItem>
+								</SelectContent>
+							</Select>
+							<Input
+								type="text"
+								placeholder="RGB or Hex"
+								onChange={(e) => onUpdate({ textColor: e.target.value })}
+							/>
+						</div>
+						<div className="flex space-x-2">
+							<Select
+								onValueChange={(value) => onUpdate({ backgroundColor: value })}
+								value={backgroundColor}
+							>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Background color" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="bg-blue-500">Blue</SelectItem>
+									<SelectItem value="bg-green-500">Green</SelectItem>
+									<SelectItem value="bg-red-500">Red</SelectItem>
+									<SelectItem value="bg-gray-500">Gray</SelectItem>
+									<SelectItem value="bg-transparent">Transparent</SelectItem>
+								</SelectContent>
+							</Select>
+							<Input
+								type="text"
+								placeholder="RGB or Hex"
+								onChange={(e) => onUpdate({ backgroundColor: e.target.value })}
+							/>
+						</div>
+						<Input
+							value={padding}
+							onChange={(e) => onUpdate({ padding: e.target.value })}
+							placeholder="Padding (top right bottom left)"
+							className="w-full"
+						/>
+						<Input
+							value={margin}
+							onChange={(e) => onUpdate({ margin: e.target.value })}
+							placeholder="Margin (top right bottom left)"
+							className="w-full"
+						/>
+						<div className="flex space-x-2">
+							<Select
+								onValueChange={(value) => onUpdate({ width: value })}
+								value={width}
+							>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Width" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="w-auto">Auto</SelectItem>
+									<SelectItem value="w-full">Full</SelectItem>
+									<SelectItem value="w-1/2">Half</SelectItem>
+									<SelectItem value="w-1/3">One Third</SelectItem>
+									<SelectItem value="w-2/3">Two Thirds</SelectItem>
+								</SelectContent>
+							</Select>
+							<Input
+								type="text"
+								placeholder="Custom width"
+								onChange={(e) => onUpdate({ width: e.target.value })}
+							/>
+						</div>
+					</div>
+				</SheetContent>
+			</Sheet>
 		</div>
 	);
 }
@@ -1397,68 +1444,85 @@ function ImageComponent({
 				className={`max-w-full h-auto mb-2 ${objectFit}`}
 				style={{ width, height, opacity: opacity / 100 }}
 			/>
-			<Input
-				type="file"
-				onChange={handleFileChange}
-				accept="image/*"
-				className="mb-2"
-			/>
-			<Input
-				value={src}
-				onChange={(e) => onUpdate({ src: e.target.value })}
-				placeholder="Image URL"
-				className="mb-2"
-			/>
-			<Input
-				value={alt}
-				onChange={(e) => onUpdate({ alt: e.target.value })}
-				placeholder="Alt text"
-				className="mb-2"
-			/>
-			<div className="flex flex-wrap gap-2">
-				<Input
-					type="number"
-					value={width}
-					onChange={(e) => onUpdate({ width: parseInt(e.target.value) })}
-					className="w-20"
-					placeholder="Width"
-				/>
-				<Input
-					type="number"
-					value={height}
-					onChange={(e) => onUpdate({ height: parseInt(e.target.value) })}
-					className="w-20"
-					placeholder="Height"
-				/>
-				<div className="flex items-center space-x-2">
-					<Label htmlFor="opacity">Opacity</Label>
-					<Slider
-						id="opacity"
-						min={0}
-						max={100}
-						step={1}
-						value={[opacity]}
-						onValueChange={([value]) => onUpdate({ opacity: value })}
-						className="w-[100px]"
+
+			<Sheet>
+				<SheetTrigger asChild>
+					<Button variant="outline">
+						<Settings className="h-4 w-4 mr-2" />
+						Estilos
+					</Button>
+				</SheetTrigger>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Personalizar Imagem</SheetTitle>
+						<SheetDescription>
+							Edite as propriedades de estilo da imagem.
+						</SheetDescription>
+					</SheetHeader>
+					<Input
+						type="file"
+						onChange={handleFileChange}
+						accept="image/*"
+						className="mb-2"
 					/>
-					<span>{opacity}%</span>
-				</div>
-				<Select
-					onValueChange={(value) => onUpdate({ objectFit: value })}
-					value={objectFit}
-				>
-					<SelectTrigger className="w-[180px]">
-						<SelectValue placeholder="Object fit" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="object-cover">Cover</SelectItem>
-						<SelectItem value="object-contain">Contain</SelectItem>
-						<SelectItem value="object-fill">Fill</SelectItem>
-						<SelectItem value="object-none">None</SelectItem>
-						<SelectItem value="object-scale-down">Scale Down</SelectItem>
-					</SelectContent>
-				</Select>
-			</div>
+					<Input
+						value={src}
+						onChange={(e) => onUpdate({ src: e.target.value })}
+						placeholder="Image URL"
+						className="mb-2"
+					/>
+					<Input
+						value={alt}
+						onChange={(e) => onUpdate({ alt: e.target.value })}
+						placeholder="Alt text"
+						className="mb-2"
+					/>
+					<div className="flex flex-wrap gap-2">
+						<Input
+							type="number"
+							value={width}
+							onChange={(e) => onUpdate({ width: parseInt(e.target.value) })}
+							className="w-20"
+							placeholder="Width"
+						/>
+						<Input
+							type="number"
+							value={height}
+							onChange={(e) => onUpdate({ height: parseInt(e.target.value) })}
+							className="w-20"
+							placeholder="Height"
+						/>
+						<div className="flex items-center space-x-2">
+							<Label htmlFor="opacity">Opacity</Label>
+							<Slider
+								id="opacity"
+								min={0}
+								max={100}
+								step={1}
+								value={[opacity]}
+								onValueChange={([value]) => onUpdate({ opacity: value })}
+								className="w-[100px]"
+							/>
+							<span>{opacity}%</span>
+						</div>
+						<Select
+							onValueChange={(value) => onUpdate({ objectFit: value })}
+							value={objectFit}
+						>
+							<SelectTrigger className="w-[180px]">
+								<SelectValue placeholder="Object fit" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="object-cover">Cover</SelectItem>
+								<SelectItem value="object-contain">Contain</SelectItem>
+								<SelectItem value="object-fill">Fill</SelectItem>
+								<SelectItem value="object-none">None</SelectItem>
+								<SelectItem value="object-scale-down">Scale Down</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+				</SheetContent>
+			</Sheet>
 		</div>
 	);
 }
@@ -1505,68 +1569,88 @@ function VideoComponent({
 			>
 				Your browser does not support the video tag.
 			</video>
-			<Input
-				type="file"
-				onChange={handleFileChange}
-				accept="video/*"
-				className="mb-2"
-			/>
-			<Input
-				value={src}
-				onChange={(e) => onUpdate({ src: e.target.value })}
-				placeholder="Video URL"
-				className="mb-2"
-			/>
-			<div className="flex flex-wrap gap-2">
-				<Input
-					type="number"
-					value={width}
-					onChange={(e) => onUpdate({ width: parseInt(e.target.value) })}
-					className="w-20"
-					placeholder="Width"
-					disabled={defaultSize}
-				/>
-				<Input
-					type="number"
-					value={height}
-					onChange={(e) => onUpdate({ height: parseInt(e.target.value) })}
-					className="w-20"
-					placeholder="Height"
-					disabled={defaultSize}
-				/>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={autoplay}
-						onCheckedChange={(checked) => onUpdate({ autoplay: checked })}
-						id="autoplay"
+			<Sheet>
+				<SheetTrigger asChild>
+					<Button variant="outline">
+						<Settings className="h-4 w-4 mr-2" />
+						Estilos
+					</Button>
+				</SheetTrigger>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Personalizar Vídeo</SheetTitle>
+						<SheetDescription>
+							Edite as propriedades de estilo do vídeo.
+						</SheetDescription>
+					</SheetHeader>
+					<Input
+						type="file"
+						onChange={handleFileChange}
+						accept="video/*"
+						className="mb-2"
 					/>
-					<Label htmlFor="autoplay">Autoplay</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={muted}
-						onCheckedChange={(checked) => onUpdate({ muted: checked })}
-						id="muted"
+					<Input
+						value={src}
+						onChange={(e) => onUpdate({ src: e.target.value })}
+						placeholder="Video URL"
+						className="mb-2"
 					/>
-					<Label htmlFor="muted">Muted</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={defaultSize}
-						onCheckedChange={(checked) => onUpdate({ defaultSize: checked })}
-						id="defaultSize"
-					/>
-					<Label htmlFor="defaultSize">Default Size</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={controls}
-						onCheckedChange={(checked) => onUpdate({ controls: checked })}
-						id="controls"
-					/>
-					<Label htmlFor="controls">Show Controls</Label>
-				</div>
-			</div>
+					<div className="flex flex-wrap gap-2">
+						<Input
+							type="number"
+							value={width}
+							onChange={(e) =>
+								onUpdate({ width: Number.parseInt(e.target.value) })
+							}
+							className="w-20"
+							placeholder="Width"
+							disabled={defaultSize}
+						/>
+						<Input
+							type="number"
+							value={height}
+							onChange={(e) => onUpdate({ height: parseInt(e.target.value) })}
+							className="w-20"
+							placeholder="Height"
+							disabled={defaultSize}
+						/>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={autoplay}
+								onCheckedChange={(checked) => onUpdate({ autoplay: checked })}
+								id="autoplay"
+							/>
+							<Label htmlFor="autoplay">Autoplay</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={muted}
+								onCheckedChange={(checked) => onUpdate({ muted: checked })}
+								id="muted"
+							/>
+							<Label htmlFor="muted">Muted</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={defaultSize}
+								onCheckedChange={(checked) =>
+									onUpdate({ defaultSize: checked })
+								}
+								id="defaultSize"
+							/>
+							<Label htmlFor="defaultSize">Default Size</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={controls}
+								onCheckedChange={(checked) => onUpdate({ controls: checked })}
+								id="controls"
+							/>
+							<Label htmlFor="controls">Show Controls</Label>
+						</div>
+					</div>
+				</SheetContent>
+			</Sheet>
 		</div>
 	);
 }
@@ -1623,7 +1707,7 @@ function CarouselComponent({
 			slideCount: Math.min(newItems.length, slideCount),
 		});
 	};
-
+	const [isSheetOpen, setSheetOpen] = useState(false);
 	return (
 		<div className="space-y-4">
 			<Carousel className="w-full max-w-xs mx-auto">
@@ -1691,117 +1775,139 @@ function CarouselComponent({
 				<CarouselPrevious />
 				<CarouselNext />
 			</Carousel>
-			<div className="space-y-2">
-				{items.map((item, index) => (
-					<div key={index} className="flex items-center space-x-2">
-						<Input
-							value={item.image}
-							onChange={(e) => updateSlide(index, "image", e.target.value)}
-							placeholder={`Image URL ${index + 1}`}
-						/>
-						{showText && (
-							<Input
-								value={item.text}
-								onChange={(e) => updateSlide(index, "text", e.target.value)}
-								placeholder="Text"
-							/>
-						)}
-						{showLinks && (
-							<Input
-								value={item.link}
-								onChange={(e) => updateSlide(index, "link", e.target.value)}
-								placeholder="Link"
-							/>
-						)}
-						{showButtons && (
-							<Input
-								value={item.buttonText}
-								onChange={(e) =>
-									updateSlide(index, "buttonText", e.target.value)
-								}
-								placeholder="Button Text"
-							/>
-						)}
-						<Button
-							variant="outline"
-							size="icon"
-							onClick={() => removeSlide(index)}
-						>
-							<X className="h-4 w-4" />
-						</Button>
+			<Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
+				<SheetTrigger asChild>
+					<Button variant="outline">
+						<Settings className="h-4 w-4 mr-2" />
+						Editar Carrousel
+					</Button>
+				</SheetTrigger>
+
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Configurações do Carrossel</SheetTitle>
+						<SheetDescription>
+							Edite as propriedades do carrossel.
+						</SheetDescription>
+					</SheetHeader>
+					<div className="space-y-2">
+						{items.map((item, index) => (
+							<div key={index} className="flex items-center space-x-2">
+								<Input
+									value={item.image}
+									onChange={(e) => updateSlide(index, "image", e.target.value)}
+									placeholder={`Image URL ${index + 1}`}
+								/>
+								{showText && (
+									<Input
+										value={item.text}
+										onChange={(e) => updateSlide(index, "text", e.target.value)}
+										placeholder="Text"
+									/>
+								)}
+								{showLinks && (
+									<Input
+										value={item.link}
+										onChange={(e) => updateSlide(index, "link", e.target.value)}
+										placeholder="Link"
+									/>
+								)}
+								{showButtons && (
+									<Input
+										value={item.buttonText}
+										onChange={(e) =>
+											updateSlide(index, "buttonText", e.target.value)
+										}
+										placeholder="Button Text"
+									/>
+								)}
+								<Button
+									variant="outline"
+									size="icon"
+									onClick={() => removeSlide(index)}
+								>
+									<X className="h-4 w-4" />
+								</Button>
+							</div>
+						))}
+						<Button onClick={addSlide}>Add Slide</Button>
 					</div>
-				))}
-				<Button onClick={addSlide}>Add Slide</Button>
-			</div>
-			<div className="flex flex-wrap gap-2">
-				<Input
-					type="number"
-					value={slideCount}
-					onChange={(e) =>
-						onUpdate({
-							slideCount: Math.min(parseInt(e.target.value), items.length),
-						})
-					}
-					className="w-20"
-					placeholder="Slide Count"
-				/>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={showText}
-						onCheckedChange={(checked) => onUpdate({ showText: checked })}
-						id="showText"
-					/>
-					<Label htmlFor="showText">Show Text</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={showLinks}
-						onCheckedChange={(checked) => onUpdate({ showLinks: checked })}
-						id="showLinks"
-					/>
-					<Label htmlFor="showLinks">Show Links</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={showButtons}
-						onCheckedChange={(checked) => onUpdate({ showButtons: checked })}
-						id="showButtons"
-					/>
-					<Label htmlFor="showButtons">Show Buttons</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={isCardType}
-						onCheckedChange={(checked) => onUpdate({ isCardType: checked })}
-						id="isCardType"
-					/>
-					<Label htmlFor="isCardType">Card Type</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={autoPlay}
-						onCheckedChange={(checked) => onUpdate({ autoPlay: checked })}
-						id="autoPlay"
-					/>
-					<Label htmlFor="autoPlay">Auto Play</Label>
-				</div>
-				<Input
-					type="number"
-					value={interval}
-					onChange={(e) => onUpdate({ interval: parseInt(e.target.value) })}
-					className="w-20"
-					placeholder="Interval (ms)"
-				/>
-				<Input
-					type="number"
-					value={visibleSlides}
-					onChange={(e) =>
-						onUpdate({ visibleSlides: parseInt(e.target.value) })
-					}
-					className="w-20"
-					placeholder="Visible Slides"
-				/>
-			</div>
+					<div className="flex flex-wrap gap-2">
+						<Input
+							type="number"
+							value={slideCount}
+							onChange={(e) =>
+								onUpdate({
+									slideCount: Math.min(
+										Number.parseInt(e.target.value),
+										items.length,
+									),
+								})
+							}
+							className="w-20"
+							placeholder="Slide Count"
+						/>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={showText}
+								onCheckedChange={(checked) => onUpdate({ showText: checked })}
+								id="showText"
+							/>
+							<Label htmlFor="showText">Show Text</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={showLinks}
+								onCheckedChange={(checked) => onUpdate({ showLinks: checked })}
+								id="showLinks"
+							/>
+							<Label htmlFor="showLinks">Show Links</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={showButtons}
+								onCheckedChange={(checked) =>
+									onUpdate({ showButtons: checked })
+								}
+								id="showButtons"
+							/>
+							<Label htmlFor="showButtons">Show Buttons</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={isCardType}
+								onCheckedChange={(checked) => onUpdate({ isCardType: checked })}
+								id="isCardType"
+							/>
+							<Label htmlFor="isCardType">Card Type</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								checked={autoPlay}
+								onCheckedChange={(checked) => onUpdate({ autoPlay: checked })}
+								id="autoPlay"
+							/>
+							<Label htmlFor="autoPlay">Auto Play</Label>
+						</div>
+						<Input
+							type="number"
+							value={interval}
+							onChange={(e) => onUpdate({ interval: parseInt(e.target.value) })}
+							className="w-20"
+							placeholder="Interval (ms)"
+						/>
+						<Input
+							type="number"
+							value={visibleSlides}
+							onChange={(e) =>
+								onUpdate({ visibleSlides: parseInt(e.target.value) })
+							}
+							className="w-20"
+							placeholder="Visible Slides"
+						/>
+					</div>
+				</SheetContent>
+			</Sheet>
 		</div>
 	);
 }
@@ -1832,7 +1938,7 @@ function FormComponent({
 	const addField = () => {
 		onUpdate({ fields: [...fields, { label: "New Field", type: "text" }] });
 	};
-
+	const [isSheetOpen, setSheetOpen] = useState(false);
 	return (
 		<div className="space-y-4">
 			<Input
@@ -1847,55 +1953,6 @@ function FormComponent({
 				placeholder="Form Subtitle"
 				className="mb-2"
 			/>
-			<div className="flex flex-wrap gap-2">
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ font: value })}
-						value={font}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Select font" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="font-sans">Sans-serif</SelectItem>
-							<SelectItem value="font-serif">Serif</SelectItem>
-							<SelectItem value="font-mono">Monospace</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="Custom font"
-						onChange={(e) => onUpdate({ font: e.target.value })}
-					/>
-				</div>
-				<Input
-					type="number"
-					value={fontSize}
-					onChange={(e) => onUpdate({ fontSize: parseInt(e.target.value) })}
-					className="w-20"
-					placeholder="Font size"
-				/>
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ alignment: value })}
-						value={alignment}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Alignment" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="text-left">Left</SelectItem>
-							<SelectItem value="text-center">Center</SelectItem>
-							<SelectItem value="text-right">Right</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="Custom alignment"
-						onChange={(e) => onUpdate({ alignment: e.target.value })}
-					/>
-				</div>
-			</div>
 			<div className="space-y-2">
 				{fields.map((field, index) => (
 					<div key={index} className="flex items-center space-x-2">
@@ -1958,47 +2015,105 @@ function FormComponent({
 					onChange={(e) => onUpdate({ buttonText: e.target.value })}
 					placeholder="Submit Button Text"
 				/>
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ buttonColor: value })}
-						value={buttonColor}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Button color" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="bg-blue-500">Blue</SelectItem>
-							<SelectItem value="bg-green-500">Green</SelectItem>
-							<SelectItem value="bg-red-500">Red</SelectItem>
-							<SelectItem value="bg-gray-500">Gray</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="RGB or Hex"
-						onChange={(e) => onUpdate({ buttonColor: e.target.value })}
-					/>
-				</div>
-				<div className="flex space-x-2">
-					<Select
-						onValueChange={(value) => onUpdate({ buttonTextColor: value })}
-						value={buttonTextColor}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Button text color" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="text-white">White</SelectItem>
-							<SelectItem value="text-black">Black</SelectItem>
-						</SelectContent>
-					</Select>
-					<Input
-						type="text"
-						placeholder="RGB or Hex"
-						onChange={(e) => onUpdate({ buttonTextColor: e.target.value })}
-					/>
-				</div>
 			</div>
+			<Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
+				<SheetTrigger asChild>
+					<Button variant="outline">
+						<Settings className="h-4 w-4 mr-2" />
+						Editar Formulário
+					</Button>
+				</SheetTrigger>
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Configurações do Formulário</SheetTitle>
+						<SheetDescription>
+							Edite as propriedades do formulário.
+						</SheetDescription>
+					</SheetHeader>
+					<div className="flex flex-wrap gap-2 mt-4">
+						<div className="flex space-x-2">
+							<SelectFont font={font} onUpdate={onUpdate} />
+							<Input
+								type="text"
+								placeholder="Custom font"
+								onChange={(e) => onUpdate({ font: e.target.value })}
+							/>
+						</div>
+						<Input
+							type="number"
+							value={fontSize}
+							onChange={(e) =>
+								onUpdate({ fontSize: Number.parseInt(e.target.value) })
+							}
+							className="w-20"
+							placeholder="Font size"
+						/>
+						<div className="flex space-x-2">
+							<Select
+								onValueChange={(value) => onUpdate({ alignment: value })}
+								value={alignment}
+							>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Alignment" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="text-left">Left</SelectItem>
+									<SelectItem value="text-center">Center</SelectItem>
+									<SelectItem value="text-right">Right</SelectItem>
+								</SelectContent>
+							</Select>
+							<Input
+								type="text"
+								placeholder="Custom alignment"
+								onChange={(e) => onUpdate({ alignment: e.target.value })}
+							/>
+						</div>
+					</div>
+					<hr className="my-4 text-black" />
+					<div className="flex flex-col gap-3">
+						<div className="flex space-x-2">
+							<Select
+								onValueChange={(value) => onUpdate({ buttonTextColor: value })}
+								value={buttonTextColor}
+							>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Button text color" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="text-white">White</SelectItem>
+									<SelectItem value="text-black">Black</SelectItem>
+								</SelectContent>
+							</Select>
+							<Input
+								type="text"
+								placeholder="RGB or Hex"
+								onChange={(e) => onUpdate({ buttonTextColor: e.target.value })}
+							/>
+						</div>
+						<div className="flex space-x-2">
+							<Select
+								onValueChange={(value) => onUpdate({ buttonColor: value })}
+								value={buttonColor}
+							>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Button color" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="bg-blue-500">Blue</SelectItem>
+									<SelectItem value="bg-green-500">Green</SelectItem>
+									<SelectItem value="bg-red-500">Red</SelectItem>
+									<SelectItem value="bg-gray-500">Gray</SelectItem>
+								</SelectContent>
+							</Select>
+							<Input
+								type="text"
+								placeholder="RGB or Hex"
+								onChange={(e) => onUpdate({ buttonColor: e.target.value })}
+							/>
+						</div>
+					</div>
+				</SheetContent>
+			</Sheet>
 		</div>
 	);
 }
@@ -2049,39 +2164,60 @@ function TableComponent({
 		const newData = data.map((row) => [...row, ""]);
 		onUpdate({ headers: newHeaders, data: newData, columns: columns + 1 });
 	};
-
+	const [isSheetOpen, setSheetOpen] = useState(false);
 	return (
 		<div className="space-y-4">
-			<div className="flex space-x-2">
-				<Button onClick={addRow}>Add Row</Button>
-				<Button onClick={addColumn}>Add Column</Button>
-			</div>
-			<div className="flex space-x-2">
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={striped}
-						onCheckedChange={(checked) => onUpdate({ striped: checked })}
-						id="striped"
-					/>
-					<Label htmlFor="striped">Striped</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={hoverable}
-						onCheckedChange={(checked) => onUpdate({ hoverable: checked })}
-						id="hoverable"
-					/>
-					<Label htmlFor="hoverable">Hoverable</Label>
-				</div>
-				<div className="flex items-center space-x-2">
-					<Switch
-						checked={bordered}
-						onCheckedChange={(checked) => onUpdate({ bordered: checked })}
-						id="bordered"
-					/>
-					<Label htmlFor="bordered">Bordered</Label>
-				</div>
-			</div>
+			<Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
+				<SheetTrigger asChild>
+					<Button variant="outline">
+						<Settings className="h-4 w-4 mr-2" />
+						Editar Carrousel
+					</Button>
+				</SheetTrigger>
+
+				<SheetContent>
+					<SheetHeader>
+						<SheetTitle>Configurações do Carrossel</SheetTitle>
+						<SheetDescription>
+							Edite as propriedades do carrossel.
+						</SheetDescription>
+					</SheetHeader>
+					<div className="space-y-4 mt-4">
+						<div className="flex space-x-2">
+							<Button onClick={addRow}>Add Row</Button>
+							<Button onClick={addColumn}>Add Column</Button>
+						</div>
+						<div className="flex space-x-2">
+							<div className="flex items-center space-x-2">
+								<Switch
+									checked={striped}
+									onCheckedChange={(checked) => onUpdate({ striped: checked })}
+									id="striped"
+								/>
+								<Label htmlFor="striped">Striped</Label>
+							</div>
+							<div className="flex items-center space-x-2">
+								<Switch
+									checked={hoverable}
+									onCheckedChange={(checked) =>
+										onUpdate({ hoverable: checked })
+									}
+									id="hoverable"
+								/>
+								<Label htmlFor="hoverable">Hoverable</Label>
+							</div>
+							<div className="flex items-center space-x-2">
+								<Switch
+									checked={bordered}
+									onCheckedChange={(checked) => onUpdate({ bordered: checked })}
+									id="bordered"
+								/>
+								<Label htmlFor="bordered">Bordered</Label>
+							</div>
+						</div>
+					</div>
+				</SheetContent>
+			</Sheet>
 			<Table
 				className={`${striped ? "table-striped" : ""} ${
 					hoverable ? "table-hover" : ""
