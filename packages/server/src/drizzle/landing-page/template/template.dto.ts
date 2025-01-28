@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { DBConnection } from "../../drizzle/drizzle-client";
+import { DBConnection } from "../../drizzle-client";
 import {
 	CreateTemplateSchema,
 	SelectTemplateSchema,
