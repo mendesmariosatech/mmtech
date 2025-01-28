@@ -6,6 +6,12 @@ import { genEntityId } from "./utils";
 import { videosTable } from "./videos/videos";
 
 export { videosTable } from "./videos/videos";
+export {
+	templateTable,
+	templateRelations,
+} from "./landing-page/template/template";
+
+export { pageTable, pageRelations } from "./landing-page/page/page";
 
 export const authTable = sqliteTable("auth", {
 	id: text("id", { length: 128 })
