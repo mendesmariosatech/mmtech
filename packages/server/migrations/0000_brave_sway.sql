@@ -68,7 +68,7 @@ CREATE TABLE `landing_page.components` (
 	`type` text NOT NULL,
 	`content` text,
 	`css` text NOT NULL,
-	`created_at` integer DEFAULT '"2025-01-29T01:27:24.982Z"'
+	`created_at` integer DEFAULT '"2025-01-30T00:27:33.779Z"'
 );
 --> statement-breakpoint
 CREATE TABLE `customer` (

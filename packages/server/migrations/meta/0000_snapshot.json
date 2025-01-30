@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "77ad9457-b119-4af0-9a80-b9e394e8e968",
+  "id": "b6c7ede6-57fe-4b38-a378-37af73816db3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "address": {
@@ -492,7 +492,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2025-01-29T01:27:24.982Z\"'"
+          "default": "'\"2025-01-30T00:27:33.779Z\"'"
         }
       },
       "indexes": {
