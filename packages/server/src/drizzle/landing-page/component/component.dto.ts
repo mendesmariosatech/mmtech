@@ -43,19 +43,28 @@ export class ComponentTable extends DBConnection {
 			id: number;
 		},
 	) {
-		const cssArgs = CssSchema.parse(args.css);
-		const content = ContentSchema.parse(args.content);
+		try {
+			const cssArgs = CssSchema.parse(args.css);
+			const content = ContentSchema.parse(args.content);
 
-		const [page] = await this.db
-			.update(componentTable)
-			.set({
-				type: args.type,
-				css: cssArgs,
-				content: content,
-			})
-			.where(eq(componentTable.id, args.id))
-			.returning();
+			const [page] = await this.db
+				.update(componentTable)
+				.set({
+					type: args.type,
+					css: cssArgs,
+					content: content,
+				})
+				.where(eq(componentTable.id, args.id))
+				.returning();
 
-		return page;
+			return page;
+		} catch (error) {
+			if (error.name === 'ZodError') {
+				console.error('Erro de validação:', error.errors);
+				throw new Error('Dados inválidos fornecidos para atualização');
+			}
+			console.error('Erro ao atualizar componente:', error);
+			throw error;
+		}
 	}
 }
