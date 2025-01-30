@@ -7,10 +7,13 @@ export const componentTable = sqliteTable(
 	{
 		id: integer("id").primaryKey(),
 		type: text("type", { enum: componentTypes }).notNull(),
-		content: text("content", { mode: "json" }).$type<{
-			text?: string;
-			url?: string;
-		}>(),
+		content: text("content", { mode: "json" }).$type<
+			| { type: "text"; text: string }
+			| { type: "image"; url: string; alt?: string }
+			| { type: "video"; url: string }
+			| { type: "button"; text: string; url: string }
+			| { type: "block"; children: Array<{ id: number }> }
+		>(),
 		css: text("css", { mode: "json" })
 			.$type<{
 				color?: string;
