@@ -22,7 +22,7 @@ export class ComponentTable extends DBConnection {
 
 			return page;
 		} catch (error) {
-			console.error('Erro ao criar componente:', error);
+			console.error("Erro ao criar componente:", error);
 			throw error;
 		}
 	}
@@ -59,11 +59,6 @@ export class ComponentTable extends DBConnection {
 
 			return page;
 		} catch (error) {
-			if (error.name === 'ZodError') {
-				console.error('Erro de validação:', error.errors);
-				throw new Error('Dados inválidos fornecidos para atualização');
-			}
-			console.error('Erro ao atualizar componente:', error);
 			throw error;
 		}
 	}
