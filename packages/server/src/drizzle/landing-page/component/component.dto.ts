@@ -14,12 +14,17 @@ export class ComponentTable extends DBConnection {
 	}
 
 	public async createComponent(args: CreateMergeComponentSchema) {
-		const [page] = await this.db
-			.insert(componentTable)
-			.values(args)
-			.returning();
+		try {
+			const [page] = await this.db
+				.insert(componentTable)
+				.values(args)
+				.returning();
 
-		return page;
+			return page;
+		} catch (error) {
+			console.error('Erro ao criar componente:', error);
+			throw error;
+		}
 	}
 
 	public async getAllComponentsByTemplate(
