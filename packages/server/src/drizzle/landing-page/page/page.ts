@@ -1,9 +1,10 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, index } from "drizzle-orm/sqlite-core";
 import { genEntityId } from "../../utils";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { templateTable } from "../template/template";
 import { relations } from "drizzle-orm";
+import { componentTable } from "../component/component";
 
 export const pageTable = sqliteTable("landing_page.page", {
 	id: text("id", { length: 128 })
@@ -21,11 +22,31 @@ export const pageTable = sqliteTable("landing_page.page", {
 	),
 });
 
-export const pageRelations = relations(pageTable, ({ one }) => ({
+export const componentPage = sqliteTable(
+	"component_page",
+	{
+		// TODO typar esse schema
+		id: integer("id").primaryKey(),
+		componentId: integer("component_id").references(() => componentTable.id),
+		pageId: integer("page_id").references(() => pageTable.id),
+		order: integer("order").notNull(), // For sorting components in page
+		cssOverrides: text("css_override", { mode: "json" }), // Overridden CSS properties
+		contentOverrides: text("content_override", { mode: "json" }), // Overridden content
+	},
+	(table) => ({
+		pageComponentIdx: index("page_component_idx").on(
+			table.pageId,
+			table.componentId,
+		),
+	}),
+);
+
+export const pageRelations = relations(pageTable, ({ one, many }) => ({
 	template: one(templateTable, {
 		fields: [pageTable.templateId],
 		references: [templateTable.id],
 	}),
+	components: many(componentTable),
 }));
 
 export const CreatePageSchema = createInsertSchema(pageTable).omit({

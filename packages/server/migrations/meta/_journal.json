@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1730685026225,
-      "tag": "0000_lush_venom",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1732404942667,
-      "tag": "0001_heavy_kulan_gath",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1734484488991,
-      "tag": "0002_military_moira_mactaggert",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1734486354244,
-      "tag": "0003_salty_masked_marvel",
+      "when": 1738196853786,
+      "tag": "0000_brave_sway",
       "breakpoints": true
     }
   ]
