@@ -25,6 +25,7 @@ export const pageTable = sqliteTable("landing_page.page", {
 export const componentPage = sqliteTable(
 	"component_page",
 	{
+		// TODO typar esse schema
 		id: integer("id").primaryKey(),
 		componentId: integer("component_id").references(() => componentTable.id),
 		pageId: integer("page_id").references(() => pageTable.id),
