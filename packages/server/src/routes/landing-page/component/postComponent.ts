@@ -73,5 +73,9 @@ export const createComponentHandler: AppRouteHandler<
 
 	const newComponent = await componentTable.createComponent(body);
 
+	if (!newComponent) {
+		return c.json({ error: "Page not found" }, 404);
+	}
+
 	return c.json({ data: newComponent }, 201);
 };

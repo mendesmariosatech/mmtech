@@ -5,7 +5,7 @@ import {
 	componentTable,
 	ContentSchema,
 	CssSchema,
-	type CreateComponentSchema,
+	type CreateMergeComponentSchema,
 } from "./component";
 
 export class ComponentTable extends DBConnection {
@@ -13,17 +13,10 @@ export class ComponentTable extends DBConnection {
 		super(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	}
 
-	public async createComponent(args: CreateComponentSchema) {
-		const cssArgs = CssSchema.parse(args.css);
-		const content = ContentSchema.parse(args.content);
-
+	public async createComponent(args: CreateMergeComponentSchema) {
 		const [page] = await this.db
 			.insert(componentTable)
-			.values({
-				type: args.type,
-				css: cssArgs,
-				content: content,
-			})
+			.values(args)
 			.returning();
 
 		return page;
@@ -41,7 +34,7 @@ export class ComponentTable extends DBConnection {
 
 	// update component
 	public async updateComponent(
-		args: CreateComponentSchema & {
+		args: CreateMergeComponentSchema & {
 			id: number;
 		},
 	) {
