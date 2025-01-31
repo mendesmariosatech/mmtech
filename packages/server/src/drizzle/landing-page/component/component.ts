@@ -77,3 +77,14 @@ export const CreateMergeComponentSchema = z.object({
 export type CreateMergeComponentSchema = z.infer<
 	typeof CreateMergeComponentSchema
 >;
+
+const UpdateComponentSchema = createInsertSchema(componentTable).omit({
+	createdAt: true,
+	id: true,
+});
+
+export const UpdateMergeComponentSchema = z.object({
+	...UpdateComponentSchema.shape,
+	content: ContentSchema,
+	css: CssSchema,
+});
