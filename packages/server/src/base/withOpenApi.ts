@@ -14,6 +14,7 @@ export function withOpenApi(app: OpenAPIHono<AppOpenAPI>) {
 	app.get(
 		"/api/swagger",
 		apiReference({
+			cdn: "https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.25.80",
 			theme: "bluePlanet",
 			defaultHttpClient: {
 				targetKey: "node",
