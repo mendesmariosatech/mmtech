@@ -1,4 +1,8 @@
 import { app } from "../../base/base-app";
+import {
+	createComponentHandler,
+	createComponentSpec,
+} from "./component/postComponent";
 import { createPageHandler, createPageSpec } from "./page/create-page";
 import {
 	getAllPagesByTemplateHandler,
@@ -24,6 +28,7 @@ const templateRouter = app
 	.openapi(getAllTemplatesSpec, getAllTemplatesHandler)
 	.openapi(createPageSpec, createPageHandler)
 	.openapi(getAllPagesByTemplateSpec, getAllPagesByTemplateHandler)
-	.openapi(getPageByIdSpec, getPageByIdHandler);
+	.openapi(getPageByIdSpec, getPageByIdHandler)
+	.openapi(createComponentSpec, createComponentHandler);
 
 export { templateRouter };

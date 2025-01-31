@@ -41,6 +41,14 @@ export const componentPage = sqliteTable(
 	}),
 );
 
+const SelectComponentPageSchema = createSelectSchema(componentPage).pick({
+	id: true,
+});
+
+export type SelectComponentPageSchema = z.infer<
+	typeof SelectComponentPageSchema
+>;
+
 export const pageRelations = relations(pageTable, ({ one, many }) => ({
 	template: one(templateTable, {
 		fields: [pageTable.templateId],
