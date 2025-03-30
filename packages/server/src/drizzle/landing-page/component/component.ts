@@ -42,11 +42,10 @@ export const ContentSchema = z.discriminatedUnion("type", [
 ]);
 
 type ContentSchema = z.infer<typeof ContentSchema>;
-
 type CssSchema = z.infer<typeof CssSchema>;
 
 export const componentTable = sqliteTable("landing_page.components", {
-	id: integer("id").primaryKey(),
+	id: integer("id").primaryKey().notNull(),
 	type: text("type", { enum: componentTypes }).notNull(),
 	content: text("content", { mode: "json" }).$type<ContentSchema>().notNull(),
 	css: text("css", { mode: "json" }).$type<CssSchema>().notNull(),
