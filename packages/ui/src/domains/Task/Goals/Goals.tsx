@@ -3,10 +3,8 @@ import { Card, CardContent } from "../../../components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import GoalProgressList from "./components/GoalsList";
-import { useRouter } from "next/navigation";
 
 export function Goals() {
-	const router = useRouter();
 	return (
 		<div className="container mx-auto p-4 max-w-4xl">
 			<div className="mb-6">
