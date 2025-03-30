@@ -2,11 +2,9 @@ import { Button } from "../../../components/ui/button";
 import { Card, CardContent } from "../../../components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import GoalProgressList from "./components/GoalsList";
-import { useRouter } from "next/navigation";
+import { PlanGrid } from "./PlanGrid";
 
-export function Goals() {
-	const router = useRouter();
+export function Plans() {
 	return (
 		<div className="container mx-auto p-4 max-w-4xl">
 			<div className="mb-6">
@@ -16,20 +14,20 @@ export function Goals() {
 						Back to Tasks
 					</Button>
 				</Link>
-				<h1 className="text-3xl font-bold">Goal Progress</h1>
+				<h1 className="text-3xl font-bold">Pre-set Plans</h1>
 			</div>
 
 			<div className="grid gap-4">
 				<Card className="bg-blue-50">
 					<CardContent className="p-4">
-						<GoalProgressList />
+						<PlanGrid />
 					</CardContent>
 				</Card>
 
 				<Card className="bg-blue-50">
 					<CardContent className="p-4">
 						<div className="text-center text-gray-500">
-							Additional goal metrics and statistics will appear here
+							Plan details and recommendations will appear here
 						</div>
 					</CardContent>
 				</Card>
