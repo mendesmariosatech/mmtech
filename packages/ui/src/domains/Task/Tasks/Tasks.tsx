@@ -21,12 +21,6 @@ export function Tasks() {
 							Plans
 						</Button>
 					</Link>
-					<Link href="/add">
-						<Button>
-							<PlusIcon className="h-4 w-4 mr-2" />
-							Add Task
-						</Button>
-					</Link>
 				</div>
 			</div>
 			<TaskList />
