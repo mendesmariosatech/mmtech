@@ -114,7 +114,7 @@ export function PlanGrid() {
 		});
 
 		// Navigate back to the task list
-		router.push("/");
+		router.push("/tasks");
 	};
 
 	return (

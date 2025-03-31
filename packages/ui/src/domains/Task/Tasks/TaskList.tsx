@@ -98,12 +98,15 @@ export function TaskList() {
 											</div>
 										</div>
 									</div>
-									<Link href={`/${task.id}`}>
-										<Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-											<Eye className="h-4 w-4" />
-											<span className="sr-only">View Details</span>
-										</Button>
-									</Link>
+									<Button
+										variant="ghost"
+										size="sm"
+										className="h-8 w-8 p-0"
+										disabled
+									>
+										<Eye className="h-4 w-4" />
+										<span className="sr-only">View Details</span>
+									</Button>
 								</div>
 							</div>
 						</div>
