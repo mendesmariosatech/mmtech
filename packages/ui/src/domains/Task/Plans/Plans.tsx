@@ -8,7 +8,7 @@ export function Plans() {
 	return (
 		<div className="container mx-auto p-4 max-w-4xl">
 			<div className="mb-6">
-				<Link href="/">
+				<Link href="/tasks">
 					<Button variant="outline" className="mb-4">
 						<ArrowLeft className="h-4 w-4 mr-2" />
 						Back to Tasks
