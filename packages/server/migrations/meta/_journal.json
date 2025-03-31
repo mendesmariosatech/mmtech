@@ -8,6 +8,13 @@
       "when": 1738196853786,
       "tag": "0000_brave_sway",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1738887993887,
+      "tag": "0001_light_mesmero",
+      "breakpoints": true
     }
   ]
 }
