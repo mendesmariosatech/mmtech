@@ -55,7 +55,7 @@ export function TaskList() {
 					<Link href="/add">
 						<Button>Create Task</Button>
 					</Link>
-					<Link href="/plans">
+					<Link href="/tasks/plans">
 						<Button variant="outline">Choose a Plan</Button>
 					</Link>
 				</div>
