@@ -34,7 +34,7 @@ export const createMasterPlanSpec = createRoute({
 				},
 			},
 		},
-		403: {
+		500: {
 			description: "Unauthorized",
 			content: {
 				"application/json": {
@@ -63,10 +63,6 @@ export const createMasterPlanHandler: AppRouteHandler<PersonalRoute> = async (
 	const Tasks = c.get("dto").Tasks;
 	const masterTasks = await Tasks.createMasterTasks(input);
 
-	console.log({
-		masterTasks,
-	});
-
 	if (!masterTasks) {
 		return c.json(
 			{
@@ -74,7 +70,7 @@ export const createMasterPlanHandler: AppRouteHandler<PersonalRoute> = async (
 					message: "Failed to create master tasks",
 				},
 			},
-			403,
+			500,
 		);
 	}
 
