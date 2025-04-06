@@ -2,7 +2,7 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { genEntityId } from "../utils";
 import { clientTable } from "../schema";
 import { sql } from "drizzle-orm";
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 const PlanMasterId = z.string().brand("PlanMasterId");
@@ -21,10 +21,14 @@ export const planMaster = sqliteTable("plan_master", {
 	),
 });
 
-const PlanMaster = createInsertSchema(planMaster).pick({
+export const GetSchemaPlanMaster = createSelectSchema(planMaster);
+
+export const PlanMaster = createInsertSchema(planMaster).pick({
 	name: true,
 	description: true,
 });
+
+export type PlanMaster = z.infer<typeof PlanMaster>;
 
 export const planMasterTasks = sqliteTable("plan_master_tasks", {
 	planMasterTasksId: text("planMasterTasksId", { length: 128 })
