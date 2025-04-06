@@ -2,10 +2,8 @@
 import type { Metadata } from "next";
 import { LoginForm } from "@repo/ui/components/form-builder/Forms/Login/LoginForm";
 import Link from "next/link";
-import Image from "next/image";
 import { Logo } from "@repo/ui/components/ui/Logo";
 import { useLogin } from "@repo/hook-services";
-import { LinkFormer } from "@repo/ui/components/linkFormer/LinkFormer";
 
 export const metadata: Metadata = {
 	title: "Authentication",

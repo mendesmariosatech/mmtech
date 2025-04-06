@@ -54,47 +54,14 @@ export function Hero() {
 					<span className="text-2xl font-bold text-gray-800">MM</span>
 				</div>
 				<div className="sm:hidden md:flex space-x-4">
-					<Button
-						variant={"link"}
-						className="text-gray-600 hover:text-gray-800"
-					>
-						HOME
-					</Button>
-					<Button
-						// href="/pages"
-						variant={"link"}
-						className="text-gray-600 hover:text-gray-800"
-					>
-						PAGES
-					</Button>
-					<Button
-						// href="/services"
-						variant={"link"}
-						className="text-gray-600 hover:text-gray-800"
-					>
-						SERVICES
-					</Button>
-					<Button
-						// href="/elements"
-						variant={"link"}
-						className="text-gray-600 hover:text-gray-800"
-					>
-						ELEMENTS
-					</Button>
-					<Button
-						// href="/shop"
-						variant={"link"}
-						className="text-gray-600 hover:text-gray-800"
-					>
-						SHOP
-					</Button>
-					<Button
-						// href="/blog"
-						variant={"link"}
-						className="text-gray-600 hover:text-gray-800"
-					>
-						BLOG
-					</Button>
+					<Link href={"/projects"}>
+						<Button
+							variant={"link"}
+							className="text-gray-600 hover:text-gray-800"
+						>
+							PROJECTS
+						</Button>
+					</Link>
 				</div>
 				<div className="flex items-center space-x-4">
 					<button className="relative">
