@@ -21,11 +21,14 @@ export const Routes = {
 		"/tasks": {
 			"/": "/tasks",
 		},
-		"/page-builderV1": {
+		"/page-builder": {
 			"/": "/page-builderV1",
 		},
 		"/page-builderV2": {
 			"/": "/page-builderV2",
+		},
+		"/ecommerce": {
+			"/": "/ecommerce",
 		},
 	},
 } as const;
