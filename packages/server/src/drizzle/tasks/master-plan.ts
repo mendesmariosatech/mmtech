@@ -8,7 +8,7 @@ import { z } from "zod";
 const PlanMasterId = z.string().brand("PlanMasterId");
 const PlanMasterTasksId = z.string().brand("PlanMasterTasksId");
 
-const planMaster = sqliteTable("plan_master", {
+export const planMaster = sqliteTable("plan_master", {
 	planMasterId: text("planMasterId", { length: 128 })
 		.$defaultFn(() => genEntityId("PM"))
 		.primaryKey()
@@ -26,7 +26,7 @@ const PlanMaster = createInsertSchema(planMaster).pick({
 	description: true,
 });
 
-const planMasterTasks = sqliteTable("plan_master_tasks", {
+export const planMasterTasks = sqliteTable("plan_master_tasks", {
 	planMasterTasksId: text("planMasterTasksId", { length: 128 })
 		.$defaultFn(() => genEntityId("PMT"))
 		.primaryKey()
