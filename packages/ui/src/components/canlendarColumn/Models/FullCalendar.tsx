@@ -26,18 +26,25 @@ export function FullCalendarBuilder({
 
 	const handleEventSelect = (arg: EventClickArg) => {
 		if (arg.event) {
-			const event = arg.event;
+			// Separar data e hora do início do evento
+			const [date, time] = arg.event.startStr.split("T");
+
+			const startTime = time ? time.slice(0, 5) : "";
+			const endTime = arg.event.endStr
+				? arg.event.endStr.split("T")[1]?.slice(0, 5)
+				: ""; // Verifica se endStr existe
+
 			onEventSelect(
 				{
-					id: event.id,
-					title: event.title,
-					start: event.start,
-					end: event.end,
-					description: event.extendedProps.description,
-					tag: event.extendedProps.tag,
-					allDay: event.allDay,
+					id: arg.event.id,
+					title: arg.event.title,
+					eventDate: date, // "YYYY-MM-DD"
+					start: startTime,
+					end: endTime,
+					description: arg.event.extendedProps.description || "",
+					tag: arg.event.extendedProps.tag || "",
 				},
-				null,
+				null, // Passa nulo porque não há um novo date associado
 			);
 		} else {
 			onEventSelect(null, null); // Passa null se não houver evento
@@ -46,25 +53,18 @@ export function FullCalendarBuilder({
 
 	// Manipulador de clique em data
 	const handleDateClick = (arg: DateClickArg) => {
+		const [date] = arg.dateStr.split("T");
 		const newEvent: DataEvents = {
-			id: "", // Você pode gerar um ID único ou usar um UUID
-			title: "", // Título pode ser preenchido no modal
-			start: arg.date, // Definido como a data clicada
-			end: null, // Você pode definir um horário de término padrão
+			id: "", // ID será gerado posteriormente
+			title: "", // Preencherá o título no modal
+			eventDate: date, // "YYYY-MM-DD"
+			start: "", // Horário de início padrão
+			end: "", // Horário de término padrão
 			description: "",
 			tag: [],
-			allDay: false,
 		};
 
-		// Verifica se a data clicada não contém hora (somente data)
-		const isAllDayEvent =
-			arg.date.getHours() === 0 && arg.date.getMinutes() === 0;
-		if (isAllDayEvent) {
-			// Marcar como evento de dia todo
-			newEvent.allDay = true; // A propriedade 'allDay' é uma convenção para eventos de dia todo
-		}
-
-		// Abre o modal para adicionar o novo evento
+		// Abrir o modal para criar um novo evento
 		onEventSelect(newEvent, null);
 	};
 

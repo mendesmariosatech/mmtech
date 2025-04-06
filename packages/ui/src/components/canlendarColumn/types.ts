@@ -5,12 +5,11 @@ export interface Tag {
 export interface DataEvents {
 	id?: string;
 	title?: string;
-	start: Date | null;
-	end: Date | null;
+	eventDate?: string;
+	start?: string;
+	end?: string;
 	description: string;
 	tag: Tag[];
-	calendar?: string;
-	allDay?: boolean;
 }
 
 export type CalendarProps = {

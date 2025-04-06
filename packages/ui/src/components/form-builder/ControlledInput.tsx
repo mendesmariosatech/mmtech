@@ -50,7 +50,7 @@ type DropdownProps<D extends FieldValues> = {
 
 type InputText<D extends FieldValues> = {
 	name: FieldPath<D>;
-	input: "text" | "date" | "datetime-local" | "color";
+	input: "text" | "date" | "datetime-local" | "color" | "time";
 } & InputProps &
 	FormConfig;
 //
@@ -144,7 +144,15 @@ export const ControlledInput = <D extends FieldValues>(
 							<FormControl>
 								<Input
 									{...field}
-									type={props.input} // "date" or "datetime-local"
+									type={props.input} //
+								/>
+							</FormControl>
+						) : props.input === "time" ? ( // Add handling for time input
+							<FormControl>
+								<Input
+									{...field}
+									type="time"
+									className="time-input-class" // Add necessary classes
 								/>
 							</FormControl>
 						) : null}
