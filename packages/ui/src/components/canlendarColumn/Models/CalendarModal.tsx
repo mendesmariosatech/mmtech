@@ -25,8 +25,9 @@ const texts = {
 		modalTitleDelete: "Delete Event",
 		textAreaLabel: "Description",
 		titleEvent: "Event Title",
-		StartDate: "Start Date",
-		EndDate: "End Date",
+		StartEvent: "Start time",
+		EndEvent: "End time",
+		EventDate: "Date",
 		Alerts: "Fields title and start date are required",
 		Color: "",
 		tagName: "Add Tag",
@@ -43,8 +44,9 @@ const texts = {
 		modalTitleDelete: "Deletar Evento",
 		textAreaLabel: "Descrição",
 		titleEvent: "Título do Evento",
-		StartDate: "Data de Início",
-		EndDate: "Data de Término",
+		StartEvent: "Hora de Início",
+		EndEvent: "Hora de Término",
+		EventDate: "Data",
 		Alerts: "Os campos título e data de início são obrigatórios",
 		Color: "",
 		tagName: "Adicionar Tag",
@@ -60,9 +62,9 @@ export const modalFields = z.object({
 	titleEvent: z.string().min(1, { message: texts.EN.error.title }),
 	textAreaLabel: z.string().optional(),
 	tagName: z.string().optional(),
-	allDays: z.boolean().optional(),
-	StartDate: z.string().min(1, { message: "Start date please" }),
-	EndDate: z.string().optional(),
+	EventDate: z.string().optional(),
+	StartEvent: z.string().optional(),
+	EndEvent: z.string().optional(),
 	Color: z.string(),
 });
 
@@ -70,8 +72,9 @@ export type ModalFields = z.infer<typeof modalFields>;
 
 const getLabels = (language: keyof typeof texts) => ({
 	titleEvent: texts[language].titleEvent,
-	StartDate: texts[language].StartDate,
-	EndDate: texts[language].EndDate,
+	EventDate: texts[language].EventDate,
+	StartEvent: texts[language].StartEvent,
+	EndEvent: texts[language].EndEvent,
 	textAreaLabel: texts[language].textAreaLabel,
 	tagName: texts[language].tagName,
 	Color: texts[language].Color,
@@ -88,17 +91,17 @@ interface CalendarModalProps {
 	onDeleteEvent?: (eventId: string) => void;
 }
 
-export const useCalendarForm = () =>
+export const useCalendarForm = (event?: DataEvents | null) =>
 	useForm<ModalFields>({
 		resolver: zodResolver(modalFields),
 		defaultValues: {
-			titleEvent: "",
-			textAreaLabel: "",
-			tagName: "",
-			allDays: false,
-			StartDate: "",
-			EndDate: "",
-			Color: "#6d7b92",
+			titleEvent: event?.title || "",
+			textAreaLabel: event?.description || "",
+			tagName: event?.tag[0]?.name || "",
+			EventDate: event?.eventDate || "",
+			StartEvent: event?.start || "",
+			EndEvent: event?.end || "",
+			Color: event?.tag[0]?.color || "#6d7b92",
 		},
 	});
 
@@ -111,9 +114,21 @@ export function CalendarModal({
 	onEditEvent,
 	onDeleteEvent,
 }: CalendarModalProps) {
-	const modalConfig = configModal(getLabels(language), true);
-	const form = useCalendarForm();
-
+	const form = useCalendarForm(event);
+	React.useEffect(() => {
+		if (event) {
+			form.reset({
+				titleEvent: event.title,
+				textAreaLabel: event.description,
+				tagName: event.tag[0]?.name || "",
+				EventDate: event.eventDate,
+				StartEvent: event.start,
+				EndEvent: event.end,
+				Color: event.tag[0]?.color || "#6d7b92",
+			});
+		}
+	}, [event, form]);
+	const modalConfig = configModal(getLabels(language));
 	const handleSave = (input: ModalFields) => {
 		if (input && input.id) {
 			// onEditEvent(input); // editar o evento existente
@@ -151,7 +166,7 @@ export function CalendarModal({
 							<Button
 								variant="destructive"
 								className="mr-2"
-								onClick={() => onDeleteEvent(event?.id!)}
+								onClick={() => event?.id && onDeleteEvent(event?.id)}
 							>
 								{texts[language].modalTitleDelete}
 							</Button>
