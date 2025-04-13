@@ -7,6 +7,11 @@ export const TasksDTO = (db: DBConnectionFunc) => ({
 
 		return masterTasks;
 	},
+
+	async getAllMasterPlans() {
+		const masterPlans = await db.select().from(planMaster);
+		return masterPlans;
+	},
 });
 
 export type TasksDTO = ReturnType<typeof TasksDTO>;
