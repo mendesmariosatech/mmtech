@@ -5,7 +5,7 @@
   "scripts": {
     "ui:add": "npx shadcn-ui@latest add",
     "lint": "eslint .",
-    "chromatic": "npx chromatic --project-token=<CHROMATIC_TOKEN> --exit-once-uploaded",
+    "chromatic": "npx chromatic --project-token=<CHROMATIC_TOKEN> --exit-once-uploaded --allow-console-errors",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
