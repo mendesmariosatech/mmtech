@@ -4,16 +4,12 @@ import { createRoute } from "@hono/zod-openapi";
 import type { AppRouteHandler } from "../../base/type";
 import { MasterPlanWithTasks } from "../../drizzle/tasks/master-plan";
 import { dbContext } from "../middleware/dbContext";
-import { authMiddleware } from "../middleware/authentication";
 
 export const getMasterPlanSpec = createRoute({
 	method: "get",
 	path: "/master-plan/:id",
 	tags: ["plans"],
-	middleware: [authMiddleware, dbContext],
-	header: {
-		authorization: z.string(),
-	},
+	middleware: [dbContext],
 	request: {
 		params: {
 			id: z.string().min(1).describe("The ID of the master plan"),
