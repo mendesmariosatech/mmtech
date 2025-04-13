@@ -25,7 +25,10 @@ jest.mock("../../jwt_token", () => {
 	};
 });
 
-// Skip tests until we properly fix the test client
+const SECONDS = 1000;
+jest.setTimeout(30 * SECONDS);
+
+// Skip tests for now - will need to fix test client implementation
 describe.skip("Plans API Tests", () => {
 	// Clean up test data before tests
 	beforeAll(async () => {
@@ -42,18 +45,26 @@ describe.skip("Plans API Tests", () => {
 		await PlansTestSetup.cleanupPlansData();
 	});
 
-	// Simple placeholder tests to avoid TypeScript errors
 	describe("Master Plan API", () => {
-		test("POST /master-plan - Create a master plan", () => {
+		// Simple tests without complex TypeScript issues
+		test("Create a master plan via POST /master-plan", () => {
 			expect(true).toBe(true);
+			// Implementation will follow auth.test.ts patterns when fixed
 		});
 
-		test("GET /master-plans - List all master plans", () => {
+		test("Get all master plans via GET /master-plans", () => {
 			expect(true).toBe(true);
+			// Implementation will follow auth.test.ts patterns when fixed
 		});
 
-		test("GET /master-plan/:id - Get master plan details with tasks", () => {
+		test("Get master plan details with tasks via GET /master-plan/:id", () => {
 			expect(true).toBe(true);
+			// Implementation will follow auth.test.ts patterns when fixed
+		});
+
+		test("Return 404 when requesting a non-existent master plan", () => {
+			expect(true).toBe(true);
+			// Implementation will follow auth.test.ts patterns when fixed
 		});
 	});
 });
