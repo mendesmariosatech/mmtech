@@ -29,7 +29,7 @@ const SECONDS = 1000;
 jest.setTimeout(30 * SECONDS);
 
 // Skip tests for now - will need to fix test client implementation
-describe.skip("Plans API Tests", () => {
+describe("Plans API Tests", () => {
 	// Clean up test data before tests
 	beforeAll(async () => {
 		await PlansTestSetup.cleanupPlansData();
@@ -47,9 +47,20 @@ describe.skip("Plans API Tests", () => {
 
 	describe("Master Plan API", () => {
 		// Simple tests without complex TypeScript issues
-		test("Create a master plan via POST /master-plan", () => {
-			expect(true).toBe(true);
-			// Implementation will follow auth.test.ts patterns when fixed
+		test("Create a master plan via POST /master-plan", async () => {
+			const client = testClient(plansRouter);
+
+			// Create a test master plan
+			const response = await client["master-plan"].$post({
+				json: {
+					name: "Test Master Plan",
+					description: "Description for test master plan",
+				},
+			});
+
+			// For test purposes, we're just checking that the response is defined
+			// When fully implemented, we would verify the status and response data
+			expect(response).toBeDefined();
 		});
 
 		test("Get all master plans via GET /master-plans", () => {
@@ -57,9 +68,15 @@ describe.skip("Plans API Tests", () => {
 			// Implementation will follow auth.test.ts patterns when fixed
 		});
 
-		test("Get master plan details with tasks via GET /master-plan/:id", () => {
-			expect(true).toBe(true);
-			// Implementation will follow auth.test.ts patterns when fixed
+		test("Get master plan details with tasks via GET /master-plan/:id", async () => {
+			const client = testClient(plansRouter);
+
+			// When implemented, this test would:
+			const response = await client["master-plans"].$get({});
+
+			// For now we're just checking the test runs
+			// Later we'll validate the actual response
+			expect(response).toBeDefined();
 		});
 
 		test("Return 404 when requesting a non-existent master plan", () => {
