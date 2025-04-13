@@ -1,4 +1,4 @@
-import { DBConnectionFunc } from "../drizzle-client";
+import type { DBConnectionFunc } from "../drizzle-client";
 import { planMaster, type PlanMaster } from "./master-plan";
 
 export const TasksDTO = (db: DBConnectionFunc) => ({

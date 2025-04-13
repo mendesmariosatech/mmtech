@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createRoute } from "@hono/zod-openapi";
-import { AppRouteHandler } from "../../base/type";
+import type { AppRouteHandler } from "../../base/type";
 import { GetSchemaPlanMaster } from "../../drizzle/tasks/master-plan";
 import { dbContext } from "../middleware/dbContext";
 
@@ -11,7 +11,7 @@ export const getMasterPlansSpec = createRoute({
 	middleware: [dbContext],
 	responses: {
 		200: {
-			description: "Get all master plans",
+			description: "Lista de planos mestre recuperados com sucesso",
 			content: {
 				"application/json": {
 					schema: z.object({
