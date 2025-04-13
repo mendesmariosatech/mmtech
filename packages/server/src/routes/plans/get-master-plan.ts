@@ -10,9 +10,9 @@ export const getMasterPlanSpec = createRoute({
 	tags: ["plans"],
 	middleware: [dbContext],
 	request: {
-		params: {
+		params: z.object({
 			id: z.string().min(1).describe("The ID of the master plan"),
-		},
+		}),
 	},
 	responses: {
 		200: {
