@@ -42,10 +42,11 @@ export const ContentSchema = z.discriminatedUnion("type", [
 ]);
 
 type ContentSchema = z.infer<typeof ContentSchema>;
+
 type CssSchema = z.infer<typeof CssSchema>;
 
 export const componentTable = sqliteTable("landing_page.components", {
-	id: integer("id").primaryKey().notNull(),
+	id: integer("id").primaryKey(),
 	type: text("type", { enum: componentTypes }).notNull(),
 	content: text("content", { mode: "json" }).$type<ContentSchema>().notNull(),
 	css: text("css", { mode: "json" }).$type<CssSchema>().notNull(),
@@ -76,14 +77,3 @@ export const CreateMergeComponentSchema = z.object({
 export type CreateMergeComponentSchema = z.infer<
 	typeof CreateMergeComponentSchema
 >;
-
-const UpdateComponentSchema = createInsertSchema(componentTable).omit({
-	createdAt: true,
-	id: true,
-});
-
-export const UpdateMergeComponentSchema = z.object({
-	...UpdateComponentSchema.shape,
-	content: ContentSchema,
-	css: CssSchema,
-});

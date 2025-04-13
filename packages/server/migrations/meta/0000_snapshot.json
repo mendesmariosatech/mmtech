@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b6c7ede6-57fe-4b38-a378-37af73816db3",
+  "id": "5d083391-d8bb-48a4-8a2a-4f3c6153af36",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "address": {
@@ -476,7 +476,7 @@
           "name": "content",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "css": {
@@ -490,20 +490,12 @@
           "name": "created_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-01-30T00:27:33.779Z\"'"
+          "default": "'\"2025-04-06T17:50:59.659Z\"'"
         }
       },
-      "indexes": {
-        "type_idx": {
-          "name": "type_idx",
-          "columns": [
-            "type"
-          ],
-          "isUnique": false
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}

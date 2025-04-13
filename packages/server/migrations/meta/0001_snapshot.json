@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "9f665b74-aa22-4543-ab7b-40c44f5e19aa",
-  "prevId": "b6c7ede6-57fe-4b38-a378-37af73816db3",
+  "id": "d86baa5d-ad2a-492d-a7d2-0a55aab6dbd2",
+  "prevId": "5d083391-d8bb-48a4-8a2a-4f3c6153af36",
   "tables": {
     "address": {
       "name": "address",
@@ -492,7 +492,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-02-07T00:26:33.863Z\"'"
+          "default": "'\"2025-04-06T18:02:00.803Z\"'"
         }
       },
       "indexes": {},
@@ -801,6 +801,117 @@
           ],
           "columnsTo": [
             "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "plan_master": {
+      "name": "plan_master",
+      "columns": {
+        "planMasterId": {
+          "name": "planMasterId",
+          "type": "text(128)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "plan_master_tasks": {
+      "name": "plan_master_tasks",
+      "columns": {
+        "planMasterTasksId": {
+          "name": "planMasterTasksId",
+          "type": "text(128)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "plan_master_id": {
+          "name": "plan_master_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "plan_master_tasks_plan_master_id_plan_master_planMasterId_fk": {
+          "name": "plan_master_tasks_plan_master_id_plan_master_planMasterId_fk",
+          "tableFrom": "plan_master_tasks",
+          "tableTo": "plan_master",
+          "columnsFrom": [
+            "plan_master_id"
+          ],
+          "columnsTo": [
+            "planMasterId"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"

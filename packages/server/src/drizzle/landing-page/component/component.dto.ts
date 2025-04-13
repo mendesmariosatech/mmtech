@@ -1,4 +1,3 @@
-import { SelectAuth } from "./../../schema";
 import { eq } from "drizzle-orm";
 import { DBConnection } from "../../drizzle-client";
 import { componentPage, SelectComponentPageSchema } from "../page/page";
@@ -32,17 +31,10 @@ export class ComponentTable extends DBConnection {
 		pageId: SelectComponentPageSchema["id"],
 	) {
 		const components = await this.db.query.componentPage.findMany({
-			where: eq(componentPage.pageId, pageId),
-			with: {
-				components: true,
-			},
+			where: eq(componentTable.id, pageId),
 		});
 
-		const mappedComponents = components.map(
-			(componentPage) => componentPage.components,
-		);
-
-		return mappedComponents;
+		return components;
 	}
 
 	// update component
@@ -52,15 +44,15 @@ export class ComponentTable extends DBConnection {
 		},
 	) {
 		try {
-			// const cssArgs = CssSchema.parse(args.css);
-			// const content = ContentSchema.parse(args.content);
+			const cssArgs = CssSchema.parse(args.css);
+			const content = ContentSchema.parse(args.content);
 
 			const [page] = await this.db
 				.update(componentTable)
 				.set({
 					type: args.type,
-					css: args.css,
-					content: args.content,
+					css: cssArgs,
+					content: content,
 				})
 				.where(eq(componentTable.id, args.id))
 				.returning();
