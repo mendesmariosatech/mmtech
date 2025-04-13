@@ -67,3 +67,6 @@ Thumbs.db
 *storybook.log
 
 .env
+
+# Aider specific files
+.aider*

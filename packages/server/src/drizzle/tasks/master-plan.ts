@@ -46,7 +46,9 @@ export const planMasterTasks = sqliteTable("plan_master_tasks", {
 	),
 });
 
-const PlanMasterTasks = createInsertSchema(planMasterTasks)
+export const GetSchemaPlanMasterTasks = createSelectSchema(planMasterTasks);
+
+export const PlanMasterTasks = createInsertSchema(planMasterTasks)
 	.pick({
 		name: true,
 		description: true,
@@ -59,4 +61,9 @@ const PlanMasterTasks = createInsertSchema(planMasterTasks)
 		};
 	});
 
-type PlanMasterTasks = z.infer<typeof PlanMasterTasks>;
+export type PlanMasterTasks = z.infer<typeof PlanMasterTasks>;
+
+// Define the schema for combined master plan with tasks
+export const MasterPlanWithTasks = GetSchemaPlanMaster.extend({
+	tasks: z.array(GetSchemaPlanMasterTasks),
+});

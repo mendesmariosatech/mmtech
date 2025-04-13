@@ -4,9 +4,11 @@ import {
 	createMasterPlanSpec,
 } from "./create-master-plan";
 import { getMasterPlansHandler, getMasterPlansSpec } from "./get-master-plans";
+import { getMasterPlanHandler, getMasterPlanSpec } from "./get-master-plan";
 
 const plansRouter = app
 	.openapi(createMasterPlanSpec, createMasterPlanHandler)
-	.openapi(getMasterPlansSpec, getMasterPlansHandler);
+	.openapi(getMasterPlansSpec, getMasterPlansHandler)
+	.openapi(getMasterPlanSpec, getMasterPlanHandler);
 
 export { plansRouter };
