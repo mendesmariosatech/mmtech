@@ -5,7 +5,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build & Lint Commands
 - Build: `yarn build` (uses Turborepo)
 - Format: `yarn format` (Biome formatter)
-- Lint: `yarn lint` (Biome linter)
 - Run tests: `yarn server:test` (Jest for server package)
 - Run a single test: `yarn server:test -t "test name pattern"`
 - UI Storybook: `yarn ui:storybook`
