@@ -1,10 +1,17 @@
+type AwaitedResponse<T> =
+	| { success: true; data: T }
+	| { success: false; error: unknown };
+
 export async function safeAwait<T>(
 	promise: Promise<T>,
-): Promise<[T, null] | [null, unknown]> {
+): Promise<AwaitedResponse<T>> {
 	try {
 		const data = await promise;
-		return [data, null];
+
+		if (!data) throw new Error("No data returned from safe awaited promise");
+
+		return { success: true, data };
 	} catch (error) {
-		return [null, error];
+		return { success: false, error };
 	}
 }

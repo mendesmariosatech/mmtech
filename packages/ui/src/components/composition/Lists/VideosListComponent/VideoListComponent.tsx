@@ -1,9 +1,6 @@
 "use client";
-// import { useGetVideosQuery } from "@/lib/api/api";
 import Link from "next/link";
 import ReactPlayer from "react-player";
-// import { usePopoverState } from "../NavBar/Auth/hooks";
-// import { useSheetState } from "../CreateVideoSheet/hooks";
 import { Button } from "../../../ui/button";
 
 function trimString(str: string, maxLength: number) {
@@ -59,7 +56,7 @@ export const SkeletonList = () => (
 
 export type VideoListComponentProps = {
 	title: string;
-	description: string;
+	description: string | null;
 	url: string;
 	id: string;
 	num_comments: number;
@@ -86,7 +83,9 @@ export const VideoListComponent: React.FC<VideoListComponentProps> = ({
 					style={{ borderRadius: "10px" }}
 				/>
 				<p className="font-bold">{trimString(title, 45)}</p>
-				<p className="text-gray-700">{trimString(description, 60)}</p>
+				<p className="text-gray-700">
+					{trimString(description ?? "No Description", 60)}
+				</p>
 			</div>
 		</Link>
 	);
@@ -97,31 +96,34 @@ export const VideoListComponent: React.FC<VideoListComponentProps> = ({
 // if I don't have the data, that can be because it's loading or because there's an error
 
 // this list should not even be considered if the user is not logged in
-type VideoListProps = {
-	data: VideoListProps[];
-	isLoading: false;
-	error: false;
-};
+type VideoListProps =
+	| {
+			data: VideoListComponentProps[];
+	  }
+	| {
+			isLoading: true;
+	  }
+	| {
+			error: true;
+	  };
 
 export const VideoList: React.FC<VideoListProps> = (props) => {
-	const { data, isLoading, error } = props;
-
 	return (
 		<>
-			{error ? (
+			{"error" in props ? (
 				<ErrorAlert />
-			) : isLoading ? (
+			) : "isLoading" in props ? (
 				<SkeletonList />
-			) : data?.length && !isLoading ? (
+			) : props.data.length === 0 ? (
 				<AddVideoText />
 			) : (
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
-					{data?.map((video: any) => (
+					{props.data.map((video) => (
 						<VideoListComponent
 							key={video.id}
 							description={video.description}
 							title={video.title}
-							url={video.video_url}
+							url={video.url}
 							id={video.id}
 							num_comments={video.num_comments}
 						/>

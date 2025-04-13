@@ -1,14 +1,13 @@
-import { Hono } from "hono";
-import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { authMiddleware } from "../middleware/authentication";
-import { createRoute, RouteHandler } from "@hono/zod-openapi";
+import { createRoute } from "@hono/zod-openapi";
 import { AppRouteHandler } from "../../base/type";
+import { authMiddleware } from "../middleware/authentication";
 
 export const personalRoute = createRoute({
 	method: "get",
 	path: "/personal/me",
 	tags: ["personal"],
+	middleware: [authMiddleware],
 	header: {
 		authorization: z.string(),
 	},
@@ -19,9 +18,9 @@ export const personalRoute = createRoute({
 				"application/json": {
 					schema: z.object({
 						data: z.object({
-							email: z.string(),
-							password: z.string(),
-							token: z.string(),
+							clientId: z.string(),
+							businessId: z.string().optional(),
+							authId: z.string(),
 						}),
 					}),
 				},
@@ -45,12 +44,19 @@ export const personalRoute = createRoute({
 type PersonalRoute = typeof personalRoute;
 
 export const personalHandler: AppRouteHandler<PersonalRoute> = async (c) => {
+	// make sure the user is authenticated here
+	console.log("personal handler");
+
+	const clientId = c.get("clientId");
+	const businessId = c.get("businessId");
+	const authId = c.get("authId");
+
 	return c.json(
 		{
 			data: {
-				email: "Alex",
-				password: "123456",
-				token: "123456",
+				clientId,
+				businessId,
+				authId,
 			},
 		},
 		200,

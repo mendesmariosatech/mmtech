@@ -1,7 +1,11 @@
 // an spec for /business/
 
 import { createRoute, z } from "@hono/zod-openapi";
-import { CreateBusinessSchema, GetBusinessSchema } from "../../drizzle/schema";
+import {
+	CreateBusinessInput,
+	CreateBusinessSchema,
+	GetBusinessSchema,
+} from "../../drizzle/schema";
 import { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "./dto/business.dto";
 import { env } from "hono/adapter";
@@ -25,7 +29,7 @@ export const createBusinessSpec = createRoute({
 		body: {
 			content: {
 				"application/json": {
-					schema: CreateBusinessSchema,
+					schema: CreateBusinessInput,
 				},
 			},
 		},
@@ -52,7 +56,7 @@ export const createBusinessSpec = createRoute({
 			},
 		},
 		403: {
-			description: "Bad Request",
+			description: "Forbidden",
 			content: {
 				"application/json": {
 					schema: z.object({
@@ -86,7 +90,7 @@ export const createBusinessHandler: AppRouteHandler<
 
 	const body = c.req.valid("json");
 
-	const [newBusiness, error] = await safeAwait(
+	const newBusinessResult = await safeAwait(
 		Business.createBusiness({
 			name: body.name,
 			clientId: client,
@@ -94,7 +98,7 @@ export const createBusinessHandler: AppRouteHandler<
 		}),
 	);
 
-	if (error || !newBusiness) {
+	if (newBusinessResult.success === false || !newBusinessResult.data) {
 		return c.json({ error: "Failed to create business" }, 400);
 	}
 
@@ -102,7 +106,7 @@ export const createBusinessHandler: AppRouteHandler<
 		{
 			clientId: client,
 			authId: auth,
-			businessId: newBusiness.id,
+			businessId: newBusinessResult.data.id,
 		},
 		JWT_SECRET_KEY,
 	);
@@ -112,9 +116,8 @@ export const createBusinessHandler: AppRouteHandler<
 
 	return c.json(
 		{
-			...newBusiness,
-			name: newBusiness.name,
-			id: newBusiness.id,
+			name: newBusinessResult.data.name,
+			id: newBusinessResult.data.id,
 			token,
 		},
 		201,
