@@ -22,7 +22,7 @@ const filteredRoutes = typedKeys(Routes.client).filter((route) => {
 
 export const ProjectList = () => {
 	return (
-		<body className="bg-gray-100 p-6">
+		<div className="bg-gray-100 p-6">
 			<div className="container mx-auto">
 				<h1 className="text-3xl font-semibold text-gray-800 text-center mb-8">
 					My Projects
@@ -33,6 +33,6 @@ export const ProjectList = () => {
 					))}
 				</div>
 			</div>
-		</body>
+		</div>
 	);
 };
