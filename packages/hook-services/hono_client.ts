@@ -8,7 +8,7 @@ export const hono_client = hc<AppType>(
 			return getBaseUrl();
 		} catch (error) {
 			console.error("Erro ao obter URL base:", error);
-			return process.env.FALLBACK_API_URL || "http://localhost:3001";
+			return process.env.FALLBACK_API_URL || "http://localhost:3000";
 		}
 	})(),
 );
