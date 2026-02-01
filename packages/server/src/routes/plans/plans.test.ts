@@ -133,7 +133,7 @@ describe("Plans API Tests", () => {
 
 			// Now test getting the specific master plan by ID
 			// Using the correct Hono test client pattern for parameterized routes
-			const getResponse = await client.master.plan.$get({
+			const getResponse = await client["master-plan/:id"]["$get"]({
 				param: { id: masterPlanId },
 			});
 
@@ -159,7 +159,7 @@ describe("Plans API Tests", () => {
 
 			// Test getting a non-existent master plan by ID
 			// Using the correct Hono test client pattern for parameterized routes
-			const getResponse = await client.master.plan.$get({
+			const getResponse = await client["master-plan/:id"]["$get"]({
 				param: { id: "PM_nonexistent_plan_id" },
 			});
 
