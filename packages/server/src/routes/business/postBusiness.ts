@@ -56,7 +56,7 @@ export const createBusinessSpec = createRoute({
 			},
 		},
 		403: {
-			description: "Forbidden",
+			description: "Bad Request",
 			content: {
 				"application/json": {
 					schema: z.object({

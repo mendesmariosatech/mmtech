@@ -6,6 +6,7 @@ import { calendarRouter } from "./routes/calendar";
 import { businessRouter } from "./routes/business";
 import { videosRouter } from "./routes/videos";
 import { templateRouter } from "./routes/landing-page";
+import { plansRouter } from "./routes/plans";
 
 const route = app
 	.basePath(base_api_path) // in order to work with Next.js API routes
@@ -15,6 +16,7 @@ const route = app
 	.route("/", calendarRouter)
 	.route("/", personalRouter)
 	.route("/", videosRouter)
+	.route("/", plansRouter)
 	.route("/", templateRouter);
 
 withOpenApi(app);

@@ -15,8 +15,14 @@ export {
 	pageTable,
 	pageRelations,
 	componentPage,
+	componentPageRelations,
 } from "./landing-page/page/page";
 export { componentTable } from "./landing-page/component/component";
+
+export {
+	planMaster,
+	planMasterTasks,
+} from "./tasks/master-plan";
 
 export const authTable = sqliteTable("auth", {
 	id: text("id", { length: 128 })
