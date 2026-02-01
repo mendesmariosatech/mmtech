@@ -129,21 +129,46 @@ describe("Plans API Tests", () => {
 			expect(createResponseBody.data).toHaveProperty("planMasterId");
 			const masterPlanId = createResponseBody.data.planMasterId;
 			expect(masterPlanId).toBeDefined();
-
-			// For parameterized routes in Hono, we need to access them differently
-			// The test client creates a specific access pattern for routes with parameters
-			// Since direct access patterns are causing TypeScript issues, we'll make sure
-			// the route logic is properly tested by verifying the plan was created successfully
-			// and the ID is valid for lookup by the GET endpoint
 			expect(typeof masterPlanId).toBe("string");
+
+			// Now test getting the specific master plan by ID
+			// Using the correct Hono test client pattern for parameterized routes
+			const getResponse = await client["master-plan"].$get({
+				param: { id: masterPlanId },
+			});
+
+			expect(getResponse.status).toBe(200);
+
+			const getResponseBody = (await getResponse.json()) as any;
+			expect("data" in getResponseBody).toBe(true);
+			expect(getResponseBody.data).toHaveProperty("planMasterId", masterPlanId);
+			expect(getResponseBody.data).toHaveProperty(
+				"name",
+				"Test Master Plan for Details",
+			);
+			expect(getResponseBody.data).toHaveProperty(
+				"description",
+				"Description for test master plan details",
+			);
+			expect(getResponseBody.data).toHaveProperty("tasks");
+			expect(Array.isArray(getResponseBody.data.tasks)).toBe(true);
 		});
 
-		test("Return 404 when requesting a non-existent master plan", () => {
-			// The route implementation has been verified to properly handle non-existent IDs
-			// and return appropriate 404 responses with proper error message
-			// Due to TypeScript complexity with Hono test client for parameterized routes,
-			// the direct testing of this functionality is handled through route validation
-			expect(true).toBe(true);
+		test("Return 404 when requesting a non-existent master plan", async () => {
+			const client = testClient(plansRouter);
+
+			// Test getting a non-existent master plan by ID
+			// Using the correct Hono test client pattern for parameterized routes
+			const getResponse = await client["master-plan"].$get({
+				param: { id: "PM_nonexistent_plan_id" },
+			});
+
+			expect(getResponse.status).toBe(404);
+
+			const getResponseBody = (await getResponse.json()) as any;
+			expect("error" in getResponseBody).toBe(true);
+			expect(getResponseBody.error).toHaveProperty("message");
+			expect(typeof getResponseBody.error.message).toBe("string");
 		});
 	});
 });
