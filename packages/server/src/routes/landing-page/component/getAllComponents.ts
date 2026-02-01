@@ -1,7 +1,7 @@
 import { env } from "hono/adapter";
 import { GetMergedSchema } from "../../../drizzle/landing-page/component/component";
 import { createRoute, z } from "@hono/zod-openapi";
-import { AppRouteHandler } from "../../../base/type";
+import type { AppRouteHandler } from "../../../base/type";
 import { ComponentTable } from "../../../drizzle/landing-page/component/component.dto";
 
 export const getComponentsSpec = createRoute({
@@ -10,7 +10,7 @@ export const getComponentsSpec = createRoute({
 	tags: ["templates"],
 	request: {
 		params: z.object({
-			pageId: z.string(),
+			pageId: z.coerce.number().int().positive(),
 		}),
 	},
 	responses: {
@@ -53,6 +53,10 @@ export const getComponentsHandler: AppRouteHandler<GetComponentsSpec> = async (
 ) => {
 	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
 
+	if (!TURSO_CONNECTION_URL || !TURSO_AUTH_TOKEN) {
+		return c.json({ error: "Internal Server Error" }, 500);
+	}
+
 	const componentTable = new ComponentTable(
 		TURSO_CONNECTION_URL,
 		TURSO_AUTH_TOKEN,
@@ -62,12 +66,12 @@ export const getComponentsHandler: AppRouteHandler<GetComponentsSpec> = async (
 
 	try {
 		const components = await componentTable.getAllComponentsByTemplate(
-			Number(pageId),
+			String(pageId),
 		);
 		return c.json({ data: components });
-	} catch {
+	} catch (error) {
+		// Check if it's a specific "not found" error or a general error
 		return c.json({ error: "Page not found" }, 404);
 	}
 };
 // Test commit to verify push functionality
-// Testing commit and push functionality after adding fixes

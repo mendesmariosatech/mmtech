@@ -4,7 +4,7 @@ import {
 	UpdateMergeComponentSchema,
 } from "../../../drizzle/landing-page/component/component";
 import { createRoute, z } from "@hono/zod-openapi";
-import { AppRouteHandler } from "../../../base/type";
+import type { AppRouteHandler } from "../../../base/type";
 import { ComponentTable } from "../../../drizzle/landing-page/component/component.dto";
 
 export const updateComponentsSpec = createRoute({
@@ -13,8 +13,8 @@ export const updateComponentsSpec = createRoute({
 	tags: ["templates"],
 	request: {
 		params: z.object({
-			pageId: z.string(),
-			componentId: z.string(),
+			pageId: z.coerce.number().int().positive(),
+			componentId: z.coerce.number().int().positive(),
 		}),
 
 		body: {
@@ -65,17 +65,16 @@ export const updateComponentsHandler: AppRouteHandler<
 > = async (c) => {
 	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
 
+	if (!TURSO_CONNECTION_URL || !TURSO_AUTH_TOKEN) {
+		return c.json({ error: "Internal Server Error" }, 500);
+	}
+
 	const componentTable = new ComponentTable(
 		TURSO_CONNECTION_URL,
 		TURSO_AUTH_TOKEN,
 	);
 
 	const { pageId, componentId } = c.req.valid("param");
-
-	console.log({
-		pageId,
-		componentId,
-	});
 
 	const updateData = c.req.valid("json");
 

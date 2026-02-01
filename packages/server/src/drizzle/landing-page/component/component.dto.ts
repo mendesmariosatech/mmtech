@@ -28,18 +28,17 @@ export class ComponentTable extends DBConnection {
 		}
 	}
 
-	public async getAllComponentsByTemplate(
-		pageId: number,
-	) {
+	public async getAllComponentsByTemplate(pageId: string) {
 		const componentPages = await this.db.query.componentPage.findMany({
 			where: eq(componentPage.pageId, pageId),
 			with: {
 				component: true,
 			},
+			orderBy: (componentPage, { asc }) => [asc(componentPage.order)],
 		});
 
 		// Extract and return just the components, not the componentPage wrapper
-		return componentPages.map(cp => cp.component);
+		return componentPages.map((cp) => cp.component);
 	}
 
 	// update component

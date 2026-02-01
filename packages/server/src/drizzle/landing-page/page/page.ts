@@ -28,7 +28,7 @@ export const componentPage = sqliteTable(
 		// TODO typar esse schema
 		id: integer("id").primaryKey(),
 		componentId: integer("component_id").references(() => componentTable.id),
-		pageId: integer("page_id").references(() => pageTable.id),
+		pageId: text("page_id", { length: 128 }).references(() => pageTable.id),
 		order: integer("order").notNull(), // For sorting components in page
 		cssOverrides: text("css_override", { mode: "json" }), // Overridden CSS properties
 		contentOverrides: text("content_override", { mode: "json" }), // Overridden content
