@@ -33,7 +33,12 @@ export const TasksDTO = (db: DBConnectionFunc) => ({
 		}
 
 		// Transform the results into the appropriate structure
-		const plan = results[0].plan;
+		const planResult = results[0];
+		if (!planResult || !planResult.plan) {
+			return null;
+		}
+
+		const plan = planResult.plan;
 		const tasks = results
 			.filter(
 				(
@@ -41,7 +46,7 @@ export const TasksDTO = (db: DBConnectionFunc) => ({
 				): result is {
 					plan: typeof planMaster.$inferSelect;
 					tasks: typeof planMasterTasks.$inferSelect;
-				} => result.tasks !== null,
+				} => result && result.tasks !== null,
 			)
 			.map((result) => result.tasks);
 
