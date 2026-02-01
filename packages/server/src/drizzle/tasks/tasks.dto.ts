@@ -35,10 +35,15 @@ export const TasksDTO = (db: DBConnectionFunc) => ({
 		// Transform the results into the appropriate structure
 		const plan = results[0].plan;
 		const tasks = results
-			.map((r) => r.tasks)
 			.filter(
-				(task): task is typeof planMasterTasks.$inferSelect => task !== null,
-			);
+				(
+					result,
+				): result is {
+					plan: typeof planMaster.$inferSelect;
+					tasks: typeof planMasterTasks.$inferSelect;
+				} => result.tasks !== null,
+			)
+			.map((result) => result.tasks);
 
 		return {
 			...plan,
