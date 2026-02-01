@@ -33,12 +33,11 @@ export const TasksDTO = (db: DBConnectionFunc) => ({
 		}
 
 		// Transform the results into the appropriate structure
-		const planResult = results[0];
-		if (!planResult || !planResult.plan) {
+		const [{ plan }] = results;
+		if (!plan) {
 			return null;
 		}
 
-		const plan = planResult.plan;
 		const tasks = results
 			.filter(
 				(
