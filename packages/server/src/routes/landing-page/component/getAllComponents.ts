@@ -69,3 +69,4 @@ export const getComponentsHandler: AppRouteHandler<GetComponentsSpec> = async (
 		return c.json({ error: "Page not found" }, 404);
 	}
 };
+// Test commit to verify push functionality
