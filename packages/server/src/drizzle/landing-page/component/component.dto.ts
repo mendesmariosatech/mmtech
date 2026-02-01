@@ -1,11 +1,12 @@
 import { eq } from "drizzle-orm";
 import { DBConnection } from "../../drizzle-client";
-import { componentPage, SelectComponentPageSchema } from "../page/page";
+import { componentPage } from "../page/page";
 import {
 	componentTable,
 	ContentSchema,
 	CssSchema,
 	type CreateMergeComponentSchema,
+	GetMergedSchema,
 } from "./component";
 
 export class ComponentTable extends DBConnection {
@@ -15,12 +16,12 @@ export class ComponentTable extends DBConnection {
 
 	public async createComponent(args: CreateMergeComponentSchema) {
 		try {
-			const [page] = await this.db
+			const [component] = await this.db
 				.insert(componentTable)
 				.values(args)
 				.returning();
 
-			return page;
+			return component;
 		} catch (error) {
 			console.error("Erro ao criar componente:", error);
 			throw error;
@@ -28,13 +29,17 @@ export class ComponentTable extends DBConnection {
 	}
 
 	public async getAllComponentsByTemplate(
-		pageId: SelectComponentPageSchema["id"],
+		pageId: number,
 	) {
-		const components = await this.db.query.componentPage.findMany({
-			where: eq(componentTable.id, pageId),
+		const componentPages = await this.db.query.componentPage.findMany({
+			where: eq(componentPage.pageId, pageId),
+			with: {
+				component: true,
+			},
 		});
 
-		return components;
+		// Extract and return just the components, not the componentPage wrapper
+		return componentPages.map(cp => cp.component);
 	}
 
 	// update component
@@ -47,7 +52,7 @@ export class ComponentTable extends DBConnection {
 			const cssArgs = CssSchema.parse(args.css);
 			const content = ContentSchema.parse(args.content);
 
-			const [page] = await this.db
+			const [updatedComponent] = await this.db
 				.update(componentTable)
 				.set({
 					type: args.type,
@@ -57,7 +62,7 @@ export class ComponentTable extends DBConnection {
 				.where(eq(componentTable.id, args.id))
 				.returning();
 
-			return page;
+			return updatedComponent;
 		} catch (error) {
 			throw error;
 		}

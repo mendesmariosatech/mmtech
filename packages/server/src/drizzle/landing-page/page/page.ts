@@ -41,6 +41,17 @@ export const componentPage = sqliteTable(
 	}),
 );
 
+export const componentPageRelations = relations(componentPage, ({ one }) => ({
+	page: one(pageTable, {
+		fields: [componentPage.pageId],
+		references: [pageTable.id],
+	}),
+	component: one(componentTable, {
+		fields: [componentPage.componentId],
+		references: [componentTable.id],
+	}),
+}));
+
 const SelectComponentPageSchema = createSelectSchema(componentPage).pick({
 	id: true,
 });
@@ -55,6 +66,7 @@ export const pageRelations = relations(pageTable, ({ one, many }) => ({
 		references: [templateTable.id],
 	}),
 	components: many(componentTable),
+	componentPages: many(componentPage),
 }));
 
 export const CreatePageSchema = createInsertSchema(pageTable).omit({

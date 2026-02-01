@@ -77,14 +77,15 @@ export const updateComponentsHandler: AppRouteHandler<
 		componentId,
 	});
 
-	// this will fail miserably
-	try {
-		const components = await componentTable.getAllComponentsByTemplate(
-			Number(pageId),
-		);
-	} catch {
-		return c.json({ error: "Page not found" }, 404);
-	}
+	const updateData = c.req.valid("json");
 
-	return c.json({ error: "Not Implemented" }, 500);
+	try {
+		const updatedComponent = await componentTable.updateComponent({
+			id: Number(componentId),
+			...updateData,
+		});
+		return c.json({ data: updatedComponent });
+	} catch (error) {
+		return c.json({ error: "Failed to update component" }, 500);
+	}
 };

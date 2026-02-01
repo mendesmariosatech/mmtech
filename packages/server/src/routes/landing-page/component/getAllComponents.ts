@@ -60,14 +60,12 @@ export const getComponentsHandler: AppRouteHandler<GetComponentsSpec> = async (
 
 	const { pageId } = c.req.valid("param");
 
-	// this will fail miserably
 	try {
 		const components = await componentTable.getAllComponentsByTemplate(
 			Number(pageId),
 		);
+		return c.json({ data: components });
 	} catch {
 		return c.json({ error: "Page not found" }, 404);
 	}
-
-	return c.json({ error: "Not Implemented" }, 500);
 };
