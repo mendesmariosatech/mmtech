@@ -15,6 +15,7 @@ export {
 	pageTable,
 	pageRelations,
 	componentPage,
+	componentPageRelations,
 } from "./landing-page/page/page";
 export { componentTable } from "./landing-page/component/component";
 

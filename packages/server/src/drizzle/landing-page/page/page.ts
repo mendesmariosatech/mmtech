@@ -28,7 +28,7 @@ export const componentPage = sqliteTable(
 		// TODO typar esse schema
 		id: integer("id").primaryKey(),
 		componentId: integer("component_id").references(() => componentTable.id),
-		pageId: integer("page_id").references(() => pageTable.id),
+		pageId: text("page_id", { length: 128 }).references(() => pageTable.id),
 		order: integer("order").notNull(), // For sorting components in page
 		cssOverrides: text("css_override", { mode: "json" }), // Overridden CSS properties
 		contentOverrides: text("content_override", { mode: "json" }), // Overridden content
@@ -40,6 +40,17 @@ export const componentPage = sqliteTable(
 		),
 	}),
 );
+
+export const componentPageRelations = relations(componentPage, ({ one }) => ({
+	page: one(pageTable, {
+		fields: [componentPage.pageId],
+		references: [pageTable.id],
+	}),
+	component: one(componentTable, {
+		fields: [componentPage.componentId],
+		references: [componentTable.id],
+	}),
+}));
 
 const SelectComponentPageSchema = createSelectSchema(componentPage).pick({
 	id: true,
@@ -55,6 +66,7 @@ export const pageRelations = relations(pageTable, ({ one, many }) => ({
 		references: [templateTable.id],
 	}),
 	components: many(componentTable),
+	componentPages: many(componentPage),
 }));
 
 export const CreatePageSchema = createInsertSchema(pageTable).omit({
