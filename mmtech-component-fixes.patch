@@ -1,0 +1,183 @@
+From 67e2e6f7618b690f5c4c774236c1d318fdc9d296 Mon Sep 17 00:00:00 2001
+From: OpenClaw AI <openclaw@example.com>
+Date: Sun, 1 Feb 2026 12:08:59 +0000
+Subject: [PATCH] Fix API routes for landing page components
+
+- Fix getAllComponents route to return actual components instead of error
+- Fix updateComponent route to use correct method and process request body
+- Add proper relations for componentPage table to enable joins
+- Update DTO methods to properly retrieve and update components
+---
+ .../landing-page/component/component.dto.ts   | 23 +++++++++++--------
+ .../src/drizzle/landing-page/page/page.ts     | 12 ++++++++++
+ packages/server/src/drizzle/schema.ts         |  1 +
+ .../component/getAllComponents.ts             |  4 +---
+ .../landing-page/component/updateComponent.ts | 17 +++++++-------
+ 5 files changed, 37 insertions(+), 20 deletions(-)
+
+diff --git a/packages/server/src/drizzle/landing-page/component/component.dto.ts b/packages/server/src/drizzle/landing-page/component/component.dto.ts
+index 06bead4..60dce47 100644
+--- a/packages/server/src/drizzle/landing-page/component/component.dto.ts
++++ b/packages/server/src/drizzle/landing-page/component/component.dto.ts
+@@ -1,11 +1,12 @@
+ import { eq } from "drizzle-orm";
+ import { DBConnection } from "../../drizzle-client";
+-import { componentPage, SelectComponentPageSchema } from "../page/page";
++import { componentPage } from "../page/page";
+ import {
+ 	componentTable,
+ 	ContentSchema,
+ 	CssSchema,
+ 	type CreateMergeComponentSchema,
++	GetMergedSchema,
+ } from "./component";
+ 
+ export class ComponentTable extends DBConnection {
+@@ -15,12 +16,12 @@ export class ComponentTable extends DBConnection {
+ 
+ 	public async createComponent(args: CreateMergeComponentSchema) {
+ 		try {
+-			const [page] = await this.db
++			const [component] = await this.db
+ 				.insert(componentTable)
+ 				.values(args)
+ 				.returning();
+ 
+-			return page;
++			return component;
+ 		} catch (error) {
+ 			console.error("Erro ao criar componente:", error);
+ 			throw error;
+@@ -28,13 +29,17 @@ export class ComponentTable extends DBConnection {
+ 	}
+ 
+ 	public async getAllComponentsByTemplate(
+-		pageId: SelectComponentPageSchema["id"],
++		pageId: number,
+ 	) {
+-		const components = await this.db.query.componentPage.findMany({
+-			where: eq(componentTable.id, pageId),
++		const componentPages = await this.db.query.componentPage.findMany({
++			where: eq(componentPage.pageId, pageId),
++			with: {
++				component: true,
++			},
+ 		});
+ 
+-		return components;
++		// Extract and return just the components, not the componentPage wrapper
++		return componentPages.map(cp => cp.component);
+ 	}
+ 
+ 	// update component
+@@ -47,7 +52,7 @@ export class ComponentTable extends DBConnection {
+ 			const cssArgs = CssSchema.parse(args.css);
+ 			const content = ContentSchema.parse(args.content);
+ 
+-			const [page] = await this.db
++			const [updatedComponent] = await this.db
+ 				.update(componentTable)
+ 				.set({
+ 					type: args.type,
+@@ -57,7 +62,7 @@ export class ComponentTable extends DBConnection {
+ 				.where(eq(componentTable.id, args.id))
+ 				.returning();
+ 
+-			return page;
++			return updatedComponent;
+ 		} catch (error) {
+ 			throw error;
+ 		}
+diff --git a/packages/server/src/drizzle/landing-page/page/page.ts b/packages/server/src/drizzle/landing-page/page/page.ts
+index 9680fff..0f39e03 100644
+--- a/packages/server/src/drizzle/landing-page/page/page.ts
++++ b/packages/server/src/drizzle/landing-page/page/page.ts
+@@ -41,6 +41,17 @@ export const componentPage = sqliteTable(
+ 	}),
+ );
+ 
++export const componentPageRelations = relations(componentPage, ({ one }) => ({
++	page: one(pageTable, {
++		fields: [componentPage.pageId],
++		references: [pageTable.id],
++	}),
++	component: one(componentTable, {
++		fields: [componentPage.componentId],
++		references: [componentTable.id],
++	}),
++}));
++
+ const SelectComponentPageSchema = createSelectSchema(componentPage).pick({
+ 	id: true,
+ });
+@@ -55,6 +66,7 @@ export const pageRelations = relations(pageTable, ({ one, many }) => ({
+ 		references: [templateTable.id],
+ 	}),
+ 	components: many(componentTable),
++	componentPages: many(componentPage),
+ }));
+ 
+ export const CreatePageSchema = createInsertSchema(pageTable).omit({
+diff --git a/packages/server/src/drizzle/schema.ts b/packages/server/src/drizzle/schema.ts
+index 53ee462..4f1bb6e 100644
+--- a/packages/server/src/drizzle/schema.ts
++++ b/packages/server/src/drizzle/schema.ts
+@@ -15,6 +15,7 @@ export {
+ 	pageTable,
+ 	pageRelations,
+ 	componentPage,
++	componentPageRelations,
+ } from "./landing-page/page/page";
+ export { componentTable } from "./landing-page/component/component";
+ 
+diff --git a/packages/server/src/routes/landing-page/component/getAllComponents.ts b/packages/server/src/routes/landing-page/component/getAllComponents.ts
+index e5a9e96..18466ad 100644
+--- a/packages/server/src/routes/landing-page/component/getAllComponents.ts
++++ b/packages/server/src/routes/landing-page/component/getAllComponents.ts
+@@ -60,14 +60,12 @@ export const getComponentsHandler: AppRouteHandler<GetComponentsSpec> = async (
+ 
+ 	const { pageId } = c.req.valid("param");
+ 
+-	// this will fail miserably
+ 	try {
+ 		const components = await componentTable.getAllComponentsByTemplate(
+ 			Number(pageId),
+ 		);
++		return c.json({ data: components });
+ 	} catch {
+ 		return c.json({ error: "Page not found" }, 404);
+ 	}
+-
+-	return c.json({ error: "Not Implemented" }, 500);
+ };
+diff --git a/packages/server/src/routes/landing-page/component/updateComponent.ts b/packages/server/src/routes/landing-page/component/updateComponent.ts
+index 0149882..c5751c8 100644
+--- a/packages/server/src/routes/landing-page/component/updateComponent.ts
++++ b/packages/server/src/routes/landing-page/component/updateComponent.ts
+@@ -77,14 +77,15 @@ export const updateComponentsHandler: AppRouteHandler<
+ 		componentId,
+ 	});
+ 
+-	// this will fail miserably
++	const updateData = c.req.valid("json");
++
+ 	try {
+-		const components = await componentTable.getAllComponentsByTemplate(
+-			Number(pageId),
+-		);
+-	} catch {
+-		return c.json({ error: "Page not found" }, 404);
++		const updatedComponent = await componentTable.updateComponent({
++			id: Number(componentId),
++			...updateData,
++		});
++		return c.json({ data: updatedComponent });
++	} catch (error) {
++		return c.json({ error: "Failed to update component" }, 500);
+ 	}
+-
+-	return c.json({ error: "Not Implemented" }, 500);
+ };
+-- 
+2.43.0
+

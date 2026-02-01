@@ -67,3 +67,4 @@ Thumbs.db
 *storybook.log
 
 .env
+.aider*
