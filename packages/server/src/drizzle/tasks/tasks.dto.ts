@@ -33,7 +33,9 @@ export const TasksDTO = (db: DBConnectionFunc) => ({
 		}
 
 		// Transform the results into the appropriate structure
-		const [{ plan }] = results;
+		const [maybePlans] = results;
+		const plan = maybePlans?.plan;
+
 		if (!plan) {
 			return null;
 		}
