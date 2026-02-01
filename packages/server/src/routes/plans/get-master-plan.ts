@@ -74,7 +74,7 @@ export const getMasterPlanHandler: AppRouteHandler<GetMasterPlanRoute> = async (
 		}
 
 		return c.json({ data: masterPlan }, 200);
-	} catch (error) {
+	} catch (error: unknown) {
 		console.error("Error getting master plan details:", error);
 		return c.json(
 			{

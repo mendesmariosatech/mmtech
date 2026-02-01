@@ -15,19 +15,30 @@ export const TasksDTO = (db: DBConnectionFunc) => ({
 	},
 
 	async getMasterPlanById(planMasterId: string) {
-		const [plan] = await db
-			.select()
+		// Using JOIN to improve performance by fetching plan and tasks in a single query
+		const results = await db
+			.select({
+				plan: planMaster,
+				tasks: planMasterTasks,
+			})
 			.from(planMaster)
+			.leftJoin(
+				planMasterTasks,
+				eq(planMaster.planMasterId, planMasterTasks.planMasterId),
+			)
 			.where(eq(planMaster.planMasterId, planMasterId));
 
-		if (!plan) {
+		if (results.length === 0) {
 			return null;
 		}
 
-		const tasks = await db
-			.select()
-			.from(planMasterTasks)
-			.where(eq(planMasterTasks.planMasterId, planMasterId));
+		// Transform the results into the appropriate structure
+		const plan = results[0].plan;
+		const tasks = results
+			.map((r) => r.tasks)
+			.filter(
+				(task): task is typeof planMasterTasks.$inferSelect => task !== null,
+			);
 
 		return {
 			...plan,
