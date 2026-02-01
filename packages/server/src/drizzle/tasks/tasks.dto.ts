@@ -1,5 +1,6 @@
+import { and, eq } from "drizzle-orm";
 import type { DBConnectionFunc } from "../drizzle-client";
-import { planMaster, type PlanMaster } from "./master-plan";
+import { planMaster, planMasterTasks, type PlanMaster } from "./master-plan";
 
 export const TasksDTO = (db: DBConnectionFunc) => ({
 	async createMasterTasks(args: PlanMaster) {
@@ -11,6 +12,49 @@ export const TasksDTO = (db: DBConnectionFunc) => ({
 	async getAllMasterPlans() {
 		const masterPlans = await db.select().from(planMaster);
 		return masterPlans;
+	},
+
+	async getMasterPlanById(planMasterId: string) {
+		// Using JOIN to improve performance by fetching plan and tasks in a single query
+		const results = await db
+			.select({
+				plan: planMaster,
+				tasks: planMasterTasks,
+			})
+			.from(planMaster)
+			.leftJoin(
+				planMasterTasks,
+				eq(planMaster.planMasterId, planMasterTasks.planMasterId),
+			)
+			.where(eq(planMaster.planMasterId, planMasterId));
+
+		if (results.length === 0) {
+			return null;
+		}
+
+		// Transform the results into the appropriate structure
+		const [maybePlans] = results;
+		const plan = maybePlans?.plan;
+
+		if (!plan) {
+			return null;
+		}
+
+		const tasks = results
+			.filter(
+				(
+					result,
+				): result is {
+					plan: typeof planMaster.$inferSelect;
+					tasks: typeof planMasterTasks.$inferSelect;
+				} => result && result.tasks !== null,
+			)
+			.map((result) => result.tasks);
+
+		return {
+			...plan,
+			tasks,
+		};
 	},
 });
 
