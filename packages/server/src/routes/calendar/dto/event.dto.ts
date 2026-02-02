@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { DBConnection } from "../../../drizzle/drizzle-client";
 import { eventTable, InsertEvent } from "../../../drizzle/schema";
 
@@ -6,5 +7,14 @@ export class EventTable extends DBConnection {
 		const [event] = await this.db.insert(eventTable).values(args).returning();
 
 		return event;
+	}
+
+	public async getEventsByBusinessId(businessId: string) {
+		const events = await this.db
+			.select()
+			.from(eventTable)
+			.where(eq(eventTable.businessId, businessId));
+
+		return events;
 	}
 }
