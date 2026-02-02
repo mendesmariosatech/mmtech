@@ -8,6 +8,10 @@ import { env } from "hono/adapter";
 import { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
 
+/**
+ * Specification for retrieving calendar events for a specific business
+ * Requires authentication and proper business access rights
+ */
 export const getCalendarSpec = createRoute({
 	method: "get",
 	path: "/calendar/:businessId",
@@ -22,6 +26,7 @@ export const getCalendarSpec = createRoute({
 		},
 	},
 	request: {
+		/** Parameter schema to specify which business's calendar to retrieve */
 		params: z.object({
 			businessId: z.string(),
 		}),
@@ -31,6 +36,7 @@ export const getCalendarSpec = createRoute({
 			description: "Calendar Events Retrieved",
 			content: {
 				"application/json": {
+					/** Returns an array of events for the specified business */
 					schema: z.array(SelectEventSchema),
 				},
 			},

@@ -8,6 +8,10 @@ import { env } from "hono/adapter";
 import { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
 
+/**
+ * Specification for creating a new calendar event
+ * Requires authentication and business association
+ */
 export const createEventSpec = createRoute({
 	method: "post",
 	path: "/calendar/events",
@@ -25,6 +29,10 @@ export const createEventSpec = createRoute({
 		body: {
 			content: {
 				"application/json": {
+					/**
+					 * Request body schema for creating a calendar event
+					 * Includes title, date, optional startTime/endTime, description
+					 */
 					schema: InsertEventSchema,
 				},
 			},
@@ -66,7 +74,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		return c.json({ error: "Not authorized" }, 403);
 	}
 
-	const input = c.req.valid("json");
+	const validatedInput = c.req.valid("json");
 
 	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
@@ -76,18 +84,22 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		return c.json({ error: "Not authorized, you don't have a business" }, 403);
 	}
 
-	const { title, date, startTime, endTime } = c.req.valid("json");
-
-	// how to create a new event
+	// how to create a new event - add businessId and clientId from auth context
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
-	const newEvent = await Event.createEvent({
-		title,
-		date,
-		startTime,
-		endTime,
-		businessId,
-		clientId,
-	});
+
+	// Construct the event data with all required fields
+	const eventData = {
+		title: validatedInput.title,
+		date: validatedInput.date,
+		description: validatedInput.description || null,
+		startTime: validatedInput.startTime || null,
+		endTime: validatedInput.endTime || null,
+		clientId: clientId!,
+		businessId: businessId!,
+		addressId: null, // Default to null if not provided
+	};
+
+	const newEvent = await Event.createEvent(eventData);
 
 	if (!newEvent) {
 		return c.json({ error: "Event not created" }, 403);

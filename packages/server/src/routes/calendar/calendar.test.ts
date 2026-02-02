@@ -1,4 +1,3 @@
-import { userEvent } from "@storybook/test";
 import {
 	afterAll,
 	describe,
@@ -31,7 +30,7 @@ jest.mock("../../jwt_token", () => {
 	};
 });
 
-describe.skip("Calendar Tests", () => {
+describe("Calendar Tests", () => {
 	beforeAll(async () => {});
 
 	afterAll(async () => {
@@ -48,15 +47,13 @@ describe.skip("Calendar Tests", () => {
 		);
 
 		test("User cannot create an event if the business does not exist", async () => {
-			const evenetResponse = await testClient(
+			const eventResponse = await testClient(
 				calendarRouter,
 			).calendar.events.$post(
 				{
 					json: {
-						businessId: "BU_123",
 						title: "Event Title",
-						clientId: "CL_123",
-						date: new Date().toString(),
+						date: new Date().toISOString(),
 					},
 				},
 				{
@@ -66,15 +63,8 @@ describe.skip("Calendar Tests", () => {
 				},
 			);
 
-			if (evenetResponse.status !== 201) {
-				const error = await evenetResponse.json();
-				throw new Error("Error creating event: " + error.error);
-			}
-
-			const data = await evenetResponse.json();
-
-			expect(evenetResponse.status).toBe(201);
-			expect(data.id).toBeDefined();
+			// Should return 403 since business doesn't exist in test environment
+			expect(eventResponse.status).toBe(403);
 		});
 	});
 
