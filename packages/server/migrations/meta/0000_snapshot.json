@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "56e5c989-ab73-42b6-a5b1-2f141612557f",
+  "id": "5d083391-d8bb-48a4-8a2a-4f3c6153af36",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "address": {
@@ -148,7 +148,9 @@
       "indexes": {
         "auth_email_unique": {
           "name": "auth_email_unique",
-          "columns": ["email"],
+          "columns": [
+            "email"
+          ],
           "isUnique": true
         }
       },
@@ -202,8 +204,12 @@
           "name": "business_customers_business_id_business_id_fk",
           "tableFrom": "business_customers",
           "tableTo": "business",
-          "columnsFrom": ["business_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "business_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -211,8 +217,12 @@
           "name": "business_customers_customer_id_customer_id_fk",
           "tableFrom": "business_customers",
           "tableTo": "customer",
-          "columnsFrom": ["customer_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -280,8 +290,12 @@
           "name": "business_client_id_client_id_fk",
           "tableFrom": "business",
           "tableTo": "client",
-          "columnsFrom": ["client_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "client_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -289,8 +303,12 @@
           "name": "business_address_id_address_id_fk",
           "tableFrom": "business",
           "tableTo": "address",
-          "columnsFrom": ["address_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "address_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -337,12 +355,148 @@
           "name": "client_auth_id_auth_id_fk",
           "tableFrom": "client",
           "tableTo": "auth",
-          "columnsFrom": ["auth_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "auth_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "component_page": {
+      "name": "component_page",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "component_id": {
+          "name": "component_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "page_id": {
+          "name": "page_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "css_override": {
+          "name": "css_override",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "content_override": {
+          "name": "content_override",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "page_component_idx": {
+          "name": "page_component_idx",
+          "columns": [
+            "page_id",
+            "component_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "component_page_component_id_landing_page.components_id_fk": {
+          "name": "component_page_component_id_landing_page.components_id_fk",
+          "tableFrom": "component_page",
+          "tableTo": "landing_page.components",
+          "columnsFrom": [
+            "component_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "component_page_page_id_landing_page.page_id_fk": {
+          "name": "component_page_page_id_landing_page.page_id_fk",
+          "tableFrom": "component_page",
+          "tableTo": "landing_page.page",
+          "columnsFrom": [
+            "page_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "landing_page.components": {
+      "name": "landing_page.components",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "css": {
+          "name": "css",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'\"2025-04-06T17:50:59.659Z\"'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -385,8 +539,12 @@
           "name": "customer_auth_id_auth_id_fk",
           "tableFrom": "customer",
           "tableTo": "auth",
-          "columnsFrom": ["auth_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "auth_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -440,8 +598,12 @@
           "name": "customer_attendee_customer_id_customer_id_fk",
           "tableFrom": "customer_attendee",
           "tableTo": "customer",
-          "columnsFrom": ["customer_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -449,8 +611,12 @@
           "name": "customer_attendee_event_id_event_id_fk",
           "tableFrom": "customer_attendee",
           "tableTo": "event",
-          "columnsFrom": ["event_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "event_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -546,8 +712,12 @@
           "name": "event_client_id_client_id_fk",
           "tableFrom": "event",
           "tableTo": "client",
-          "columnsFrom": ["client_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "client_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -555,8 +725,12 @@
           "name": "event_business_id_business_id_fk",
           "tableFrom": "event",
           "tableTo": "business",
-          "columnsFrom": ["business_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "business_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -564,8 +738,12 @@
           "name": "event_address_id_address_id_fk",
           "tableFrom": "event",
           "tableTo": "address",
-          "columnsFrom": ["address_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "address_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -573,8 +751,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "customer": {
-      "name": "customer",
+    "landing_page.page": {
+      "name": "landing_page.page",
       "columns": {
         "id": {
           "name": "id",
@@ -583,20 +761,26 @@
           "notNull": true,
           "autoincrement": false
         },
-        "auth_id": {
-          "name": "auth_id",
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "template_id": {
+          "name": "template_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
           "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
@@ -608,12 +792,16 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "customer_auth_id_auth_id_fk": {
-          "name": "customer_auth_id_auth_id_fk",
-          "tableFrom": "customer",
-          "tableTo": "auth",
-          "columnsFrom": ["auth_id"],
-          "columnsTo": ["id"],
+        "landing_page.page_template_id_landing_page.template_id_fk": {
+          "name": "landing_page.page_template_id_landing_page.template_id_fk",
+          "tableFrom": "landing_page.page",
+          "tableTo": "landing_page.template",
+          "columnsFrom": [
+            "template_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -621,8 +809,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "customer_attendee": {
-      "name": "customer_attendee",
+    "landing_page.template": {
+      "name": "landing_page.template",
       "columns": {
         "id": {
           "name": "id",
@@ -631,15 +819,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "customer_id": {
-          "name": "customer_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "event_id": {
-          "name": "event_id",
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -647,11 +828,10 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
@@ -662,43 +842,17 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "customer_attendee_customer_id_customer_id_fk": {
-          "name": "customer_attendee_customer_id_customer_id_fk",
-          "tableFrom": "customer_attendee",
-          "tableTo": "customer",
-          "columnsFrom": ["customer_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "customer_attendee_event_id_event_id_fk": {
-          "name": "customer_attendee_event_id_event_id_fk",
-          "tableFrom": "customer_attendee",
-          "tableTo": "event",
-          "columnsFrom": ["event_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "event": {
-      "name": "event",
+    "videos": {
+      "name": "videos",
       "columns": {
         "id": {
           "name": "id",
           "type": "text(128)",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "client_id": {
-          "name": "client_id",
-          "type": "text",
-          "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
@@ -709,15 +863,15 @@
           "notNull": true,
           "autoincrement": false
         },
-        "address_id": {
-          "name": "address_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "title": {
           "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "url": {
+          "name": "url",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -730,34 +884,12 @@
           "notNull": false,
           "autoincrement": false
         },
-        "date": {
-          "name": "date",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "time": {
-          "name": "time",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "location": {
-          "name": "location",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "created_at": {
           "name": "created_at",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
@@ -769,30 +901,16 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "event_client_id_client_id_fk": {
-          "name": "event_client_id_client_id_fk",
-          "tableFrom": "event",
-          "tableTo": "client",
-          "columnsFrom": ["client_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "event_business_id_business_id_fk": {
-          "name": "event_business_id_business_id_fk",
-          "tableFrom": "event",
+        "videos_business_id_business_id_fk": {
+          "name": "videos_business_id_business_id_fk",
+          "tableFrom": "videos",
           "tableTo": "business",
-          "columnsFrom": ["business_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "event_address_id_address_id_fk": {
-          "name": "event_address_id_address_id_fk",
-          "tableFrom": "event",
-          "tableTo": "address",
-          "columnsFrom": ["address_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "business_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }

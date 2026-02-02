@@ -54,11 +54,25 @@ export function CalendarPage({ eventsData, language }: CalendarProps) {
 	const [events, setEvents] = React.useState<DataEvents[]>(eventsData);
 
 	const handleOpenModal = (event: DataEvents | null, date: Date | null) => {
-		setSelectedEvent(
-			event
-				? event
-				: { start: date, end: null, title: "", description: "", tag: [] },
-		);
+		const selectedEvent = event
+			? {
+					eventDate: event.eventDate,
+					start: event.start,
+					end: event.end,
+					title: event.title,
+					description: event.description,
+					tag: event.tag,
+				}
+			: ({
+					eventDate: date?.toISOString().split("T")[0],
+					start: "",
+					end: "",
+					title: "",
+					description: "",
+					tag: [],
+				} as DataEvents);
+
+		setSelectedEvent(selectedEvent);
 		setIsModalOpen(true);
 	};
 

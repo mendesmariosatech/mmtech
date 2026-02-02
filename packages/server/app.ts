@@ -1,12 +1,13 @@
 import "dotenv/config";
 import app from "./src";
 import { serve } from "@hono/node-server";
+import "dotenv/config";
 
 const PORT = process.env.PORT || 4000;
 try {
 	const server = serve({
 		fetch: app.fetch,
-		port: PORT,
+		port: Number(PORT),
 	});
 
 	process.on("SIGTERM", () => {
@@ -22,3 +23,4 @@ try {
 }
 
 console.log(`🚀 node server started on port http://localhost:${PORT}/api`);
+console.log(`📜 Open API Docs on port http://localhost:${PORT}/api/swagger`);

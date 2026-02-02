@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "tsx watch app.ts",
-    "deploy": "wrangler deploy --minify src/index.ts",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
     "test": "jest --env-file=.env",
