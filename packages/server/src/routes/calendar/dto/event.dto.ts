@@ -4,7 +4,7 @@ import { eventTable, InsertEvent } from "../../../drizzle/schema";
 
 /**
  * Data Transfer Object for handling calendar event operations
- * Provides methods for creating and retrieving calendar events
+ * Provides methods for creating, retrieving, updating and deleting calendar events
  */
 export class EventTable extends DBConnection {
 	/**
@@ -30,5 +30,49 @@ export class EventTable extends DBConnection {
 			.where(eq(eventTable.businessId, businessId));
 
 		return events;
+	}
+
+	/**
+	 * Retrieves a specific event by ID
+	 * @param eventId The ID of the event to retrieve
+	 * @returns The event object if found, null otherwise
+	 */
+	public async getEventById(eventId: string) {
+		const [event] = await this.db
+			.select()
+			.from(eventTable)
+			.where(eq(eventTable.id, eventId));
+
+		return event || null;
+	}
+
+	/**
+	 * Updates an existing calendar event
+	 * @param eventId The ID of the event to update
+	 * @param args Updated event data
+	 * @returns The updated event object
+	 */
+	public async updateEvent(eventId: string, args: Partial<InsertEvent>) {
+		const [event] = await this.db
+			.update(eventTable)
+			.set(args)
+			.where(eq(eventTable.id, eventId))
+			.returning();
+
+		return event;
+	}
+
+	/**
+	 * Deletes a calendar event by ID
+	 * @param eventId The ID of the event to delete
+	 * @returns Boolean indicating success or failure
+	 */
+	public async deleteEvent(eventId: string) {
+		const result = await this.db
+			.delete(eventTable)
+			.where(eq(eventTable.id, eventId))
+			.returning();
+
+		return result.length > 0;
 	}
 }
