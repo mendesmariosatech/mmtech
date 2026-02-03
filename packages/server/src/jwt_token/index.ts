@@ -17,7 +17,7 @@ export async function decodeToken(
 	token: string,
 	secret: string,
 ): Promise<JWTDecoded> {
-	const decoded = await verify(token, secret);
+	const decoded = await verify(token, secret, "HS256");
 	return {
 		...decoded,
 		authId: decoded.authId as string,
