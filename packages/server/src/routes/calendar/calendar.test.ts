@@ -1,6 +1,25 @@
 import { testClient } from "hono/testing";
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test, jest, afterAll } from "@jest/globals";
 import { calendarRouter } from ".";
+import { DBTestSetup } from "../tests/setup";
+
+const genEmail = () => Date.now() + "test@gmail.com";
+const password = "TestPassword123";
+const SECONDS = 1000;
+jest.setTimeout(70 * SECONDS);
+
+jest.mock("../../jwt_token", () => {
+	return {
+		generateToken: jest.fn().mockReturnValue(Promise.resolve("123")),
+		decodeToken: jest.fn().mockReturnValue(
+			Promise.resolve({
+				authId: "AU_123",
+				clientId: "CL_123",
+				businessId: "BU_123",
+			}),
+		),
+	};
+});
 
 describe("Calendar Routes Basic Test", () => {
 	test("Routes should be defined", () => {
@@ -64,4 +83,8 @@ describe("Calendar API Integration Tests", () => {
 			expect(error).toBeDefined();
 		}
 	});
+});
+
+afterAll(async () => {
+	await DBTestSetup.deleteTableAuth();
 });
