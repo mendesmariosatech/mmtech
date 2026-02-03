@@ -2,8 +2,6 @@ import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./dto/event.dto";
-import { ENV_TYPES } from "@repo/zod-types";
-
 import { env } from "hono/adapter";
 import { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
@@ -33,7 +31,11 @@ export const createEventSpec = createRoute({
 					 * Request body schema for creating a calendar event
 					 * Includes title, date, optional startTime/endTime, description
 					 */
-					schema: InsertEventSchema,
+					schema: InsertEventSchema.omit({
+						clientId: true,
+						businessId: true,
+						addressId: true,
+					}),
 				},
 			},
 		},
@@ -49,6 +51,16 @@ export const createEventSpec = createRoute({
 		},
 		403: {
 			description: "Not Authorized",
+			content: {
+				"application/json": {
+					schema: z.object({
+						error: z.string(),
+					}),
+				},
+			},
+		},
+		500: {
+			description: "Internal Server Error",
 			content: {
 				"application/json": {
 					schema: z.object({
@@ -84,9 +96,6 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		return c.json({ error: "Not authorized, you don't have a business" }, 403);
 	}
 
-	// how to create a new event - add businessId and clientId from auth context
-	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
-
 	// Construct the event data with all required fields
 	const eventData = {
 		title: validatedInput.title,
@@ -99,10 +108,13 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		addressId: null, // Default to null if not provided
 	};
 
+	// how to create a new event - add businessId and clientId from auth context
+	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const newEvent = await Event.createEvent(eventData);
 
 	if (!newEvent) {
-		return c.json({ error: "Event not created" }, 403);
+		return c.json({ error: "Event not created" }, 500);
+	}
 	}
 
 	return c.json(newEvent, 201);

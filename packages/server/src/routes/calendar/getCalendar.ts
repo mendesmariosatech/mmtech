@@ -2,11 +2,8 @@ import { createRoute, z } from "@hono/zod-openapi";
 import { SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./dto/event.dto";
-import { ENV_TYPES } from "@repo/zod-types";
-
 import { env } from "hono/adapter";
-import { AppRouteHandler } from "../../base/type";
-import { BusinessTable } from "../business/dto/business.dto";
+import type { AppRouteHandler } from "../../base/type";
 
 /**
  * Specification for retrieving calendar events for a specific business
@@ -64,7 +61,7 @@ export const getCalendarSpec = createRoute({
 	},
 });
 
-export type GetCalendarRoute = typeof getCalendarSpec;
+type GetCalendarRoute = typeof getCalendarSpec;
 
 export const getCalendarHandler: AppRouteHandler<GetCalendarRoute> = async (
 	c,
@@ -72,30 +69,16 @@ export const getCalendarHandler: AppRouteHandler<GetCalendarRoute> = async (
 	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
 	const authId = c.get("authId");
 	const clientId = c.get("clientId");
-	const businessId = c.req.param("businessId");
+	const businessId = c.get("businessId");
+	const { businessId: requestedBusinessId } = c.req.valid("param");
 
-	if (!businessId || !authId || !clientId) {
-		return c.json({ error: "Not authorized" }, 401);
+	// Check if the user is trying to access their own business calendar
+	if (!authId || !clientId || businessId !== requestedBusinessId) {
+		return c.json({ error: "Not authorized" }, 403);
 	}
 
-	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
-
-	const business = await Business.findBusinessByClientId(clientId);
-
-	if (!business) {
-		return c.json({ error: "Not authorized, you don't have a business" }, 401);
-	}
-
-	if (business.id !== businessId) {
-		return c.json(
-			{ error: "Not authorized to access this business calendar" },
-			403,
-		);
-	}
-
-	// Get events for the business
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
-	const events = await Event.getEventsByBusinessId(businessId);
+	const events = await Event.getEventsByBusinessId(requestedBusinessId);
 
 	return c.json(events, 200);
 };

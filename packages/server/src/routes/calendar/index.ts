@@ -1,6 +1,6 @@
 import { app } from "../../base/base-app";
-import { createEventHandler, createEventSpec } from "./postEvent";
-import { getCalendarHandler, getCalendarSpec } from "./getCalendar";
+import { createEventSpec, createEventHandler } from "./postEvent";
+import { getCalendarSpec, getCalendarHandler } from "./getCalendar";
 
 const calendarRouter = app
 	.openapi(createEventSpec, createEventHandler)
