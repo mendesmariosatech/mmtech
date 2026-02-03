@@ -1,11 +1,15 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
-import { EventTable } from "./event.dto";
+import { EventTable } from "./dto/event.dto";
 import { env } from "hono/adapter";
 import type { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
 
+/**
+ * Specification for creating a new calendar event
+ * Requires authentication and business association
+ */
 export const createEventSpec = createRoute({
 	method: "post",
 	path: "/calendar/events",
@@ -23,7 +27,15 @@ export const createEventSpec = createRoute({
 		body: {
 			content: {
 				"application/json": {
-					schema: InsertEventSchema,
+					/**
+					 * Request body schema for creating a calendar event
+					 * Includes title, date, optional startTime/endTime, description
+					 */
+					schema: InsertEventSchema.omit({
+						clientId: true,
+						businessId: true,
+						addressId: true,
+					}),
 				},
 			},
 		},
@@ -48,7 +60,7 @@ export const createEventSpec = createRoute({
 			},
 		},
 		500: {
-			description: "Not Authorized",
+			description: "Internal Server Error",
 			content: {
 				"application/json": {
 					schema: z.object({
@@ -74,7 +86,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		return c.json({ error: "Not authorized" }, 403);
 	}
 
-	const input = c.req.valid("json");
+	const validatedInput = c.req.valid("json");
 
 	const Business = new BusinessTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
@@ -84,19 +96,24 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 		return c.json({ error: "Not authorized, you don't have a business" }, 403);
 	}
 
-	const { title, date } = c.req.valid("json");
+	// Construct the event data with all required fields
+	const eventData = {
+		title: validatedInput.title,
+		date: validatedInput.date,
+		description: validatedInput.description || null,
+		startTime: validatedInput.startTime || null,
+		endTime: validatedInput.endTime || null,
+		clientId: clientId!,
+		businessId: businessId!,
+		addressId: null, // Default to null if not provided
+	};
 
-	// how to create a new event
+	// how to create a new event - add businessId and clientId from auth context
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
-	const newEvent = await Event.createEvent({
-		title,
-		date: Number(date),
-		businessId: businessId,
-		clientId: clientId,
-	});
+	const newEvent = await Event.createEvent(eventData);
 
 	if (!newEvent) {
-		return c.json({ error: "Server Error: Event not created" }, 500);
+		return c.json({ error: "Event not created" }, 500);
 	}
 
 	return c.json(newEvent, 201);

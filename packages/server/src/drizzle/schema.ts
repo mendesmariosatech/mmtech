@@ -158,9 +158,9 @@ export const eventTable = sqliteTable("event", {
 	}),
 	title: text("title").notNull(),
 	description: text("description"),
-	date: integer("date").notNull(),
-	time: integer("time"),
-	location: text("location"),
+	date: integer("date", { mode: "timestamp" }).notNull(),
+	startTime: integer("startTime", { mode: "timestamp" }),
+	endTime: integer("endTime", { mode: "timestamp" }),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
 	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
 		() => new Date(),
@@ -264,10 +264,12 @@ export const SelectEventSchema = createSelectSchema(eventTable).pick({
 });
 
 const StringToDate = z.string().transform((date) => new Date(date));
+const OptionalStringToDate = StringToDate.nullable().optional();
 
 export const InsertEventSchema = createInsertSchema(eventTable, {
 	date: StringToDate,
-	time: StringToDate,
+	startTime: OptionalStringToDate,
+	endTime: OptionalStringToDate,
 }).omit({
 	id: true,
 	createdAt: true,
