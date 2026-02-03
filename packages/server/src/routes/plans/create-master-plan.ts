@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { createRoute } from "@hono/zod-openapi";
 import { AppRouteHandler } from "../../base/type";
-import { authMiddleware } from "../middleware/authentication";
 import {
 	GetSchemaPlanMaster,
 	PlanMaster,
