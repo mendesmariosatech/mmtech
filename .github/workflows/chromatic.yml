@@ -3,7 +3,11 @@
 name: 'Chromatic Deployment'
 
 # Event for the workflow
-on: push
+on:
+  push:
+    paths:
+      - 'packages/ui/**'
+      - '.github/workflows/chromatic.yml'
 
 # List of jobs
 jobs:
