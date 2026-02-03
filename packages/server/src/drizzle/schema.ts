@@ -264,11 +264,12 @@ export const SelectEventSchema = createSelectSchema(eventTable).pick({
 });
 
 const StringToDate = z.string().transform((date) => new Date(date));
+const OptionalStringToDate = StringToDate.nullable().optional();
 
 export const InsertEventSchema = createInsertSchema(eventTable, {
 	date: StringToDate,
-	startTime: StringToDate,
-	endTime: StringToDate,
+	startTime: OptionalStringToDate,
+	endTime: OptionalStringToDate,
 }).omit({
 	id: true,
 	createdAt: true,

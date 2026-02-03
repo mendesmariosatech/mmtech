@@ -1,7 +1,6 @@
 import { env } from "hono/adapter";
 import { createMiddleware } from "hono/factory";
 import { dbConnection, DBConnection } from "../../drizzle/drizzle-client";
-import { AppOpenAPI } from "../../base/type";
 import { VideoDTO } from "../../drizzle/videos/videos.dto";
 import { TasksDTO } from "../../drizzle/tasks/tasks.dto";
 

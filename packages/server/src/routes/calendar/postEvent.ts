@@ -31,7 +31,11 @@ export const createEventSpec = createRoute({
 					 * Request body schema for creating a calendar event
 					 * Includes title, date, optional startTime/endTime, description
 					 */
-					schema: InsertEventSchema,
+					schema: InsertEventSchema.omit({
+						clientId: true,
+						businessId: true,
+						addressId: true,
+					}),
 				},
 			},
 		},
@@ -47,6 +51,16 @@ export const createEventSpec = createRoute({
 		},
 		403: {
 			description: "Not Authorized",
+			content: {
+				"application/json": {
+					schema: z.object({
+						error: z.string(),
+					}),
+				},
+			},
+		},
+		500: {
+			description: "Internal Server Error",
 			content: {
 				"application/json": {
 					schema: z.object({
@@ -99,7 +113,7 @@ export const createEventHandler: AppRouteHandler<CreateEventRoute> = async (
 	const newEvent = await Event.createEvent(eventData);
 
 	if (!newEvent) {
-		return c.json({ error: "Event not created" }, 403);
+		return c.json({ error: "Event not created" }, 500);
 	}
 
 	return c.json(newEvent, 201);
