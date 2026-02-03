@@ -12,8 +12,6 @@ export const dbContext = createMiddleware(async (c, next) => {
 	// and will return all of the DTOs that are needed for the app
 	const db = dbConnection(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
-	console.log("DB", db);
-
 	c.set("db", db);
 	c.set("dto", {
 		Videos: VideoDTO(db),
