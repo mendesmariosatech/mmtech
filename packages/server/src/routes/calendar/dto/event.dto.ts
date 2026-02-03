@@ -55,10 +55,7 @@ export class EventTable extends DBConnection {
 	public async updateEvent(eventId: string, args: Partial<InsertEvent>) {
 		const [event] = await this.db
 			.update(eventTable)
-			.set({
-				...args,
-				updatedAt: new Date(), // Update the timestamp
-			})
+			.set(args)
 			.where(eq(eventTable.id, eventId))
 			.returning();
 

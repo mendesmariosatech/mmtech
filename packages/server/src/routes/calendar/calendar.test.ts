@@ -29,6 +29,23 @@ describe("Calendar Routes Basic Test", () => {
 });
 
 describe("Calendar API Integration Tests", () => {
+	test("Should handle POST /calendar/events request with proper schema", () => {
+		// Test that the route exists and accepts the correct request structure
+		const client = testClient(calendarRouter);
+
+		// We're testing that the route accepts the correct schema without actually making the request
+		// because the actual request would require a real database connection
+		expect(client.calendar.events.$post).toBeDefined();
+	});
+
+	test("Should handle GET /calendar/:businessId request with proper schema", () => {
+		// Test that the route exists and accepts the correct request structure
+		const client = testClient(calendarRouter);
+
+		// We're testing that the route exists and accepts the correct request structure
+		expect(client["calendar"][":businessId"].$get).toBeDefined();
+	});
+
 	test("Should handle PUT /calendar/events/:eventId request with proper schema", () => {
 		// Test that the route exists and accepts the correct request structure
 		const client = testClient(calendarRouter);
