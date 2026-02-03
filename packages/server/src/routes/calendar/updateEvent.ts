@@ -4,8 +4,6 @@ import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./dto/event.dto";
 import { env } from "hono/adapter";
 import type { AppRouteHandler } from "../../base/type";
-import { eq } from "drizzle-orm";
-import { eventTable } from "../../drizzle/schema";
 
 /**
  * Specification for updating an existing calendar event
@@ -107,8 +105,12 @@ export const updateEventHandler: AppRouteHandler<UpdateEventRoute> = async (
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const existingEvent = await Event.getEventById(eventId);
 
-	if (!existingEvent || existingEvent.businessId !== businessId) {
-		return c.json({ error: "Event not found or not authorized" }, 404);
+	if (!existingEvent) {
+		return c.json({ error: "Event not found" }, 404);
+	}
+
+	if (existingEvent.businessId !== businessId) {
+		return c.json({ error: "Not authorized" }, 403);
 	}
 
 	// Update the event with provided fields

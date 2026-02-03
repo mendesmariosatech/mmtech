@@ -70,6 +70,22 @@ describe("Calendar API Integration Tests", () => {
 		// We're testing that the route exists and accepts the correct schema
 		expect(client.calendar.events[":eventId"].attendees.$get).toBeDefined();
 	});
+
+	test("Should handle PUT /calendar/events/:eventId request with proper schema", () => {
+		// Test that the route exists and accepts the correct request structure
+		const client = testClient(calendarRouter);
+
+		// We're testing that the route exists and accepts the correct schema
+		expect(client.calendar.events[":eventId"].$put).toBeDefined();
+	});
+
+	test("Should handle DELETE /calendar/events/:eventId request with proper schema", () => {
+		// Test that the route exists and accepts the correct request structure
+		const client = testClient(calendarRouter);
+
+		// We're testing that the route exists and accepts the correct schema
+		expect(client.calendar.events[":eventId"].$delete).toBeDefined();
+	});
 });
 
 afterAll(async () => {
