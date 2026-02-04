@@ -125,5 +125,12 @@ export const updateEventHandler: AppRouteHandler<UpdateEventRoute> = async (
 		return c.json({ error: "Event not updated" }, 500);
 	}
 
-	return c.json(updatedEvent, 200);
+	// Return only the fields specified in SelectEventSchema
+	return c.json(
+		{
+			id: updatedEvent.id,
+			title: updatedEvent.title,
+		},
+		200,
+	);
 };

@@ -1,10 +1,11 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { authMiddleware } from "../middleware/authentication";
 import { AttendeeTable } from "./dto/attendee.dto";
+import { EventTable } from "./dto/event.dto";
 import { env } from "hono/adapter";
 import type { AppRouteHandler } from "../../base/type";
-import { eq, and } from "drizzle-orm";
-import { eventTable, customerAttendeeTable } from "../../drizzle/schema";
+import { eq } from "drizzle-orm";
+import { eventTable } from "../../drizzle/schema";
 
 /**
  * Specification for removing a customer from an event's attendees
@@ -90,11 +91,8 @@ export const removeAttendeeHandler: AppRouteHandler<
 	}
 
 	// Check if the event belongs to the user's business
-	const existingEventResult = await c.var.db
-		.select()
-		.from(eventTable)
-		.where(eq(eventTable.id, eventId));
-	const existingEvent = existingEventResult[0];
+	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
+	const existingEvent = await Event.getEventById(eventId);
 
 	if (!existingEvent || existingEvent.businessId !== businessId) {
 		return c.json({ error: "Event not found or not authorized" }, 404);

@@ -4,7 +4,7 @@ import { AttendeeTable } from "./dto/attendee.dto";
 import { env } from "hono/adapter";
 import type { AppRouteHandler } from "../../base/type";
 import { eq } from "drizzle-orm";
-import { eventTable } from "../../drizzle/schema";
+import { eventTable, customer } from "../../drizzle/schema";
 
 /**
  * Specification for adding a customer as an attendee to a calendar event
@@ -129,6 +129,17 @@ export const addAttendeeHandler: AppRouteHandler<AddAttendeeRoute> = async (
 
 	const Attendee = new AttendeeTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
+	// Check if the customer exists
+	const customerExistsResult = await c.var.db
+		.select()
+		.from(customer)
+		.where(eq(customer.id, customerId));
+	const customerExists = customerExistsResult[0];
+
+	if (!customerExists) {
+		return c.json({ error: "Event or Customer not found" }, 404);
+	}
+
 	// Check if the customer is already attending the event
 	const isAlreadyAttending = await Attendee.isCustomerAttendingEvent(
 		customerId,
@@ -138,10 +149,15 @@ export const addAttendeeHandler: AppRouteHandler<AddAttendeeRoute> = async (
 		return c.json({ error: "Customer is already attending this event" }, 409);
 	}
 
-	const newAttendee = await Attendee.addAttendee(customerId, eventId);
+	try {
+		const newAttendee = await Attendee.addAttendee(customerId, eventId);
 
-	if (!newAttendee) {
-		return c.json({ error: "Attendee not added" }, 500);
+		if (!newAttendee) {
+			return c.json({ error: "Attendee not added" }, 500);
+		}
+	} catch (error) {
+		// Handle potential constraint violations (e.g., foreign key constraints)
+		return c.json({ error: "Event or Customer not found" }, 404);
 	}
 
 	return c.json(
