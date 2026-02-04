@@ -135,23 +135,25 @@ export function CalendarModal({
 			<DialogContent className="max-w-[400px] sm:max-w-[525px] rounded-lg">
 				<DialogHeader>
 					<DialogTitle>
-						{event?.title !== ""
+						{event && event.title
 							? texts[language].modalTitleEdit
 							: texts[language].modalTitleCreate}
 					</DialogTitle>
 				</DialogHeader>
-				<DevTool control={form.control} />
+				{process.env.NODE_ENV === "development" && (
+					<DevTool control={form.control} />
+				)}
 				<ControlledForm
 					useForm={form}
 					config={modalConfig}
 					onSubmit={handleSave}
 				>
 					<div className="flex flex-row justify-center items-center">
-						{event?.title !== "" && onDeleteEvent && (
+						{event && event.title && onDeleteEvent && (
 							<Button
 								variant="destructive"
 								className="mr-2"
-								onClick={() => onDeleteEvent(event?.id!)}
+								onClick={() => onDeleteEvent(event.id)}
 							>
 								{texts[language].modalTitleDelete}
 							</Button>

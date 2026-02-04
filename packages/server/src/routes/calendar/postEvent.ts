@@ -31,10 +31,12 @@ export const createEventSpec = createRoute({
 					 * Request body schema for creating a calendar event
 					 * Includes title, date, optional startTime/endTime, description
 					 */
-					schema: InsertEventSchema.omit({
-						clientId: true,
-						businessId: true,
-						addressId: true,
+					schema: InsertEventSchema.pick({
+						title: true,
+						date: true,
+						description: true,
+						startTime: true,
+						endTime: true,
 					}),
 				},
 			},

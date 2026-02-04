@@ -35,7 +35,7 @@ type CheckBox<D extends FieldValues> = {
 	name: FieldPath<D>;
 	input: "checkbox";
 	checkboxLabel: string;
-	value: boolean;
+	value?: boolean;
 } & FormConfig;
 
 type DropdownOptions = {
@@ -114,7 +114,7 @@ export const ControlledInput = <D extends FieldValues>(
 								<div className="flex items-center space-x-2 pl-2 py-2">
 									<Checkbox
 										id={field.name}
-										checked={field.value}
+										checked={field.value ?? props.value ?? false}
 										onCheckedChange={field.onChange}
 									/>
 									<Label
@@ -130,7 +130,8 @@ export const ControlledInput = <D extends FieldValues>(
 								<Textarea
 									{...field}
 									placeholder={props.placeholder}
-									className="textarea-class" // Add necessary classes
+									disabled={props.disabled}
+									className="w-full px-3 py-2 border rounded-md"
 								/>
 							</FormControl>
 						) : props.input === "color" ? ( // Handle color input
@@ -138,7 +139,7 @@ export const ControlledInput = <D extends FieldValues>(
 								<Input
 									{...field}
 									type="color" // Set the type to color
-									className="color-input-class" // Add necessary classes
+									className="w-12 h-10 border rounded cursor-pointer"
 								/>
 							</FormControl> // Handle date or datetime-local input
 						) : props.input === "date" || props.input === "datetime-local" ? (
@@ -153,7 +154,7 @@ export const ControlledInput = <D extends FieldValues>(
 								<Input
 									{...field}
 									type="time"
-									className="time-input-class" // Add necessary classes
+									className="w-full px-3 py-2 border rounded-md"
 								/>
 							</FormControl>
 						) : null}

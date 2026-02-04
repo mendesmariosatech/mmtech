@@ -31,10 +31,6 @@ jest.mock("../../jwt_token", () => {
 describe("Calendar Tests", () => {
 	beforeAll(async () => {});
 
-	afterAll(async () => {
-		await DBTestSetup.deleteTableAuth();
-	});
-
 	describe("Create Event - POST /calendar/events", () => {
 		test.todo("User can create an event");
 
