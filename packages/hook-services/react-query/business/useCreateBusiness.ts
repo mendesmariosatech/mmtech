@@ -14,6 +14,7 @@ type CreateBusinessResponse = {
 	clientId: string;
 	createdAt: string;
 	updatedAt: string;
+	token: string;
 };
 
 export const useCreateBusiness = (
@@ -24,15 +25,24 @@ export const useCreateBusiness = (
 	>,
 ) => {
 	return useMutation<CreateBusinessResponse, Error, CreateBusinessVariables>({
-		mutationFn: (variables) => {
-			return hono_client.api.business.$post({
+		mutationFn: async (variables) => {
+			const response = await hono_client.api.business.$post({
 				json: {
 					name: variables.name,
 					description: variables.description,
 				},
 			});
+
+			if (!response.ok) {
+				const errorData = await response
+					.json()
+					.catch(() => ({ error: "Unknown error" }));
+				throw new Error(errorData.error || "Failed to create business");
+			}
+
+			return response.json();
 		},
-		onError: (error) => {
+		onError: (error: Error) => {
 			toast.error(error.message);
 		},
 		...options,

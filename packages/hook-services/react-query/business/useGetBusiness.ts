@@ -18,7 +18,7 @@ export const useGetBusiness = (
 	return useQuery<Business, Error>({
 		queryKey: ["business", businessId],
 		queryFn: async () => {
-			const response = await hono_client.api.business[":businessId"].$get({
+			const response = await hono_client.api["business"][":businessId"].$get({
 				param: { businessId },
 			});
 
@@ -30,9 +30,6 @@ export const useGetBusiness = (
 			}
 
 			return response.json();
-		},
-		onError: (error) => {
-			toast.error(error.message);
 		},
 		...options,
 	});
