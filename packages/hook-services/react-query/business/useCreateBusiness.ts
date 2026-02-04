@@ -1,11 +1,8 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { hono_client } from "../../hono_client";
 import { toast } from "sonner";
-
-type CreateBusinessVariables = {
-	name: string;
-	description?: string;
-};
+import { CreateBusinessInput } from "@repo/server/src/drizzle/schema";
+import { z } from "zod";
 
 type CreateBusinessResponse = {
 	id: string;
@@ -17,10 +14,14 @@ export const useCreateBusiness = (
 	options?: UseMutationOptions<
 		CreateBusinessResponse,
 		Error,
-		CreateBusinessVariables
+		z.infer<typeof CreateBusinessInput>
 	>,
 ) => {
-	return useMutation<CreateBusinessResponse, Error, CreateBusinessVariables>({
+	return useMutation<
+		CreateBusinessResponse,
+		Error,
+		z.infer<typeof CreateBusinessInput>
+	>({
 		mutationFn: async (variables) => {
 			const response = await hono_client.api.business.$post({
 				json: {
