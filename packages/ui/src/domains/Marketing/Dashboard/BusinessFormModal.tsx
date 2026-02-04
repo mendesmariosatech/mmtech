@@ -7,7 +7,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@repo/ui/components/ui/dialog";
-import { CreateBusinessForm } from "@ui/components/form-builder/Forms/CreateBusiness/CreateBusinessForm";
+import { CreateBusinessForm } from "@repo/ui/components/form-builder/Forms/CreateBusiness/CreateBusinessForm";
 
 interface BusinessFormModalProps {
 	isOpen: boolean;
