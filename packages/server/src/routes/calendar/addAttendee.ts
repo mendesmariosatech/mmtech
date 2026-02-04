@@ -100,7 +100,7 @@ export const addAttendeeSpec = createRoute({
 	},
 });
 
-type AddAttendeeRoute = typeof addAttendeeSpec;
+export type AddAttendeeRoute = typeof addAttendeeSpec;
 
 export const addAttendeeHandler: AppRouteHandler<AddAttendeeRoute> = async (
 	c,
@@ -140,6 +140,28 @@ export const addAttendeeHandler: AppRouteHandler<AddAttendeeRoute> = async (
 		return c.json({ error: "Event or Customer not found" }, 404);
 	}
 
+	// Check if the customer belongs to the authenticated business
+	const businessCustomerResult = await c.var.db
+		.select()
+		.from(c.var.db.schema.businessCustomers)
+		.where(
+			c.var.db.schema.and(
+				c.var.db.schema.eq(
+					c.var.db.schema.businessCustomers.businessId,
+					businessId!,
+				),
+				c.var.db.schema.eq(
+					c.var.db.schema.businessCustomers.customerId,
+					customerId,
+				),
+			),
+		);
+	const businessCustomer = businessCustomerResult[0];
+
+	if (!businessCustomer) {
+		return c.json({ error: "Customer does not belong to your business" }, 403);
+	}
+
 	// Check if the customer is already attending the event
 	const isAlreadyAttending = await Attendee.isCustomerAttendingEvent(
 		customerId,
@@ -168,7 +190,9 @@ export const addAttendeeHandler: AppRouteHandler<AddAttendeeRoute> = async (
 			201,
 		);
 	} catch (error) {
+		// Log the actual error for debugging purposes
+		console.error("Error adding attendee:", error);
 		// Handle potential constraint violations (e.g., foreign key constraints)
-		return c.json({ error: "Event or Customer not found" }, 404);
+		return c.json({ error: "Internal server error" }, 500);
 	}
 };
