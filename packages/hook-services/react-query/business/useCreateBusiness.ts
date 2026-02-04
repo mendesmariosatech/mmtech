@@ -1,5 +1,5 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { client } from "../../hono_client";
+import { hono_client } from "../../hono_client";
 
 type CreateBusinessVariables = {
 	name: string;
@@ -24,7 +24,7 @@ export const useCreateBusiness = (
 ) => {
 	return useMutation<CreateBusinessResponse, Error, CreateBusinessVariables>({
 		mutationFn: async (variables) => {
-			const response = await client.api.business.$post({
+			const response = await hono_client.api.business.$post({
 				json: {
 					name: variables.name,
 					description: variables.description,
