@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@ui/components/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -10,11 +10,11 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@ui/components/ui/form";
-import { Input } from "@ui/components/ui/input";
-import { Textarea } from "@ui/components/ui/textarea";
-import { useCreateBusiness } from "@hooks/react-query/business/useCreateBusiness";
+} from "@repo/ui/components/ui/form";
+import { Input } from "@repo/ui/components/ui/input";
+import { Textarea } from "@repo/ui/components/ui/textarea";
 import { toast } from "sonner";
+import { useCreateBusiness } from "@repo/hook-services";
 
 const CreateBusinessFormSchema = z.object({
 	name: z.string().min(2, {
