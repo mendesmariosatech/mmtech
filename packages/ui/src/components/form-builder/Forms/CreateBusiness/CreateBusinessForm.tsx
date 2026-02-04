@@ -13,8 +13,8 @@ import {
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
 import { Textarea } from "@repo/ui/components/ui/textarea";
-import { useCreateBusiness } from "@repo/hook-services/react-query/business/useCreateBusiness";
 import { toast } from "sonner";
+import { useCreateBusiness } from "@repo/hook-services";
 
 const CreateBusinessFormSchema = z.object({
 	name: z.string().min(2, {
