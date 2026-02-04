@@ -1,8 +1,14 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { hono_client } from "../../hono_client";
 import { toast } from "sonner";
-import { CreateBusinessInput } from "@repo/server/src/drizzle/schema";
 import { z } from "zod";
+
+// Define the same schema as in the backend to ensure type consistency
+// Based on CreateBusinessInput from @repo/server/src/drizzle/schema
+const CreateBusinessInput = z.object({
+	name: z.string(),
+	description: z.string().optional(),
+});
 
 type CreateBusinessResponse = {
 	id: string;
