@@ -87,10 +87,6 @@
   font-size: 12px; /* Reduz o tamanho da fonte dos números do calendário */
 }
 
-.mobile-calendar .fc-daygrid-day-number {
-  font-size: 12px; /* Reduz o tamanho da fonte dos números do calendário */
-}
-
 .mobile-calendar .fc-col-header-cell-cushion {
   font-size: 12px; /* Reduz o tamanho da fonte dos dias da semana */
 }

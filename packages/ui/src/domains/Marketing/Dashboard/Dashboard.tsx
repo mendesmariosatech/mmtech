@@ -69,10 +69,23 @@ import { DashBoardData } from "@repo/data-testing/DashBoardData";
 import { Routes } from "@repo/data-testing/Routes";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@repo/hook-services";
+import { useState } from "react";
+import { BusinessFormModal } from "./BusinessFormModal";
+import { PlusCircle } from "lucide-react";
 
 export function Dashboard() {
 	const router = useRouter();
 	const logout = useLogout();
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const handleCreateBusiness = () => {
+		setIsModalOpen(true);
+	};
+
+	const handleBusinessCreated = () => {
+		// Refresh the page or update the UI as needed
+		setIsModalOpen(false);
+	};
 
 	return (
 		<div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -118,39 +131,50 @@ export function Dashboard() {
 							className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
 						/>
 					</div>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button
-								variant="outline"
-								size="icon"
-								className="overflow-hidden rounded-full"
-							>
-								<Image
-									src="/marketing/logo.svg"
-									width={36}
-									height={36}
-									alt="Avatar"
+					<div className="flex items-center gap-2">
+						<Button onClick={handleCreateBusiness} size="sm">
+							<PlusCircle className="h-4 w-4" />
+							<span className="ml-2 hidden sm:inline">Create Business</span>
+						</Button>
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button
+									variant="outline"
+									size="icon"
 									className="overflow-hidden rounded-full"
-								/>
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
-							<DropdownMenuLabel>My Account</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>Settings</DropdownMenuItem>
-							<DropdownMenuItem>Support</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem
-								onSelect={() => {
-									logout.mutate();
-									router.push(Routes.client["/"]);
-								}}
-							>
-								Logout
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+								>
+									<Image
+										src="/marketing/logo.svg"
+										width={36}
+										height={36}
+										alt="Avatar"
+										className="overflow-hidden rounded-full"
+									/>
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="end">
+								<DropdownMenuLabel>My Account</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem>Settings</DropdownMenuItem>
+								<DropdownMenuItem>Support</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem
+									onSelect={() => {
+										logout.mutate();
+										router.push(Routes.client["/"]);
+									}}
+								>
+									Logout
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
 				</header>
+				<BusinessFormModal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					onBusinessCreated={handleBusinessCreated}
+				/>
 				<main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
 					<div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
 						<div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
