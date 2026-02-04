@@ -1,5 +1,6 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { hono_client } from "../../hono_client";
+import { toast } from "sonner";
 
 type CreateBusinessVariables = {
 	name: string;
@@ -9,10 +10,7 @@ type CreateBusinessVariables = {
 type CreateBusinessResponse = {
 	id: string;
 	name: string;
-	description?: string;
-	clientId: string;
-	createdAt: string;
-	updatedAt: string;
+	token: string;
 };
 
 export const useCreateBusiness = (
@@ -32,13 +30,16 @@ export const useCreateBusiness = (
 			});
 
 			if (!response.ok) {
-				const error = await response
+				const errorData = await response
 					.json()
 					.catch(() => ({ error: "Unknown error" }));
-				throw new Error(error.message || "Failed to create business");
+				throw new Error(errorData.error || "Failed to create business");
 			}
 
 			return response.json();
+		},
+		onError: (error: Error) => {
+			toast.error(error.message);
 		},
 		...options,
 	});
