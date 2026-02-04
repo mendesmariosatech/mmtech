@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Button } from "@ui/components/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from "@ui/components/ui/dialog";
+} from "@repo/ui/components/ui/dialog";
 import { CreateBusinessForm } from "@ui/components/form-builder/Forms/CreateBusiness/CreateBusinessForm";
 
 interface BusinessFormModalProps {

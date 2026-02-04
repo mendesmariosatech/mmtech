@@ -1,5 +1,5 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { client } from "../../hono_client";
+import { hono_client as client } from "../../hono_client";
 
 type CreateBusinessVariables = {
 	name: string;
