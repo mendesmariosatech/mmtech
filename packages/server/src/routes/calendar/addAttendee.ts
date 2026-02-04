@@ -155,20 +155,20 @@ export const addAttendeeHandler: AppRouteHandler<AddAttendeeRoute> = async (
 		if (!newAttendee) {
 			return c.json({ error: "Attendee not added" }, 500);
 		}
+
+		return c.json(
+			{
+				message: "Attendee added successfully",
+				attendee: {
+					id: newAttendee.id,
+					customerId: newAttendee.customerId,
+					eventId: newAttendee.eventId,
+				},
+			},
+			201,
+		);
 	} catch (error) {
 		// Handle potential constraint violations (e.g., foreign key constraints)
 		return c.json({ error: "Event or Customer not found" }, 404);
 	}
-
-	return c.json(
-		{
-			message: "Attendee added successfully",
-			attendee: {
-				id: newAttendee.id,
-				customerId: newAttendee.customerId,
-				eventId: newAttendee.eventId,
-			},
-		},
-		201,
-	);
 };
