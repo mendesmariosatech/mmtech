@@ -10,10 +10,6 @@ type CreateBusinessVariables = {
 type CreateBusinessResponse = {
 	id: string;
 	name: string;
-	description?: string;
-	clientId: string;
-	createdAt: string;
-	updatedAt: string;
 	token: string;
 };
 
