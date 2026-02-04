@@ -21,30 +21,7 @@ jest.mock("../../jwt_token", () => {
 	};
 });
 
-describe("Calendar Routes Basic Test", () => {
-	test("Routes should be defined", () => {
-		// Simply test that the router is created without throwing errors
-		expect(calendarRouter).toBeDefined();
-	});
-});
-
-describe("Calendar API Integration Tests", () => {
-	test("Should handle PUT /calendar/events/:eventId request with proper schema", () => {
-		// Test that the route exists and accepts the correct request structure
-		const client = testClient(calendarRouter);
-
-		// We're testing that the route exists and accepts the correct schema
-		expect(client.calendar.events[":eventId"].$put).toBeDefined();
-	});
-
-	test("Should handle DELETE /calendar/events/:eventId request with proper schema", () => {
-		// Test that the route exists and accepts the correct request structure
-		const client = testClient(calendarRouter);
-
-		// We're testing that the route exists and accepts the correct schema
-		expect(client.calendar.events[":eventId"].$delete).toBeDefined();
-	});
-
+describe("Calendar Attendee Routes Test", () => {
 	test("Should handle POST /calendar/events/:eventId/attendees request with proper schema", () => {
 		// Test that the route exists and accepts the correct request structure
 		const client = testClient(calendarRouter);
@@ -69,22 +46,6 @@ describe("Calendar API Integration Tests", () => {
 
 		// We're testing that the route exists and accepts the correct schema
 		expect(client.calendar.events[":eventId"].attendees.$get).toBeDefined();
-	});
-
-	test("Should handle PUT /calendar/events/:eventId request with proper schema", () => {
-		// Test that the route exists and accepts the correct request structure
-		const client = testClient(calendarRouter);
-
-		// We're testing that the route exists and accepts the correct schema
-		expect(client.calendar.events[":eventId"].$put).toBeDefined();
-	});
-
-	test("Should handle DELETE /calendar/events/:eventId request with proper schema", () => {
-		// Test that the route exists and accepts the correct request structure
-		const client = testClient(calendarRouter);
-
-		// We're testing that the route exists and accepts the correct schema
-		expect(client.calendar.events[":eventId"].$delete).toBeDefined();
 	});
 });
 
