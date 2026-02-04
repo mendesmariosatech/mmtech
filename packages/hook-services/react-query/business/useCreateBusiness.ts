@@ -1,4 +1,4 @@
-import { UseMutationOptions, useMutation } from "@tanstack/react-query";
+import { type UseMutationOptions, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { z } from "zod";
 import { hono_client } from "../../hono_client";
