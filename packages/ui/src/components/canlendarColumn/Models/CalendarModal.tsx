@@ -149,7 +149,7 @@ export function CalendarModal({
 					onSubmit={handleSave}
 				>
 					<div className="flex flex-row justify-center items-center">
-						{event && event.title && onDeleteEvent && (
+						{event && event.title && onDeleteEvent && event.id && (
 							<Button
 								variant="destructive"
 								className="mr-2"

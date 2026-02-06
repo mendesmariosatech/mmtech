@@ -25,7 +25,10 @@ export class EventTable extends DBConnection {
 	 */
 	public async getEventsByBusinessId(businessId: string) {
 		const events = await this.db
-			.select()
+			.select({
+				id: eventTable.id,
+				title: eventTable.title,
+			})
 			.from(eventTable)
 			.where(eq(eventTable.businessId, businessId));
 
