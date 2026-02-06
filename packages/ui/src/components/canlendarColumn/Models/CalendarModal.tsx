@@ -88,19 +88,38 @@ interface CalendarModalProps {
 	onDeleteEvent?: (eventId: string) => void;
 }
 
-export const useCalendarForm = (events: DataEvents | null) =>
-	useForm<ModalFields>({
+export const useCalendarForm = (events: DataEvents | null) => {
+	const form = useForm<ModalFields>({
 		resolver: zodResolver(modalFields),
 		defaultValues: {
 			titleEvent: events?.title || "",
 			textAreaLabel: events?.description || "",
 			tagName: events?.tag[0]?.name || "",
 			allDays: events?.allDay || false,
-			StartDate: events?.start ? new Date(events.start) : undefined,
-			EndDate: events?.end ? new Date(events.end) : undefined,
+			StartDate: events?.start ? new Date(events.start) : new Date(),
+			EndDate: events?.end ? new Date(events.end) : new Date(),
 			Color: events?.tag[0]?.color || "#6d7b92",
 		},
 	});
+
+	// Reset form when events change
+	React.useEffect(() => {
+		if (events) {
+			form.reset({
+				id: events.id || "",
+				titleEvent: events?.title || "",
+				textAreaLabel: events?.description || "",
+				tagName: events?.tag[0]?.name || "",
+				allDays: events?.allDay || false,
+				StartDate: events?.start ? new Date(events.start) : new Date(),
+				EndDate: events?.end ? new Date(events.end) : new Date(),
+				Color: events?.tag[0]?.color || "#6d7b92",
+			});
+		}
+	}, [events, form]);
+
+	return form;
+};
 
 export function CalendarModal({
 	language,
