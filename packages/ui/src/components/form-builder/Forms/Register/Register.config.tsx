@@ -35,6 +35,7 @@ export const registerFormConfig: ConfigObject<RegisterFields> = {
 		name: "agreeTerms",
 		input: "checkbox",
 		checkboxLabel: " Accept terms and conditions",
+		value: false,
 		//   required: "You must agree to the terms and conditions",
 	},
 };

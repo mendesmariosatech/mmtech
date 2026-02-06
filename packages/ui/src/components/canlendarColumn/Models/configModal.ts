@@ -4,17 +4,18 @@ import { ModalFields } from "./CalendarModal";
 // Define the type for modal fields including the checkbox
 interface ConfigModalFields {
 	titleEvent: string;
-	EventDate: string;
-	StartEvent: string;
-	EndEvent: string;
+	StartDate: string;
+	EndDate: string;
 	textAreaLabel: string;
 	tagName: string;
 	Color: string;
+	allDays: string; // Ensure this property is included
 }
 
 // Adjust the function to follow the pattern of `ConfigObject`
 export const configModal = (
 	labels: ConfigModalFields,
+	isAllDay: boolean,
 ): ConfigObject<Omit<ModalFields, "id">> => ({
 	titleEvent: {
 		name: "titleEvent",
@@ -22,29 +23,28 @@ export const configModal = (
 		label: labels.titleEvent,
 		placeholder: "Enter the event title",
 	},
-	EventDate: {
-		name: "EventDate",
-		input: "date", // Conditional input type based on all-day event
-		label: labels.EventDate, // Label from config or default
-		placeholder: labels.EventDate
-			? `Select ${labels.EventDate.toLowerCase()}`
-			: "Select date",
+	StartDate: {
+		name: "StartDate",
+		input: isAllDay ? "date" : "datetime-local", // Conditional input type based on all-day event
+		label: labels.StartDate, // Label from config or default
+		placeholder: labels.StartDate
+			? `Select ${labels.StartDate.toLowerCase()}`
+			: "Select start date",
 	},
-	StartEvent: {
-		name: "StartEvent",
-		input: "time", // Conditional input type based on all-day event
-		label: labels.StartEvent, // Label from config or default
-		placeholder: labels.StartEvent
-			? `Select ${labels.StartEvent.toLowerCase()}`
-			: "Select start event",
+	allDays: {
+		name: "allDays",
+		input: "checkbox",
+		checkboxLabel: labels.allDays ? "All Day Event" : "Evento Dia Todo",
+		value: isAllDay,
 	},
-	EndEvent: {
-		name: "EndEvent",
-		input: "time", // Conditional input type based on all-day event
-		label: labels.EndEvent,
-		placeholder: labels.EndEvent
-			? `Select ${labels.EndEvent.toLowerCase()}`
-			: "Select end event",
+	EndDate: {
+		name: "EndDate",
+		input: "datetime-local",
+		label: labels.EndDate,
+		placeholder: labels.EndDate
+			? `Select ${labels.EndDate.toLowerCase()}`
+			: "Select end date",
+		disabled: isAllDay, // Disable end date if it's an all-day event
 	},
 	textAreaLabel: {
 		name: "textAreaLabel",

@@ -7,7 +7,7 @@ type ClientToken = {
 };
 
 export async function generateToken(payload: ClientToken, secret: string) {
-	const token = await sign(payload, secret);
+	const token = await sign(payload, secret, "HS256");
 	return token;
 }
 
@@ -22,6 +22,6 @@ export async function decodeToken(
 		...decoded,
 		authId: decoded.authId as string,
 		clientId: decoded.clientId as string,
-		businessId: decoded.businessId as string,
+		businessId: decoded.businessId as string | undefined,
 	};
 }

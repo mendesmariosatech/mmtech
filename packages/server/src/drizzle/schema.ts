@@ -32,6 +32,9 @@ export const authTable = sqliteTable("auth", {
 	password: text("password").notNull(),
 	email: text("email").unique().notNull(),
 	phone: text("phone"),
+	agreeTerms: integer("agree_terms", { mode: "boolean" })
+		.notNull()
+		.default(false),
 	emailConfirmedAt: integer("email_confirmed_at", { mode: "timestamp" }),
 	deletedAt: integer("deleted_at", { mode: "timestamp" }),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
@@ -45,6 +48,7 @@ export const RegisterFields = createInsertSchema(authTable).pick({
 	email: true,
 	password: true,
 	phone: true,
+	agreeTerms: true,
 });
 
 export type InsertAuth = typeof authTable.$inferInsert;
@@ -264,16 +268,26 @@ export const SelectEventSchema = createSelectSchema(eventTable).pick({
 });
 
 const StringToDate = z.string().transform((date) => new Date(date));
-const OptionalStringToDate = StringToDate.nullable().optional();
+
+const StringToDateNullable = z
+	.preprocess(
+		(value) =>
+			value === null || value === undefined ? null : new Date(String(value)),
+		z.date().nullable(),
+	)
+	.optional();
 
 export const InsertEventSchema = createInsertSchema(eventTable, {
 	date: StringToDate,
-	startTime: OptionalStringToDate,
-	endTime: OptionalStringToDate,
+	startTime: StringToDateNullable,
+	endTime: StringToDateNullable,
 }).omit({
 	id: true,
 	createdAt: true,
 	updatedAt: true,
+	businessId: true,
+	clientId: true,
+	addressId: true,
 });
 
 export type InsertEvent = typeof eventTable.$inferInsert;

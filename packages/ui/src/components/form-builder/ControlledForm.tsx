@@ -40,6 +40,7 @@ export const ControlledForm = <T extends FieldValues>({
 									//  @ts-expect-error
 									name={key}
 									input={value.input}
+									disabled={value.disabled}
 								/>
 							) : (
 								<ControlledInput
@@ -50,6 +51,7 @@ export const ControlledForm = <T extends FieldValues>({
 									//  @ts-expect-error
 									name={key}
 									input={value.input}
+									disabled={value.disabled}
 								/>
 							)}
 						</div>

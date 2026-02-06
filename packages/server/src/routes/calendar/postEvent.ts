@@ -1,9 +1,9 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { createRoute, RouteHandler, z } from "@hono/zod-openapi";
 import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
 import { EventTable } from "./dto/event.dto";
 import { env } from "hono/adapter";
-import type { AppRouteHandler } from "../../base/type";
+import { AppRouteHandler } from "../../base/type";
 import { BusinessTable } from "../business/dto/business.dto";
 
 /**
@@ -31,10 +31,12 @@ export const createEventSpec = createRoute({
 					 * Request body schema for creating a calendar event
 					 * Includes title, date, optional startTime/endTime, description
 					 */
-					schema: InsertEventSchema.omit({
-						clientId: true,
-						businessId: true,
-						addressId: true,
+					schema: InsertEventSchema.pick({
+						title: true,
+						date: true,
+						description: true,
+						startTime: true,
+						endTime: true,
 					}),
 				},
 			},

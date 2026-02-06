@@ -25,9 +25,8 @@ const texts = {
 		modalTitleDelete: "Delete Event",
 		textAreaLabel: "Description",
 		titleEvent: "Event Title",
-		StartEvent: "Start time",
-		EndEvent: "End time",
-		EventDate: "Date",
+		StartDate: "Start Date",
+		EndDate: "End Date",
 		Alerts: "Fields title and start date are required",
 		Color: "",
 		tagName: "Add Tag",
@@ -44,9 +43,8 @@ const texts = {
 		modalTitleDelete: "Deletar Evento",
 		textAreaLabel: "Descrição",
 		titleEvent: "Título do Evento",
-		StartEvent: "Hora de Início",
-		EndEvent: "Hora de Término",
-		EventDate: "Data",
+		StartDate: "Data de Início",
+		EndDate: "Data de Término",
 		Alerts: "Os campos título e data de início são obrigatórios",
 		Color: "",
 		tagName: "Adicionar Tag",
@@ -62,9 +60,9 @@ export const modalFields = z.object({
 	titleEvent: z.string().min(1, { message: texts.EN.error.title }),
 	textAreaLabel: z.string().optional(),
 	tagName: z.string().optional(),
-	EventDate: z.string().optional(),
-	StartEvent: z.string().optional(),
-	EndEvent: z.string().optional(),
+	allDays: z.boolean().optional(),
+	StartDate: z.union([z.date(), z.string().datetime()]), // Permite string ou Date
+	EndDate: z.union([z.date(), z.string().datetime()]).optional(),
 	Color: z.string(),
 });
 
@@ -72,9 +70,8 @@ export type ModalFields = z.infer<typeof modalFields>;
 
 const getLabels = (language: keyof typeof texts) => ({
 	titleEvent: texts[language].titleEvent,
-	EventDate: texts[language].EventDate,
-	StartEvent: texts[language].StartEvent,
-	EndEvent: texts[language].EndEvent,
+	StartDate: texts[language].StartDate,
+	EndDate: texts[language].EndDate,
 	textAreaLabel: texts[language].textAreaLabel,
 	tagName: texts[language].tagName,
 	Color: texts[language].Color,
@@ -91,19 +88,38 @@ interface CalendarModalProps {
 	onDeleteEvent?: (eventId: string) => void;
 }
 
-export const useCalendarForm = (event?: DataEvents | null) =>
-	useForm<ModalFields>({
+export const useCalendarForm = (events: DataEvents | null) => {
+	const form = useForm<ModalFields>({
 		resolver: zodResolver(modalFields),
 		defaultValues: {
-			titleEvent: event?.title || "",
-			textAreaLabel: event?.description || "",
-			tagName: event?.tag[0]?.name || "",
-			EventDate: event?.eventDate || "",
-			StartEvent: event?.start || "",
-			EndEvent: event?.end || "",
-			Color: event?.tag[0]?.color || "#6d7b92",
+			titleEvent: events?.title || "",
+			textAreaLabel: events?.description || "",
+			tagName: events?.tag[0]?.name || "",
+			allDays: events?.allDay || false,
+			StartDate: events?.start ? new Date(events.start) : new Date(),
+			EndDate: events?.end ? new Date(events.end) : new Date(),
+			Color: events?.tag[0]?.color || "#6d7b92",
 		},
 	});
+
+	// Reset form when events change
+	React.useEffect(() => {
+		if (events) {
+			form.reset({
+				id: events.id || "",
+				titleEvent: events?.title || "",
+				textAreaLabel: events?.description || "",
+				tagName: events?.tag[0]?.name || "",
+				allDays: events?.allDay || false,
+				StartDate: events?.start ? new Date(events.start) : new Date(),
+				EndDate: events?.end ? new Date(events.end) : new Date(),
+				Color: events?.tag[0]?.color || "#6d7b92",
+			});
+		}
+	}, [events, form]);
+
+	return form;
+};
 
 export function CalendarModal({
 	language,
@@ -114,21 +130,9 @@ export function CalendarModal({
 	onEditEvent,
 	onDeleteEvent,
 }: CalendarModalProps) {
+	const modalConfig = configModal(getLabels(language), true);
 	const form = useCalendarForm(event);
-	React.useEffect(() => {
-		if (event) {
-			form.reset({
-				titleEvent: event.title,
-				textAreaLabel: event.description,
-				tagName: event.tag[0]?.name || "",
-				EventDate: event.eventDate,
-				StartEvent: event.start,
-				EndEvent: event.end,
-				Color: event.tag[0]?.color || "#6d7b92",
-			});
-		}
-	}, [event, form]);
-	const modalConfig = configModal(getLabels(language));
+
 	const handleSave = (input: ModalFields) => {
 		if (input && input.id) {
 			// onEditEvent(input); // editar o evento existente
@@ -150,23 +154,25 @@ export function CalendarModal({
 			<DialogContent className="max-w-[400px] sm:max-w-[525px] rounded-lg">
 				<DialogHeader>
 					<DialogTitle>
-						{event?.title !== ""
+						{event && event.title
 							? texts[language].modalTitleEdit
 							: texts[language].modalTitleCreate}
 					</DialogTitle>
 				</DialogHeader>
-				<DevTool control={form.control} />
+				{process.env.NODE_ENV === "development" && (
+					<DevTool control={form.control} />
+				)}
 				<ControlledForm
 					useForm={form}
 					config={modalConfig}
 					onSubmit={handleSave}
 				>
 					<div className="flex flex-row justify-center items-center">
-						{event?.title !== "" && onDeleteEvent && (
+						{event && event.title && onDeleteEvent && event.id && (
 							<Button
 								variant="destructive"
 								className="mr-2"
-								onClick={() => event?.id && onDeleteEvent(event?.id)}
+								onClick={() => onDeleteEvent(event.id)}
 							>
 								{texts[language].modalTitleDelete}
 							</Button>

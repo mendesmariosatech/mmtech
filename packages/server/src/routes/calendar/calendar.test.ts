@@ -1,5 +1,12 @@
+import {
+	afterAll,
+	describe,
+	expect,
+	test,
+	jest,
+	beforeAll,
+} from "@jest/globals";
 import { testClient } from "hono/testing";
-import { describe, expect, test, jest, afterAll } from "@jest/globals";
 import { calendarRouter } from ".";
 import { DBTestSetup } from "../tests/setup";
 
@@ -21,10 +28,56 @@ jest.mock("../../jwt_token", () => {
 	};
 });
 
-describe("Calendar Routes Basic Test", () => {
-	test("Routes should be defined", () => {
-		// Simply test that the router is created without throwing errors
-		expect(calendarRouter).toBeDefined();
+describe("Calendar Tests", () => {
+	beforeAll(async () => {});
+
+	describe("Create Event - POST /calendar/events", () => {
+		test.todo("User can create an event");
+
+		test.todo("User cannot create an event if they are not authenticated");
+
+		test.todo(
+			"User cannot create an event if they are not a business customer",
+		);
+
+		test("User cannot create an event if the business does not exist", async () => {
+			const eventResponse = await testClient(
+				calendarRouter,
+			).calendar.events.$post(
+				{
+					json: {
+						title: "Event Title",
+						date: new Date().toISOString(),
+					},
+				},
+				{
+					headers: {
+						authorization: `Bearer ${"bearetoken123"}`,
+					},
+				},
+			);
+
+			// Should return 403 since business doesn't exist in test environment
+			expect(eventResponse.status).toBe(403);
+		});
+	});
+
+	describe("Calendar - GET /calendar/:businessId", () => {
+		test.todo(
+			"User can get a calendar of all the events for the business their in",
+		);
+
+		test.todo(
+			"User cannot get a calendar of all the events for the business their in if they are not authenticated",
+		);
+
+		test.todo(
+			"User cannot get a calendar of all the events for the business their in if they are not a business customer",
+		);
+
+		test.todo(
+			"User cannot get a calendar of all the events for the business their in if the business does not exist",
+		);
 	});
 });
 

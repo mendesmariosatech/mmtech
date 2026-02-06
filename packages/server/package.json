@@ -32,7 +32,6 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.7.5",
     "dotenv": "^16.4.5",
-    "drizzle-kit": "^0.24.2",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
