@@ -32,7 +32,9 @@ export const authTable = sqliteTable("auth", {
 	password: text("password").notNull(),
 	email: text("email").unique().notNull(),
 	phone: text("phone"),
-	agreeTerms: integer("agree_terms", { mode: "boolean" }).notNull(),
+	agreeTerms: integer("agree_terms", { mode: "boolean" })
+		.notNull()
+		.default(false),
 	emailConfirmedAt: integer("email_confirmed_at", { mode: "timestamp" }),
 	deletedAt: integer("deleted_at", { mode: "timestamp" }),
 	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
