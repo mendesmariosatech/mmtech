@@ -1,0 +1,53 @@
+@import "@repo/ui/globals.css";
+
+/* Cyber theme styles for time spending app */
+.cyber-text {
+	background: linear-gradient(45deg, #00ffff, #ff0080);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.neon-text {
+	color: #00ffff;
+	text-shadow: 0 0 10px #00ffff;
+}
+
+.spent-text {
+	color: #ff0080;
+	text-shadow: 0 0 10px #ff0080;
+}
+
+.cyber-border {
+	border: 1px solid rgba(0, 255, 255, 0.3);
+	box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.cyber-glow {
+	box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+/* Button variant styles */
+.variant-cyber {
+	background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 128, 0.1));
+	border: 1px solid #00ffff;
+	color: #00ffff;
+	transition: all 0.3s ease;
+}
+
+.variant-cyber:hover {
+	background: linear-gradient(45deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 128, 0.2));
+	box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+	transform: translateY(-2px);
+}
+
+.variant-cyber:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* Dark background with subtle pattern */
+body {
+	background: radial-gradient(ellipse at center, rgba(0, 20, 40, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%);
+	min-height: 100vh;
+}

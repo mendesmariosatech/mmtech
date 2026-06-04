@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	experimental: {
-		optimizePackageImports: ["lucide-react"],
-	},
+	transpilePackages: ["@repo/ui"],
 };
 
 export default nextConfig;
