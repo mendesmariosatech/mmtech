@@ -1,10 +1,9 @@
-import "@repo/ui/globals.css";
 import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
 	title: "Time Spending Tracker",
-	description:
-		"A cyberpunk-themed time management app where every minute costs $60 from your daily $86,400 budget",
+	description: "Track how you spend your time with a daily budget metaphor",
 };
 
 export default function RootLayout({
@@ -14,9 +13,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" className="dark">
-			<body className="min-h-screen bg-background font-mono antialiased matrix-bg">
-				{children}
-			</body>
+			<body>{children}</body>
 		</html>
 	);
 }
