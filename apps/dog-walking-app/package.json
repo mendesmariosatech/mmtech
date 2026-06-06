@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run db:migrate && npm run db:push && npm run db:seed && next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "db:migrate": "tsx scripts/migrate-db.ts",
+    "db:push": "tsx scripts/push-schema.ts",
+    "db:seed": "tsx scripts/seed-db.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -35,6 +38,7 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.7.1",
     "typescript": "^5.4.5"
   }
 }
