@@ -1,38 +1,36 @@
-import { createClient } from "@/lib/supabase/server";
+import { db, schema } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { EmployeeNav } from "@/components/employee/employee-nav";
+import { eq } from "drizzle-orm";
 
 export default async function EmployeeLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	const supabase = await createClient();
-
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
-	if (!user) {
-		redirect("/auth/login");
-	}
+	// Mock employee user for now
+	const mockUser = { id: "demo-employee-user-id" };
 
 	// Check if user is an employee
-	const { data: employee } = await supabase
-		.from("employees")
-		.select("*, company:companies(name)")
-		.eq("user_id", user.id)
-		.single();
+	const employees = await db
+		.select()
+		.from(schema.dogWalkingEmployees)
+		.leftJoin(
+			schema.dogWalkingCompanies,
+			eq(schema.dogWalkingEmployees.company_id, schema.dogWalkingCompanies.id),
+		)
+		.where(eq(schema.dogWalkingEmployees.user_id, mockUser.id))
+		.limit(1);
 
-	if (!employee) {
+	if (employees.length === 0) {
 		// Not an employee, check if owner
-		const { data: company } = await supabase
-			.from("companies")
-			.select("id")
-			.eq("owner_id", user.id)
-			.single();
+		const companies = await db
+			.select()
+			.from(schema.dogWalkingCompanies)
+			.where(eq(schema.dogWalkingCompanies.owner_id, mockUser.id))
+			.limit(1);
 
-		if (company) {
+		if (companies.length > 0) {
 			redirect("/dashboard");
 		}
 

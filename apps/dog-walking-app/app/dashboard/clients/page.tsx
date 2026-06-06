@@ -1,28 +1,27 @@
-import { createClient } from "@/lib/supabase/server";
+import { db, schema } from "@/lib/db";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { ClientList } from "@/components/dashboard/client-list";
 import { AddClientDialog } from "@/components/dashboard/add-client-dialog";
+import { eq, desc } from "drizzle-orm";
 
 export default async function ClientsPage() {
-	const supabase = await createClient();
+	// Mock user for now
+	const mockUser = { id: "demo-user-id" };
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
+	const companies = await db
+		.select()
+		.from(schema.dogWalkingCompanies)
+		.where(eq(schema.dogWalkingCompanies.owner_id, mockUser.id))
+		.limit(1);
 
-	const { data: company } = await supabase
-		.from("companies")
-		.select("id")
-		.eq("owner_id", user!.id)
-		.single();
-
+	const company = companies[0];
 	if (!company) return null;
 
-	const { data: clients } = await supabase
-		.from("clients")
-		.select("*")
-		.eq("company_id", company.id)
-		.order("created_at", { ascending: false });
+	const clients = await db
+		.select()
+		.from(schema.dogWalkingClients)
+		.where(eq(schema.dogWalkingClients.company_id, company.id))
+		.orderBy(desc(schema.dogWalkingClients.createdAt));
 
 	return (
 		<div className="flex flex-col">
@@ -32,7 +31,7 @@ export default async function ClientsPage() {
 				action={<AddClientDialog companyId={company.id} />}
 			/>
 			<main className="flex-1 p-6">
-				<ClientList clients={clients || []} />
+				<ClientList clients={clients} />
 			</main>
 		</div>
 	);

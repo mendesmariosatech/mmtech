@@ -1,89 +1,99 @@
-import { createClient } from "@/lib/supabase/server";
+import { db, schema } from "@/lib/db";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, UserCircle, Footprints, DollarSign } from "lucide-react";
+import { eq, count, desc } from "drizzle-orm";
 
 export default async function DashboardPage() {
-	const supabase = await createClient();
-
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
+	// Mock user for now
+	const mockUser = { id: "demo-user-id" };
 
 	// Get company
-	const { data: company } = await supabase
-		.from("companies")
-		.select("id")
-		.eq("owner_id", user!.id)
-		.single();
+	const companies = await db
+		.select()
+		.from(schema.dogWalkingCompanies)
+		.where(eq(schema.dogWalkingCompanies.owner_id, mockUser.id))
+		.limit(1);
 
+	const company = companies[0];
 	if (!company) return null;
 
 	// Get stats
-	const [
-		{ count: employeeCount },
-		{ count: clientCount },
-		{ count: walkCount },
-		{ data: walks },
-	] = await Promise.all([
-		supabase
-			.from("employees")
-			.select("*", { count: "exact", head: true })
-			.eq("company_id", company.id)
-			.eq("is_active", true),
-		supabase
-			.from("clients")
-			.select("*", { count: "exact", head: true })
-			.eq("company_id", company.id)
-			.eq("is_active", true),
-		supabase
-			.from("walks")
-			.select("*", { count: "exact", head: true })
-			.eq("company_id", company.id)
-			.eq("status", "completed"),
-		supabase
-			.from("walks")
-			.select("*, client:clients(walk_rate)")
-			.eq("company_id", company.id)
-			.eq("status", "completed"),
-	]);
+	const [employeeCount, clientCount, walkCount, completedWalks] =
+		await Promise.all([
+			db
+				.select({ count: count() })
+				.from(schema.dogWalkingEmployees)
+				.where(eq(schema.dogWalkingEmployees.company_id, company.id))
+				.then((result) => result[0]?.count || 0),
+			db
+				.select({ count: count() })
+				.from(schema.dogWalkingClients)
+				.where(eq(schema.dogWalkingClients.company_id, company.id))
+				.then((result) => result[0]?.count || 0),
+			db
+				.select({ count: count() })
+				.from(schema.dogWalkingWalks)
+				.where(eq(schema.dogWalkingWalks.company_id, company.id))
+				.then((result) => result[0]?.count || 0),
+			db
+				.select()
+				.from(schema.dogWalkingWalks)
+				.leftJoin(
+					schema.dogWalkingClients,
+					eq(schema.dogWalkingWalks.client_id, schema.dogWalkingClients.id),
+				)
+				.where(eq(schema.dogWalkingWalks.company_id, company.id)),
+		]);
 
 	const totalRevenue =
-		walks?.reduce((sum, walk) => sum + (walk.client?.walk_rate || 0), 0) || 0;
+		completedWalks.reduce(
+			(sum, { dog_walking_clients }) =>
+				sum + (dog_walking_clients?.walk_rate || 0),
+			0,
+		) || 0;
 
 	const stats = [
 		{
 			title: "Active Employees",
-			value: employeeCount || 0,
+			value: employeeCount,
 			icon: Users,
 			color: "text-chart-1",
 		},
 		{
 			title: "Active Clients",
-			value: clientCount || 0,
+			value: clientCount,
 			icon: UserCircle,
 			color: "text-chart-2",
 		},
 		{
-			title: "Completed Walks",
-			value: walkCount || 0,
+			title: "Total Walks",
+			value: walkCount,
 			icon: Footprints,
 			color: "text-chart-3",
 		},
 		{
 			title: "Total Revenue",
-			value: `$${totalRevenue.toFixed(2)}`,
+			value: `$${(totalRevenue / 100).toFixed(2)}`,
 			icon: DollarSign,
 			color: "text-chart-4",
 		},
 	];
 
 	// Get recent walks
-	const { data: recentWalks } = await supabase
-		.from("walks")
-		.select("*, client:clients(name, dog_name), employee:employees(name)")
-		.eq("company_id", company.id)
-		.order("created_at", { ascending: false })
+	const recentWalks = await db
+		.select()
+		.from(schema.dogWalkingWalks)
+		.leftJoin(
+			schema.dogWalkingClients,
+			eq(schema.dogWalkingWalks.client_id, schema.dogWalkingClients.id),
+		)
+		.leftJoin(
+			schema.dogWalkingEmployees,
+			eq(schema.dogWalkingWalks.employee_id, schema.dogWalkingEmployees.id),
+		)
+		.where(eq(schema.dogWalkingWalks.company_id, company.id))
+		.orderBy(desc(schema.dogWalkingWalks.createdAt))
 		.limit(5);
 
 	return (
@@ -116,27 +126,38 @@ export default async function DashboardPage() {
 					<CardContent>
 						{recentWalks && recentWalks.length > 0 ? (
 							<div className="space-y-4">
-								{recentWalks.map((walk) => (
-									<div
-										key={walk.id}
-										className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
-									>
-										<div>
-											<p className="font-medium">{walk.client?.dog_name}</p>
-											<p className="text-sm text-muted-foreground">
-												{walk.client?.name} - walked by {walk.employee?.name}
-											</p>
+								{recentWalks.map(
+									({
+										dog_walking_walks,
+										dog_walking_clients,
+										dog_walking_employees,
+									}) => (
+										<div
+											key={dog_walking_walks.id}
+											className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
+										>
+											<div>
+												<p className="font-medium">
+													{dog_walking_clients?.dog_name}
+												</p>
+												<p className="text-sm text-muted-foreground">
+													{dog_walking_clients?.name} - walked by{" "}
+													{dog_walking_employees?.name}
+												</p>
+											</div>
+											<div className="text-right">
+												<p className="text-sm font-medium capitalize">
+													{dog_walking_walks.status.replace("_", " ")}
+												</p>
+												<p className="text-xs text-muted-foreground">
+													{new Date(
+														dog_walking_walks.started_at,
+													).toLocaleDateString()}
+												</p>
+											</div>
 										</div>
-										<div className="text-right">
-											<p className="text-sm font-medium capitalize">
-												{walk.status.replace("_", " ")}
-											</p>
-											<p className="text-xs text-muted-foreground">
-												{new Date(walk.started_at).toLocaleDateString()}
-											</p>
-										</div>
-									</div>
-								))}
+									),
+								)}
 							</div>
 						) : (
 							<p className="text-center text-muted-foreground py-8">

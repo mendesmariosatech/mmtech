@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@libsql/client": "^0.5.6",
     "@repo/hook-services": "*",
     "@repo/server": "*",
     "@repo/ui": "*",
     "@repo/zod-types": "*",
+    "drizzle-orm": "^0.30.10",
     "lucide-react": "^0.263.1",
     "next": "14.2.4",
     "react": "^18",
