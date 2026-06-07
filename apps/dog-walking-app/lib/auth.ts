@@ -24,23 +24,37 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export async function getUserCompany(userId: string) {
-	const companies = await db
-		.select()
-		.from(schema.dogWalkingCompanies)
-		.where(eq(schema.dogWalkingCompanies.owner_id, userId))
-		.limit(1);
+	try {
+		console.log(`Getting company for user: ${userId}`);
+		const companies = await db
+			.select()
+			.from(schema.dogWalkingCompanies)
+			.where(eq(schema.dogWalkingCompanies.owner_id, userId))
+			.limit(1);
 
-	return companies[0] || null;
+		console.log(`Found ${companies.length} companies for user ${userId}`);
+		return companies[0] || null;
+	} catch (error) {
+		console.error("Error getting user company:", error);
+		return null;
+	}
 }
 
 export async function createUserCompany(userId: string, companyName: string) {
-	const company = await db
-		.insert(schema.dogWalkingCompanies)
-		.values({
-			name: companyName,
-			owner_id: userId,
-		})
-		.returning();
+	try {
+		console.log(`Creating company "${companyName}" for user: ${userId}`);
+		const company = await db
+			.insert(schema.dogWalkingCompanies)
+			.values({
+				name: companyName,
+				owner_id: userId,
+			})
+			.returning();
 
-	return company[0];
+		console.log(`Created company: ${company[0]?.name}`);
+		return company[0];
+	} catch (error) {
+		console.error("Error creating user company:", error);
+		throw error;
+	}
 }

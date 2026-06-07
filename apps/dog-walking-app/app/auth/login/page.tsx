@@ -27,12 +27,23 @@ export default function LoginPage() {
 		setIsLoading(true);
 		setError(null);
 
-		// Simulate login delay
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		try {
+			console.log("Login attempt started...");
 
-		// For demo purposes, just redirect to dashboard
-		// In a real app, this would authenticate the user
-		router.push("/dashboard");
+			// Simulate login delay
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+
+			console.log("Login successful, redirecting to dashboard...");
+
+			// For demo purposes, just redirect to dashboard
+			// In a real app, this would authenticate the user
+			router.push("/dashboard");
+		} catch (error) {
+			console.error("Login error:", error);
+			setError("Login failed. Please try again.");
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (

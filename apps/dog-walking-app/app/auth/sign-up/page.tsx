@@ -42,12 +42,23 @@ export default function SignUpPage() {
 			return;
 		}
 
-		// Simulate signup delay
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		try {
+			console.log("Signup attempt started...");
 
-		// For demo purposes, just redirect to dashboard
-		// In a real app, this would create the user and company
-		router.push("/dashboard");
+			// Simulate signup delay
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+
+			console.log("Signup successful, redirecting to dashboard...");
+
+			// For demo purposes, just redirect to dashboard
+			// In a real app, this would create the user and company
+			router.push("/dashboard");
+		} catch (error) {
+			console.error("Signup error:", error);
+			setError("Signup failed. Please try again.");
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
