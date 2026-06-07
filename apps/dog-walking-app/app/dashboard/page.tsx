@@ -3,20 +3,22 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, UserCircle, Footprints, DollarSign } from "lucide-react";
 import { eq, count, desc } from "drizzle-orm";
+import { getCurrentUser, getUserCompany } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-	// Mock user for now
-	const mockUser = { id: "demo-user-id" };
+	// Get current authenticated user
+	const user = await getCurrentUser();
+	if (!user) {
+		redirect("/auth/login");
+	}
 
-	// Get company
-	const companies = await db
-		.select()
-		.from(schema.dogWalkingCompanies)
-		.where(eq(schema.dogWalkingCompanies.owner_id, mockUser.id))
-		.limit(1);
-
-	const company = companies[0];
-	if (!company) return null;
+	// Get user's company
+	const company = await getUserCompany(user.id);
+	if (!company) {
+		// Redirect to company setup if no company exists
+		redirect("/onboarding");
+	}
 
 	// Get stats
 	const [employeeCount, clientCount, walkCount, completedWalks] =

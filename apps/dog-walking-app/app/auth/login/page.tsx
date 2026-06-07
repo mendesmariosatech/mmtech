@@ -1,6 +1,5 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -25,22 +24,15 @@ export default function LoginPage() {
 
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
-		const supabase = createClient();
 		setIsLoading(true);
 		setError(null);
 
-		try {
-			const { error } = await supabase.auth.signInWithPassword({
-				email,
-				password,
-			});
-			if (error) throw error;
-			router.push("/dashboard");
-		} catch (error: unknown) {
-			setError(error instanceof Error ? error.message : "An error occurred");
-		} finally {
-			setIsLoading(false);
-		}
+		// Simulate login delay
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+
+		// For demo purposes, just redirect to dashboard
+		// In a real app, this would authenticate the user
+		router.push("/dashboard");
 	};
 
 	return (

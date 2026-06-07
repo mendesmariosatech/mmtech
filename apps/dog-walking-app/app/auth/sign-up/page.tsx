@@ -1,6 +1,5 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -20,6 +19,7 @@ export default function SignUpPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [name, setName] = useState("");
 	const [companyName, setCompanyName] = useState("");
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -42,43 +42,12 @@ export default function SignUpPage() {
 			return;
 		}
 
-		const supabase = createClient();
+		// Simulate signup delay
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 
-		try {
-			const { data, error } = await supabase.auth.signUp({
-				email,
-				password,
-				options: {
-					emailRedirectTo:
-						process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
-						`${window.location.origin}/auth/callback`,
-					data: {
-						company_name: companyName,
-						role: "owner",
-					},
-				},
-			});
-			if (error) throw error;
-
-			// Create company for the owner
-			if (data.user) {
-				const { error: companyError } = await supabase
-					.from("companies")
-					.insert({
-						owner_id: data.user.id,
-						name: companyName,
-					});
-				if (companyError) {
-					console.error("Error creating company:", companyError);
-				}
-			}
-
-			router.push("/auth/sign-up-success");
-		} catch (error: unknown) {
-			setError(error instanceof Error ? error.message : "An error occurred");
-		} finally {
-			setIsLoading(false);
-		}
+		// For demo purposes, just redirect to dashboard
+		// In a real app, this would create the user and company
+		router.push("/dashboard");
 	};
 
 	return (
@@ -99,6 +68,17 @@ export default function SignUpPage() {
 						<CardContent>
 							<form onSubmit={handleSignUp}>
 								<div className="flex flex-col gap-4">
+									<div className="grid gap-2">
+										<Label htmlFor="name">Full Name</Label>
+										<Input
+											id="name"
+											type="text"
+											placeholder="John Doe"
+											required
+											value={name}
+											onChange={(e) => setName(e.target.value)}
+										/>
+									</div>
 									<div className="grid gap-2">
 										<Label htmlFor="company">Company Name</Label>
 										<Input
