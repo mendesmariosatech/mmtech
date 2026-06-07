@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Dog } from "lucide-react";
+import { authenticateUser, setCurrentUser } from "@/lib/local-auth";
 
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
@@ -28,15 +29,22 @@ export default function LoginPage() {
 		setError(null);
 
 		try {
-			console.log("Login attempt started...");
+			console.log("Login attempt started for:", email);
 
-			// Simulate login delay
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			// Authenticate user with local auth system
+			const user = authenticateUser(email, password);
 
-			console.log("Login successful, redirecting to dashboard...");
+			if (!user) {
+				setError("Invalid email or password");
+				return;
+			}
 
-			// For demo purposes, just redirect to dashboard
-			// In a real app, this would authenticate the user
+			console.log("Login successful for:", user.name);
+
+			// Set current user in localStorage
+			setCurrentUser(user);
+
+			// Redirect to dashboard
 			router.push("/dashboard");
 		} catch (error) {
 			console.error("Login error:", error);
@@ -60,6 +68,9 @@ export default function LoginPage() {
 							<CardDescription>
 								Sign in to manage your dog walking business
 							</CardDescription>
+							<div className="text-xs text-muted-foreground bg-muted p-2 rounded">
+								Demo: email "demo@example.com", password "password"
+							</div>
 						</CardHeader>
 						<CardContent>
 							<form onSubmit={handleLogin}>

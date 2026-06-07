@@ -1,32 +1,67 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getCurrentUser, createCompany, hasCompany } from "@/lib/local-auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dog } from "lucide-react";
-import { getCurrentUser, createUserCompany } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 
-export default async function OnboardingPage() {
-	const user = await getCurrentUser();
-	if (!user) {
-		redirect("/auth/login");
-	}
+export default function OnboardingPage() {
+	const [user, setUser] = useState<any>(null);
+	const [companyName, setCompanyName] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const router = useRouter();
 
-	async function handleCompanyCreation(formData: FormData) {
-		"use server";
+	useEffect(() => {
+		const currentUser = getCurrentUser();
+		if (!currentUser) {
+			router.push("/auth/login");
+			return;
+		}
 
-		const companyName = formData.get("companyName") as string;
-		if (!companyName) return;
+		if (hasCompany(currentUser)) {
+			router.push("/dashboard");
+			return;
+		}
+
+		setUser(currentUser);
+	}, [router]);
+
+	const handleCompanyCreation = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!companyName.trim()) return;
+
+		setIsLoading(true);
+		setError(null);
 
 		try {
-			await createUserCompany(user.id, companyName);
-			revalidatePath("/dashboard");
-			redirect("/dashboard");
+			console.log(`Creating company "${companyName}" for user: ${user.name}`);
+
+			const updatedUser = createCompany(user, companyName);
+			setUser(updatedUser);
+
+			console.log(`Company created successfully: ${updatedUser.companyName}`);
+
+			// Redirect to dashboard
+			router.push("/dashboard");
 		} catch (error) {
 			console.error("Error creating company:", error);
-			// In a real app, you'd handle this error properly
+			setError("Failed to create company. Please try again.");
+		} finally {
+			setIsLoading(false);
 		}
+	};
+
+	if (!user) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				Loading...
+			</div>
+		);
 	}
 
 	return (
@@ -40,21 +75,28 @@ export default async function OnboardingPage() {
 				</CardHeader>
 				<CardContent className="space-y-4 text-center">
 					<p className="text-muted-foreground">
-						Set up your dog walking business to get started with managing
-						clients, employees, and walks.
+						Hi {user.name}! Set up your dog walking business to get started with
+						managing clients, employees, and walks.
 					</p>
-					<form action={handleCompanyCreation} className="space-y-4">
-						<div className="space-y-2">
+					<form onSubmit={handleCompanyCreation} className="space-y-4">
+						<div className="space-y-2 text-left">
 							<Label htmlFor="companyName">Company Name</Label>
 							<Input
 								id="companyName"
-								name="companyName"
+								value={companyName}
+								onChange={(e) => setCompanyName(e.target.value)}
 								placeholder="Happy Tails Dog Walking"
 								required
 							/>
 						</div>
-						<Button type="submit" className="w-full" size="lg">
-							Create Your Business
+						{error && <p className="text-sm text-destructive">{error}</p>}
+						<Button
+							type="submit"
+							className="w-full"
+							size="lg"
+							disabled={isLoading}
+						>
+							{isLoading ? "Creating Your Business..." : "Create Your Business"}
 						</Button>
 					</form>
 				</CardContent>

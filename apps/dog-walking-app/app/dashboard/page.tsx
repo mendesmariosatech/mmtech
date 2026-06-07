@@ -1,108 +1,78 @@
-import { db, schema } from "@/lib/db";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getCurrentUser, hasCompany } from "@/lib/local-auth";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, UserCircle, Footprints, DollarSign } from "lucide-react";
-import { eq, count, desc } from "drizzle-orm";
-import { getCurrentUser, getUserCompany } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
-export default async function DashboardPage() {
-	// Get current authenticated user
-	const user = await getCurrentUser();
+export default function DashboardPage() {
+	const [user, setUser] = useState<any>(null);
+	const [loading, setLoading] = useState(true);
+	const router = useRouter();
+
+	useEffect(() => {
+		const currentUser = getCurrentUser();
+		if (!currentUser) {
+			router.push("/auth/login");
+			return;
+		}
+
+		if (!hasCompany(currentUser)) {
+			router.push("/onboarding");
+			return;
+		}
+
+		setUser(currentUser);
+		setLoading(false);
+	}, [router]);
+
+	if (loading) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				Loading...
+			</div>
+		);
+	}
+
 	if (!user) {
-		redirect("/auth/login");
+		return null;
 	}
 
-	// Get user's company
-	const company = await getUserCompany(user.id);
-	if (!company) {
-		// Redirect to company setup if no company exists
-		redirect("/onboarding");
-	}
-
-	// Get stats
-	const [employeeCount, clientCount, walkCount, completedWalks] =
-		await Promise.all([
-			db
-				.select({ count: count() })
-				.from(schema.dogWalkingEmployees)
-				.where(eq(schema.dogWalkingEmployees.company_id, company.id))
-				.then((result) => result[0]?.count || 0),
-			db
-				.select({ count: count() })
-				.from(schema.dogWalkingClients)
-				.where(eq(schema.dogWalkingClients.company_id, company.id))
-				.then((result) => result[0]?.count || 0),
-			db
-				.select({ count: count() })
-				.from(schema.dogWalkingWalks)
-				.where(eq(schema.dogWalkingWalks.company_id, company.id))
-				.then((result) => result[0]?.count || 0),
-			db
-				.select()
-				.from(schema.dogWalkingWalks)
-				.leftJoin(
-					schema.dogWalkingClients,
-					eq(schema.dogWalkingWalks.client_id, schema.dogWalkingClients.id),
-				)
-				.where(eq(schema.dogWalkingWalks.company_id, company.id)),
-		]);
-
-	const totalRevenue =
-		completedWalks.reduce(
-			(sum, { dog_walking_clients }) =>
-				sum + (dog_walking_clients?.walk_rate || 0),
-			0,
-		) || 0;
-
+	// Mock stats for demo
 	const stats = [
 		{
 			title: "Active Employees",
-			value: employeeCount,
+			value: 3,
 			icon: Users,
 			color: "text-chart-1",
 		},
 		{
 			title: "Active Clients",
-			value: clientCount,
+			value: 12,
 			icon: UserCircle,
 			color: "text-chart-2",
 		},
 		{
 			title: "Total Walks",
-			value: walkCount,
+			value: 47,
 			icon: Footprints,
 			color: "text-chart-3",
 		},
 		{
 			title: "Total Revenue",
-			value: `$${(totalRevenue / 100).toFixed(2)}`,
+			value: "$1,245.00",
 			icon: DollarSign,
 			color: "text-chart-4",
 		},
 	];
 
-	// Get recent walks
-	const recentWalks = await db
-		.select()
-		.from(schema.dogWalkingWalks)
-		.leftJoin(
-			schema.dogWalkingClients,
-			eq(schema.dogWalkingWalks.client_id, schema.dogWalkingClients.id),
-		)
-		.leftJoin(
-			schema.dogWalkingEmployees,
-			eq(schema.dogWalkingWalks.employee_id, schema.dogWalkingEmployees.id),
-		)
-		.where(eq(schema.dogWalkingWalks.company_id, company.id))
-		.orderBy(desc(schema.dogWalkingWalks.createdAt))
-		.limit(5);
-
 	return (
 		<div className="flex flex-col">
 			<PageHeader
 				title="Dashboard"
-				description="Overview of your dog walking business"
+				description={`Welcome back, ${user.name}! Here's your ${user.companyName} overview`}
 			/>
 			<main className="flex-1 p-6">
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -123,49 +93,47 @@ export default async function DashboardPage() {
 
 				<Card className="mt-6">
 					<CardHeader>
-						<CardTitle>Recent Walks</CardTitle>
+						<CardTitle>Recent Activity</CardTitle>
 					</CardHeader>
 					<CardContent>
-						{recentWalks && recentWalks.length > 0 ? (
-							<div className="space-y-4">
-								{recentWalks.map(
-									({
-										dog_walking_walks,
-										dog_walking_clients,
-										dog_walking_employees,
-									}) => (
-										<div
-											key={dog_walking_walks.id}
-											className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
-										>
-											<div>
-												<p className="font-medium">
-													{dog_walking_clients?.dog_name}
-												</p>
-												<p className="text-sm text-muted-foreground">
-													{dog_walking_clients?.name} - walked by{" "}
-													{dog_walking_employees?.name}
-												</p>
-											</div>
-											<div className="text-right">
-												<p className="text-sm font-medium capitalize">
-													{dog_walking_walks.status.replace("_", " ")}
-												</p>
-												<p className="text-xs text-muted-foreground">
-													{new Date(
-														dog_walking_walks.started_at,
-													).toLocaleDateString()}
-												</p>
-											</div>
-										</div>
-									),
-								)}
+						<div className="space-y-4">
+							<div className="flex items-center justify-between border-b pb-4">
+								<div>
+									<p className="font-medium">Buddy - Morning Walk</p>
+									<p className="text-sm text-muted-foreground">
+										John Doe - walked by Sarah Johnson
+									</p>
+								</div>
+								<div className="text-right">
+									<p className="text-sm font-medium">Completed</p>
+									<p className="text-xs text-muted-foreground">Today</p>
+								</div>
 							</div>
-						) : (
-							<p className="text-center text-muted-foreground py-8">
-								No walks yet. Add employees and clients to get started!
-							</p>
-						)}
+							<div className="flex items-center justify-between border-b pb-4">
+								<div>
+									<p className="font-medium">Max - Afternoon Walk</p>
+									<p className="text-sm text-muted-foreground">
+										Jane Smith - walked by Mike Wilson
+									</p>
+								</div>
+								<div className="text-right">
+									<p className="text-sm font-medium">In Progress</p>
+									<p className="text-xs text-muted-foreground">Today</p>
+								</div>
+							</div>
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="font-medium">Luna - Evening Walk</p>
+									<p className="text-sm text-muted-foreground">
+										Bob Brown - scheduled with Emma Davis
+									</p>
+								</div>
+								<div className="text-right">
+									<p className="text-sm font-medium">Scheduled</p>
+									<p className="text-xs text-muted-foreground">Tomorrow</p>
+								</div>
+							</div>
+						</div>
 					</CardContent>
 				</Card>
 			</main>

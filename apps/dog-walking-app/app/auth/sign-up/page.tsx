@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Dog } from "lucide-react";
+import { createUser, setCurrentUser } from "@/lib/local-auth";
 
 export default function SignUpPage() {
 	const [email, setEmail] = useState("");
@@ -43,15 +44,17 @@ export default function SignUpPage() {
 		}
 
 		try {
-			console.log("Signup attempt started...");
+			console.log("Signup attempt started for:", name, email);
 
-			// Simulate signup delay
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			// Create new user with local auth system
+			const user = createUser(name, email, password, companyName);
 
-			console.log("Signup successful, redirecting to dashboard...");
+			console.log("Signup successful for:", user.name);
 
-			// For demo purposes, just redirect to dashboard
-			// In a real app, this would create the user and company
+			// Set current user in localStorage
+			setCurrentUser(user);
+
+			// Redirect to dashboard (user already has company from signup)
 			router.push("/dashboard");
 		} catch (error) {
 			console.error("Signup error:", error);
