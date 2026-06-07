@@ -1,21 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Dog } from "lucide-react";
-import { authenticateUser, setCurrentUser } from "@/lib/local-auth";
+import { useRouter } from "next/navigation";
 
+// Simplified login page to debug the RSC issue
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -29,23 +17,28 @@ export default function LoginPage() {
 		setError(null);
 
 		try {
-			console.log("Login attempt started for:", email);
+			console.log("Simple login attempt for:", email);
 
-			// Authenticate user with local auth system
-			const user = authenticateUser(email, password);
+			// Simple validation
+			if (email === "demo@example.com" && password === "password") {
+				console.log("Login successful!");
 
-			if (!user) {
-				setError("Invalid email or password");
-				return;
+				// Store user in localStorage
+				localStorage.setItem(
+					"current-user",
+					JSON.stringify({
+						id: "demo-user-id",
+						name: "Demo Owner",
+						email: "demo@example.com",
+						companyName: "Demo Dog Walking Co",
+					}),
+				);
+
+				// Redirect to dashboard
+				router.push("/dashboard");
+			} else {
+				setError("Invalid credentials. Try demo@example.com / password");
 			}
-
-			console.log("Login successful for:", user.name);
-
-			// Set current user in localStorage
-			setCurrentUser(user);
-
-			// Redirect to dashboard
-			router.push("/dashboard");
 		} catch (error) {
 			console.error("Login error:", error);
 			setError("Login failed. Please try again.");
@@ -55,64 +48,66 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div className="flex min-h-svh w-full items-center justify-center bg-background p-6 md:p-10">
-			<div className="w-full max-w-sm">
-				<div className="flex flex-col gap-6">
-					<div className="flex items-center justify-center gap-2 text-primary">
-						<Dog className="h-8 w-8" />
-						<span className="text-2xl font-bold">PawTrack</span>
+		<div className="min-h-screen flex items-center justify-center p-4">
+			<div className="max-w-md w-full">
+				<div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+					<h1 className="text-2xl font-bold mb-6 text-center">
+						PawTrack Login
+					</h1>
+					<div className="mb-4 p-2 bg-gray-100 rounded text-sm">
+						Demo: demo@example.com / password
 					</div>
-					<Card>
-						<CardHeader>
-							<CardTitle className="text-2xl">Welcome back</CardTitle>
-							<CardDescription>
-								Sign in to manage your dog walking business
-							</CardDescription>
-							<div className="text-xs text-muted-foreground bg-muted p-2 rounded">
-								Demo: email "demo@example.com", password "password"
-							</div>
-						</CardHeader>
-						<CardContent>
-							<form onSubmit={handleLogin}>
-								<div className="flex flex-col gap-4">
-									<div className="grid gap-2">
-										<Label htmlFor="email">Email</Label>
-										<Input
-											id="email"
-											type="email"
-											placeholder="you@example.com"
-											required
-											value={email}
-											onChange={(e) => setEmail(e.target.value)}
-										/>
-									</div>
-									<div className="grid gap-2">
-										<Label htmlFor="password">Password</Label>
-										<Input
-											id="password"
-											type="password"
-											required
-											value={password}
-											onChange={(e) => setPassword(e.target.value)}
-										/>
-									</div>
-									{error && <p className="text-sm text-destructive">{error}</p>}
-									<Button type="submit" className="w-full" disabled={isLoading}>
-										{isLoading ? "Signing in..." : "Sign in"}
-									</Button>
-								</div>
-								<div className="mt-4 text-center text-sm">
-									{"Don't have an account? "}
-									<Link
-										href="/auth/sign-up"
-										className="text-primary underline underline-offset-4"
-									>
-										Sign up
-									</Link>
-								</div>
-							</form>
-						</CardContent>
-					</Card>
+
+					<form onSubmit={handleLogin}>
+						<div className="mb-4">
+							<label className="block text-gray-700 text-sm font-bold mb-2">
+								Email
+							</label>
+							<input
+								type="email"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+								placeholder="demo@example.com"
+								required
+							/>
+						</div>
+
+						<div className="mb-6">
+							<label className="block text-gray-700 text-sm font-bold mb-2">
+								Password
+							</label>
+							<input
+								type="password"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+								placeholder="password"
+								required
+							/>
+						</div>
+
+						{error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
+
+						<div className="flex items-center justify-between">
+							<button
+								type="submit"
+								disabled={isLoading}
+								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
+							>
+								{isLoading ? "Signing in..." : "Sign In"}
+							</button>
+						</div>
+					</form>
+
+					<div className="mt-4 text-center">
+						<a
+							href="/auth/sign-up"
+							className="text-blue-500 hover:text-blue-800"
+						>
+							Don't have an account? Sign up
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

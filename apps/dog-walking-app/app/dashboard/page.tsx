@@ -2,36 +2,41 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getCurrentUser, hasCompany } from "@/lib/local-auth";
-import { PageHeader } from "@/components/dashboard/page-header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, UserCircle, Footprints, DollarSign } from "lucide-react";
 
+// Simplified dashboard to debug RSC issues
 export default function DashboardPage() {
 	const [user, setUser] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 
 	useEffect(() => {
-		const currentUser = getCurrentUser();
-		if (!currentUser) {
+		// Check for user in localStorage
+		const storedUser = localStorage.getItem("current-user");
+
+		if (!storedUser) {
 			router.push("/auth/login");
 			return;
 		}
 
-		if (!hasCompany(currentUser)) {
-			router.push("/onboarding");
-			return;
+		try {
+			const userData = JSON.parse(storedUser);
+			setUser(userData);
+			setLoading(false);
+		} catch (error) {
+			console.error("Error parsing user data:", error);
+			router.push("/auth/login");
 		}
-
-		setUser(currentUser);
-		setLoading(false);
 	}, [router]);
+
+	const handleLogout = () => {
+		localStorage.removeItem("current-user");
+		router.push("/auth/login");
+	};
 
 	if (loading) {
 		return (
 			<div className="flex items-center justify-center min-h-screen">
-				Loading...
+				<div>Loading...</div>
 			</div>
 		);
 	}
@@ -40,103 +45,80 @@ export default function DashboardPage() {
 		return null;
 	}
 
-	// Mock stats for demo
-	const stats = [
-		{
-			title: "Active Employees",
-			value: 3,
-			icon: Users,
-			color: "text-chart-1",
-		},
-		{
-			title: "Active Clients",
-			value: 12,
-			icon: UserCircle,
-			color: "text-chart-2",
-		},
-		{
-			title: "Total Walks",
-			value: 47,
-			icon: Footprints,
-			color: "text-chart-3",
-		},
-		{
-			title: "Total Revenue",
-			value: "$1,245.00",
-			icon: DollarSign,
-			color: "text-chart-4",
-		},
-	];
-
 	return (
-		<div className="flex flex-col">
-			<PageHeader
-				title="Dashboard"
-				description={`Welcome back, ${user.name}! Here's your ${user.companyName} overview`}
-			/>
-			<main className="flex-1 p-6">
-				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-					{stats.map((stat) => (
-						<Card key={stat.title}>
-							<CardHeader className="flex flex-row items-center justify-between pb-2">
-								<CardTitle className="text-sm font-medium text-muted-foreground">
-									{stat.title}
-								</CardTitle>
-								<stat.icon className={`h-4 w-4 ${stat.color}`} />
-							</CardHeader>
-							<CardContent>
-								<div className="text-2xl font-bold">{stat.value}</div>
-							</CardContent>
-						</Card>
-					))}
-				</div>
+		<div className="min-h-screen bg-gray-50 p-4">
+			<div className="max-w-4xl mx-auto">
+				<div className="bg-white shadow rounded-lg p-6">
+					<div className="flex justify-between items-center mb-6">
+						<div>
+							<h1 className="text-2xl font-bold">Welcome to PawTrack!</h1>
+							<p className="text-gray-600">
+								Hi {user.name} from {user.companyName}
+							</p>
+						</div>
+						<button
+							onClick={handleLogout}
+							className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+						>
+							Logout
+						</button>
+					</div>
 
-				<Card className="mt-6">
-					<CardHeader>
-						<CardTitle>Recent Activity</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className="space-y-4">
-							<div className="flex items-center justify-between border-b pb-4">
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+						<div className="bg-blue-50 p-4 rounded-lg">
+							<h3 className="font-semibold text-blue-900">Active Clients</h3>
+							<p className="text-2xl font-bold text-blue-600">12</p>
+						</div>
+						<div className="bg-green-50 p-4 rounded-lg">
+							<h3 className="font-semibold text-green-900">Total Walks</h3>
+							<p className="text-2xl font-bold text-green-600">47</p>
+						</div>
+						<div className="bg-purple-50 p-4 rounded-lg">
+							<h3 className="font-semibold text-purple-900">Revenue</h3>
+							<p className="text-2xl font-bold text-purple-600">$1,245</p>
+						</div>
+					</div>
+
+					<div className="bg-white border rounded-lg p-6">
+						<h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+						<div className="space-y-3">
+							<div className="flex justify-between items-center p-3 bg-gray-50 rounded">
 								<div>
 									<p className="font-medium">Buddy - Morning Walk</p>
-									<p className="text-sm text-muted-foreground">
-										John Doe - walked by Sarah Johnson
+									<p className="text-sm text-gray-600">
+										John Doe - walked by Sarah
 									</p>
 								</div>
-								<div className="text-right">
-									<p className="text-sm font-medium">Completed</p>
-									<p className="text-xs text-muted-foreground">Today</p>
-								</div>
+								<span className="text-sm text-green-600 font-medium">
+									Completed
+								</span>
 							</div>
-							<div className="flex items-center justify-between border-b pb-4">
+							<div className="flex justify-between items-center p-3 bg-gray-50 rounded">
 								<div>
 									<p className="font-medium">Max - Afternoon Walk</p>
-									<p className="text-sm text-muted-foreground">
-										Jane Smith - walked by Mike Wilson
+									<p className="text-sm text-gray-600">
+										Jane Smith - walked by Mike
 									</p>
 								</div>
-								<div className="text-right">
-									<p className="text-sm font-medium">In Progress</p>
-									<p className="text-xs text-muted-foreground">Today</p>
-								</div>
+								<span className="text-sm text-blue-600 font-medium">
+									In Progress
+								</span>
 							</div>
-							<div className="flex items-center justify-between">
+							<div className="flex justify-between items-center p-3 bg-gray-50 rounded">
 								<div>
 									<p className="font-medium">Luna - Evening Walk</p>
-									<p className="text-sm text-muted-foreground">
-										Bob Brown - scheduled with Emma Davis
+									<p className="text-sm text-gray-600">
+										Bob Brown - scheduled with Emma
 									</p>
 								</div>
-								<div className="text-right">
-									<p className="text-sm font-medium">Scheduled</p>
-									<p className="text-xs text-muted-foreground">Tomorrow</p>
-								</div>
+								<span className="text-sm text-orange-600 font-medium">
+									Scheduled
+								</span>
 							</div>
 						</div>
-					</CardContent>
-				</Card>
-			</main>
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 }
