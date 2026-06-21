@@ -6,7 +6,7 @@
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
     "test": "npx drizzle-kit push --config=drizzle.test.config.ts && jest",
-    "test:watch": "jest --watch",
+    "test:watch": "npx drizzle-kit push --config=drizzle.test.config.ts && jest --watch",
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
