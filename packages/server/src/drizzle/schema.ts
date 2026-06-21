@@ -277,3 +277,185 @@ export const InsertEventSchema = createInsertSchema(eventTable, {
 });
 
 export type InsertEvent = typeof eventTable.$inferInsert;
+
+// Dog Walking Tables
+export const dogWalkingCompanies = sqliteTable("dog_walking_companies", {
+	id: text("id", { length: 128 })
+		.$defaultFn(() => genEntityId("DC"))
+		.primaryKey(),
+	owner_id: text("owner_id")
+		.references(() => authTable.id, { onDelete: "cascade" })
+		.notNull(),
+	name: text("name").notNull(),
+	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+export const dogWalkingEmployees = sqliteTable("dog_walking_employees", {
+	id: text("id", { length: 128 })
+		.$defaultFn(() => genEntityId("DE"))
+		.primaryKey(),
+	user_id: text("user_id").references(() => authTable.id, {
+		onDelete: "set null",
+	}),
+	company_id: text("company_id")
+		.references(() => dogWalkingCompanies.id, { onDelete: "cascade" })
+		.notNull(),
+	name: text("name").notNull(),
+	email: text("email").notNull(),
+	phone: text("phone"),
+	hourly_rate: integer("hourly_rate").notNull(),
+	is_active: integer("is_active", { mode: "boolean" }).default(true).notNull(),
+	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+export const dogWalkingClients = sqliteTable("dog_walking_clients", {
+	id: text("id", { length: 128 })
+		.$defaultFn(() => genEntityId("DW"))
+		.primaryKey(),
+	company_id: text("company_id")
+		.references(() => dogWalkingCompanies.id, { onDelete: "cascade" })
+		.notNull(),
+	name: text("name").notNull(),
+	email: text("email"),
+	phone: text("phone"),
+	address: text("address"),
+	dog_name: text("dog_name").notNull(),
+	dog_breed: text("dog_breed"),
+	dog_notes: text("dog_notes"),
+	walk_rate: integer("walk_rate").notNull(),
+	is_active: integer("is_active", { mode: "boolean" }).default(true).notNull(),
+	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+export const dogWalkingWalks = sqliteTable("dog_walking_walks", {
+	id: text("id", { length: 128 })
+		.$defaultFn(() => genEntityId("DWK"))
+		.primaryKey(),
+	company_id: text("company_id")
+		.references(() => dogWalkingCompanies.id, { onDelete: "cascade" })
+		.notNull(),
+	client_id: text("client_id")
+		.references(() => dogWalkingClients.id, { onDelete: "cascade" })
+		.notNull(),
+	employee_id: text("employee_id")
+		.references(() => dogWalkingEmployees.id, { onDelete: "cascade" })
+		.notNull(),
+	started_at: text("started_at").notNull(),
+	ended_at: text("ended_at"),
+	duration_minutes: integer("duration_minutes"),
+	notes: text("notes"),
+	status: text("status", { enum: ["in_progress", "completed", "cancelled"] })
+		.default("in_progress")
+		.notNull(),
+	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+export const dogWalkingInvoices = sqliteTable("dog_walking_invoices", {
+	id: text("id", { length: 128 })
+		.$defaultFn(() => genEntityId("DI"))
+		.primaryKey(),
+	company_id: text("company_id")
+		.references(() => dogWalkingCompanies.id, { onDelete: "cascade" })
+		.notNull(),
+	client_id: text("client_id")
+		.references(() => dogWalkingClients.id, { onDelete: "cascade" })
+		.notNull(),
+	invoice_number: text("invoice_number").notNull().unique(),
+	period_start: text("period_start").notNull(),
+	period_end: text("period_end").notNull(),
+	total_walks: integer("total_walks").notNull(),
+	total_amount: integer("total_amount").notNull(),
+	status: text("status", { enum: ["draft", "sent", "paid"] })
+		.default("draft")
+		.notNull(),
+	createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+// Dog Walking Relations
+export const dogWalkingCompanyRelations = relations(
+	dogWalkingCompanies,
+	({ one, many }) => ({
+		owner: one(authTable, {
+			fields: [dogWalkingCompanies.owner_id],
+			references: [authTable.id],
+		}),
+		employees: many(dogWalkingEmployees),
+		clients: many(dogWalkingClients),
+		walks: many(dogWalkingWalks),
+		invoices: many(dogWalkingInvoices),
+	}),
+);
+
+export const dogWalkingEmployeeRelations = relations(
+	dogWalkingEmployees,
+	({ one, many }) => ({
+		user: one(authTable, {
+			fields: [dogWalkingEmployees.user_id],
+			references: [authTable.id],
+		}),
+		company: one(dogWalkingCompanies, {
+			fields: [dogWalkingEmployees.company_id],
+			references: [dogWalkingCompanies.id],
+		}),
+		walks: many(dogWalkingWalks),
+	}),
+);
+
+export const dogWalkingClientRelations = relations(
+	dogWalkingClients,
+	({ one, many }) => ({
+		company: one(dogWalkingCompanies, {
+			fields: [dogWalkingClients.company_id],
+			references: [dogWalkingCompanies.id],
+		}),
+		walks: many(dogWalkingWalks),
+		invoices: many(dogWalkingInvoices),
+	}),
+);
+
+export const dogWalkingWalkRelations = relations(
+	dogWalkingWalks,
+	({ one }) => ({
+		company: one(dogWalkingCompanies, {
+			fields: [dogWalkingWalks.company_id],
+			references: [dogWalkingCompanies.id],
+		}),
+		client: one(dogWalkingClients, {
+			fields: [dogWalkingWalks.client_id],
+			references: [dogWalkingClients.id],
+		}),
+		employee: one(dogWalkingEmployees, {
+			fields: [dogWalkingWalks.employee_id],
+			references: [dogWalkingEmployees.id],
+		}),
+	}),
+);
+
+export const dogWalkingInvoiceRelations = relations(
+	dogWalkingInvoices,
+	({ one }) => ({
+		company: one(dogWalkingCompanies, {
+			fields: [dogWalkingInvoices.company_id],
+			references: [dogWalkingCompanies.id],
+		}),
+		client: one(dogWalkingClients, {
+			fields: [dogWalkingInvoices.client_id],
+			references: [dogWalkingClients.id],
+		}),
+	}),
+);

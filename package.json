@@ -33,5 +33,9 @@
     "packages/*"
   ],
   "packageManager": "yarn@1.22.22",
-  "dependencies": {}
+  "dependencies": {},
+  "resolutions": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
 }
