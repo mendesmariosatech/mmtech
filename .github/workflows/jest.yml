@@ -16,4 +16,4 @@ jobs:
         with:
           node-version: 20.x
       - run: yarn
-      - run: yarn server:test
+      - run: cd packages/server && yarn test
