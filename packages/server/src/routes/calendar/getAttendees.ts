@@ -1,17 +1,19 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
+import { AttendeeTable } from "./dto/attendee.dto";
 import { EventTable } from "./dto/event.dto";
 import { env } from "hono/adapter";
 import type { AppRouteHandler } from "../../base/type";
+import { eq } from "drizzle-orm";
+import { eventTable } from "../../drizzle/schema";
 
 /**
- * Specification for updating an existing calendar event
+ * Specification for retrieving all attendees for a calendar event
  * Requires authentication and ownership of the event
  */
-export const updateEventSpec = createRoute({
-	method: "put",
-	path: "/calendar/events/:eventId",
+export const getAttendeesSpec = createRoute({
+	method: "get",
+	path: "/calendar/events/:eventId/attendees",
 	tags: ["events"],
 	middleware: [authMiddleware],
 	headers: {
@@ -26,28 +28,23 @@ export const updateEventSpec = createRoute({
 		params: z.object({
 			eventId: z.string(),
 		}),
-		body: {
-			content: {
-				"application/json": {
-					/**
-					 * Request body schema for updating a calendar event
-					 * All fields are optional, allowing partial updates
-					 */
-					schema: InsertEventSchema.omit({
-						clientId: true,
-						businessId: true,
-						addressId: true,
-					}).partial(), // Allow partial updates
-				},
-			},
-		},
 	},
 	responses: {
 		200: {
-			description: "Event Updated",
+			description: "Attendees Retrieved Successfully",
 			content: {
 				"application/json": {
-					schema: SelectEventSchema,
+					schema: z.array(
+						z.object({
+							id: z.string(),
+							customerId: z.string(),
+							eventId: z.string(),
+							customer: z.object({
+								id: z.string(),
+								authId: z.string().nullable(),
+							}),
+						}),
+					),
 				},
 			},
 		},
@@ -84,9 +81,9 @@ export const updateEventSpec = createRoute({
 	},
 });
 
-type UpdateEventRoute = typeof updateEventSpec;
+type GetAttendeesRoute = typeof getAttendeesSpec;
 
-export const updateEventHandler: AppRouteHandler<UpdateEventRoute> = async (
+export const getAttendeesHandler: AppRouteHandler<GetAttendeesRoute> = async (
 	c,
 ) => {
 	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
@@ -99,38 +96,28 @@ export const updateEventHandler: AppRouteHandler<UpdateEventRoute> = async (
 		return c.json({ error: "Not authorized" }, 403);
 	}
 
-	const validatedInput = c.req.valid("json");
-
 	// Check if the event belongs to the user's business
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const existingEvent = await Event.getEventById(eventId);
 
-	if (!existingEvent) {
-		return c.json({ error: "Event not found" }, 404);
+	if (!existingEvent || existingEvent.businessId !== businessId) {
+		return c.json({ error: "Event not found or not authorized" }, 404);
 	}
 
-	if (existingEvent.businessId !== businessId) {
-		return c.json({ error: "Not authorized" }, 403);
-	}
+	const Attendee = new AttendeeTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
-	// Update the event with provided fields
-	const updatedEvent = await Event.updateEvent(eventId, {
-		...validatedInput,
-		clientId: existingEvent.clientId,
-		businessId: existingEvent.businessId,
-		addressId: existingEvent.addressId,
-	});
+	const attendees = await Attendee.getAttendeesByEventId(eventId);
 
-	if (!updatedEvent) {
-		return c.json({ error: "Event not updated" }, 500);
-	}
-
-	// Return only the fields specified in SelectEventSchema
-	return c.json(
-		{
-			id: updatedEvent.id,
-			title: updatedEvent.title,
+	// Transform the response to match the expected schema
+	const formattedAttendees = attendees.map((item) => ({
+		id: item.customer_attendee.id,
+		customerId: item.customer_attendee.customerId,
+		eventId: item.customer_attendee.eventId,
+		customer: {
+			id: item.customer.id,
+			authId: item.customer.authId,
 		},
-		200,
-	);
+	}));
+
+	return c.json(formattedAttendees, 200);
 };

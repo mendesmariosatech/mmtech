@@ -55,7 +55,10 @@ export class EventTable extends DBConnection {
 	public async updateEvent(eventId: string, args: Partial<InsertEvent>) {
 		const [event] = await this.db
 			.update(eventTable)
-			.set(args)
+			.set({
+				...args,
+				// updatedAt is handled automatically by the schema's $onUpdate
+			})
 			.where(eq(eventTable.id, eventId))
 			.returning();
 

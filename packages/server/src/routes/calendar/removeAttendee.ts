@@ -1,17 +1,19 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { InsertEventSchema, SelectEventSchema } from "../../drizzle/schema";
 import { authMiddleware } from "../middleware/authentication";
+import { AttendeeTable } from "./dto/attendee.dto";
 import { EventTable } from "./dto/event.dto";
 import { env } from "hono/adapter";
 import type { AppRouteHandler } from "../../base/type";
+import { eq } from "drizzle-orm";
+import { eventTable } from "../../drizzle/schema";
 
 /**
- * Specification for updating an existing calendar event
+ * Specification for removing a customer from an event's attendees
  * Requires authentication and ownership of the event
  */
-export const updateEventSpec = createRoute({
-	method: "put",
-	path: "/calendar/events/:eventId",
+export const removeAttendeeSpec = createRoute({
+	method: "delete",
+	path: "/calendar/events/:eventId/attendees/:customerId",
 	tags: ["events"],
 	middleware: [authMiddleware],
 	headers: {
@@ -25,29 +27,17 @@ export const updateEventSpec = createRoute({
 	request: {
 		params: z.object({
 			eventId: z.string(),
+			customerId: z.string(),
 		}),
-		body: {
-			content: {
-				"application/json": {
-					/**
-					 * Request body schema for updating a calendar event
-					 * All fields are optional, allowing partial updates
-					 */
-					schema: InsertEventSchema.omit({
-						clientId: true,
-						businessId: true,
-						addressId: true,
-					}).partial(), // Allow partial updates
-				},
-			},
-		},
 	},
 	responses: {
 		200: {
-			description: "Event Updated",
+			description: "Attendee Removed Successfully",
 			content: {
 				"application/json": {
-					schema: SelectEventSchema,
+					schema: z.object({
+						message: z.string(),
+					}),
 				},
 			},
 		},
@@ -62,7 +52,8 @@ export const updateEventSpec = createRoute({
 			},
 		},
 		404: {
-			description: "Event not found",
+			description:
+				"Event or Customer not found, or customer is not attending the event",
 			content: {
 				"application/json": {
 					schema: z.object({
@@ -84,53 +75,45 @@ export const updateEventSpec = createRoute({
 	},
 });
 
-type UpdateEventRoute = typeof updateEventSpec;
+type RemoveAttendeeRoute = typeof removeAttendeeSpec;
 
-export const updateEventHandler: AppRouteHandler<UpdateEventRoute> = async (
-	c,
-) => {
+export const removeAttendeeHandler: AppRouteHandler<
+	RemoveAttendeeRoute
+> = async (c) => {
 	const { TURSO_AUTH_TOKEN, TURSO_CONNECTION_URL } = env(c);
 	const authId = c.get("authId");
 	const clientId = c.get("clientId");
 	const businessId = c.get("businessId");
-	const { eventId } = c.req.valid("param");
+	const { eventId, customerId } = c.req.valid("param");
 
 	if (!businessId || !authId || !clientId) {
 		return c.json({ error: "Not authorized" }, 403);
 	}
 
-	const validatedInput = c.req.valid("json");
-
 	// Check if the event belongs to the user's business
 	const Event = new EventTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	const existingEvent = await Event.getEventById(eventId);
 
-	if (!existingEvent) {
-		return c.json({ error: "Event not found" }, 404);
+	if (!existingEvent || existingEvent.businessId !== businessId) {
+		return c.json({ error: "Event not found or not authorized" }, 404);
 	}
 
-	if (existingEvent.businessId !== businessId) {
-		return c.json({ error: "Not authorized" }, 403);
-	}
+	const Attendee = new AttendeeTable(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
-	// Update the event with provided fields
-	const updatedEvent = await Event.updateEvent(eventId, {
-		...validatedInput,
-		clientId: existingEvent.clientId,
-		businessId: existingEvent.businessId,
-		addressId: existingEvent.addressId,
-	});
-
-	if (!updatedEvent) {
-		return c.json({ error: "Event not updated" }, 500);
-	}
-
-	// Return only the fields specified in SelectEventSchema
-	return c.json(
-		{
-			id: updatedEvent.id,
-			title: updatedEvent.title,
-		},
-		200,
+	// Check if the customer is attending the event
+	const isAttending = await Attendee.isCustomerAttendingEvent(
+		customerId,
+		eventId,
 	);
+	if (!isAttending) {
+		return c.json({ error: "Customer is not attending this event" }, 404);
+	}
+
+	const removed = await Attendee.removeAttendee(customerId, eventId);
+
+	if (!removed) {
+		return c.json({ error: "Attendee not removed" }, 500);
+	}
+
+	return c.json({ message: "Attendee removed successfully" }, 200);
 };
