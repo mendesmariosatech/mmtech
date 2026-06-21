@@ -4,7 +4,8 @@ module.exports = {
   testEnvironment: "node",
   roots: ["src"],
   testMatch: ["**/*.test.ts"],
-  setupFiles: ["dotenv/config"],
+  setupFiles: ["<rootDir>/jest.setup.js"],
+  maxWorkers: 1,
   extensionsToTreatAsEsm: [".ts"],
   moduleNameMapper: {
     "^(\\.{1,2}\\/.*)\\\\.\\.js$": "$1",

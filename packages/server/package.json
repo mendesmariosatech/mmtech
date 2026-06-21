@@ -5,8 +5,9 @@
     "dev": "tsx watch app.ts",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
-    "test": "jest --env-file=.env",
-    "test:watch": "jest --watch --env-file=.env",
+    "pretest": "npx drizzle-kit push --config=drizzle.test.config.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "test:ci": "jest",
     "test:coverage": "jest --coverage"
   },

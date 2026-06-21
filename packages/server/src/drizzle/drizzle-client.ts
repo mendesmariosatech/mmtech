@@ -4,7 +4,7 @@ import * as schema from "./schema";
 
 export const createDrizzleClient = (
 	TURSO_CONNECTION_URL: string,
-	TURSO_AUTH_TOKEN: string,
+	TURSO_AUTH_TOKEN?: string,
 ) =>
 	drizzle(
 		createClient({
@@ -18,7 +18,7 @@ export const createDrizzleClient = (
 
 export const dbConnection = (
 	TURSO_CONNECTION_URL: string,
-	TURSO_AUTH_TOKEN: string,
+	TURSO_AUTH_TOKEN?: string,
 ) => createDrizzleClient(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 
 export type DBConnectionFunc = ReturnType<typeof dbConnection>;
@@ -27,7 +27,7 @@ export type DB = ReturnType<typeof createDrizzleClient>;
 export class DBConnection {
 	db: ReturnType<typeof createDrizzleClient>;
 
-	constructor(TURSO_CONNECTION_URL: string, TURSO_AUTH_TOKEN: string) {
+	constructor(TURSO_CONNECTION_URL: string, TURSO_AUTH_TOKEN?: string) {
 		this.db = createDrizzleClient(TURSO_CONNECTION_URL, TURSO_AUTH_TOKEN);
 	}
 }

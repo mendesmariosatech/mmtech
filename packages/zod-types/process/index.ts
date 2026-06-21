@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const envVariables = z.object({
 	TURSO_CONNECTION_URL: z.string(),
-	TURSO_AUTH_TOKEN: z.string(),
+	TURSO_AUTH_TOKEN: z.string().optional(),
 	JWT_SECRET_KEY: z.string(),
 	COOkIE_SECRET_KEY: z.string(),
 	LANG: z.string().default("pt_BR"),

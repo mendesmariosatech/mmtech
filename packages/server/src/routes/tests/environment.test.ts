@@ -7,7 +7,6 @@ describe("ENV VARIABLES", () => {
 
 	test("ENV VARIABLES for DATABASE", () => {
 		expect(process.env.TURSO_CONNECTION_URL).toBeDefined();
-		expect(process.env.TURSO_AUTH_TOKEN).toBeDefined();
 	});
 
 	test("ENV for AUTHENTICATION", () => {

@@ -20,6 +20,9 @@ node_modules/
 .env.production
 .dev.vars
 
+# test database
+test.db
+
 # logs
 logs/
 *.log
