@@ -3,8 +3,8 @@ import { authMiddleware } from "../middleware/authentication";
 import { AttendeeTable } from "./dto/attendee.dto";
 import { env } from "hono/adapter";
 import type { AppRouteHandler } from "../../base/type";
-import { eq } from "drizzle-orm";
-import { eventTable, customer } from "../../drizzle/schema";
+import { eq, and } from "drizzle-orm";
+import { eventTable, customer, businessCustomers } from "../../drizzle/schema";
 
 /**
  * Specification for adding a customer as an attendee to a calendar event
@@ -143,17 +143,11 @@ export const addAttendeeHandler: AppRouteHandler<AddAttendeeRoute> = async (
 	// Check if the customer belongs to the authenticated business
 	const businessCustomerResult = await c.var.db
 		.select()
-		.from(c.var.db.schema.businessCustomers)
+		.from(businessCustomers)
 		.where(
-			c.var.db.schema.and(
-				c.var.db.schema.eq(
-					c.var.db.schema.businessCustomers.businessId,
-					businessId!,
-				),
-				c.var.db.schema.eq(
-					c.var.db.schema.businessCustomers.customerId,
-					customerId,
-				),
+			and(
+				eq(businessCustomers.businessId, businessId!),
+				eq(businessCustomers.customerId, customerId),
 			),
 		);
 	const businessCustomer = businessCustomerResult[0];
