@@ -1,303 +1,308 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import {
+	Plus,
+	Trash2,
+	Clock,
+	DollarSign,
+	Zap,
+	Target,
+	Calendar,
+} from "lucide-react";
+import { Button } from "@repo/ui/components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Clock, DollarSign, Plus, Minus, Save } from "lucide-react";
-import { cn } from "@/lib/utils";
+} from "@repo/ui/components/ui/card";
+import { Progress } from "@repo/ui/components/ui/progress";
 
-interface TimeEntry {
+interface TimeActivity {
 	id: string;
 	activity: string;
 	minutes: number;
 	cost: number;
+	timestamp: string;
 }
 
-export default function TimeSpendingApp() {
-	const DAILY_BUDGET = 86400; // seconds in a day
-	const [entries, setEntries] = useState<TimeEntry[]>([]);
+const DAILY_BUDGET = 86400; // $86,400 representing 86,400 seconds in a day
+const COST_PER_MINUTE = 60; // $60 per minute
+
+export default function TimeSpendingTracker() {
+	const [activities, setActivities] = useState<TimeActivity[]>([]);
 	const [newActivity, setNewActivity] = useState("");
-	const [newMinutes, setNewMinutes] = useState(0);
-	const [timeLeft, setTimeLeft] = useState(DAILY_BUDGET);
-	const [lastReset, setLastReset] = useState<string>("");
+	const [minutes, setMinutes] = useState<number>(0);
+	const [totalSpent, setTotalSpent] = useState(0);
+	const [currentDate, setCurrentDate] = useState("");
 
-	// Calculate cost per second (1 dollar per second)
-	const calculateCost = (minutes: number) => minutes * 60;
-
-	// Calculate total spent
-	const totalSpent = entries.reduce((sum, entry) => sum + entry.cost, 0);
-	const totalMinutes = entries.reduce((sum, entry) => sum + entry.minutes, 0);
-	const remainingBudget = DAILY_BUDGET - totalSpent;
-	const progressPercent = (totalSpent / DAILY_BUDGET) * 100;
-
-	// Load data from localStorage
+	// Load data from localStorage on component mount
 	useEffect(() => {
-		const savedData = localStorage.getItem("time-spending-data");
 		const today = new Date().toDateString();
+		setCurrentDate(today);
 
-		if (savedData) {
-			const data = JSON.parse(savedData);
-
-			// Check if we need to reset for a new day
-			if (data.date !== today) {
-				// New day - reset everything
-				setEntries([]);
-				setTimeLeft(DAILY_BUDGET);
-				setLastReset(today);
-				// Save reset state
-				localStorage.setItem(
-					"time-spending-data",
-					JSON.stringify({
-						entries: [],
-						date: today,
-					}),
-				);
-			} else {
-				// Same day - restore data
-				setEntries(data.entries || []);
-				setLastReset(data.date);
-			}
-		} else {
-			// First time - initialize
-			setLastReset(today);
-			localStorage.setItem(
-				"time-spending-data",
-				JSON.stringify({
-					entries: [],
-					date: today,
-				}),
-			);
+		const stored = localStorage.getItem(`time-spending-${today}`);
+		if (stored) {
+			const data = JSON.parse(stored);
+			setActivities(data.activities || []);
+			setTotalSpent(data.totalSpent || 0);
 		}
 	}, []);
 
-	// Save to localStorage whenever entries change
+	// Save data to localStorage whenever activities change
 	useEffect(() => {
-		if (lastReset) {
-			localStorage.setItem(
-				"time-spending-data",
-				JSON.stringify({
-					entries,
-					date: lastReset,
-				}),
-			);
-		}
-	}, [entries, lastReset]);
+		const today = new Date().toDateString();
+		const data = { activities, totalSpent };
+		localStorage.setItem(`time-spending-${today}`, JSON.stringify(data));
+	}, [activities, totalSpent]);
 
-	const addEntry = () => {
-		if (newActivity.trim() && newMinutes > 0) {
-			const cost = calculateCost(newMinutes);
+	// Calculate total spent whenever activities change
+	useEffect(() => {
+		const total = activities.reduce((sum, activity) => sum + activity.cost, 0);
+		setTotalSpent(total);
+	}, [activities]);
 
-			// Check if we have enough budget
-			if (cost <= remainingBudget) {
-				const entry: TimeEntry = {
-					id: Date.now().toString(),
-					activity: newActivity,
-					minutes: newMinutes,
-					cost,
-				};
-				setEntries([...entries, entry]);
-				setNewActivity("");
-				setNewMinutes(0);
-			} else {
-				alert(
-					`Not enough time budget! You only have ${Math.floor(remainingBudget / 60)} minutes left.`,
-				);
-			}
-		}
+	const addActivity = () => {
+		if (!newActivity.trim() || minutes <= 0) return;
+
+		const cost = minutes * COST_PER_MINUTE;
+		const activity: TimeActivity = {
+			id: Date.now().toString(),
+			activity: newActivity.trim(),
+			minutes,
+			cost,
+			timestamp: new Date().toLocaleTimeString(),
+		};
+
+		setActivities([...activities, activity]);
+		setNewActivity("");
+		setMinutes(0);
 	};
 
-	const removeEntry = (id: string) => {
-		setEntries(entries.filter((entry) => entry.id !== id));
+	const removeActivity = (id: string) => {
+		setActivities(activities.filter((activity) => activity.id !== id));
 	};
 
-	const formatTime = (seconds: number) => {
-		const hours = Math.floor(seconds / 3600);
-		const minutes = Math.floor((seconds % 3600) / 60);
-		const secs = seconds % 60;
-		return `${hours}h ${minutes}m ${secs}s`;
+	const remainingBudget = DAILY_BUDGET - totalSpent;
+	const budgetPercentage = (totalSpent / DAILY_BUDGET) * 100;
+	const remainingMinutes = Math.floor(remainingBudget / COST_PER_MINUTE);
+
+	const formatCurrency = (amount: number) => {
+		return new Intl.NumberFormat("en-US", {
+			style: "currency",
+			currency: "USD",
+		}).format(amount);
+	};
+
+	const formatTime = (minutes: number) => {
+		const hours = Math.floor(minutes / 60);
+		const mins = minutes % 60;
+		return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 	};
 
 	return (
-		<div className="min-h-screen bg-background cyberpunk-grid">
-			<header className="border-b border-border/50 bg-card/50 backdrop-blur-sm">
-				<div className="container mx-auto px-4 py-6">
-					<div className="flex items-center justify-between">
-						<div className="flex items-center gap-3">
-							<div className="p-2 rounded-lg bg-primary/20 glow-effect">
-								<Clock className="h-6 w-6 text-primary" />
+		<div className="min-h-screen p-4 space-y-6">
+			{/* Header */}
+			<div className="text-center space-y-2">
+				<h1 className="text-4xl font-bold cyber-text mb-2">
+					TIME SPENDING TRACKER
+				</h1>
+				<p className="text-muted-foreground text-lg">
+					Every minute costs $60 from your daily $86,400 budget
+				</p>
+				<div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+					<Calendar className="w-4 h-4" />
+					<span>{currentDate}</span>
+				</div>
+			</div>
+
+			<div className="max-w-4xl mx-auto grid gap-6 md:grid-cols-2">
+				{/* Budget Overview */}
+				<Card className="cyber-border bg-card/50 backdrop-blur-sm">
+					<CardHeader>
+						<CardTitle className="flex items-center gap-2">
+							<Target className="w-5 h-5 text-cyan-400" />
+							<span className="neon-text">Daily Budget</span>
+						</CardTitle>
+						<CardDescription>Your financial time allocation</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<div className="space-y-2">
+							<div className="flex justify-between text-sm">
+								<span>Progress</span>
+								<span>{budgetPercentage.toFixed(1)}%</span>
 							</div>
-							<div>
-								<h1 className="text-2xl font-bold neon-text">TimeSpend</h1>
-								<p className="text-sm text-muted-foreground">
-									86,400 seconds daily budget
-								</p>
+							<Progress
+								value={budgetPercentage}
+								className="cyber-glow"
+								style={{
+									background:
+										"linear-gradient(90deg, rgba(0,255,255,0.1) 0%, rgba(255,0,128,0.1) 100%)",
+								}}
+							/>
+						</div>
+						<div className="grid grid-cols-2 gap-4">
+							<div className="text-center p-3 rounded-lg cyber-border bg-background/20">
+								<div className="text-2xl font-bold neon-text">
+									{formatCurrency(DAILY_BUDGET)}
+								</div>
+								<div className="text-xs text-muted-foreground">
+									Total Budget
+								</div>
+							</div>
+							<div className="text-center p-3 rounded-lg cyber-border bg-background/20">
+								<div className="text-2xl font-bold spent-text">
+									{formatCurrency(totalSpent)}
+								</div>
+								<div className="text-xs text-muted-foreground">Spent</div>
 							</div>
 						</div>
-						<div className="text-right">
-							<div className="text-lg font-bold text-primary neon-text">
-								${remainingBudget.toLocaleString()}
+						<div className="text-center p-3 rounded-lg cyber-border bg-background/20">
+							<div className="text-xl font-bold text-green-400">
+								{formatCurrency(remainingBudget)}
 							</div>
-							<div className="text-sm text-muted-foreground">
-								{formatTime(remainingBudget)} remaining
+							<div className="text-xs text-muted-foreground">
+								Remaining ({remainingMinutes} minutes)
 							</div>
 						</div>
-					</div>
-				</div>
-			</header>
+					</CardContent>
+				</Card>
 
-			<main className="container mx-auto px-4 py-8">
-				<div className="grid gap-6 md:grid-cols-2">
-					{/* Budget Overview */}
-					<Card className="bg-card/50 border-border/50 backdrop-blur-sm">
-						<CardHeader>
-							<CardTitle className="flex items-center gap-2">
-								<DollarSign className="h-5 w-5 text-primary" />
-								Daily Budget
-							</CardTitle>
-							<CardDescription>
-								Track how you spend your 24 hours
-							</CardDescription>
-						</CardHeader>
-						<CardContent className="space-y-4">
-							<div className="space-y-2">
-								<div className="flex justify-between text-sm">
-									<span>Spent: ${totalSpent.toLocaleString()}</span>
-									<span>{progressPercent.toFixed(1)}%</span>
+				{/* Add Activity */}
+				<Card className="cyber-border bg-card/50 backdrop-blur-sm">
+					<CardHeader>
+						<CardTitle className="flex items-center gap-2">
+							<Plus className="w-5 h-5 text-cyan-400" />
+							<span className="neon-text">Log Time Activity</span>
+						</CardTitle>
+						<CardDescription>
+							Record how you spend your time budget
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<div className="space-y-2">
+							<label className="text-sm font-medium">Activity</label>
+							<input
+								type="text"
+								placeholder="What did you do?"
+								value={newActivity}
+								onChange={(e) => setNewActivity(e.target.value)}
+								className="w-full p-3 rounded-lg bg-background/50 border border-cyan-400/30 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all"
+								onKeyDown={(e) => e.key === "Enter" && addActivity()}
+							/>
+						</div>
+						<div className="space-y-2">
+							<label className="text-sm font-medium">Duration (minutes)</label>
+							<input
+								type="number"
+								placeholder="0"
+								value={minutes || ""}
+								onChange={(e) => setMinutes(Number(e.target.value))}
+								className="w-full p-3 rounded-lg bg-background/50 border border-cyan-400/30 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all"
+								min="1"
+								max={remainingMinutes}
+								onKeyDown={(e) => e.key === "Enter" && addActivity()}
+							/>
+						</div>
+						{minutes > 0 && (
+							<div className="p-3 rounded-lg cyber-border bg-background/20">
+								<div className="text-sm text-muted-foreground">
+									Cost Preview:
 								</div>
-								<Progress value={progressPercent} className="h-3 glow-effect" />
+								<div className="text-lg font-bold spent-text">
+									{formatCurrency(minutes * COST_PER_MINUTE)}
+								</div>
 							</div>
-							<div className="grid grid-cols-2 gap-4 text-center">
-								<div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
-									<div className="text-lg font-bold text-primary">
-										{Math.floor(totalMinutes / 60)}h {totalMinutes % 60}m
-									</div>
-									<div className="text-xs text-muted-foreground">
-										Time Spent
-									</div>
-								</div>
-								<div className="p-3 rounded-lg bg-secondary/10 border border-secondary/20">
-									<div className="text-lg font-bold">
-										{Math.floor(remainingBudget / 3600)}h{" "}
-										{Math.floor((remainingBudget % 3600) / 60)}m
-									</div>
-									<div className="text-xs text-muted-foreground">Remaining</div>
-								</div>
-							</div>
-						</CardContent>
-					</Card>
+						)}
+						<Button
+							onClick={addActivity}
+							disabled={
+								!newActivity.trim() ||
+								minutes <= 0 ||
+								remainingBudget < minutes * COST_PER_MINUTE
+							}
+							className="w-full variant-cyber"
+						>
+							<Zap className="w-4 h-4 mr-2" />
+							Add Activity
+						</Button>
+						{remainingBudget < minutes * COST_PER_MINUTE && minutes > 0 && (
+							<p className="text-sm text-red-400 text-center">
+								Insufficient budget for this activity
+							</p>
+						)}
+					</CardContent>
+				</Card>
+			</div>
 
-					{/* Add Entry */}
-					<Card className="bg-card/50 border-border/50 backdrop-blur-sm">
-						<CardHeader>
-							<CardTitle>Log Time Spent</CardTitle>
-							<CardDescription>
-								What did you spend your time on?
-							</CardDescription>
-						</CardHeader>
-						<CardContent className="space-y-4">
-							<div className="space-y-2">
-								<label className="text-sm font-medium">Activity</label>
-								<input
-									type="text"
-									value={newActivity}
-									onChange={(e) => setNewActivity(e.target.value)}
-									placeholder="What did you do?"
-									className="w-full px-3 py-2 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-								/>
-							</div>
-							<div className="space-y-2">
-								<label className="text-sm font-medium">Time (minutes)</label>
-								<div className="flex items-center gap-2">
-									<Button
-										variant="outline"
-										size="icon"
-										onClick={() => setNewMinutes(Math.max(0, newMinutes - 5))}
-									>
-										<Minus className="h-4 w-4" />
-									</Button>
-									<input
-										type="number"
-										value={newMinutes}
-										onChange={(e) =>
-											setNewMinutes(Math.max(0, parseInt(e.target.value) || 0))
-										}
-										min="0"
-										className="flex-1 px-3 py-2 bg-background border border-border rounded-md text-center focus:outline-none focus:ring-2 focus:ring-primary/50"
-									/>
-									<Button
-										variant="outline"
-										size="icon"
-										onClick={() => setNewMinutes(newMinutes + 5)}
-									>
-										<Plus className="h-4 w-4" />
-									</Button>
-								</div>
-								{newMinutes > 0 && (
-									<div className="text-sm text-muted-foreground text-center">
-										Cost: ${calculateCost(newMinutes).toLocaleString()}
-									</div>
-								)}
-							</div>
-							<Button
-								onClick={addEntry}
-								disabled={
-									!newActivity.trim() ||
-									newMinutes <= 0 ||
-									calculateCost(newMinutes) > remainingBudget
-								}
-								className="w-full glow-effect"
-							>
-								<Save className="h-4 w-4 mr-2" />
-								Log Activity
-							</Button>
-						</CardContent>
-					</Card>
-				</div>
-
-				{/* Entries List */}
-				{entries.length > 0 && (
-					<Card className="mt-6 bg-card/50 border-border/50 backdrop-blur-sm">
-						<CardHeader>
-							<CardTitle>Today's Activities</CardTitle>
-							<CardDescription>
-								How you've spent your time today
-							</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<div className="space-y-3">
-								{entries.map((entry) => (
-									<div
-										key={entry.id}
-										className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/50"
-									>
-										<div className="flex-1">
-											<div className="font-medium">{entry.activity}</div>
-											<div className="text-sm text-muted-foreground">
-												{entry.minutes} min • ${entry.cost.toLocaleString()}
-											</div>
+			{/* Activities List */}
+			<Card className="max-w-4xl mx-auto cyber-border bg-card/50 backdrop-blur-sm">
+				<CardHeader>
+					<CardTitle className="flex items-center gap-2">
+						<Clock className="w-5 h-5 text-cyan-400" />
+						<span className="neon-text">Today&apos;s Activities</span>
+					</CardTitle>
+					<CardDescription>Your time spending log for today</CardDescription>
+				</CardHeader>
+				<CardContent>
+					{activities.length === 0 ? (
+						<div className="text-center py-8 text-muted-foreground">
+							<Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
+							<p>No activities logged yet</p>
+							<p className="text-sm">
+								Start tracking your time to see your spending patterns
+							</p>
+						</div>
+					) : (
+						<div className="space-y-3">
+							{activities.map((activity) => (
+								<div
+									key={activity.id}
+									className="flex items-center justify-between p-4 rounded-lg cyber-border bg-background/20 hover:bg-background/30 transition-colors"
+								>
+									<div className="flex-1">
+										<div className="font-medium text-cyan-400">
+											{activity.activity}
 										</div>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => removeEntry(entry.id)}
-											className="text-destructive hover:text-destructive"
-										>
-											×
-										</Button>
+										<div className="text-sm text-muted-foreground flex items-center gap-4">
+											<span className="flex items-center gap-1">
+												<Clock className="w-3 h-3" />
+												{formatTime(activity.minutes)}
+											</span>
+											<span className="flex items-center gap-1">
+												<DollarSign className="w-3 h-3" />
+												{formatCurrency(activity.cost)}
+											</span>
+											<span>{activity.timestamp}</span>
+										</div>
 									</div>
-								))}
-							</div>
-						</CardContent>
-					</Card>
-				)}
-			</main>
+									<Button
+										variant="ghost"
+										size="icon"
+										onClick={() => removeActivity(activity.id)}
+										className="text-red-400 hover:text-red-300 hover:bg-red-400/10"
+									>
+										<Trash2 className="w-4 h-4" />
+									</Button>
+								</div>
+							))}
+						</div>
+					)}
+				</CardContent>
+			</Card>
+
+			{/* Footer */}
+			<div className="text-center text-xs text-muted-foreground max-w-4xl mx-auto">
+				<p>
+					💡 Concept: 86,400 seconds in a day = $86,400 budget | Each minute
+					costs $60
+				</p>
+				<p>
+					Data resets daily at midnight and is stored locally in your browser
+				</p>
+			</div>
 		</div>
 	);
 }
