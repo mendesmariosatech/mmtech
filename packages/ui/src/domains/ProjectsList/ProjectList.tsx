@@ -15,6 +15,10 @@ const filteredRoutes = typedKeys(Routes.client).filter((route) => {
 			return true;
 		case "/page-builderV2":
 			return true;
+		case "/property-tracker":
+			return true;
+		case "/time-spending-app":
+			return true;
 		default:
 			return false;
 	}

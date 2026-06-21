@@ -10,15 +10,15 @@ import {
 	Target,
 	Calendar,
 } from "lucide-react";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "../../components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "@repo/ui/components/ui/card";
-import { Progress } from "@repo/ui/components/ui/progress";
+} from "../../components/ui/card";
+import { Progress } from "../../components/ui/progress";
 
 interface TimeActivity {
 	id: string;
@@ -28,17 +28,16 @@ interface TimeActivity {
 	timestamp: string;
 }
 
-const DAILY_BUDGET = 86400; // $86,400 representing 86,400 seconds in a day
-const COST_PER_MINUTE = 60; // $60 per minute
+const DAILY_BUDGET = 86400;
+const COST_PER_MINUTE = 60;
 
-export default function TimeSpendingTracker() {
+export const TimeSpendingApp = () => {
 	const [activities, setActivities] = useState<TimeActivity[]>([]);
 	const [newActivity, setNewActivity] = useState("");
 	const [minutes, setMinutes] = useState<number>(0);
 	const [totalSpent, setTotalSpent] = useState(0);
 	const [currentDate, setCurrentDate] = useState("");
 
-	// Load data from localStorage on component mount
 	useEffect(() => {
 		const today = new Date().toDateString();
 		setCurrentDate(today);
@@ -51,14 +50,12 @@ export default function TimeSpendingTracker() {
 		}
 	}, []);
 
-	// Save data to localStorage whenever activities change
 	useEffect(() => {
 		const today = new Date().toDateString();
 		const data = { activities, totalSpent };
 		localStorage.setItem(`time-spending-${today}`, JSON.stringify(data));
 	}, [activities, totalSpent]);
 
-	// Calculate total spent whenever activities change
 	useEffect(() => {
 		const total = activities.reduce((sum, activity) => sum + activity.cost, 0);
 		setTotalSpent(total);
@@ -96,15 +93,14 @@ export default function TimeSpendingTracker() {
 		}).format(amount);
 	};
 
-	const formatTime = (minutes: number) => {
-		const hours = Math.floor(minutes / 60);
-		const mins = minutes % 60;
-		return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+	const formatTime = (mins: number) => {
+		const hours = Math.floor(mins / 60);
+		const m = mins % 60;
+		return hours > 0 ? `${hours}h ${m}m` : `${m}m`;
 	};
 
 	return (
 		<div className="min-h-screen p-4 space-y-6">
-			{/* Header */}
 			<div className="text-center space-y-2">
 				<h1 className="text-4xl font-bold cyber-text mb-2">
 					TIME SPENDING TRACKER
@@ -119,7 +115,6 @@ export default function TimeSpendingTracker() {
 			</div>
 
 			<div className="max-w-4xl mx-auto grid gap-6 md:grid-cols-2">
-				{/* Budget Overview */}
 				<Card className="cyber-border bg-card/50 backdrop-blur-sm">
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
@@ -148,9 +143,7 @@ export default function TimeSpendingTracker() {
 								<div className="text-2xl font-bold neon-text">
 									{formatCurrency(DAILY_BUDGET)}
 								</div>
-								<div className="text-xs text-muted-foreground">
-									Total Budget
-								</div>
+								<div className="text-xs text-muted-foreground">Total Budget</div>
 							</div>
 							<div className="text-center p-3 rounded-lg cyber-border bg-background/20">
 								<div className="text-2xl font-bold spent-text">
@@ -170,7 +163,6 @@ export default function TimeSpendingTracker() {
 					</CardContent>
 				</Card>
 
-				{/* Add Activity */}
 				<Card className="cyber-border bg-card/50 backdrop-blur-sm">
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
@@ -237,7 +229,6 @@ export default function TimeSpendingTracker() {
 				</Card>
 			</div>
 
-			{/* Activities List */}
 			<Card className="max-w-4xl mx-auto cyber-border bg-card/50 backdrop-blur-sm">
 				<CardHeader>
 					<CardTitle className="flex items-center gap-2">
@@ -293,11 +284,10 @@ export default function TimeSpendingTracker() {
 				</CardContent>
 			</Card>
 
-			{/* Footer */}
 			<div className="text-center text-xs text-muted-foreground max-w-4xl mx-auto">
 				<p>
-					💡 Concept: 86,400 seconds in a day = $86,400 budget | Each minute
-					costs $60
+					Concept: 86,400 seconds in a day = $86,400 budget | Each minute costs
+					$60
 				</p>
 				<p>
 					Data resets daily at midnight and is stored locally in your browser
@@ -305,4 +295,4 @@ export default function TimeSpendingTracker() {
 			</div>
 		</div>
 	);
-}
+};
