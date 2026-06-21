@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createClient } from "@/lib/supabase/server";
 import { WalkTracker } from "@/components/employee/walk-tracker";
 

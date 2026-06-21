@@ -37,7 +37,7 @@ export const LoginForm = (props: LoginFormProps) => {
 
 	return (
 		<div className="border-2 border-primary-foreground p-6 rounded-md">
-			<DevTool control={form.control} />
+			<DevTool control={form.control as any} />
 			<ControlledForm
 				useForm={form}
 				config={loginFormConfig}

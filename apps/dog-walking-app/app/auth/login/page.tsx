@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-// Simplified login page to debug the RSC issue
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -19,11 +18,9 @@ export default function LoginPage() {
 		try {
 			console.log("Simple login attempt for:", email);
 
-			// Simple validation
 			if (email === "demo@example.com" && password === "password") {
 				console.log("Login successful!");
 
-				// Store user in localStorage
 				localStorage.setItem(
 					"current-user",
 					JSON.stringify({
@@ -34,7 +31,6 @@ export default function LoginPage() {
 					}),
 				);
 
-				// Redirect to dashboard
 				router.push("/dashboard");
 			} else {
 				setError("Invalid credentials. Try demo@example.com / password");
@@ -48,66 +44,139 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center p-4">
-			<div className="max-w-md w-full">
-				<div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-					<h1 className="text-2xl font-bold mb-6 text-center">
+		<div
+			style={{
+				minHeight: "100vh",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				padding: "20px",
+				backgroundColor: "#f9fafb",
+			}}
+		>
+			<div style={{ maxWidth: "400px", width: "100%" }}>
+				<div
+					style={{
+						backgroundColor: "white",
+						boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+						borderRadius: "8px",
+						padding: "32px",
+					}}
+				>
+					<h1
+						style={{
+							fontSize: "24px",
+							fontWeight: "bold",
+							marginBottom: "24px",
+							textAlign: "center",
+							color: "#111827",
+						}}
+					>
 						PawTrack Login
 					</h1>
-					<div className="mb-4 p-2 bg-gray-100 rounded text-sm">
+
+					<div
+						style={{
+							marginBottom: "16px",
+							padding: "8px",
+							backgroundColor: "#f3f4f6",
+							borderRadius: "4px",
+							fontSize: "14px",
+							color: "#374151",
+						}}
+					>
 						Demo: demo@example.com / password
 					</div>
 
 					<form onSubmit={handleLogin}>
-						<div className="mb-4">
-							<label className="block text-gray-700 text-sm font-bold mb-2">
+						<div style={{ marginBottom: "16px" }}>
+							<label
+								style={{
+									display: "block",
+									color: "#374151",
+									fontSize: "14px",
+									fontWeight: "bold",
+									marginBottom: "8px",
+								}}
+							>
 								Email
 							</label>
 							<input
 								type="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
-								className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+								style={{
+									width: "100%",
+									padding: "8px 12px",
+									border: "1px solid #d1d5db",
+									borderRadius: "4px",
+									fontSize: "16px",
+									outline: "none",
+								}}
 								placeholder="demo@example.com"
 								required
 							/>
 						</div>
 
-						<div className="mb-6">
-							<label className="block text-gray-700 text-sm font-bold mb-2">
+						<div style={{ marginBottom: "24px" }}>
+							<label
+								style={{
+									display: "block",
+									color: "#374151",
+									fontSize: "14px",
+									fontWeight: "bold",
+									marginBottom: "8px",
+								}}
+							>
 								Password
 							</label>
 							<input
 								type="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
-								className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+								style={{
+									width: "100%",
+									padding: "8px 12px",
+									border: "1px solid #d1d5db",
+									borderRadius: "4px",
+									fontSize: "16px",
+									outline: "none",
+								}}
 								placeholder="password"
 								required
 							/>
 						</div>
 
-						{error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
-
-						<div className="flex items-center justify-between">
-							<button
-								type="submit"
-								disabled={isLoading}
-								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
+						{error && (
+							<div
+								style={{
+									marginBottom: "16px",
+									color: "#ef4444",
+									fontSize: "14px",
+								}}
 							>
-								{isLoading ? "Signing in..." : "Sign In"}
-							</button>
-						</div>
-					</form>
+								{error}
+							</div>
+						)}
 
-					<div className="mt-4 text-center">
-						<a
-							href="/auth/sign-up"
-							className="text-blue-500 hover:text-blue-800"
+						<button
+							type="submit"
+							disabled={isLoading}
+							style={{
+								backgroundColor: isLoading ? "#9ca3af" : "#3b82f6",
+								color: "white",
+								fontWeight: "bold",
+								padding: "12px 16px",
+								borderRadius: "4px",
+								border: "none",
+								cursor: isLoading ? "not-allowed" : "pointer",
+								width: "100%",
+								fontSize: "16px",
+							}}
 						>
-							Don't have an account? Sign up
-						</a>
-					</div>
+							{isLoading ? "Signing in..." : "Sign In"}
+						</button>
+					</form>
 				</div>
 			</div>
 		</div>
