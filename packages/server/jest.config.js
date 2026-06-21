@@ -5,4 +5,13 @@ module.exports = {
   roots: ["src"],
   testMatch: ["**/*.test.ts"],
   setupFiles: ["dotenv/config"],
+  extensionsToTreatAsEsm: [".ts"],
+  moduleNameMapper: {
+    "^(\\.{1,2}\\/.*)\\\\.\\.js$": "$1",
+  },
+  transform: {
+    "^.+\\.tsx?$": ["ts-jest", {
+      useESM: true
+    }]
+  }
 };
