@@ -1,24 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { PropertyForm } from "../components/PropertyForm";
-import { PropertyList } from "../components/PropertyList";
+import { PropertyForm } from "./PropertyForm";
+import { PropertyList } from "./PropertyList";
 import { PropertyCalculations, Property } from "@repo/zod-types";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "../../components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
-} from "@repo/ui/components/ui/card";
+} from "../../components/ui/card";
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
-} from "@repo/ui/components/ui/tabs";
+} from "../../components/ui/tabs";
 
-export default function Page(): JSX.Element {
+export const PropertyTracker = () => {
 	const [properties, setProperties] = useState<
 		(Property & { calculations: PropertyCalculations })[]
 	>([]);
@@ -117,4 +117,4 @@ export default function Page(): JSX.Element {
 			</div>
 		</div>
 	);
-}
+};
