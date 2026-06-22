@@ -3,23 +3,20 @@ import { redirect } from "next/navigation";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { eq } from "drizzle-orm";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function DashboardLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	// For now, use mock auth - in production, this would use proper auth
-	const mockUser = {
-		id: "demo-user-id",
-		email: "demo@example.com",
-	};
+	const user = await getCurrentUser();
+	if (!user) redirect("/auth/login");
 
-	// Get company for this owner
 	const companies = await db
 		.select()
 		.from(schema.dogWalkingCompanies)
-		.where(eq(schema.dogWalkingCompanies.owner_id, mockUser.id))
+		.where(eq(schema.dogWalkingCompanies.owner_id, user.id))
 		.limit(1);
 
 	const company = companies[0];
@@ -29,7 +26,7 @@ export default async function DashboardLayout({
 		const employees = await db
 			.select()
 			.from(schema.dogWalkingEmployees)
-			.where(eq(schema.dogWalkingEmployees.user_id, mockUser.id))
+			.where(eq(schema.dogWalkingEmployees.user_id, user.id))
 			.limit(1);
 
 		if (employees.length > 0) {
@@ -42,7 +39,7 @@ export default async function DashboardLayout({
 
 	return (
 		<SidebarProvider>
-			<DashboardSidebar company={company} userEmail={mockUser.email} />
+			<DashboardSidebar company={company} userEmail={user.email} />
 			<SidebarInset>{children}</SidebarInset>
 		</SidebarProvider>
 	);

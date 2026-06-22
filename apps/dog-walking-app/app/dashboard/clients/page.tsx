@@ -3,15 +3,16 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { ClientList } from "@/components/dashboard/client-list";
 import { AddClientDialog } from "@/components/dashboard/add-client-dialog";
 import { eq, desc } from "drizzle-orm";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function ClientsPage() {
-	// Mock user for now
-	const mockUser = { id: "demo-user-id" };
+	const user = await getCurrentUser();
+	if (!user) return null;
 
 	const companies = await db
 		.select()
 		.from(schema.dogWalkingCompanies)
-		.where(eq(schema.dogWalkingCompanies.owner_id, mockUser.id))
+		.where(eq(schema.dogWalkingCompanies.owner_id, user.id))
 		.limit(1);
 
 	const company = companies[0];

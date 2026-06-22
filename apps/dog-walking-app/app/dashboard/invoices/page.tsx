@@ -1,18 +1,20 @@
 export const dynamic = "force-dynamic";
 
 import { db, schema } from "@/lib/db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { InvoiceList } from "@/components/dashboard/invoice-list";
 import { GenerateInvoicesDialog } from "@/components/dashboard/generate-invoices-dialog";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function InvoicesPage() {
-	const mockUser = { id: "demo-user-id" };
+	const user = await getCurrentUser();
+	if (!user) return null;
 
 	const companies = await db
 		.select()
 		.from(schema.dogWalkingCompanies)
-		.where(eq(schema.dogWalkingCompanies.owner_id, mockUser.id))
+		.where(eq(schema.dogWalkingCompanies.owner_id, user.id))
 		.limit(1);
 
 	const company = companies[0];
@@ -30,7 +32,12 @@ export default async function InvoicesPage() {
 			name: schema.dogWalkingClients.name,
 		})
 		.from(schema.dogWalkingClients)
-		.where(eq(schema.dogWalkingClients.company_id, company.id));
+		.where(
+			and(
+				eq(schema.dogWalkingClients.company_id, company.id),
+				eq(schema.dogWalkingClients.is_active, true),
+			),
+		);
 
 	return (
 		<div className="flex flex-col">

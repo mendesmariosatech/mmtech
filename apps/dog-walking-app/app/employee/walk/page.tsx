@@ -1,14 +1,16 @@
 export const dynamic = "force-dynamic";
 
 import { db, schema } from "@/lib/db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, asc } from "drizzle-orm";
 import { WalkTracker } from "@/components/employee/walk-tracker";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function WalkPage() {
-	const mockUser = { id: "demo-user-id" };
+	const user = await getCurrentUser();
+	if (!user) return null;
 
 	const employee = await db.query.dogWalkingEmployees.findFirst({
-		where: eq(schema.dogWalkingEmployees.user_id, mockUser.id),
+		where: eq(schema.dogWalkingEmployees.user_id, user.id),
 	});
 
 	if (!employee) return null;
@@ -39,7 +41,8 @@ export default async function WalkPage() {
 				eq(schema.dogWalkingClients.company_id, employee.company_id),
 				eq(schema.dogWalkingClients.is_active, true),
 			),
-		);
+		)
+		.orderBy(asc(schema.dogWalkingClients.name));
 
 	return (
 		<WalkTracker

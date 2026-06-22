@@ -24,14 +24,7 @@ interface WalkTrackerProps {
 	employeeId: string;
 	companyId: string;
 	clients: Pick<Client, "id" | "name" | "dog_name" | "address" | "dog_notes">[];
-	activeWalk:
-		| (Walk & {
-				client: Pick<
-					Client,
-					"name" | "dog_name" | "address" | "dog_notes"
-				> | null;
-		  })
-		| null;
+	activeWalk: Walk | null;
 }
 
 export function WalkTracker({
@@ -82,8 +75,7 @@ export function WalkTracker({
 			selectedClient,
 		);
 		if (walkData) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			setCurrentWalk(walkData as any);
+			setCurrentWalk(walkData);
 			setElapsedTime(0);
 		}
 		setIsLoading(false);

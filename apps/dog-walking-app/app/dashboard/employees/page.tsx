@@ -5,14 +5,16 @@ import { eq, desc } from "drizzle-orm";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { EmployeeList } from "@/components/dashboard/employee-list";
 import { AddEmployeeDialog } from "@/components/dashboard/add-employee-dialog";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function EmployeesPage() {
-	const mockUser = { id: "demo-user-id" };
+	const user = await getCurrentUser();
+	if (!user) return null;
 
 	const companies = await db
 		.select()
 		.from(schema.dogWalkingCompanies)
-		.where(eq(schema.dogWalkingCompanies.owner_id, mockUser.id))
+		.where(eq(schema.dogWalkingCompanies.owner_id, user.id))
 		.limit(1);
 
 	const company = companies[0];

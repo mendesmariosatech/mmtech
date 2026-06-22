@@ -6,12 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dog, Footprints, Clock } from "lucide-react";
 import Link from "next/link";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function EmployeeHomePage() {
-	const mockUser = { id: "demo-user-id" };
+	const user = await getCurrentUser();
+	if (!user) return null;
 
 	const employee = await db.query.dogWalkingEmployees.findFirst({
-		where: eq(schema.dogWalkingEmployees.user_id, mockUser.id),
+		where: eq(schema.dogWalkingEmployees.user_id, user.id),
 		with: { company: true },
 	});
 

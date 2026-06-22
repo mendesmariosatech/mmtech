@@ -5,12 +5,14 @@ import { eq, and, desc } from "drizzle-orm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function HistoryPage() {
-	const mockUser = { id: "demo-user-id" };
+	const user = await getCurrentUser();
+	if (!user) return null;
 
 	const employee = await db.query.dogWalkingEmployees.findFirst({
-		where: eq(schema.dogWalkingEmployees.user_id, mockUser.id),
+		where: eq(schema.dogWalkingEmployees.user_id, user.id),
 	});
 
 	if (!employee) return null;

@@ -39,47 +39,72 @@ export async function addEmployee(companyId: string, formData: FormData) {
 }
 
 export async function toggleClientActive(clientId: string, isActive: boolean) {
-	await db
-		.update(schema.dogWalkingClients)
-		.set({ is_active: !isActive })
-		.where(eq(schema.dogWalkingClients.id, clientId));
-	revalidatePath("/dashboard/clients");
+	try {
+		await db
+			.update(schema.dogWalkingClients)
+			.set({ is_active: !isActive })
+			.where(eq(schema.dogWalkingClients.id, clientId));
+		revalidatePath("/dashboard/clients");
+		return { success: true };
+	} catch (e) {
+		return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+	}
 }
 
 export async function deleteClient(clientId: string) {
-	await db
-		.delete(schema.dogWalkingClients)
-		.where(eq(schema.dogWalkingClients.id, clientId));
-	revalidatePath("/dashboard/clients");
+	try {
+		await db
+			.delete(schema.dogWalkingClients)
+			.where(eq(schema.dogWalkingClients.id, clientId));
+		revalidatePath("/dashboard/clients");
+		return { success: true };
+	} catch (e) {
+		return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+	}
 }
 
 export async function toggleEmployeeActive(
 	employeeId: string,
 	isActive: boolean,
 ) {
-	await db
-		.update(schema.dogWalkingEmployees)
-		.set({ is_active: !isActive })
-		.where(eq(schema.dogWalkingEmployees.id, employeeId));
-	revalidatePath("/dashboard/employees");
+	try {
+		await db
+			.update(schema.dogWalkingEmployees)
+			.set({ is_active: !isActive })
+			.where(eq(schema.dogWalkingEmployees.id, employeeId));
+		revalidatePath("/dashboard/employees");
+		return { success: true };
+	} catch (e) {
+		return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+	}
 }
 
 export async function deleteEmployee(employeeId: string) {
-	await db
-		.delete(schema.dogWalkingEmployees)
-		.where(eq(schema.dogWalkingEmployees.id, employeeId));
-	revalidatePath("/dashboard/employees");
+	try {
+		await db
+			.delete(schema.dogWalkingEmployees)
+			.where(eq(schema.dogWalkingEmployees.id, employeeId));
+		revalidatePath("/dashboard/employees");
+		return { success: true };
+	} catch (e) {
+		return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+	}
 }
 
 export async function updateInvoiceStatus(
 	invoiceId: string,
 	status: "draft" | "sent" | "paid",
 ) {
-	await db
-		.update(schema.dogWalkingInvoices)
-		.set({ status })
-		.where(eq(schema.dogWalkingInvoices.id, invoiceId));
-	revalidatePath("/dashboard/invoices");
+	try {
+		await db
+			.update(schema.dogWalkingInvoices)
+			.set({ status })
+			.where(eq(schema.dogWalkingInvoices.id, invoiceId));
+		revalidatePath("/dashboard/invoices");
+		return { success: true };
+	} catch (e) {
+		return { success: false, error: e instanceof Error ? e.message : "Unknown error" };
+	}
 }
 
 export async function generateInvoice(

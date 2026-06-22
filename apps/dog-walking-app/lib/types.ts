@@ -2,7 +2,7 @@ export interface Company {
 	id: string;
 	owner_id: string;
 	name: string;
-	created_at: string;
+	createdAt: string;
 }
 
 export interface Employee {
@@ -14,7 +14,7 @@ export interface Employee {
 	phone: string | null;
 	hourly_rate: number;
 	is_active: boolean;
-	created_at: string;
+	createdAt: string;
 }
 
 export interface Client {
@@ -29,7 +29,7 @@ export interface Client {
 	dog_notes: string | null;
 	walk_rate: number;
 	is_active: boolean;
-	created_at: string;
+	createdAt: string;
 }
 
 export interface Walk {
@@ -42,10 +42,10 @@ export interface Walk {
 	duration_minutes: number | null;
 	notes: string | null;
 	status: "in_progress" | "completed" | "cancelled";
-	created_at: string;
-	// Joined fields
-	client?: Client;
-	employee?: Employee;
+	createdAt: string;
+	// Joined fields — column selection may return a subset of the full type
+	client?: Partial<Client>;
+	employee?: Partial<Employee>;
 }
 
 export interface Invoice {
@@ -58,9 +58,9 @@ export interface Invoice {
 	total_walks: number;
 	total_amount: number;
 	status: "draft" | "sent" | "paid";
-	created_at: string;
-	// Joined fields
-	client?: Client;
+	createdAt: string;
+	// Joined fields — column selection may return a subset of the full type
+	client?: Partial<Client>;
 }
 
 export type UserRole = "owner" | "employee";

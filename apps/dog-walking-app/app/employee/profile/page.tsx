@@ -5,12 +5,14 @@ import { eq, and, gte } from "drizzle-orm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SignOutButton } from "@/components/employee/sign-out-button";
 import { User, Mail, Phone, DollarSign } from "lucide-react";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function ProfilePage() {
-	const mockUser = { id: "demo-user-id" };
+	const user = await getCurrentUser();
+	if (!user) return null;
 
 	const employee = await db.query.dogWalkingEmployees.findFirst({
-		where: eq(schema.dogWalkingEmployees.user_id, mockUser.id),
+		where: eq(schema.dogWalkingEmployees.user_id, user.id),
 		with: { company: true },
 	});
 
