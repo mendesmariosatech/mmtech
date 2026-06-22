@@ -10,15 +10,16 @@ import {
 	Target,
 	Calendar,
 } from "lucide-react";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "../../components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "@repo/ui/components/ui/card";
-import { Progress } from "@repo/ui/components/ui/progress";
+} from "../../components/ui/card";
+import { Progress } from "../../components/ui/progress";
+import styles from "./TimeSpendingApp.module.css";
 
 interface TimeActivity {
 	id: string;
@@ -28,17 +29,16 @@ interface TimeActivity {
 	timestamp: string;
 }
 
-const DAILY_BUDGET = 86400; // $86,400 representing 86,400 seconds in a day
-const COST_PER_MINUTE = 60; // $60 per minute
+const DAILY_BUDGET = 86400;
+const COST_PER_MINUTE = 60;
 
-export default function TimeSpendingTracker() {
+export const TimeSpendingApp = () => {
 	const [activities, setActivities] = useState<TimeActivity[]>([]);
 	const [newActivity, setNewActivity] = useState("");
 	const [minutes, setMinutes] = useState<number>(0);
 	const [totalSpent, setTotalSpent] = useState(0);
 	const [currentDate, setCurrentDate] = useState("");
 
-	// Load data from localStorage on component mount
 	useEffect(() => {
 		const today = new Date().toDateString();
 		setCurrentDate(today);
@@ -51,14 +51,12 @@ export default function TimeSpendingTracker() {
 		}
 	}, []);
 
-	// Save data to localStorage whenever activities change
 	useEffect(() => {
 		const today = new Date().toDateString();
 		const data = { activities, totalSpent };
 		localStorage.setItem(`time-spending-${today}`, JSON.stringify(data));
 	}, [activities, totalSpent]);
 
-	// Calculate total spent whenever activities change
 	useEffect(() => {
 		const total = activities.reduce((sum, activity) => sum + activity.cost, 0);
 		setTotalSpent(total);
@@ -96,17 +94,22 @@ export default function TimeSpendingTracker() {
 		}).format(amount);
 	};
 
-	const formatTime = (minutes: number) => {
-		const hours = Math.floor(minutes / 60);
-		const mins = minutes % 60;
-		return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+	const formatTime = (mins: number) => {
+		const hours = Math.floor(mins / 60);
+		const m = mins % 60;
+		return hours > 0 ? `${hours}h ${m}m` : `${m}m`;
 	};
 
 	return (
-		<div className="min-h-screen p-4 space-y-6">
-			{/* Header */}
+		<div
+			className="min-h-screen p-4 space-y-6"
+			style={{
+				background:
+					"radial-gradient(ellipse at center, rgba(0, 20, 40, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%)",
+			}}
+		>
 			<div className="text-center space-y-2">
-				<h1 className="text-4xl font-bold cyber-text mb-2">
+				<h1 className={`text-4xl font-bold mb-2 ${styles["cyber-text"]}`}>
 					TIME SPENDING TRACKER
 				</h1>
 				<p className="text-muted-foreground text-lg">
@@ -119,12 +122,11 @@ export default function TimeSpendingTracker() {
 			</div>
 
 			<div className="max-w-4xl mx-auto grid gap-6 md:grid-cols-2">
-				{/* Budget Overview */}
-				<Card className="cyber-border bg-card/50 backdrop-blur-sm">
+				<Card className={`bg-card/50 backdrop-blur-sm ${styles["cyber-border"]}`}>
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<Target className="w-5 h-5 text-cyan-400" />
-							<span className="neon-text">Daily Budget</span>
+							<span className={styles["neon-text"]}>Daily Budget</span>
 						</CardTitle>
 						<CardDescription>Your financial time allocation</CardDescription>
 					</CardHeader>
@@ -136,7 +138,7 @@ export default function TimeSpendingTracker() {
 							</div>
 							<Progress
 								value={budgetPercentage}
-								className="cyber-glow"
+								className={styles["cyber-glow"]}
 								style={{
 									background:
 										"linear-gradient(90deg, rgba(0,255,255,0.1) 0%, rgba(255,0,128,0.1) 100%)",
@@ -144,22 +146,20 @@ export default function TimeSpendingTracker() {
 							/>
 						</div>
 						<div className="grid grid-cols-2 gap-4">
-							<div className="text-center p-3 rounded-lg cyber-border bg-background/20">
-								<div className="text-2xl font-bold neon-text">
+							<div className={`text-center p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}>
+								<div className={`text-2xl font-bold ${styles["neon-text"]}`}>
 									{formatCurrency(DAILY_BUDGET)}
 								</div>
-								<div className="text-xs text-muted-foreground">
-									Total Budget
-								</div>
+								<div className="text-xs text-muted-foreground">Total Budget</div>
 							</div>
-							<div className="text-center p-3 rounded-lg cyber-border bg-background/20">
-								<div className="text-2xl font-bold spent-text">
+							<div className={`text-center p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}>
+								<div className={`text-2xl font-bold ${styles["spent-text"]}`}>
 									{formatCurrency(totalSpent)}
 								</div>
 								<div className="text-xs text-muted-foreground">Spent</div>
 							</div>
 						</div>
-						<div className="text-center p-3 rounded-lg cyber-border bg-background/20">
+						<div className={`text-center p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}>
 							<div className="text-xl font-bold text-green-400">
 								{formatCurrency(remainingBudget)}
 							</div>
@@ -170,12 +170,11 @@ export default function TimeSpendingTracker() {
 					</CardContent>
 				</Card>
 
-				{/* Add Activity */}
-				<Card className="cyber-border bg-card/50 backdrop-blur-sm">
+				<Card className={`bg-card/50 backdrop-blur-sm ${styles["cyber-border"]}`}>
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<Plus className="w-5 h-5 text-cyan-400" />
-							<span className="neon-text">Log Time Activity</span>
+							<span className={styles["neon-text"]}>Log Time Activity</span>
 						</CardTitle>
 						<CardDescription>
 							Record how you spend your time budget
@@ -207,11 +206,11 @@ export default function TimeSpendingTracker() {
 							/>
 						</div>
 						{minutes > 0 && (
-							<div className="p-3 rounded-lg cyber-border bg-background/20">
+							<div className={`p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}>
 								<div className="text-sm text-muted-foreground">
 									Cost Preview:
 								</div>
-								<div className="text-lg font-bold spent-text">
+								<div className={`text-lg font-bold ${styles["spent-text"]}`}>
 									{formatCurrency(minutes * COST_PER_MINUTE)}
 								</div>
 							</div>
@@ -223,7 +222,7 @@ export default function TimeSpendingTracker() {
 								minutes <= 0 ||
 								remainingBudget < minutes * COST_PER_MINUTE
 							}
-							className="w-full variant-cyber"
+							className={`w-full ${styles["variant-cyber"]}`}
 						>
 							<Zap className="w-4 h-4 mr-2" />
 							Add Activity
@@ -237,12 +236,11 @@ export default function TimeSpendingTracker() {
 				</Card>
 			</div>
 
-			{/* Activities List */}
-			<Card className="max-w-4xl mx-auto cyber-border bg-card/50 backdrop-blur-sm">
+			<Card className={`max-w-4xl mx-auto bg-card/50 backdrop-blur-sm ${styles["cyber-border"]}`}>
 				<CardHeader>
 					<CardTitle className="flex items-center gap-2">
 						<Clock className="w-5 h-5 text-cyan-400" />
-						<span className="neon-text">Today&apos;s Activities</span>
+						<span className={styles["neon-text"]}>Today&apos;s Activities</span>
 					</CardTitle>
 					<CardDescription>Your time spending log for today</CardDescription>
 				</CardHeader>
@@ -260,7 +258,7 @@ export default function TimeSpendingTracker() {
 							{activities.map((activity) => (
 								<div
 									key={activity.id}
-									className="flex items-center justify-between p-4 rounded-lg cyber-border bg-background/20 hover:bg-background/30 transition-colors"
+									className={`flex items-center justify-between p-4 rounded-lg bg-background/20 hover:bg-background/30 transition-colors ${styles["cyber-border"]}`}
 								>
 									<div className="flex-1">
 										<div className="font-medium text-cyan-400">
@@ -293,11 +291,10 @@ export default function TimeSpendingTracker() {
 				</CardContent>
 			</Card>
 
-			{/* Footer */}
 			<div className="text-center text-xs text-muted-foreground max-w-4xl mx-auto">
 				<p>
-					💡 Concept: 86,400 seconds in a day = $86,400 budget | Each minute
-					costs $60
+					Concept: 86,400 seconds in a day = $86,400 budget | Each minute costs
+					$60
 				</p>
 				<p>
 					Data resets daily at midnight and is stored locally in your browser
@@ -305,4 +302,4 @@ export default function TimeSpendingTracker() {
 			</div>
 		</div>
 	);
-}
+};
