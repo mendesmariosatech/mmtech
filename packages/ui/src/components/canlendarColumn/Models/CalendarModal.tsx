@@ -155,7 +155,7 @@ export function CalendarModal({
 							: texts[language].modalTitleCreate}
 					</DialogTitle>
 				</DialogHeader>
-				<DevTool control={form.control} />
+				<DevTool control={form.control as any} />
 				<ControlledForm
 					useForm={form}
 					config={modalConfig}
