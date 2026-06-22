@@ -34,14 +34,14 @@ const PRESET_COLORS = [
 
 export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialogProps) {
 	const [name, setName] = useState("");
-	const [selectedColor, setSelectedColor] = useState(PRESET_COLORS[0]);
+	const [selectedColor, setSelectedColor] = useState<string>(PRESET_COLORS[0] ?? "#7c3aed");
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (name.trim()) {
 			onAddHabit(name.trim(), selectedColor);
 			setName("");
-			setSelectedColor(PRESET_COLORS[0]);
+			setSelectedColor(PRESET_COLORS[0] ?? "#7c3aed");
 			onOpenChange(false);
 		}
 	};
