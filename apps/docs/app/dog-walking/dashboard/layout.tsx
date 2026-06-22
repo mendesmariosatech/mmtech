@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { db, schema } from "~/lib/db";
 import { redirect } from "next/navigation";
 import { DashboardSidebar } from "@repo/ui/domains/DogWalking/dashboard";

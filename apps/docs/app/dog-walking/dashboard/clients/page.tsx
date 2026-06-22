@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { db, schema } from "~/lib/db";
 import { PageHeader } from "@repo/ui/domains/DogWalking/dashboard";
 import { ClientList } from "@repo/ui/domains/DogWalking/dashboard";
