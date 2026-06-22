@@ -1,0 +1,28 @@
+.glow-effect {
+	animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+	0%,
+	100% {
+		box-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
+	}
+	50% {
+		box-shadow: 0 0 20px rgba(139, 92, 246, 0.8), 0 0 30px rgba(139, 92, 246, 0.4);
+	}
+}
+
+.neon-text {
+	text-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
+	animation: neon-flicker 3s ease-in-out infinite;
+}
+
+@keyframes neon-flicker {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.8;
+	}
+}
