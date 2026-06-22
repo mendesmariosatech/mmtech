@@ -14,7 +14,10 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Play, Square, Dog, MapPin, Clock, FileText } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import {
+	startWalk as startWalkAction,
+	endWalk as endWalkAction,
+} from "@/app/actions/dog-walking";
 import { Walk, Client } from "@/lib/types";
 
 interface WalkTrackerProps {
@@ -73,21 +76,14 @@ export function WalkTracker({
 		if (!selectedClient) return;
 		setIsLoading(true);
 
-		const supabase = createClient();
-		const { data, error } = await supabase
-			.from("walks")
-			.insert({
-				company_id: companyId,
-				employee_id: employeeId,
-				client_id: selectedClient,
-				started_at: new Date().toISOString(),
-				status: "in_progress",
-			})
-			.select("*, client:clients(name, dog_name, address, dog_notes)")
-			.single();
-
-		if (!error && data) {
-			setCurrentWalk(data);
+		const walkData = await startWalkAction(
+			companyId,
+			employeeId,
+			selectedClient,
+		);
+		if (walkData) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			setCurrentWalk(walkData as any);
 			setElapsedTime(0);
 		}
 		setIsLoading(false);
@@ -97,22 +93,11 @@ export function WalkTracker({
 		if (!currentWalk) return;
 		setIsLoading(true);
 
-		const supabase = createClient();
-		const endedAt = new Date();
-		const startedAt = new Date(currentWalk.started_at);
-		const durationMinutes = Math.round(
-			(endedAt.getTime() - startedAt.getTime()) / 60000,
+		await endWalkAction(
+			currentWalk.id,
+			currentWalk.started_at,
+			notes || undefined,
 		);
-
-		await supabase
-			.from("walks")
-			.update({
-				ended_at: endedAt.toISOString(),
-				duration_minutes: durationMinutes,
-				notes: notes || null,
-				status: "completed",
-			})
-			.eq("id", currentWalk.id);
 
 		setCurrentWalk(null);
 		setNotes("");

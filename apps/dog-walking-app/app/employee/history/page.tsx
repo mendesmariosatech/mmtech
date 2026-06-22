@@ -1,39 +1,31 @@
 export const dynamic = "force-dynamic";
 
-import { createClient } from "@/lib/supabase/server";
+import { db, schema } from "@/lib/db";
+import { eq, and, desc } from "drizzle-orm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 
 export default async function HistoryPage() {
-	const supabase = await createClient();
+	const mockUser = { id: "demo-user-id" };
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
-	const { data: employee } = await supabase
-		.from("employees")
-		.select("id")
-		.eq("user_id", user!.id)
-		.single();
+	const employee = await db.query.dogWalkingEmployees.findFirst({
+		where: eq(schema.dogWalkingEmployees.user_id, mockUser.id),
+	});
 
 	if (!employee) return null;
 
-	const { data: walks } = await supabase
-		.from("walks")
-		.select("*, client:clients(name, dog_name)")
-		.eq("employee_id", employee.id)
-		.order("started_at", { ascending: false })
-		.limit(50);
+	const walks = await db.query.dogWalkingWalks.findMany({
+		where: eq(schema.dogWalkingWalks.employee_id, employee.id),
+		with: { client: { columns: { name: true, dog_name: true } } },
+		orderBy: [desc(schema.dogWalkingWalks.started_at)],
+		limit: 50,
+	});
 
-	// Group walks by date
 	const groupedWalks: Record<string, typeof walks> = {};
-	walks?.forEach((walk) => {
+	walks.forEach((walk) => {
 		const date = format(new Date(walk.started_at), "yyyy-MM-dd");
-		if (!groupedWalks[date]) {
-			groupedWalks[date] = [];
-		}
+		if (!groupedWalks[date]) groupedWalks[date] = [];
 		groupedWalks[date]!.push(walk);
 	});
 

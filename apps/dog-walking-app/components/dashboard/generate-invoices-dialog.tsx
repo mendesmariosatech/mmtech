@@ -21,7 +21,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { FileText } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { generateInvoice } from "@/app/actions/dog-walking";
 
 interface GenerateInvoicesDialogProps {
 	companyId: string;
@@ -43,46 +43,23 @@ export function GenerateInvoicesDialog({
 		if (!selectedClient) return;
 		setIsLoading(true);
 
-		const supabase = createClient();
-
-		// Calculate period dates
 		const monthNum = parseInt(month);
 		const yearNum = parseInt(year);
 		const periodStart = new Date(yearNum, monthNum, 1);
 		const periodEnd = new Date(yearNum, monthNum + 1, 0);
 
-		// Get completed walks for this client in this period
-		const { data: walks } = await supabase
-			.from("walks")
-			.select("*, client:clients(walk_rate)")
-			.eq("company_id", companyId)
-			.eq("client_id", selectedClient)
-			.eq("status", "completed")
-			.gte("started_at", periodStart.toISOString())
-			.lte("started_at", periodEnd.toISOString());
+		const result = await generateInvoice(
+			companyId,
+			selectedClient,
+			periodStart.toISOString(),
+			periodEnd.toISOString(),
+		);
 
-		if (!walks || walks.length === 0) {
-			alert("No completed walks found for this period");
+		if (!result.success) {
+			alert(result.error || "Failed to generate invoice");
 			setIsLoading(false);
 			return;
 		}
-
-		const totalAmount = walks.reduce(
-			(sum, walk) => sum + (walk.client?.walk_rate || 0),
-			0,
-		);
-		const invoiceNumber = `INV-${yearNum}${String(monthNum + 1).padStart(2, "0")}-${Date.now().toString().slice(-4)}`;
-
-		await supabase.from("invoices").insert({
-			company_id: companyId,
-			client_id: selectedClient,
-			invoice_number: invoiceNumber,
-			period_start: periodStart.toISOString().split("T")[0],
-			period_end: periodEnd.toISOString().split("T")[0],
-			total_walks: walks.length,
-			total_amount: totalAmount,
-			status: "draft",
-		});
 
 		setOpen(false);
 		router.refresh();

@@ -18,7 +18,10 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { createClient } from "@/lib/supabase/client";
+import {
+	toggleClientActive,
+	deleteClient as deleteClientAction,
+} from "@/app/actions/dog-walking";
 import { useRouter } from "next/navigation";
 
 interface ClientListProps {
@@ -29,17 +32,12 @@ export function ClientList({ clients }: ClientListProps) {
 	const router = useRouter();
 
 	const toggleActive = async (client: Client) => {
-		const supabase = createClient();
-		await supabase
-			.from("clients")
-			.update({ is_active: !client.is_active })
-			.eq("id", client.id);
+		await toggleClientActive(client.id, client.is_active);
 		router.refresh();
 	};
 
 	const deleteClient = async (id: string) => {
-		const supabase = createClient();
-		await supabase.from("clients").delete().eq("id", id);
+		await deleteClientAction(id);
 		router.refresh();
 	};
 

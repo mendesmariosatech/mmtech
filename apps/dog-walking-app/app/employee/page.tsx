@@ -1,47 +1,47 @@
 export const dynamic = "force-dynamic";
 
-import { createClient } from "@/lib/supabase/server";
+import { db, schema } from "@/lib/db";
+import { eq, and, gte, desc } from "drizzle-orm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dog, Footprints, Clock } from "lucide-react";
 import Link from "next/link";
 
 export default async function EmployeeHomePage() {
-	const supabase = await createClient();
+	const mockUser = { id: "demo-user-id" };
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
-	const { data: employee } = await supabase
-		.from("employees")
-		.select("*, company:companies(name)")
-		.eq("user_id", user!.id)
-		.single();
+	const employee = await db.query.dogWalkingEmployees.findFirst({
+		where: eq(schema.dogWalkingEmployees.user_id, mockUser.id),
+		with: { company: true },
+	});
 
 	if (!employee) return null;
 
-	// Get today's walks
 	const today = new Date();
 	today.setHours(0, 0, 0, 0);
 
-	const { data: todayWalks } = await supabase
-		.from("walks")
-		.select("*, client:clients(name, dog_name)")
-		.eq("employee_id", employee.id)
-		.gte("started_at", today.toISOString())
-		.order("started_at", { ascending: false });
+	const todayWalks = await db.query.dogWalkingWalks.findMany({
+		where: and(
+			eq(schema.dogWalkingWalks.employee_id, employee.id),
+			gte(schema.dogWalkingWalks.started_at, today.toISOString()),
+		),
+		with: { client: { columns: { name: true, dog_name: true } } },
+		orderBy: [desc(schema.dogWalkingWalks.started_at)],
+	});
 
-	// Check for active walk
-	const { data: activeWalk } = await supabase
-		.from("walks")
-		.select("*, client:clients(name, dog_name, address)")
-		.eq("employee_id", employee.id)
-		.eq("status", "in_progress")
-		.single();
+	const activeWalk = await db.query.dogWalkingWalks.findFirst({
+		where: and(
+			eq(schema.dogWalkingWalks.employee_id, employee.id),
+			eq(schema.dogWalkingWalks.status, "in_progress"),
+		),
+		with: {
+			client: { columns: { name: true, dog_name: true, address: true } },
+		},
+	});
 
-	const completedToday =
-		todayWalks?.filter((w) => w.status === "completed").length || 0;
+	const completedToday = todayWalks.filter(
+		(w) => w.status === "completed",
+	).length;
 
 	return (
 		<div className="p-4">
@@ -83,7 +83,7 @@ export default async function EmployeeHomePage() {
 				<Card>
 					<CardContent className="flex flex-col items-center justify-center py-6">
 						<Dog className="h-8 w-8 text-accent mb-2" />
-						<p className="text-3xl font-bold">{todayWalks?.length || 0}</p>
+						<p className="text-3xl font-bold">{todayWalks.length}</p>
 						<p className="text-sm text-muted-foreground">Total Today</p>
 					</CardContent>
 				</Card>
@@ -98,7 +98,7 @@ export default async function EmployeeHomePage() {
 				</Button>
 			)}
 
-			{todayWalks && todayWalks.length > 0 && (
+			{todayWalks.length > 0 && (
 				<Card className="mt-6">
 					<CardHeader>
 						<CardTitle className="text-lg">{"Today's Walks"}</CardTitle>

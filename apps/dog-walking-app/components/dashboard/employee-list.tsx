@@ -11,7 +11,10 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { createClient } from "@/lib/supabase/client";
+import {
+	toggleEmployeeActive,
+	deleteEmployee as deleteEmployeeAction,
+} from "@/app/actions/dog-walking";
 import { useRouter } from "next/navigation";
 
 interface EmployeeListProps {
@@ -22,17 +25,12 @@ export function EmployeeList({ employees }: EmployeeListProps) {
 	const router = useRouter();
 
 	const toggleActive = async (employee: Employee) => {
-		const supabase = createClient();
-		await supabase
-			.from("employees")
-			.update({ is_active: !employee.is_active })
-			.eq("id", employee.id);
+		await toggleEmployeeActive(employee.id, employee.is_active);
 		router.refresh();
 	};
 
 	const deleteEmployee = async (id: string) => {
-		const supabase = createClient();
-		await supabase.from("employees").delete().eq("id", id);
+		await deleteEmployeeAction(id);
 		router.refresh();
 	};
 

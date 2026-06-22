@@ -19,7 +19,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Printer } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { updateInvoiceStatus } from "@/app/actions/dog-walking";
 import { useRouter } from "next/navigation";
 
 interface InvoiceListProps {
@@ -36,9 +36,11 @@ const statusColors: Record<string, string> = {
 export function InvoiceList({ invoices, companyId }: InvoiceListProps) {
 	const router = useRouter();
 
-	const updateStatus = async (invoiceId: string, status: string) => {
-		const supabase = createClient();
-		await supabase.from("invoices").update({ status }).eq("id", invoiceId);
+	const updateStatus = async (
+		invoiceId: string,
+		status: "draft" | "sent" | "paid",
+	) => {
+		await updateInvoiceStatus(invoiceId, status);
 		router.refresh();
 	};
 

@@ -1,45 +1,52 @@
 export const dynamic = "force-dynamic";
 
-import { createClient } from "@/lib/supabase/server";
+import { db, schema } from "@/lib/db";
+import { eq, and } from "drizzle-orm";
 import { WalkTracker } from "@/components/employee/walk-tracker";
 
 export default async function WalkPage() {
-	const supabase = await createClient();
+	const mockUser = { id: "demo-user-id" };
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
-	const { data: employee } = await supabase
-		.from("employees")
-		.select("id, company_id")
-		.eq("user_id", user!.id)
-		.single();
+	const employee = await db.query.dogWalkingEmployees.findFirst({
+		where: eq(schema.dogWalkingEmployees.user_id, mockUser.id),
+	});
 
 	if (!employee) return null;
 
-	// Get active walk if any
-	const { data: activeWalk } = await supabase
-		.from("walks")
-		.select("*, client:clients(name, dog_name, address, dog_notes)")
-		.eq("employee_id", employee.id)
-		.eq("status", "in_progress")
-		.single();
+	const activeWalk = await db.query.dogWalkingWalks.findFirst({
+		where: and(
+			eq(schema.dogWalkingWalks.employee_id, employee.id),
+			eq(schema.dogWalkingWalks.status, "in_progress"),
+		),
+		with: {
+			client: {
+				columns: { name: true, dog_name: true, address: true, dog_notes: true },
+			},
+		},
+	});
 
-	// Get clients for selection
-	const { data: clients } = await supabase
-		.from("clients")
-		.select("id, name, dog_name, address, dog_notes")
-		.eq("company_id", employee.company_id)
-		.eq("is_active", true)
-		.order("name");
+	const clients = await db
+		.select({
+			id: schema.dogWalkingClients.id,
+			name: schema.dogWalkingClients.name,
+			dog_name: schema.dogWalkingClients.dog_name,
+			address: schema.dogWalkingClients.address,
+			dog_notes: schema.dogWalkingClients.dog_notes,
+		})
+		.from(schema.dogWalkingClients)
+		.where(
+			and(
+				eq(schema.dogWalkingClients.company_id, employee.company_id),
+				eq(schema.dogWalkingClients.is_active, true),
+			),
+		);
 
 	return (
 		<WalkTracker
 			employeeId={employee.id}
 			companyId={employee.company_id}
-			clients={clients || []}
-			activeWalk={activeWalk}
+			clients={clients}
+			activeWalk={activeWalk ?? null}
 		/>
 	);
 }

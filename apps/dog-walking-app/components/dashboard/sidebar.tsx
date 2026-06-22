@@ -32,7 +32,6 @@ import {
 	ChevronUp,
 } from "lucide-react";
 import { Company } from "@/lib/types";
-import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
 	{ title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -55,9 +54,7 @@ export function DashboardSidebar({
 	const pathname = usePathname();
 	const router = useRouter();
 
-	const handleSignOut = async () => {
-		const supabase = createClient();
-		await supabase.auth.signOut();
+	const handleSignOut = () => {
 		router.push("/auth/login");
 	};
 

@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { addClient } from "@/app/actions/dog-walking";
 
 interface AddClientDialogProps {
 	companyId: string;
@@ -32,21 +32,9 @@ export function AddClientDialog({ companyId }: AddClientDialogProps) {
 		setIsLoading(true);
 
 		const formData = new FormData(e.currentTarget);
-		const supabase = createClient();
+		const result = await addClient(companyId, formData);
 
-		const { error } = await supabase.from("clients").insert({
-			company_id: companyId,
-			name: formData.get("name") as string,
-			email: (formData.get("email") as string) || null,
-			phone: (formData.get("phone") as string) || null,
-			address: (formData.get("address") as string) || null,
-			dog_name: formData.get("dog_name") as string,
-			dog_breed: (formData.get("dog_breed") as string) || null,
-			dog_notes: (formData.get("dog_notes") as string) || null,
-			walk_rate: parseFloat(formData.get("walk_rate") as string) || 25,
-		});
-
-		if (!error) {
+		if (result.success) {
 			setOpen(false);
 			router.refresh();
 		}

@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Home, Footprints, History, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
 	{ title: "Home", href: "/employee", icon: Home },
@@ -15,7 +14,6 @@ const navItems = [
 
 export function EmployeeNav() {
 	const pathname = usePathname();
-	const router = useRouter();
 
 	return (
 		<nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-card">

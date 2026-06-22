@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { addEmployee } from "@/app/actions/dog-walking";
 
 interface AddEmployeeDialogProps {
 	companyId: string;
@@ -31,18 +31,9 @@ export function AddEmployeeDialog({ companyId }: AddEmployeeDialogProps) {
 		setIsLoading(true);
 
 		const formData = new FormData(e.currentTarget);
-		const supabase = createClient();
+		const result = await addEmployee(companyId, formData);
 
-		// Create employee record
-		const { error } = await supabase.from("employees").insert({
-			company_id: companyId,
-			name: formData.get("name") as string,
-			email: formData.get("email") as string,
-			phone: (formData.get("phone") as string) || null,
-			hourly_rate: parseFloat(formData.get("hourly_rate") as string) || 15,
-		});
-
-		if (!error) {
+		if (result.success) {
 			setOpen(false);
 			router.refresh();
 		}

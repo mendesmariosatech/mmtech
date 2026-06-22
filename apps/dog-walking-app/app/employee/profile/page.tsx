@@ -1,45 +1,40 @@
 export const dynamic = "force-dynamic";
 
-import { createClient } from "@/lib/supabase/server";
+import { db, schema } from "@/lib/db";
+import { eq, and, gte } from "drizzle-orm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SignOutButton } from "@/components/employee/sign-out-button";
-import { User, Mail, Phone, DollarSign, Building } from "lucide-react";
+import { User, Mail, Phone, DollarSign } from "lucide-react";
 
 export default async function ProfilePage() {
-	const supabase = await createClient();
+	const mockUser = { id: "demo-user-id" };
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-
-	const { data: employee } = await supabase
-		.from("employees")
-		.select("*, company:companies(name)")
-		.eq("user_id", user!.id)
-		.single();
+	const employee = await db.query.dogWalkingEmployees.findFirst({
+		where: eq(schema.dogWalkingEmployees.user_id, mockUser.id),
+		with: { company: true },
+	});
 
 	if (!employee) return null;
 
-	// Get stats
 	const now = new Date();
 	const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-	const { count: monthlyWalks } = await supabase
-		.from("walks")
-		.select("*", { count: "exact", head: true })
-		.eq("employee_id", employee.id)
-		.eq("status", "completed")
-		.gte("started_at", startOfMonth.toISOString());
+	const walks = await db
+		.select({ duration_minutes: schema.dogWalkingWalks.duration_minutes })
+		.from(schema.dogWalkingWalks)
+		.where(
+			and(
+				eq(schema.dogWalkingWalks.employee_id, employee.id),
+				eq(schema.dogWalkingWalks.status, "completed"),
+				gte(schema.dogWalkingWalks.started_at, startOfMonth.toISOString()),
+			),
+		);
 
-	const { data: walks } = await supabase
-		.from("walks")
-		.select("duration_minutes")
-		.eq("employee_id", employee.id)
-		.eq("status", "completed")
-		.gte("started_at", startOfMonth.toISOString());
-
-	const totalMinutes =
-		walks?.reduce((sum, w) => sum + (w.duration_minutes || 30), 0) || 0;
+	const monthlyWalks = walks.length;
+	const totalMinutes = walks.reduce(
+		(sum, w) => sum + (w.duration_minutes || 30),
+		0,
+	);
 	const totalHours = (totalMinutes / 60).toFixed(1);
 	const estimatedPay = ((totalMinutes / 60) * employee.hourly_rate).toFixed(2);
 
@@ -86,9 +81,7 @@ export default async function ProfilePage() {
 				<CardContent>
 					<div className="grid grid-cols-3 gap-4 text-center">
 						<div>
-							<p className="text-2xl font-bold text-primary">
-								{monthlyWalks || 0}
-							</p>
+							<p className="text-2xl font-bold text-primary">{monthlyWalks}</p>
 							<p className="text-xs text-muted-foreground">Walks</p>
 						</div>
 						<div>
