@@ -9,11 +9,6 @@ jobs:
   chromatic:
     name: "Run Jest"
     runs-on: ubuntu-latest
-    env:
-      TURSO_CONNECTION_URL: ${{ secrets.TURSO_CONNECTION_URL }}
-      TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
-      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-      COOkIE_SECRET_KEY: ${{ secrets.COOkIE_SECRET_KEY }}
     # Job steps
     steps:
       - uses: actions/checkout@v4
@@ -21,4 +16,4 @@ jobs:
         with:
           node-version: 20.x
       - run: yarn
-      - run: cd packages/server && yarn test:ci
+      - run: cd packages/server && yarn test
