@@ -21,7 +21,7 @@ interface TodayViewProps {
 }
 
 export function TodayView({ habits, onToggleCompletion }: TodayViewProps) {
-	const today = new Date().toISOString().split("T")[0];
+	const today = new Date().toISOString().split("T")[0]!;
 	const todayFormatted = new Date().toLocaleDateString("en-US", {
 		weekday: "long",
 		month: "long",

@@ -22,7 +22,7 @@ export function HabitStats({ habits }: HabitStatsProps) {
 	const totalCompletions = habits.reduce((sum, habit) => sum + habit.totalCompletions, 0);
 	const longestStreak = Math.max(...habits.map((h) => h.streak), 0);
 
-	const today = new Date().toISOString().split("T")[0];
+	const today = new Date().toISOString().split("T")[0]!;
 	const completedToday = habits.filter((h) => h.completions[today]).length;
 
 	const stats = [

@@ -30,7 +30,7 @@ export function CombinedGrid({ habits, onToggleCompletion }: CombinedGridProps) 
 		for (let i = 364; i >= 0; i--) {
 			const date = new Date(today);
 			date.setDate(date.getDate() - i);
-			dates.push(date.toISOString().split("T")[0]);
+			dates.push(date.toISOString().split("T")[0]!);
 		}
 
 		return dates;
@@ -115,7 +115,7 @@ export function CombinedGrid({ habits, onToggleCompletion }: CombinedGridProps) 
 							<div key={weekIndex} className="flex flex-col gap-1">
 								{week.map((date) => {
 									const intensity = getCombinedIntensity(date);
-									const isToday = date === new Date().toISOString().split("T")[0];
+									const isToday = date === new Date().toISOString().split("T")[0]!;
 
 									return (
 										<button

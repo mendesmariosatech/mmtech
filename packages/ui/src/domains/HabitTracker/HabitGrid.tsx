@@ -31,7 +31,7 @@ export function HabitGrid({ habit, onToggleCompletion, onDelete }: HabitGridProp
 		for (let i = 364; i >= 0; i--) {
 			const date = new Date(today);
 			date.setDate(date.getDate() - i);
-			dates.push(date.toISOString().split("T")[0]);
+			dates.push(date.toISOString().split("T")[0]!);
 		}
 
 		return dates;
@@ -89,7 +89,7 @@ export function HabitGrid({ habit, onToggleCompletion, onDelete }: HabitGridProp
 						<div key={weekIndex} className="flex flex-col gap-1">
 							{week.map((date) => {
 								const isCompleted = habit.completions[date];
-								const isToday = date === new Date().toISOString().split("T")[0];
+								const isToday = date === new Date().toISOString().split("T")[0]!;
 
 								return (
 									<button
