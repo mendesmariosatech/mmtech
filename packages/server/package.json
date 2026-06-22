@@ -5,10 +5,9 @@
     "dev": "tsx watch app.ts",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
-    "test": "jest --env-file=.env",
-    "test:watch": "jest --watch --env-file=.env",
-    "test:ci": "jest",
-    "test:coverage": "jest --coverage"
+    "test": "npx drizzle-kit push --config=drizzle.test.config.ts && npx jest",
+    "test:watch": "npx drizzle-kit push --config=drizzle.test.config.ts && npx jest --watch",
+    "test:coverage": "npx jest --coverage"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.4",
