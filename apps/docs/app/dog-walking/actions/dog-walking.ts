@@ -217,4 +217,7 @@ export async function endWalk(
 			status: "completed",
 		})
 		.where(eq(schema.dogWalkingWalks.id, walkId));
+
+	revalidatePath("/dog-walking/employee/walk");
+	revalidatePath("/dog-walking/dashboard/walks");
 }
