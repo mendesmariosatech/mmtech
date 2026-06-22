@@ -1,20 +1,19 @@
 "use client";
 
 import { Property, PropertyCalculations } from "@repo/zod-types";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "../../components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
-} from "@repo/ui/components/ui/card";
-import { Badge } from "@repo/ui/components/ui/badge";
+} from "../../components/ui/card";
+import { Badge } from "../../components/ui/badge";
 import {
 	Trash2,
 	Edit,
 	MapPin,
 	Home,
-	DollarSign,
 	TrendingUp,
 	TrendingDown,
 } from "lucide-react";
@@ -120,7 +119,6 @@ export function PropertyList({
 
 					<CardContent>
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-							{/* Financial Performance */}
 							<div className="space-y-3">
 								<h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
 									Cash Flow
@@ -151,7 +149,6 @@ export function PropertyList({
 								</div>
 							</div>
 
-							{/* Investment Metrics */}
 							<div className="space-y-3">
 								<h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
 									Returns
@@ -178,7 +175,6 @@ export function PropertyList({
 								</div>
 							</div>
 
-							{/* Monthly Breakdown */}
 							<div className="space-y-3">
 								<h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
 									Monthly Breakdown
@@ -209,7 +205,6 @@ export function PropertyList({
 								</div>
 							</div>
 
-							{/* Investment Rules */}
 							<div className="space-y-3">
 								<h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
 									Investment Rules
@@ -279,9 +274,7 @@ export function PropertyList({
 								<h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide mb-2">
 									Notes
 								</h4>
-								<p className="text-sm text-muted-foreground">
-									{property.notes}
-								</p>
+								<p className="text-sm text-muted-foreground">{property.notes}</p>
 							</div>
 						)}
 					</CardContent>

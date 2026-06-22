@@ -11,25 +11,25 @@ import {
 	type PropertyCalculations,
 	PropertyTypeEnum,
 } from "@repo/zod-types";
-import { Button } from "@repo/ui/components/ui/button";
-import { Input } from "@repo/ui/components/ui/input";
-import { Label } from "@repo/ui/components/ui/label";
-import { Textarea } from "@repo/ui/components/ui/textarea";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Textarea } from "../../components/ui/textarea";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@repo/ui/components/ui/select";
+} from "../../components/ui/select";
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
-} from "@repo/ui/components/ui/card";
-import { Separator } from "@repo/ui/components/ui/separator";
-import { calculatePropertyMetrics } from "../utils/calculations";
+} from "../../components/ui/card";
+import { Separator } from "../../components/ui/separator";
+import { calculatePropertyMetrics } from "./calculations";
 
 interface PropertyFormProps {
 	onSubmit: (property: Property, calculations: PropertyCalculations) => void;
@@ -77,7 +77,6 @@ export function PropertyForm({ onSubmit, initialData }: PropertyFormProps) {
 
 	const watchedValues = watch();
 
-	// Recalculate metrics whenever relevant form values change
 	useEffect(() => {
 		const calculationInputs = {
 			purchasePrice: watchedValues.purchasePrice,
@@ -93,7 +92,7 @@ export function PropertyForm({ onSubmit, initialData }: PropertyFormProps) {
 			monthlyVacancy: watchedValues.monthlyVacancy || 0,
 			monthlyCapex: watchedValues.monthlyCapex || 0,
 			monthlyPropertyManagement: watchedValues.monthlyPropertyManagement || 0,
-			closingCosts: 2, // 2% default
+			closingCosts: 2,
 		};
 
 		if (
@@ -125,7 +124,6 @@ export function PropertyForm({ onSubmit, initialData }: PropertyFormProps) {
 
 	return (
 		<form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
-			{/* Property Information */}
 			<Card>
 				<CardHeader>
 					<CardTitle>Property Information</CardTitle>
@@ -249,7 +247,6 @@ export function PropertyForm({ onSubmit, initialData }: PropertyFormProps) {
 				</CardContent>
 			</Card>
 
-			{/* Financial Information */}
 			<Card>
 				<CardHeader>
 					<CardTitle>Financial Information</CardTitle>
@@ -295,7 +292,6 @@ export function PropertyForm({ onSubmit, initialData }: PropertyFormProps) {
 				</CardContent>
 			</Card>
 
-			{/* Income */}
 			<Card>
 				<CardHeader>
 					<CardTitle>Monthly Income</CardTitle>
@@ -321,7 +317,6 @@ export function PropertyForm({ onSubmit, initialData }: PropertyFormProps) {
 				</CardContent>
 			</Card>
 
-			{/* Expenses */}
 			<Card>
 				<CardHeader>
 					<CardTitle>Monthly Expenses</CardTitle>
@@ -396,7 +391,6 @@ export function PropertyForm({ onSubmit, initialData }: PropertyFormProps) {
 				</CardContent>
 			</Card>
 
-			{/* Notes */}
 			<Card>
 				<CardHeader>
 					<CardTitle>Additional Notes</CardTitle>
@@ -412,7 +406,6 @@ export function PropertyForm({ onSubmit, initialData }: PropertyFormProps) {
 				</CardContent>
 			</Card>
 
-			{/* Investment Analysis Preview */}
 			{calculations && (
 				<Card>
 					<CardHeader>

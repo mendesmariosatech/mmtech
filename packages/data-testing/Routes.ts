@@ -30,6 +30,12 @@ export const Routes = {
 		"/ecommerce": {
 			"/": "/ecommerce",
 		},
+		"/property-tracker": {
+			"/": "/property-tracker",
+		},
+		"/time-spending-app": {
+			"/": "/time-spending-app",
+		},
 	},
 } as const;
 

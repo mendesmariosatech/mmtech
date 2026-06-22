@@ -91,30 +91,21 @@ export function calculatePropertyMetrics(
 	const fiftyPercentRule = totalOperatingExpenses <= totalMonthlyIncome * 0.5;
 
 	return {
-		// Monthly calculations
 		monthlyMortgage: Math.round(monthlyMortgage),
 		totalMonthlyIncome: Math.round(totalMonthlyIncome),
 		totalMonthlyExpenses: Math.round(totalMonthlyExpenses),
 		netOperatingIncome: Math.round(netOperatingIncome),
 		monthlyCashFlow: Math.round(monthlyCashFlow),
-
-		// Annual calculations
 		annualRent: Math.round(annualRent),
 		annualCashFlow: Math.round(annualCashFlow),
 		annualNOI: Math.round(annualNOI),
-
-		// Investment metrics
 		capRate: Math.round(capRate * 100) / 100,
 		cashOnCashReturn: Math.round(cashOnCashReturn * 100) / 100,
 		rentToPrice: Math.round(rentToPrice * 100) / 100,
 		debtServiceCoverage: Math.round(debtServiceCoverage * 100) / 100,
-
-		// Investment rules
 		onePercentRule,
 		twoPercentRule,
 		fiftyPercentRule,
-
-		// Additional metrics
 		totalCashInvested: Math.round(totalCashInvested),
 		breakEvenRatio: Math.round(breakEvenRatio * 100) / 100,
 		grm: Math.round(grm * 100) / 100,

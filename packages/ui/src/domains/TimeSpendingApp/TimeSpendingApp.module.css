@@ -1,6 +1,3 @@
-@import "@repo/ui/globals.css";
-
-/* Cyber theme styles for time spending app */
 .cyber-text {
   background: linear-gradient(45deg, #00ffff, #ff0080);
   -webkit-background-clip: text;
@@ -27,7 +24,6 @@
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
 }
 
-/* Button variant styles */
 .variant-cyber {
   background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 128, 0.1));
   border: 1px solid #00ffff;
@@ -44,10 +40,4 @@
 .variant-cyber:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-/* Dark background with subtle pattern */
-body {
-  background: radial-gradient(ellipse at center, rgba(0, 20, 40, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%);
-  min-height: 100vh;
 }
