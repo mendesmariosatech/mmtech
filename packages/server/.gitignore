@@ -32,3 +32,8 @@ lerna-debug.log*
 # misc
 .DS_Store
 /coverage
+
+# test database
+test.db
+test.db-shm
+test.db-wal
