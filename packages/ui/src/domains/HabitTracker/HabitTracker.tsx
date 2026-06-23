@@ -27,7 +27,7 @@ interface HabitTrackerProps {
 	currentDate?: Date;
 }
 
-export const HabitTracker = ({ currentDate }: HabitTrackerProps = {}) => {
+export const HabitTracker = ({ currentDate }: HabitTrackerProps) => {
 	const [habits, setHabits] = useState<Habit[]>([]);
 	const [showAddDialog, setShowAddDialog] = useState(false);
 	const [viewMode, setViewMode] = useState<ViewMode>("today");
