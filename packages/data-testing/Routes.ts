@@ -36,6 +36,9 @@ export const Routes = {
 		"/time-spending-app": {
 			"/": "/time-spending-app",
 		},
+		"/habit-tracker": {
+			"/": "/habit-tracker",
+		},
 	},
 } as const;
 
