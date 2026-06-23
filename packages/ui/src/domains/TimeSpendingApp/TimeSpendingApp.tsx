@@ -122,7 +122,9 @@ export const TimeSpendingApp = () => {
 			</div>
 
 			<div className="max-w-4xl mx-auto grid gap-6 md:grid-cols-2">
-				<Card className={`bg-card/50 backdrop-blur-sm ${styles["cyber-border"]}`}>
+				<Card
+					className={`bg-card/50 backdrop-blur-sm ${styles["cyber-border"]}`}
+				>
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<Target className="w-5 h-5 text-cyan-400" />
@@ -146,20 +148,28 @@ export const TimeSpendingApp = () => {
 							/>
 						</div>
 						<div className="grid grid-cols-2 gap-4">
-							<div className={`text-center p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}>
+							<div
+								className={`text-center p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}
+							>
 								<div className={`text-2xl font-bold ${styles["neon-text"]}`}>
 									{formatCurrency(DAILY_BUDGET)}
 								</div>
-								<div className="text-xs text-muted-foreground">Total Budget</div>
+								<div className="text-xs text-muted-foreground">
+									Total Budget
+								</div>
 							</div>
-							<div className={`text-center p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}>
+							<div
+								className={`text-center p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}
+							>
 								<div className={`text-2xl font-bold ${styles["spent-text"]}`}>
 									{formatCurrency(totalSpent)}
 								</div>
 								<div className="text-xs text-muted-foreground">Spent</div>
 							</div>
 						</div>
-						<div className={`text-center p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}>
+						<div
+							className={`text-center p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}
+						>
 							<div className="text-xl font-bold text-green-400">
 								{formatCurrency(remainingBudget)}
 							</div>
@@ -170,7 +180,9 @@ export const TimeSpendingApp = () => {
 					</CardContent>
 				</Card>
 
-				<Card className={`bg-card/50 backdrop-blur-sm ${styles["cyber-border"]}`}>
+				<Card
+					className={`bg-card/50 backdrop-blur-sm ${styles["cyber-border"]}`}
+				>
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<Plus className="w-5 h-5 text-cyan-400" />
@@ -206,7 +218,9 @@ export const TimeSpendingApp = () => {
 							/>
 						</div>
 						{minutes > 0 && (
-							<div className={`p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}>
+							<div
+								className={`p-3 rounded-lg bg-background/20 ${styles["cyber-border"]}`}
+							>
 								<div className="text-sm text-muted-foreground">
 									Cost Preview:
 								</div>
@@ -236,7 +250,9 @@ export const TimeSpendingApp = () => {
 				</Card>
 			</div>
 
-			<Card className={`max-w-4xl mx-auto bg-card/50 backdrop-blur-sm ${styles["cyber-border"]}`}>
+			<Card
+				className={`max-w-4xl mx-auto bg-card/50 backdrop-blur-sm ${styles["cyber-border"]}`}
+			>
 				<CardHeader>
 					<CardTitle className="flex items-center gap-2">
 						<Clock className="w-5 h-5 text-cyan-400" />
