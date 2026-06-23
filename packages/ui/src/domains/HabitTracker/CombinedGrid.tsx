@@ -18,17 +18,19 @@ interface Habit {
 interface CombinedGridProps {
 	habits: Habit[];
 	onToggleCompletion: (habitId: string, date: string) => void;
+	currentDate?: Date;
 }
 
 export function CombinedGrid({
 	habits,
 	onToggleCompletion,
+	currentDate,
 }: CombinedGridProps) {
 	const [hoveredDate, setHoveredDate] = useState<string | null>(null);
 
 	const generateDates = () => {
 		const dates = [];
-		const today = new Date();
+		const today = currentDate ?? new Date();
 
 		for (let i = 364; i >= 0; i--) {
 			const date = new Date(today);
@@ -40,6 +42,7 @@ export function CombinedGrid({
 	};
 
 	const dates = generateDates();
+	const todayStr = (currentDate ?? new Date()).toISOString().split("T")[0]!;
 	const weeks: string[][] = [];
 
 	for (let i = 0; i < dates.length; i += 7) {
@@ -130,8 +133,7 @@ export function CombinedGrid({
 							<div key={weekIndex} className="flex flex-col gap-1">
 								{week.map((date) => {
 									const intensity = getCombinedIntensity(date);
-									const isToday =
-										date === new Date().toISOString().split("T")[0]!;
+									const isToday = date === todayStr;
 
 									return (
 										<button

@@ -15,9 +15,10 @@ interface Habit {
 
 interface HabitStatsProps {
 	habits: Habit[];
+	currentDate?: Date;
 }
 
-export function HabitStats({ habits }: HabitStatsProps) {
+export function HabitStats({ habits, currentDate }: HabitStatsProps) {
 	const totalHabits = habits.length;
 	const totalCompletions = habits.reduce(
 		(sum, habit) => sum + habit.totalCompletions,
@@ -25,7 +26,7 @@ export function HabitStats({ habits }: HabitStatsProps) {
 	);
 	const longestStreak = Math.max(...habits.map((h) => h.streak), 0);
 
-	const today = new Date().toISOString().split("T")[0]!;
+	const today = (currentDate ?? new Date()).toISOString().split("T")[0]!;
 	const completedToday = habits.filter((h) => h.completions[today]).length;
 
 	const stats = [

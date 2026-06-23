@@ -2,4 +2,6 @@ import { HabitTracker } from "@repo/ui/domains/HabitTracker/HabitTracker";
 
 export const metadata = { title: "Habit Tracker" };
 
-export default HabitTracker;
+export default function HabitTrackerPage() {
+	return <HabitTracker />;
+}

@@ -18,11 +18,17 @@ interface Habit {
 interface TodayViewProps {
 	habits: Habit[];
 	onToggleCompletion: (habitId: string, date: string) => void;
+	currentDate?: Date;
 }
 
-export function TodayView({ habits, onToggleCompletion }: TodayViewProps) {
-	const today = new Date().toISOString().split("T")[0]!;
-	const todayFormatted = new Date().toLocaleDateString("en-US", {
+export function TodayView({
+	habits,
+	onToggleCompletion,
+	currentDate,
+}: TodayViewProps) {
+	const now = currentDate ?? new Date();
+	const today = now.toISOString().split("T")[0]!;
+	const todayFormatted = now.toLocaleDateString("en-US", {
 		weekday: "long",
 		month: "long",
 		day: "numeric",

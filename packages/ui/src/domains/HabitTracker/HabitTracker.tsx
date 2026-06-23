@@ -23,7 +23,11 @@ interface Habit {
 
 type ViewMode = "today" | "combined" | "individual";
 
-export const HabitTracker = () => {
+interface HabitTrackerProps {
+	currentDate?: Date;
+}
+
+export const HabitTracker = ({ currentDate }: HabitTrackerProps) => {
 	const [habits, setHabits] = useState<Habit[]>([]);
 	const [showAddDialog, setShowAddDialog] = useState(false);
 	const [viewMode, setViewMode] = useState<ViewMode>("today");
@@ -209,12 +213,13 @@ export const HabitTracker = () => {
 					</div>
 				) : (
 					<div className="space-y-8">
-						<HabitStats habits={habits} />
+						<HabitStats habits={habits} currentDate={currentDate} />
 
 						{viewMode === "today" && (
 							<TodayView
 								habits={habits}
 								onToggleCompletion={toggleHabitCompletion}
+								currentDate={currentDate}
 							/>
 						)}
 
@@ -222,6 +227,7 @@ export const HabitTracker = () => {
 							<CombinedGrid
 								habits={habits}
 								onToggleCompletion={toggleHabitCompletion}
+								currentDate={currentDate}
 							/>
 						)}
 
@@ -236,6 +242,7 @@ export const HabitTracker = () => {
 											habit={habit}
 											onToggleCompletion={toggleHabitCompletion}
 											onDelete={deleteHabit}
+											currentDate={currentDate}
 										/>
 									</Card>
 								))}
