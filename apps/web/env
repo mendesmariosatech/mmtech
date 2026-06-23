@@ -1,4 +1,0 @@
-TURSO_CONNECTION_URL="libsql://"
-TURSO_AUTH_TOKEN="ey"
-JWT_SECRET_KEY="secret"
-COOkIE_SECRET_KEY="secret"
