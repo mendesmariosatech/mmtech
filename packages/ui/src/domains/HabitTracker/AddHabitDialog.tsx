@@ -32,9 +32,15 @@ const PRESET_COLORS = [
 	"#f97316",
 ];
 
-export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialogProps) {
+export function AddHabitDialog({
+	open,
+	onOpenChange,
+	onAddHabit,
+}: AddHabitDialogProps) {
 	const [name, setName] = useState("");
-	const [selectedColor, setSelectedColor] = useState<string>(PRESET_COLORS[0] ?? "#7c3aed");
+	const [selectedColor, setSelectedColor] = useState<string>(
+		PRESET_COLORS[0] ?? "#7c3aed",
+	);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -50,9 +56,12 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="sm:max-w-md bg-card/95 border-border/50 backdrop-blur-sm">
 				<DialogHeader>
-					<DialogTitle className={`font-heading ${styles["neon-text"]}`}>Add New Habit</DialogTitle>
+					<DialogTitle className={`font-heading ${styles["neon-text"]}`}>
+						Add New Habit
+					</DialogTitle>
 					<DialogDescription>
-						Create a new habit to track. Choose a name and color that motivates you.
+						Create a new habit to track. Choose a name and color that motivates
+						you.
 					</DialogDescription>
 				</DialogHeader>
 
@@ -88,7 +97,12 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
 					</div>
 
 					<DialogFooter>
-						<Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="border-border/50">
+						<Button
+							type="button"
+							variant="outline"
+							onClick={() => onOpenChange(false)}
+							className="border-border/50"
+						>
 							Cancel
 						</Button>
 						<Button

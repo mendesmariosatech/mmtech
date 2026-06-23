@@ -20,7 +20,10 @@ interface CombinedGridProps {
 	onToggleCompletion: (habitId: string, date: string) => void;
 }
 
-export function CombinedGrid({ habits, onToggleCompletion }: CombinedGridProps) {
+export function CombinedGrid({
+	habits,
+	onToggleCompletion,
+}: CombinedGridProps) {
 	const [hoveredDate, setHoveredDate] = useState<string | null>(null);
 
 	const generateDates = () => {
@@ -44,7 +47,9 @@ export function CombinedGrid({ habits, onToggleCompletion }: CombinedGridProps) 
 	}
 
 	const getCombinedIntensity = (date: string) => {
-		const completedCount = habits.filter((habit) => habit.completions[date]).length;
+		const completedCount = habits.filter(
+			(habit) => habit.completions[date],
+		).length;
 		const totalHabits = habits.length;
 
 		if (totalHabits === 0) return 0;
@@ -82,19 +87,29 @@ export function CombinedGrid({ habits, onToggleCompletion }: CombinedGridProps) 
 		return sum + habits.filter((habit) => habit.completions[date]).length;
 	}, 0);
 	const overallCompletionRate =
-		totalPossibleCompletions > 0 ? Math.round((totalActualCompletions / totalPossibleCompletions) * 100) : 0;
+		totalPossibleCompletions > 0
+			? Math.round((totalActualCompletions / totalPossibleCompletions) * 100)
+			: 0;
 
 	return (
 		<Card className="p-6 bg-card/50 border-border/50 backdrop-blur-sm">
 			<div className="space-y-6">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
-						<div className={`p-2 rounded-lg bg-primary/20 ${styles["glow-effect"]}`}>
+						<div
+							className={`p-2 rounded-lg bg-primary/20 ${styles["glow-effect"]}`}
+						>
 							<BarChart3 className="h-6 w-6 text-primary" />
 						</div>
 						<div>
-							<h3 className={`text-lg font-semibold font-heading ${styles["neon-text"]}`}>Combined Progress</h3>
-							<p className="text-sm text-muted-foreground">All habits combined over time</p>
+							<h3
+								className={`text-lg font-semibold font-heading ${styles["neon-text"]}`}
+							>
+								Combined Progress
+							</h3>
+							<p className="text-sm text-muted-foreground">
+								All habits combined over time
+							</p>
 						</div>
 					</div>
 					<div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -115,7 +130,8 @@ export function CombinedGrid({ habits, onToggleCompletion }: CombinedGridProps) 
 							<div key={weekIndex} className="flex flex-col gap-1">
 								{week.map((date) => {
 									const intensity = getCombinedIntensity(date);
-									const isToday = date === new Date().toISOString().split("T")[0]!;
+									const isToday =
+										date === new Date().toISOString().split("T")[0]!;
 
 									return (
 										<button
@@ -154,7 +170,9 @@ export function CombinedGrid({ habits, onToggleCompletion }: CombinedGridProps) 
 								const info = getHoveredDateInfo(hoveredDate);
 								return (
 									info.habits.length > 0 && (
-										<div className="mt-1 text-xs text-primary">{info.habits.join(", ")}</div>
+										<div className="mt-1 text-xs text-primary">
+											{info.habits.join(", ")}
+										</div>
 									)
 								);
 							})()}
@@ -170,7 +188,9 @@ export function CombinedGrid({ habits, onToggleCompletion }: CombinedGridProps) 
 							<div className="w-2 h-2 rounded-sm bg-primary/20 border border-primary/30" />
 							<div className="w-2 h-2 rounded-sm bg-primary/40 border border-primary/50" />
 							<div className="w-2 h-2 rounded-sm bg-primary/60 border border-primary/70" />
-							<div className={`w-2 h-2 rounded-sm bg-primary border-primary ${styles["glow-effect"]}`} />
+							<div
+								className={`w-2 h-2 rounded-sm bg-primary border-primary ${styles["glow-effect"]}`}
+							/>
 						</div>
 						<span>More</span>
 					</div>
@@ -182,11 +202,15 @@ export function CombinedGrid({ habits, onToggleCompletion }: CombinedGridProps) 
 									className={`w-2 h-2 rounded-full ${styles["glow-effect"]}`}
 									style={{ backgroundColor: habit.color }}
 								/>
-								<span className="text-xs text-muted-foreground">{habit.name}</span>
+								<span className="text-xs text-muted-foreground">
+									{habit.name}
+								</span>
 							</div>
 						))}
 						{habits.length > 5 && (
-							<span className="text-xs text-muted-foreground">+{habits.length - 5} more</span>
+							<span className="text-xs text-muted-foreground">
+								+{habits.length - 5} more
+							</span>
 						)}
 					</div>
 				</div>

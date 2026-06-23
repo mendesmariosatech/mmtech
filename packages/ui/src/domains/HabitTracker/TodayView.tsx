@@ -28,28 +28,41 @@ export function TodayView({ habits, onToggleCompletion }: TodayViewProps) {
 		day: "numeric",
 	});
 
-	const completedToday = habits.filter((habit) => habit.completions[today]).length;
+	const completedToday = habits.filter(
+		(habit) => habit.completions[today],
+	).length;
 	const totalHabits = habits.length;
-	const completionRate = totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
+	const completionRate =
+		totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
 
 	return (
 		<div className="space-y-6">
 			<Card className="p-6 bg-card/50 border-border/50 backdrop-blur-sm">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
-						<div className={`p-2 rounded-lg bg-primary/20 ${styles["glow-effect"]}`}>
+						<div
+							className={`p-2 rounded-lg bg-primary/20 ${styles["glow-effect"]}`}
+						>
 							<Calendar className="h-6 w-6 text-primary" />
 						</div>
 						<div>
-							<h2 className={`text-xl font-bold font-heading ${styles["neon-text"]}`}>Today&apos;s Focus</h2>
+							<h2
+								className={`text-xl font-bold font-heading ${styles["neon-text"]}`}
+							>
+								Today&apos;s Focus
+							</h2>
 							<p className="text-sm text-muted-foreground">{todayFormatted}</p>
 						</div>
 					</div>
 					<div className="text-right">
-						<div className={`text-2xl font-bold font-heading ${styles["neon-text"]}`}>
+						<div
+							className={`text-2xl font-bold font-heading ${styles["neon-text"]}`}
+						>
 							{completedToday}/{totalHabits}
 						</div>
-						<div className="text-sm text-muted-foreground">{completionRate}% complete</div>
+						<div className="text-sm text-muted-foreground">
+							{completionRate}% complete
+						</div>
 					</div>
 				</div>
 			</Card>
@@ -59,7 +72,10 @@ export function TodayView({ habits, onToggleCompletion }: TodayViewProps) {
 					const isCompleted = habit.completions[today];
 
 					return (
-						<Card key={habit.id} className="p-4 bg-card/50 border-border/50 backdrop-blur-sm">
+						<Card
+							key={habit.id}
+							className="p-4 bg-card/50 border-border/50 backdrop-blur-sm"
+						>
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-4">
 									<Button
@@ -73,7 +89,11 @@ export function TodayView({ habits, onToggleCompletion }: TodayViewProps) {
 												: "text-muted-foreground hover:text-foreground",
 										)}
 									>
-										{isCompleted ? <CheckCircle2 className="h-6 w-6" /> : <Circle className="h-6 w-6" />}
+										{isCompleted ? (
+											<CheckCircle2 className="h-6 w-6" />
+										) : (
+											<Circle className="h-6 w-6" />
+										)}
 									</Button>
 
 									<div className="flex items-center gap-3">
@@ -97,7 +117,9 @@ export function TodayView({ habits, onToggleCompletion }: TodayViewProps) {
 										<Flame className="h-4 w-4 text-orange-500" />
 										<span>{habit.streak}</span>
 									</div>
-									<div className="text-xs px-2 py-1 rounded-full bg-secondary/50">{habit.totalCompletions} total</div>
+									<div className="text-xs px-2 py-1 rounded-full bg-secondary/50">
+										{habit.totalCompletions} total
+									</div>
 								</div>
 							</div>
 						</Card>

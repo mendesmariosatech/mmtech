@@ -19,7 +19,10 @@ interface HabitStatsProps {
 
 export function HabitStats({ habits }: HabitStatsProps) {
 	const totalHabits = habits.length;
-	const totalCompletions = habits.reduce((sum, habit) => sum + habit.totalCompletions, 0);
+	const totalCompletions = habits.reduce(
+		(sum, habit) => sum + habit.totalCompletions,
+		0,
+	);
 	const longestStreak = Math.max(...habits.map((h) => h.streak), 0);
 
 	const today = new Date().toISOString().split("T")[0]!;
@@ -55,13 +58,22 @@ export function HabitStats({ habits }: HabitStatsProps) {
 	return (
 		<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 			{stats.map((stat, index) => (
-				<Card key={index} className="p-4 bg-card/50 border-border/50 backdrop-blur-sm">
+				<Card
+					key={index}
+					className="p-4 bg-card/50 border-border/50 backdrop-blur-sm"
+				>
 					<div className="flex items-center gap-3">
-						<div className={`p-2 rounded-lg bg-primary/10 ${styles["glow-effect"]}`}>
+						<div
+							className={`p-2 rounded-lg bg-primary/10 ${styles["glow-effect"]}`}
+						>
 							<stat.icon className={`h-5 w-5 ${stat.color}`} />
 						</div>
 						<div>
-							<p className={`text-2xl font-bold font-heading ${styles["neon-text"]}`}>{stat.value}</p>
+							<p
+								className={`text-2xl font-bold font-heading ${styles["neon-text"]}`}
+							>
+								{stat.value}
+							</p>
 							<p className="text-xs text-muted-foreground">{stat.label}</p>
 						</div>
 					</div>

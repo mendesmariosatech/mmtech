@@ -79,7 +79,9 @@ export const HabitTracker = () => {
 		);
 	};
 
-	const calculateStreak = (completions: { [date: string]: boolean }): number => {
+	const calculateStreak = (completions: {
+		[date: string]: boolean;
+	}): number => {
 		const today = new Date();
 		let streak = 0;
 
@@ -108,12 +110,20 @@ export const HabitTracker = () => {
 				<div className="container mx-auto px-4 py-6">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-3">
-							<div className={`p-2 rounded-lg bg-primary/20 ${styles["glow-effect"]}`}>
+							<div
+								className={`p-2 rounded-lg bg-primary/20 ${styles["glow-effect"]}`}
+							>
 								<Zap className="h-6 w-6 text-primary" />
 							</div>
 							<div>
-								<h1 className={`text-2xl font-bold font-heading ${styles["neon-text"]}`}>HabitStack</h1>
-								<p className="text-sm text-muted-foreground">Stack Your Success</p>
+								<h1
+									className={`text-2xl font-bold font-heading ${styles["neon-text"]}`}
+								>
+									HabitStack
+								</h1>
+								<p className="text-sm text-muted-foreground">
+									Stack Your Success
+								</p>
 							</div>
 						</div>
 						<div className="flex items-center gap-3">
@@ -125,7 +135,8 @@ export const HabitTracker = () => {
 										onClick={() => setViewMode("today")}
 										className={cn(
 											"h-8 px-3",
-											viewMode === "today" && `bg-primary hover:bg-primary/90 ${styles["glow-effect"]}`,
+											viewMode === "today" &&
+												`bg-primary hover:bg-primary/90 ${styles["glow-effect"]}`,
 										)}
 									>
 										<Calendar className="h-4 w-4 mr-1" />
@@ -137,7 +148,8 @@ export const HabitTracker = () => {
 										onClick={() => setViewMode("combined")}
 										className={cn(
 											"h-8 px-3",
-											viewMode === "combined" && `bg-primary hover:bg-primary/90 ${styles["glow-effect"]}`,
+											viewMode === "combined" &&
+												`bg-primary hover:bg-primary/90 ${styles["glow-effect"]}`,
 										)}
 									>
 										<BarChart3 className="h-4 w-4 mr-1" />
@@ -149,7 +161,8 @@ export const HabitTracker = () => {
 										onClick={() => setViewMode("individual")}
 										className={cn(
 											"h-8 px-3",
-											viewMode === "individual" && `bg-primary hover:bg-primary/90 ${styles["glow-effect"]}`,
+											viewMode === "individual" &&
+												`bg-primary hover:bg-primary/90 ${styles["glow-effect"]}`,
 										)}
 									>
 										Individual
@@ -171,14 +184,19 @@ export const HabitTracker = () => {
 			<main className="container mx-auto px-4 py-8">
 				{habits.length === 0 ? (
 					<div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-						<div className={`p-4 rounded-full bg-primary/10 mb-6 ${styles["glow-effect"]}`}>
+						<div
+							className={`p-4 rounded-full bg-primary/10 mb-6 ${styles["glow-effect"]}`}
+						>
 							<Target className="h-12 w-12 text-primary" />
 						</div>
-						<h2 className={`text-2xl font-bold font-heading mb-2 ${styles["neon-text"]}`}>
+						<h2
+							className={`text-2xl font-bold font-heading mb-2 ${styles["neon-text"]}`}
+						>
 							Build Your Habit Stack
 						</h2>
 						<p className="text-muted-foreground mb-6 max-w-md">
-							Start your journey to mastery. Each dot tells a story of progress and dedication.
+							Start your journey to mastery. Each dot tells a story of progress
+							and dedication.
 						</p>
 						<Button
 							onClick={() => setShowAddDialog(true)}
@@ -194,17 +212,26 @@ export const HabitTracker = () => {
 						<HabitStats habits={habits} />
 
 						{viewMode === "today" && (
-							<TodayView habits={habits} onToggleCompletion={toggleHabitCompletion} />
+							<TodayView
+								habits={habits}
+								onToggleCompletion={toggleHabitCompletion}
+							/>
 						)}
 
 						{viewMode === "combined" && (
-							<CombinedGrid habits={habits} onToggleCompletion={toggleHabitCompletion} />
+							<CombinedGrid
+								habits={habits}
+								onToggleCompletion={toggleHabitCompletion}
+							/>
 						)}
 
 						{viewMode === "individual" && (
 							<div className="space-y-6">
 								{habits.map((habit) => (
-									<Card key={habit.id} className="p-6 bg-card/50 border-border/50 backdrop-blur-sm">
+									<Card
+										key={habit.id}
+										className="p-6 bg-card/50 border-border/50 backdrop-blur-sm"
+									>
 										<HabitGrid
 											habit={habit}
 											onToggleCompletion={toggleHabitCompletion}

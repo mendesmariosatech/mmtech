@@ -21,7 +21,11 @@ interface HabitGridProps {
 	onDelete: (habitId: string) => void;
 }
 
-export function HabitGrid({ habit, onToggleCompletion, onDelete }: HabitGridProps) {
+export function HabitGrid({
+	habit,
+	onToggleCompletion,
+	onDelete,
+}: HabitGridProps) {
 	const [hoveredDate, setHoveredDate] = useState<string | null>(null);
 
 	const generateDates = () => {
@@ -89,7 +93,8 @@ export function HabitGrid({ habit, onToggleCompletion, onDelete }: HabitGridProp
 						<div key={weekIndex} className="flex flex-col gap-1">
 							{week.map((date) => {
 								const isCompleted = habit.completions[date];
-								const isToday = date === new Date().toISOString().split("T")[0]!;
+								const isToday =
+									date === new Date().toISOString().split("T")[0]!;
 
 								return (
 									<button
@@ -106,7 +111,9 @@ export function HabitGrid({ habit, onToggleCompletion, onDelete }: HabitGridProp
 										)}
 										style={{
 											backgroundColor: isCompleted ? habit.color : undefined,
-											boxShadow: isCompleted ? `0 0 10px ${habit.color}40` : undefined,
+											boxShadow: isCompleted
+												? `0 0 10px ${habit.color}40`
+												: undefined,
 										}}
 									/>
 								);
@@ -117,7 +124,8 @@ export function HabitGrid({ habit, onToggleCompletion, onDelete }: HabitGridProp
 
 				{hoveredDate && (
 					<div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-popover border border-border rounded text-xs whitespace-nowrap z-10">
-						{formatDate(hoveredDate)} - {habit.completions[hoveredDate] ? "Completed" : "Not completed"}
+						{formatDate(hoveredDate)} -{" "}
+						{habit.completions[hoveredDate] ? "Completed" : "Not completed"}
 					</div>
 				)}
 			</div>

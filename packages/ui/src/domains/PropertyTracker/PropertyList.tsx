@@ -274,7 +274,9 @@ export function PropertyList({
 								<h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide mb-2">
 									Notes
 								</h4>
-								<p className="text-sm text-muted-foreground">{property.notes}</p>
+								<p className="text-sm text-muted-foreground">
+									{property.notes}
+								</p>
 							</div>
 						)}
 					</CardContent>
