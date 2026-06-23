@@ -19,6 +19,8 @@ const filteredRoutes = typedKeys(Routes.client).filter((route) => {
 			return true;
 		case "/time-spending-app":
 			return true;
+		case "/habit-tracker":
+			return true;
 		default:
 			return false;
 	}
