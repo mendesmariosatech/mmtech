@@ -1,7 +1,9 @@
 {
   "providers": ["node"],
-  "nixpkgs": ["nodejs_22"],
   "phases": {
+    "setup": {
+      "nixPkgs": ["...", "nodejs_22"]
+    },
     "install": {
       "cmds": ["yarn install --frozen-lockfile"]
     },
@@ -10,6 +12,6 @@
     }
   },
   "start": {
-    "cmd": "yarn --cwd apps/docs start"
+    "cmd": "cd apps/docs && yarn start"
   }
 }
