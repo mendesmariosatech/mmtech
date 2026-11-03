@@ -26,3 +26,7 @@ yarn dev
 ```
 
 [Contribuindo](markdowns/CONTRIBUTING.md)
+
+## Agent proof
+
+This change was made by an automated agent run from the software factory.
